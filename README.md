@@ -4,6 +4,9 @@
 **Symfony Version**: 7.4  
 **PHP**: >= 8.2
 
+![Angebotserstellung](public/app/img/github/Angebote-Uebersicht.png)  
+*Komplexe Software mit dynamischer Fragen/Antworten Angebotserstellung inkl. Produkt-Auswahl und Rechnungsautomatisierung*
+
 ## Überblick
 
 FaPro ist ein integriertes ERP/CRM-System für ein Unternehmen im Bereich erneuerbare Energien. Das System verwaltet Kunden, Angebote, Produkte, Rechnungen, Zeiterfassung und Termine.
@@ -24,7 +27,7 @@ FaPro ist ein integriertes ERP/CRM-System für ein Unternehmen im Bereich erneue
 - **Kundenverwaltung**: Kunden, Ansprechpartner, Notizen
 - **Angebotswesen**: Automatisierte Angebote, Kategorien, Fragen, Antworten
 - **Produktkatalog**: Produkte, Unterkategorien, Hersteller
-- **Rechnungsstellung**: Rechnungen, Bestellungen (LexOffice-Integration)
+- **Rechnungsstellung**: Teilrechnungen, Rechnungen, Mahnungen, Bestellungen (LexOffice-Integration)
 - **Zeiterfassung**: Zeiterfassung pro Projekt/Kunde
 - **Terminverwaltung**: Buchungen, Kalender-Integration (Google Calendar)
 - **Dokumentenverwaltung**: PDFs, Bilder, Barcodes, QR-Codes
@@ -100,7 +103,7 @@ php bin/console app:slack:appointment
 
 ## Multi-Environment
 
-Das Projekt unterstützt mehrere Konfigurationsumgebungen:
+Das Projekt unterstützt mehrere Konfigurationsumgebungen für Subdomains:
 
 - `software/` - Standard-Software-Konfiguration
 - `bw/` - Baden-Württemberg Variante

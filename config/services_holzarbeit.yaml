@@ -15,7 +15,6 @@ parameters:
     app_chat: 0
     app_crypto: 0
   mail_templates: '%kernel.project_dir%/config/mail_templates_%env(APP_SUBDOMAIN)%.yaml'
-  app_google_client_id: '875912630110-6ur24n3pahhmpr17shff7u3tbahfeg6h.apps.googleusercontent.com'
   app_google_client_secret: '%env(APP_GOOGLE_CLIENT_SECRET)%'
   app_slack_bearer: '%env(string:SLACK_DSN)%'
   app_holidays: 'BE'
