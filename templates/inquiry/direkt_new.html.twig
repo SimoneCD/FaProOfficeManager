@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'iq.info'|trans }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        input { background-color: #fff6af; }
+        .newable_energie, .individual, .mobility {
+            width: 33%;
+            background-color: #ffe02d !important;
+            color: #000 !important;
+            padding: 20px;
+        }
+        .individual {background-color: #1593c5 !important; color: #ffffff !important;}
+        .mobility {background-color: #6c757d !important; color: #ffffff !important;}
+    </style>
+{% endblock %}
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+{#            <a href="{{ path('offer_category_index', {'id':category.id}) }}"><i class="material-symbols-outlined">list</i></a>#}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">{{ 'w.offer'|trans }}</h4>
+                    <p class="card-category">{{ 'iq.info'|trans }}</p>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+
+{#                    <h3>{{ 'f.label.general'|trans }}</h3>#}
+{#                    <div class="row">#}
+{#                        <div class="col-md-12">#}
+{#                            <div class="form-group bmd-form-group">#}
+{#                                {{ form_label(form.refererFrom) }}#}
+{#                                {{ form_widget(form.refererFrom) }}#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group bmd-form-group">
+                                {{ form_label(form.notice) }}
+                                {{ form_widget(form.notice) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='input-group datetime'>
+                        <input type="hidden" name="inquiry[customer][id]" value="{{ customer.id }}">
+                        {{ customer.name }} {{ customer.surName }}
+                    </div>
+
+                    {% for cat in getOfferCategories() %}
+                        <button type="submit" name="category" value="{{ cat.id }}" class="btn btn-light btn-sm pull-right"><span class="material-symbols-outlined" style="padding: 20px 4px;font-size: xx-large;">{{ cat.icon }}</span> {{ cat.name }}</button>
+                    {% endfor %}
+                    <div class="clearfix"></div>
+                    {{ form_end(form, {'render_rest': false}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

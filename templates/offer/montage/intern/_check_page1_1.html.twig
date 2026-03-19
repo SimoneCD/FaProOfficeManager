@@ -1,0 +1,184 @@
+
+<table style="margin-top: 5px">
+    <tr><td colspan="4"><h3>Anlage:</h3></td></tr>
+    <tr>
+        <td style="width: 30%">
+            <p>
+                Netz: <input style="width: 70px" placeholder=".........../..........." class="check_i" type="text" name="offer_check[anlage][3]" value="{% if yes %}{{ context.protocol.anlage[3] }}{% endif %}">V
+                &nbsp;&nbsp;&nbsp;<input style="width: 30px" class="check_i" type="text" name="offer_check[anlage][31]" value="{% if yes %}{{ context.protocol.anlage[31] }}{% endif %}">Hz
+            </p>
+        </td>
+        <td style="width: 42%">
+            <p>
+                Netzbetreiber: <input style="width: 62%" class="check_i" type="text" name="offer_check[anlage][4]" value="{% if yes %}{{ context.protocol.anlage[4] }}{% endif %}">
+            </p>
+        </td>
+        <td style="width: 28%" colspan="2">
+            Netzsystem: <input style="width: 90px" class="check_i" type="text" name="offer_check[anlage][4]" value="{% if yes %}{{ context.protocol.anlage[4] }}{% endif %}">
+        </td>
+    </tr>
+</table>
+<table style="margin-top: 5px">
+    <tr>
+        <th><h3>Montage Zeitraum:</h3></th>
+        <th>
+            <p>von <input class="check_i" type="date" name="offer_check[anlage][1]" value="{% if yes %}{{ context.protocol.anlage[1] }}{% else %}{{ getOfferName(offer.id) }}{% endif %}">
+                bis <input class="check_i" type="date" name="offer_check[anlage][11]" value="{% if yes %}{{ context.protocol.anlage[11] }}{% else %}{{ getOfferName(offer.id) }}{% endif %}">
+            </p>
+        </th>
+        <th><h3>Inbetriebnahme Datum:</h3></th>
+        <th><p><input class="check_i" type="date" name="offer_check[anlage][2]" value="{% if yes %}{{ context.protocol.anlage[2] }}{% endif %}"></p></th>
+    </tr>
+</table>
+<table style="margin-top: 5px">
+        <tr>
+            <td colspan="2" style="width: 50%"><h3>Anlagenstandort</h3></td>
+            <td colspan="2" style="width: 50%"></td>
+        </tr>
+        <tr>
+            <td><p>Straße/Nr.:</p><p>PLZ Ort:</p></td>
+            <td>
+                <p><input class="check_i" type="text" name="offer_check[station][address]" value="{% if yes %}{{ ocp.station.address }}{% else %}{{ offer.stationAddress }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[station][zip]" value="{% if yes %}{{ ocp.station.zip }}{% else %}{{ offer.stationZip }}{% endif %}"></p>
+            </td>
+            <td><p>Gebäudeart:</p><p>Bemerkung:</p></td>
+            <td>
+                <p><input class="check_i" type="text" name="offer_check[station][1]" value="{% if yes %}{{ ocp.station[1] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[station][2]" value="{% if yes %}{{ ocp.station[2] }}{% endif %}"></p>
+            </td>
+        </tr>
+        <tr><td colspan="4"><h3>Inbetriebnahme, Einspeise-Stromzähler</h3></td></tr>
+        <tr>
+            <td><p>Tag der Inbetriebnahme:</p><p>Einspeise-Stromzähler Nr:</p><p>Zählerstand bei Übergabe:</p></td>
+            <td>
+                <p><input class="check_i" style="width: 100%" type="date" name="offer_check[inbetrieb][1]" value="{% if yes %}{{ ocp.inbetrieb[1] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[inbetrieb][2]" value="{% if yes %}{{ ocp.inbetrieb[2] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[inbetrieb][3]" value="{% if yes %}{{ ocp.inbetrieb[3] }}{% endif %}"></p>
+            </td>
+            <td><p>Prognostizierter Anlagen-ertrag<br>pro Jahr:</p><p>Installierte Leistung (kWp):</p></td>
+            <td>
+                <p>&nbsp;</p>
+                <p><input class="check_i" type="text" name="offer_check[inbetrieb][4]" value="{% if yes %}{{ ocp.inbetrieb[4] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[inbetrieb][5]" value="{% if yes %}{{ ocp.inbetrieb[5] }}{% endif %}"></p>
+            </td>
+        </tr>
+        <tr><td colspan="4"><h3>PV-Module</h3></td></tr>
+        <tr>
+            <td><p>ModuleHersteller:</p><p>PV-Modulleistung:</p><p>Kurzschlussstrom Isc (A):</p><p>Leerlaufspannung Uoc (V):</p></td>
+            <td>
+                <p><input class="check_i" type="text" name="offer_check[module][1]" value="{% if yes %}{{ ocp.module[1] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[module][2]" value="{% if yes %}{{ ocp.module[2] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[module][3]" value="{% if yes %}{{ ocp.module[3] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[module][4]" value="{% if yes %}{{ ocp.module[4] }}{% endif %}"></p>
+            </td>
+            <td><p>Modultyp:</p><p>Modulanzahl:</p><p>MPP-Strom (A):</p><p>MPP-Spannung (V):</p></td>
+            <td>
+                <p><input class="check_i" type="text" name="offer_check[module][5]" value="{% if yes %}{{ ocp.module[5] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[module][6]" value="{% if yes %}{{ ocp.module[6] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[module][7]" value="{% if yes %}{{ ocp.module[7] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[module][8]" value="{% if yes %}{{ ocp.module[8] }}{% endif %}"></p>
+            </td>
+        </tr>
+        <tr><td colspan="4"><h3>PV-Wechselrichter</h3></td></tr>
+        <tr>
+            <td><p>Hersteller:</p><p>Seriennummer:</p><p>AC-Nennleistung (W):</p><p>AC-Maximalleistung (W):</p></td>
+            <td>
+                <p><input class="check_i" type="text" name="offer_check[wr][1]" value="{% if yes %}{{ ocp.wr[1] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[wr][2]" value="{% if yes %}{{ ocp.wr[2] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[wr][3]" value="{% if yes %}{{ ocp.wr[3] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[wr][4]" value="{% if yes %}{{ ocp.wr[4] }}{% endif %}"></p>
+            </td>
+            <td><p>Wechselrichtertyp:</p><p>Wechselrichteranzahl:</p><p>DC-Maximalleistung (W):</p><p>Bemerkung</p></td>
+            <td>
+                <p><input class="check_i" type="text" name="offer_check[wr][5]" value="{% if yes %}{{ ocp.wr[5] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[wr][6]" value="{% if yes %}{{ ocp.wr[6] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[wr][7]" value="{% if yes %}{{ ocp.wr[7] }}{% endif %}"></p>
+                <p><input class="check_i" type="text" name="offer_check[wr][8]" value="{% if yes %}{{ ocp.wr[8] }}{% endif %}"></p>
+            </td>
+        </tr>
+    </table>
+{#<table>#}
+{#    <tr>#}
+{#        <td colspan="3"><h3>Information zu den Besichtigungen, Prüfungen und Messungen:</h3></td>#}
+{#    </tr>#}
+{#    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">#}
+{#        <td colspan="3">#}
+{#            <p>#}
+{#                Dieser Prüfprotokoll wurde von einem befugten Gewerbetreibenden ausgefüllt und basiert auf dem nach dem#}
+{#                Elektrotechnikgesetz gültigen Normen und Vorschriften. Das Prüfprotokoll beinhaltet die unter Punkt 5#}
+{#                ersichtliche Ergebnisse der Besichtigung, Messung und Prüfungen und wurde gem. den geltenden#}
+{#                Bestimmungen hinsichtlich der Erst- bzw. der Wiederkehrenden Prüfung erstellt.#}
+{#                Die zu prüfende, elektrische Anlage wird entsprechend den gesetzlichen Richtlinien:#}
+{#            </p>#}
+{#        </td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#        <td style="padding: 0 0 0 5px;width: 33%">#}
+{#            <p><input class="check_i" type="checkbox" name="offer_check[info][1]" {% if yes and ocp.info[1]  %}checked{% endif %} value="1"> besichtigt</p>#}
+{#        </td>#}
+{#        <td style="padding: 0 0 0 5px;width: 33%">#}
+{#            <p><input class="check_i" type="checkbox" name="offer_check[info][2]" {% if yes and ocp.info[2]  %}checked{% endif %} value="1"> erprobt</p>#}
+{#        </td>#}
+{#        <td style="padding: 0 0 0 5px;">#}
+{#            <p><input class="check_i" type="checkbox" name="offer_check[info][3]" {% if yes and ocp.info[3]  %}checked{% endif %} value="1"> messtechnisch geprüft</p>#}
+{#        </td>#}
+{#    </tr>#}
+{#</table>#}
+<table style="border: 3px solid {{ sfColor }}">
+    <tr><td colspan="2"><h3>Prüfung</h3></td></tr>
+    <tr>
+        <td style="width: 60%"><h3>Prüfergebnis:</h3></td>
+        <td style="width: 40%"><h3>Grund der Prüfung:</h3></td>
+    </tr>
+    <tr>
+        <td>
+            <p><input class="check_i" type="checkbox" name="offer_check[check][1]" {% if yes and ocp.check[1]  %}checked{% endif %} value="1">&nbsp;&nbsp;&nbsp;&nbsp;Es wurden keine Mängel festgestellt.</p>
+        </td>
+        <td>
+            <p><input class="check_i" type="checkbox" name="offer_check[check][5]" {% if yes and ocp.check[5] %}checked{% endif %} value="1">&nbsp;&nbsp;&nbsp;&nbsp;Erstprüfung</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p><input class="check_i" type="checkbox" name="offer_check[check][2]" {% if yes and ocp.check[2]  %}checked{% endif %} value="1">&nbsp;&nbsp;&nbsp;&nbsp;Es wurden Mängel festgestellt.</p>
+        </td>
+        <td>
+            <p><input class="check_i" type="checkbox" name="offer_check[check][6]" {% if yes and ocp.check[6] %}checked{% endif %} value="1">&nbsp;&nbsp;&nbsp;&nbsp;Wiederholungsprüfung</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <p><input class="check_i" type="text" name="offer_check[check][3]" value="{% if yes %}{{ ocp.check[3] }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[check][31]" value="{% if yes %}{{ ocp.check[31] }}{% endif %}"></p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <p><input class="check_i" type="checkbox" name="offer_check[check][4]" {% if yes and ocp.check[4]  %}checked{% endif %} value="1">&nbsp;&nbsp;&nbsp;&nbsp;Die Photovoltaikanlage entspricht den anerkannten Regeln der Elektrotechnik</p>
+        </td>
+    </tr>
+    <tr style="border-bottom: 1px solid #dbdbdb">
+        <td colspan="2">
+            <p style="padding-left: 24px">Nächste Prüfung:&nbsp;&nbsp;&nbsp;&nbsp;<input style="width: 20%" class="check_i" type="date" name="offer_check[check][7]" value="{% if yes and ocp.check[7] %}{{ ocp.check[7] }}{% endif %}"></p>
+        </td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td><p style="padding-top: 26px">Prüfdatum:</p></td>
+        <td>
+            <p style="padding-top: 26px"><input class="check_i" type="date" name="offer_check[signDate][1]" value="{% if yes %}{{ ocp.signDate[1] }}{% else %}{{ 'now'|date('d.m.Y') }}{% endif %}"></p>
+        </td>
+        <td><p style="padding-top: 26px">Unterschrift/Prüfer:</p></td>
+        <td style="padding-top: 0;position: relative">
+            <div id="signature1Text" style="margin-top:-20px;min-width: 200px;min-height: 60px;"></div>
+            {% if pdf is defined %}
+                <p style="border-bottom: 1px solid grey ">{% if yes and ocp.sign[1] %}<img src="{{ absolute_url(asset(appAssetPath~'user/'~ocp.sign[1])) }}">{% endif %}</p>
+            {% else %}
+                <p><input id="signature1" class="check_i" type="hidden" name="offer_check[sign][1]" value="{% if yes %}{{ ocp.sign[1] }}{% endif %}"></p>
+            {% endif %}
+            <div><img style="position: absolute;bottom: -14px;right: 30px;" src="{{ absolute_url(asset(appAssetPath~'logo/stamp-logo.png')) }}"> </div>
+            {% if pdf is not defined %}<button type="button" data-id="1" style="position: absolute;height: -webkit-fill-available;top: 0;right: 0" class="p-0 signatur1_reset btn btn-danger btn-sm"><i class="material-icons">undo</i></button>{% endif %}
+        </td>
+    </tr>
+</table>

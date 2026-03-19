@@ -1,0 +1,671 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'm.protocoll'|trans }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/css/normalize.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('assets/css/foundation.css') }}"/>
+    {% include 'offer/montage/intern/pdf/_style.html.twig' %}
+    <style>
+        .mini-modal {
+            display: none;
+            position: absolute;
+            z-index: 1000;
+        }
+
+        .mini-modal.show {
+            display: block;
+        }
+
+        .mini-modal-dialog {
+            max-width: 200px;
+            margin: 0;
+        }
+
+        .mini-modal-content {
+            padding: 10px;
+        }
+        .accordion-title {
+            font-size: 12px;
+            cursor: pointer;
+            padding: 1px 6px;
+            /*background-color: #f8f9fa;*/
+            /*border: 1px solid #e0e0e0;*/
+        }
+        /*.accordion-title:hover {*/
+        /*    background-color: #ddd;*/
+        /*}*/
+        /*.accordion-item.active .accordion-title {*/
+        /*    background-color: #e9ecef;*/
+        /*}*/
+        .accordion-content {
+            padding: 0 0 0 6px;
+            font-size: 12px;
+            border: 1px solid #e0e0e0;
+            border-top: none;
+        }
+        .accordion-item {
+            border: 1px solid #e0e0e0;
+            background-color: white;
+        }
+        .accordion-content[data-accordion-target="content"] {
+            display: none;
+            background-color: #fff;
+        }
+        .accordion-date {
+            padding: 0 0 0 6px;
+            font-size: 12px;
+        }
+        .btn .material-icons, .btn:not(.btn-just-icon):not(.btn-fab) .fa {
+            margin-bottom: 0;
+            margin-top: 0;
+            font-size: xx-large;
+        }
+        #pro_top {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: {{ sfColorDark }}; /* Beispiel Hintergrundfarbe */
+            z-index: 1000; /* Damit die Buttons immer über anderen Inhalten sichtbar sind */
+            padding: 10px 0 !important;
+        }
+        @media (max-width: 767px) { /* Beispielbreite für mobile Geräte */
+            #pro_top {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                padding: 10px; /* Optionalen Innenabstand hinzufügen */
+            }
+        }
+
+        /*@media (min-width: 768px) { !* Für größere Bildschirme *!*/
+        /*    #pro_top {*/
+        /*        position: relative; !* oder position: static; wenn nicht fixiert sein soll *!*/
+        /*        bottom: auto;*/
+        /*        left: auto;*/
+        /*        right: auto;*/
+        /*    }*/
+        /*}*/
+        .custom-select-button .button-style {
+            display: inline-block;
+            background-color: #ffffff;
+            color: #2a2a2a;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color .3s;
+        }
+
+        .custom-select-button .button-style:hover {
+            background-color: #e8e8e8;
+        }
+
+        .custom-select-button .button-style.active {
+            background-color: #e5f3f3;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+        h2 {
+            text-align: left;
+            color: black;
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+        .btnbase {
+            font-size: 10px;
+            text-transform: initial;
+            width: 60px;
+            height: 60px;
+            margin: 0 0 10px 10px;
+        }
+        .page {background-color:#fff;padding:30px 1cm 20px 1cm; box-shadow: rgba(50, 50, 93, 0.25) 0 2px 5px -1px, rgba(0, 0, 0, 0.3) 0 1px 3px -1px;;width: 21cm; min-height: 29.7cm}
+        table.deckblatt td p, table.deckblatt td input {
+            font-size: 13px !important;
+        }
+        .jSignature{
+            height: 89px !important;
+        }
+        .menu-container {
+            white-space: nowrap;
+            overflow-x: auto;
+            padding: 20px 0; /* Optional: Fügt etwas Raum oben und unten hinzu */
+        }
+
+        .menu-container button {
+            display: inline-block;
+            white-space: nowrap;
+            margin: 0 5px; /* Optional: Fügt etwas Platz zwischen den Buttons hinzu */
+        }
+        .btn-default, .btn-default:hover {
+            background-color: #ff9800 !important;
+            border-color: {{ sfColorDark }} !important;
+        }
+        .is-hidden {
+            display: none;
+        }
+
+        .active {
+            display: block;
+            /* Dein Style für aktive Accordion-Items */
+        }
+        .accordion-body {
+            padding-left: 20px;
+        }
+
+        .circle {
+            height: 30px;
+            width: 30px;
+            border: 1px solid rgba(171, 171, 171, 0.4) !important;
+        }
+    </style>
+{% endblock %}
+{# montage-login #}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('app/js/jquery.uploadfile.min.js') }}"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="{{ asset('app/js/jSignature.min.js') }}?p=1"></script>
+    {% set yes = offer.context is defined and offer.context.protocol is defined and offer.context.protocol[type] is defined %}
+    {% set ocp = yes ? offer.context.protocol[type]  : null %}
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZYlsQNYOOUxcqNAFTFhwBmvX73fpGqwg&v=weekly" defer></script>
+    <script>
+        $(document).ready(function() {
+
+            function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+                var R = 6371; // Radius der Erde in Kilometern
+                var dLat = deg2rad(lat2 - lat1);
+                var dLon = deg2rad(lon2 - lon1);
+                var a =
+                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                var d = R * c; // Entfernung in Kilometern
+
+                return d;
+            }
+            function deg2rad(deg) {
+                return deg * (Math.PI / 180);
+            }
+
+            var kunden = [
+                {% for o in nearBys %}
+                    {% if o.distance == 0 %}
+                        {number: '{{ o.number }}',city	: 	'{{ o.Ort }}, Deutschland', marker	:	'{{ asset('images/Marker/main.png') }}', distance: '{{ o.distance }}', name: '{{ o.Vorname ~ ' ' ~ o.Nachname }}', position: {lat: {{ o.lat }}, lng: {{ o.lng }} }},
+                    {% else %}
+                        {number: '{{ o.number }}',city	: 	'{{ o.Ort }}, Deutschland', marker	:	'{{ asset('images/Marker/near.png') }}', distance: '{{ o.distance }}', name: '{{ o.Vorname ~ ' ' ~ o.Nachname }}', position: {lat: {{ o.lat }}, lng: {{ o.lng }} }},
+                    {% endif %}
+                {% endfor %}
+            ];
+            var infowindow		=	new google.maps.InfoWindow();
+            function initMapj() {
+                {% if offer.stationLat and offer.stationLng %}
+                // Karte initialisieren
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: {{ offer.stationLat }}, lng: {{ offer.stationLng }} }, // Zentrum der Karte (London als Beispiel)
+                    zoom: 13, // Zoom-Level,
+                    scale: 1.5,
+                    icon		:	new google.maps.MarkerImage( '{{ asset('images/Marker/main') }}', null, null, null, new google.maps.Size(24, 24) )
+                });
+                console.log(kunden);
+                for (i = 0; i < kunden.length; i++) {
+                    marker = new google.maps.Marker({
+                        position	:	new google.maps.LatLng(kunden[i]['position']['lat'], kunden[i]['position']['lng']),
+                        map			:	map,
+                        icon		:	new google.maps.MarkerImage( kunden[i]['marker'], null, null, null, new google.maps.Size(24, 24) )
+                    });
+
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                            infowindow.setContent('<h3>' + kunden[i]['name']+' '+kunden[i]['city'] + '</h3>');
+                            infowindow.open(map, marker);
+                            $('.marker-all').css('background-color', '#fff')
+                            $('#marker'+i).css('background-color', '#c3f29e')
+                        }
+                    })(marker, i));
+                }
+                {% endif %}
+            }
+            {% if offer.stationLat and offer.stationLng %}
+            initMapj()
+            {% endif %}
+        });
+
+
+            function signSignatur(id) {
+
+                var $sigdiv = $('#signature'+id+'Text');
+                $sigdiv.jSignature();
+                $sigdiv.bind('change', function(e){
+                    /* 'e.target' will refer to div with "#signature" */
+                    var datapair = $sigdiv.jSignature("getData", "svgbase64")
+                    var i = new Image()
+                    i.src = "data:" + datapair[0] + "," + datapair[1];
+                    //$(i).appendTo($('#signatur'+id));
+                    $('#signature'+id+'').val("data:" + datapair[0] + "," + datapair[1]);
+                    $('#signature'+id+'').change();
+                });
+
+                $('.signatur'+id+'_reset').bind('click', function () {
+                    $sigdiv.jSignature("reset");
+                    $('#signature'+id+'').val('');
+                    $('#sigImg'+id+'').remove();
+                })
+            }
+
+            function si(formId){
+                let form = $(formId);
+                $.ajax({
+                    'url': form.attr('data-action'),
+                    'data': form.serialize(),
+                    'method': 'post',
+                    success: function (rx) {
+                        console.log(rx)
+                        // window.location.reload();
+                    }
+                });
+            }
+            $(document).ready(function() {
+            $(document).on('change', '.check_i', function () {si('form#signatureForm');})
+            // $('.check_a').on('change', function () {si('form#deckForm');})
+
+             // clears the canvas and rerenders the decor on it.
+
+// Getting signature as SVG and rendering the SVG within the browser.
+// (!!! inline SVG rendering from IMG element does not work in all browsers !!!)
+// this export plugin returns an array of [mimetype, base64-encoded string of SVG of the signature strokes]
+             // append the image (SVG) to DOM.
+
+// Getting signature as "base30" data pair
+// array of [mimetype, string of jSIgnature"s custom Base30-compressed format]
+            // datapair = $sigdiv.jSignature("getData","base30")
+// reimporting the data into jSignature.
+// import plugins understand data-url-formatted strings like "data:mime;encoding,data"
+            // $sigdiv.jSignature("setData", "data:" + datapair.join(","))
+            // $("#signature").jSignature()
+        })
+        {% if offer.stationLat %}
+            // let map;
+            {#function initMap() {#}
+            {#    const mapOptions = {#}
+            {#        zoom: 13,#}
+            {#        center: { lat: {{ offer.stationLat }}, lng: {{ offer.stationLng }} },#}
+            {#    };#}
+            {#    map = new google.maps.Map(document.getElementById("map"), mapOptions);#}
+            {#    const marker = new google.maps.Marker({#}
+            {#        position: { lat: {{ offer.stationLat }}, lng: {{ offer.stationLng }} },#}
+            {#        map: map,#}
+            {#    });#}
+            {#    const infowindow = new google.maps.InfoWindow({#}
+            {#        content: "<p>Marker Location:" + marker.getPosition() + "</p>",#}
+            {#    });#}
+            {#    google.maps.event.addListener(marker, "click", () => {#}
+            {#        infowindow.open(map, marker);#}
+            {#    });#}
+            {#}#}
+            {#window.initMap = initMap;#}
+        {% endif %}
+            https://solar.googleapis.com/v1/buildingInsights:findClosest?location.latitude=37.4450&location.longitude=-122.1390&requiredQuality=HIGH&key=YOUR_API_KEY
+        $(document).ready(function () {
+            $(document).on('click', '.p_teams', function () {
+                let id = $(this).attr('data-id');
+                $('.p-team'+id).removeClass('d-none');
+                $(this).html('<i style="font-size: xx-large;" class="material-icons">arrow_drop_up</i>');
+                $(this).removeClass('p_teams');
+                $(this).addClass('p_teams_close');
+           });
+            $(document).on('click', '.p_teams_close', function () {
+                let id = $(this).attr('data-id');
+                $('.p-team'+id).addClass('d-none');
+                $(this).html('<i style="font-size: xx-large;" class="material-icons">arrow_drop_down</i>');
+                $(this).removeClass('p_teams_close');
+                $(this).addClass('p_teams');
+           });
+            /** Menu Details, Produkte, Aufmass, Protocoll */
+            $(document).on('click', '.clicker', function () {
+               $('.cd').hide();
+               $('#clickerdiv'+$(this).attr('data-id')).show();
+               $('.tabClick').removeClass('btn-default');
+               $(this).addClass('btn-default');
+           });
+            {% if app.request.query.get('a') is not defined %}
+                $('.clicker:first').click();
+            {% elseif app.request.query.get('a') is defined and app.request.query.get('a') == 2 %}
+                $('.clicker').eq(2).click();
+            {% else %}
+                $('.clicker:first').click();
+            {% endif %}
+               //  $(document).on('click', '.checker', function () {
+               //     $('.ccd').hide();
+               //     $('#checkerDiv'+$(this).attr('data-id')).show();
+               //     $('.tabchecker').removeClass('btn-default');
+               //     $(this).addClass('btn-default');
+               // });
+               // $('.checker:first').click();
+        });
+    </script>
+    {% if offer %}
+    <script>
+        $(document).ready(function () {
+            $(document).on('change', '.module_contexttext_change', function () {
+                let dataQuestion = $(this).attr('data-id');
+                $.ajax({
+                    'url': '{{ path('ajax_update_montage_context', {'id':offer.id}) }}',
+                    'data': {'question': dataQuestion, 'ok': ''+$('#module_context_not_'+dataQuestion).val(),'text':$(this).val()},
+                    'method': 'post',
+                    success: function (rx) {
+                        console.log(rx);
+                    }
+                })
+            });
+            $(document).on('change', '.module_context_change', function () {
+                let dataId = $(this).attr('data-offerid');
+                let dataQuestion = $(this).attr('data-id');
+                let dam = $(this);
+                console.log(dam);
+                if ($(this).val() == '0') {
+                    $('.module_context_hide_'+dataQuestion).removeClass('d-none');
+                    $('.module_context_b_'+dataQuestion).text('thumb_down_alt');
+                    $('.module_context_b1_'+dataQuestion).text('thumb_up_off_alt');
+                } else {
+                    $('.module_context_hide_'+dataQuestion).addClass('d-none');
+                    $('#module_context_text_'+dataQuestion).text('');
+                    $('.module_context_b1_'+dataQuestion).text('thumb_up_alt');
+                    $('.module_context_b_'+dataQuestion).text('thumb_down_off_alt');
+                }
+
+                $.ajax({
+                    'url': '{{ path('ajax_update_montage_context', {'id':offer.id}) }}',
+                    'data': {'question': dataQuestion, 'ok': $(this).val(),'text':$('#module_context_text_'+ dataQuestion).val()},
+                    'method': 'post',
+                    success: function (rx) {
+                        console.log(rx);
+                        // window.location.reload();
+                        {#let date2 = new Date();#}
+                        {#$dragObj.find('span.work_on').text(date2.getDate()+'.'+date2.getMonth());#}
+                        {#let u2 = '{{ path('invoice_part_index', {'id': 'ppp'}) }}';#}
+                        {#u2 = u2.replace('ppp', orderId);#}
+                        {#$dragObj.find('#froBi'+id).append('<a href="'+u2+'" target="_blank"><i class="material-symbols-outlined">receipt_long</i></a>');#}
+                        {#// todo Box Neu laden#}
+                    }
+                })
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('[data-toggle="modal"]').on('click', function(e) {
+                e.preventDefault();
+                console.log($(this))
+                const url = $(this).data('offer-url');
+                const taskId = $(this).data('task-id');
+                const offerId = $(this).data('offer-id');
+                const modal = $('#miniModal');
+                modal.dataset.url = url;
+                document.querySelector('[name="modalOffer"]').value = taskId;
+                document.querySelector('[name="modalDelivered"]').value = offerId;
+                modal.modal('show'); // Zeige das Modal an
+
+                // Setze die taskId als Data-Attribut für den "Erledigt"-Button
+                // $('#miniModal .mark-as-done').data('task-id', taskId);
+            });
+
+            $('#miniModal .mark-as-done').on('click', function() {
+                var taskId = $(this).data('task-id');
+                var icon = $('[data-task-id="' + taskId + '"]');
+                icon.attr('src', '{{ asset('app/images/ok.svg') }}'); // Ändere das Bild zu "ok.svg"
+                $('#miniModal').modal('hide'); // Schließe das Modal
+            });
+        });
+        $(document).ready(function() {
+            document.addEventListener('DOMContentLoaded', function() {
+                var container = document.getElementById('pro_top');
+                var buttons = container.getElementsByTagName('button');
+
+                // Container-Breite setzen auf die Summe der Button-Breiten
+                var totalWidth = Array.prototype.reduce.call(buttons, function (width, button) {
+                    return width + button.offsetWidth + 20; // 20px für Margins
+                }, 0);
+
+                container.style.width = totalWidth + 'px';
+            });
+            // Versteckt alle Details, außer den Titel
+            $(".toggle-content").hide();
+
+            // Fügt einen Toggle-Button hinzu
+            $(".toggle-container").prepend('<div class="toggle-button" style="cursor: pointer; margin-bottom: 10px;">weitere Informationen <i class="material-symbols-outlined">expand_more</i></div>');
+
+            // Toggle-Event
+            $(document).on('click', '.toggle-button', function() {
+                var content = $(this).next('.toggle-content');
+                var icon = $(this).find('i');
+
+                if(content.is(':visible')) {
+                    content.slideUp();
+                    icon.text('expand_more');
+                } else {
+                    content.slideDown();
+                    icon.text('expand_less');
+                }
+            });
+        });
+    </script>
+        {% include 'offer/montage/intern/_script.html.twig' %}
+    {% endif %}
+{% endblock %}
+{% block main %}
+    <div id="pro_tops"></div>
+    {% if offer %}
+        <div id="pro_top" class="w-100 p-0 m-0 text-center menu-container">
+            {#<a href="{{ path('dashboard_index') }}" class="btn btnbase btn-sm p-0" tabindex="1" style="margin-bottom: 0;">
+                <span class="btnspan material-icons">home</span>
+                <p style="text-align: center;margin-bottom:0;font-size: 10px;">Home</p>
+            </a>#}
+            <a {#href="{{ path('sf_montage') }}"#} onclick="history.back()" class="btn btnbase btn-sm p-0" tabindex="1" style="margin-bottom: 0;">
+                <span class="btnspan material-icons">arrow_back</span>
+                <p style="text-align: center;margin-bottom:0;font-size: 10px;">Zurück</p>
+            </a>
+            <button type="button" data-id="s" class="btn btnbase btn-default btn-sm tabClick clicker p-0" tabindex="1">
+                <span class="btnspan material-icons">edit_note</span>
+                <p style="text-align: center;margin-bottom:0;font-size: 10px;">Notizen</p>
+            </button>
+            <button type="button" data-id="t" class="btn btnbase btn-default btn-sm tabClick clicker p-0" tabindex="1">
+                <span class="btnspan material-icons">alarm</span>
+                <p style="text-align: center;margin-bottom:0;font-size: 10px;">Termine</p>
+            </button>
+            <button type="button" data-id="0" class="btn btnbase btn-default btn-sm tabClick clicker p-0" tabindex="1">
+                <span class="btnspan material-icons">assignment_ind</span>
+                <p style="text-align: center;margin-bottom:0;font-size: 10px;">Adresse</p>
+            </button>
+            <button type="button" data-id="1" class="btn btnbase btn-default btn-sm tabClick clicker p-0" tabindex="3">
+                <span class="material-icons">pending_actions</span>
+                <p style="text-align: center;margin-bottom:0;font-size: 10px;">{{ 'Aufmaß'|trans }}
+            </button>
+            <button type="button" data-id="2" class="btn btnbase btn-light btn-sm tabClick clicker p-0" tabindex="4"
+                    style="color: {{ sfColor }};" {#href="{{ path('pdf_protocol', {'id':offer.id}) }}"#}>
+                <span class="material-icons">home_repair_service</span>
+                <p style="text-align: center;margin-bottom:0;font-size: 10px;">Material</p>
+            </button>
+            {% if 'e-check' in appProtocols %}
+                <button type="button" data-id="3" class="btn btnbase btn-light tabClick btn-sm clicker p-1" tabindex="5">
+                    <span class="material-icons">verified</span>
+                    <p style="text-align: center;margin-bottom:0;font-size: 10px;">Prüfprotokoll</p>
+                </button>
+            {% endif %}
+            {% if offer.subCategory and offer.subCategory.requests|length %}
+                <button type="button" data-id="4" class="btn btnbase btn-default btn-sm tabClick clicker p-1" tabindex="2">
+                    <span class="material-icons">inventory</span>
+                    <p style="text-align: center;margin-bottom:0;font-size: 10px;">Anträge</p>
+                </button>
+            {% endif %}
+        </div>
+
+        {% if offer.subCategory %}
+            {% set appAnswerChecked = [] %}
+            {{ save('appAnswerChecked') }}
+            {% from 'offer/components/macros/_notice_write_macro.html.twig' import writeNoticeBlock %}
+            {% from 'offer/components/macros/_notice_read_macro.html.twig' import readNoticeBlock %}
+            <div id="clickerdivs" class="cd p-2">
+                <h2>{{ offer.customer.sex|trans }} {{ offer.customer.fullName }}</h2>
+                {#            {{ form_start(form, {'attr': {'enctype':'multipart/form-data', 'action':path('offer_auftrags_index', {'id':offer.id})}}) }}#}
+                {{ writeNoticeBlock(offer, appAssetPath, ActionLog, form2, 0) }}
+                {{ readNoticeBlock(notes, appAssetPath, ActionLog, 0, offer.id) }}
+            </div>
+            <div id="clickerdivt" class="cd p-2">
+                <h2>{{ offer.customer.sex|trans }} {{ offer.customer.fullName }}</h2>
+                {#            {{ form_start(form, {'attr': {'enctype':'multipart/form-data', 'action':path('offer_auftrags_index', {'id':offer.id})}}) }}#}
+                <div class="table-responsive">
+                    {#    <p>Kunde: {% if customer.companyName %}{{ customer.companyName }}{% else %}{{ customer.fullNormalName }}{% endif %}</p>#}
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="width: 70px"><strong>Auftrag</strong></th>
+                            <th style="width: 70px"><strong>Datum</strong></th>
+                            <th style="width: 120px"><strong>Uhrzeit</strong></th>
+                            <th><strong>Thema</strong></th>
+                            <th><strong>Information</strong></th>
+                            <th><strong></strong></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% set so = 1 %}
+                        {% for booking in offer.bookings %}
+
+                                <tr id="deleteTr{{ booking.id }}" class="offers_views{% if booking.offer.note %} note_view{% endif %} {{ booking.offer.status }}_view{% if booking.offer.status == 'rechnungPartSend' %} rechnungPartEingang_view{% endif %}">
+                                    <td style="border-bottom: none">{{ booking.offer.number }}</td>
+                                    <td style="border-bottom: none">{{ booking.beginAt|date('d.m.Y') }}</td>
+                                    <td style="border-bottom: none">{{ booking.beginAt|date('H:i') }} - {{ booking.endAt|date('H:i') }}</td>
+                                    <td style="border-bottom: none">{{ booking.title }}</td>
+                                    <td>{{ booking.notice }}</td>
+                                    <td class="text-right">
+                            {% if is_granted('POST_EDIT', booking.offer) %}
+                                        <form id="deleteForm{{ booking.id }}" method="post" data-action="{{ path('booking_delete_ajax', {'id': booking.id}) }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ booking.id) }}">
+                                            <button type="button" class="deleteAjaxTermin" data-id="{{ booking.id }}" style="border: none;background-color: #fff"><i class="material-symbols-outlined" style="background-color: #fff;color: orangered;">delete</i></button>
+                                        </form>
+                            {% endif %}
+                                    </td>
+                                </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6">Keine Einträge</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="clickerdivu" class="cd p-2">
+                <h2>{{ offer.customer.sex|trans }} {{ offer.customer.fullName }}</h2>
+                {#            {{ form_start(form, {'attr': {'enctype':'multipart/form-data', 'action':path('offer_auftrags_index', {'id':offer.id})}}) }}#}
+                <div class="table-responsive">
+                    {#    <p>Kunde: {% if customer.companyName %}{{ customer.companyName }}{% else %}{{ customer.fullNormalName }}{% endif %}</p>#}
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="width: 70px"><strong>Auftrag</strong></th>
+                            <th style="width: 70px"><strong>Datum</strong></th>
+                            <th style="width: 120px"><strong>Uhrzeit</strong></th>
+                            <th><strong>Thema</strong></th>
+                            <th><strong>Information</strong></th>
+                            <th><strong></strong></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% set so = 1 %}
+                        {% for booking in offer.bookings %}
+
+                                <tr id="deleteTr{{ booking.id }}" class="offers_views{% if booking.offer.note %} note_view{% endif %} {{ booking.offer.status }}_view{% if booking.offer.status == 'rechnungPartSend' %} rechnungPartEingang_view{% endif %}">
+                                    <td style="border-bottom: none">{{ booking.offer.number }}</td>
+                                    <td style="border-bottom: none">{{ booking.beginAt|date('d.m.Y') }}</td>
+                                    <td style="border-bottom: none">{{ booking.beginAt|date('H:i') }} - {{ booking.endAt|date('H:i') }}</td>
+                                    <td style="border-bottom: none">{{ booking.title }}</td>
+                                    <td>{{ booking.notice }}</td>
+                                    <td class="text-right">
+                            {% if is_granted('POST_EDIT', booking.offer) %}
+                                        <form id="deleteForm{{ booking.id }}" method="post" data-action="{{ path('booking_delete_ajax', {'id': booking.id}) }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ booking.id) }}">
+                                            <button type="button" class="deleteAjaxTermin" data-id="{{ booking.id }}" style="border: none;background-color: #fff"><i class="material-symbols-outlined" style="background-color: #fff;color: orangered;">delete</i></button>
+                                        </form>
+                            {% endif %}
+                                    </td>
+                                </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6">Keine Einträge</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="clickerdiv0" class="cd p-2">
+                <h2>{{ offer.customer.sex|trans }} {{ offer.customer.fullName }}</h2>
+                {{ form_start(form, {'attr': {'enctype':'multipart/form-data', 'action':path('offer_auftrags_index', {'id':offer.id})}}) }}
+                {% include 'offer/montage/intern/_data.html.twig' %}
+                {{ form_end(form, {'render_rest':false}) }}
+            </div>
+            <div id="clickerdiv1" class="cd p-2">
+                <h2>{{ offer.customer.sex|trans }} {{ offer.customer.fullName }}</h2>
+                {% include 'offer/montage/intern/_aufmass.html.twig' %}
+
+                {% include 'offer/montage/components/_auftrags_doc_upload.html.twig' %}
+                <div class="card" id="area_img">
+                    <div class="card-body">
+                        <div data-controller="upload">
+                            <h4 style="color: {{ sfColor }}">
+                                {{ 'm.images'|trans }}
+                                <button class="btn btn-light btn-sm p-1" type="button" {{ stimulus_action('upload','clickImage','click') }}>
+                                    <span class="material-icons">add_a_photo</span> {# <span title="{{ 'm.imageAdd'|trans }}" class="material-icons">add_circle_outline</span> #}
+                                </button>
+                                <input type="file" multiple class="d-none" name="file[]"
+                                       data-url="{{ path('ajax_upload_image', {'id':offer.id}) }}"
+                                       data-upload-target="fileclick"
+                                       accept="image/*" {{ stimulus_action('upload','addImagePreview','change') }}>
+                            </h4>
+                            <div data-upload-target="preview"></div>
+                            {% if offer.images|length %}
+                                <div class="row mb-3 radios" data-upload-target="preview">
+                                    {% set imagesCount = 0 %}
+                                    {% set arrayA = [] %}
+                                    {% for img in offer.images %}
+                                        {% if img.question is null %}
+                                            {% set i = loop.index-1 %}
+                                            {% include 'offer/montage/components/im_box.html.twig' with {'img':img, 'imagesCount': imagesCount} %}
+                                            {% set imagesCount = imagesCount+1 %}
+                                        {% else %}
+                                            {% include 'offer/montage/components/im_box_incl_title.html.twig' with {'img':img} %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {# {% include 'offer/montage/components/_auftrags_upload.html.twig' %} #}
+                    </div>
+                </div>
+            </div>
+            <div id="clickerdiv2" class="cd p-2">
+                <h2>{{ offer.customer.sex|trans }} {{ offer.customer.fullName }}</h2>
+                {% include 'offer/montage/intern/_products.html.twig' %}
+            </div>
+            {% if 'e-check' in appProtocols %}
+                <div id="clickerdiv3" class="cd p-2">
+                    <h2>{{ offer.customer.sex|trans }} {{ offer.customer.fullName }}</h2>
+                    {% include 'offer/montage/intern/_check.html.twig' %}
+                </div>
+            {% endif %}
+            {% if offer.subCategory and offer.subCategory.requests|length %}
+                <div id="clickerdiv4" class="cd p-2">
+                    <h2>Anträge</h2>
+                    {% include 'offer/montage/intern/_requests.html.twig' %}
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endblock %}

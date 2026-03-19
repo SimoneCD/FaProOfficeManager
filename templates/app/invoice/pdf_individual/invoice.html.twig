@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Rechnung</title>
+    <link rel="stylesheet" href="{{ absolute_url(asset('assets/css/material-dashboard.css')) }}">
+    <style>
+        .col-1 {width: 8.33%;float: left}
+        .col-2 {width: 17%;float: left}
+        .col-3 {width: 25%;float: left}
+        .col-4 {width: 33.33%;float: left}
+        .col-5 {width: 41.5%;float: left}
+        .col-6 {width: 50%;float: left}
+        .col-7 {width: 58%;float: left}
+        .col-8 {width: 66.7%;float: left}
+        .col-9 {width: 75%;float: left}
+        .col-10 {width: 83.3%;clear: left}
+        .col-11 {width: 91.67%;clear: left}
+        .col-12 {width: 100%;clear: left}
+        body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, strong {
+            color: {{ sfColorText }};
+        }
+        .row {display: flex;flex-wrap: wrap;margin-right: 0;margin-left:0;clear: left}
+        table td, table td * {
+            vertical-align: top !important;
+        }
+        strong {
+            font-weight: bold;
+            font-size: initial;
+        }
+        .main-box {
+            width: 21cm !important;
+            min-height: 29.7cm !important;
+            height: 29.72cm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    </style>
+    {% include appTemplate~'offer_pdf/_styles.html.twig' %}
+    {% include appTemplate~'invoice/pdf/_style.html.twig' %}
+</head>
+{% set price = 0 %}
+<body style="">
+    {% set rechNr = invoice.number %}
+    {% include appTemplate~'invoice/_wrap_invoice_individual.html.twig' %}
+</body>
+
+

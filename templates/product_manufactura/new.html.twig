@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Hersteller Anlegen' |trans}} - {{ sf.name }}{% endblock %}
+
+{% block main %}
+    <div class="row" id="wallbox">
+        <div class="col-md-12">
+            <a href="{{ path('app_product-manufactura_index') }}"><i class="material-symbols-outlined">list</i></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">{{ 'Hersteller anlegen' |trans}}</h4>
+                </div>
+                <div class="card-body table-responsive">
+                    {{ include('product_manufactura/_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

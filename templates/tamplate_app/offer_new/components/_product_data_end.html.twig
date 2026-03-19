@@ -1,0 +1,51 @@
+{{ restore('total') }}
+<tr>
+    <td style="border-bottom: none !important;"></td>
+    <td class="last pad-l pl-0" colspan="3"><strong>{{ 'w.nettoSum'|trans }}:</strong></td>
+    <td style="padding-right: 40px;" colspan="2" class="text-right">{{ total|number_format('2',',','.') }} &euro;</td>
+</tr>
+    <tr>
+        <td style="border-bottom: none !important;"></td>
+        <td class="last pad-l pl-0" colspan="3"><strong>{{ 'w.discount'|trans }}:</strong></td>
+        <td colspan="2" style="padding-right: 40px;" class="text-right">
+            <div class="input-group">
+                <input type="text" data-action="{{ path('ajax_update_tp', {'offer':offer.id,'type':'rabatt'}) }}" data-price="{{ (total+(offer.tax*total/100)) }}" id="rabattos" name="rabatt" class="form-control" value="{{ offer.rabat }}">
+                <i style="font-size: 14px;" class="material-icons">euro</i>
+            </div>
+            {#{{ offer.rabat|number_format('2',',','.') }} &euro;#}
+        </td>
+    </tr>
+    {% set total = total-offer.rabat %}
+    <tr>
+        <td class="pad-l" style="border-bottom: none !important;"></td>
+        <td class="last pad-l pl-0" colspan="3"><strong>{{ 'totalMinusRabat'|trans }}:</strong></td>
+        <td colspan="2" id="rabattos_price" style="padding-right: 40px;" class="text-right">{{ total|number_format('2',',','.') }} &euro;</td>
+    </tr>
+<tr>
+    <td class="pad-l" style="border-bottom: none !important;"></td>
+    <td class="last pad-l pl-0" colspan="3"><strong>{{ 'w.procentTax'|trans({'%procent%':offer.tax}) }}</strong></td>
+    <td colspan="2" style="{% if offer.tax > 0 %}border-bottom:none !important;{% endif %}padding-right: 40px;" class="text-right">{{ (appTax*total/100)|number_format('2',',','.') }} &euro;</td>
+</tr>
+{% if offer.tax == 0 %}
+    <tr>
+        <td class="pad-l" style="border-bottom: none !important;"></td>
+        <td class="last pad-l pl-0" colspan="3"><strong>{{ 'payBackTax'|trans }}<sup>*</sup></strong></td>
+        <td colspan="2" style="border-bottom:none !important;padding-right: 40px;" class="text-right">- {{ (appTax*total/100)|number_format('2',',','.') }} &euro;</td>
+    </tr>
+{% endif %}
+<tr style="background-color: #f3f3f3;">
+    <td style="border-bottom: none !important;"></td>
+    <td class="last pad-l pl-0" colspan="3"><strong style="color: {{ sfColorDark }}">{{ 'yourPrice'|trans }}:</strong></td>
+    {% if offer.tax == 0 %}
+        <td colspan="2" style="border-bottom:none !important;padding-right: 40px;font-weight: bold" class="text-right">{{ (total)|number_format('2',',','.') }} &euro;</td>
+    {% else %}
+        <td colspan="2"  style="border-bottom:none !important;padding-right: 40px;font-weight: bold" class="text-right">{{ (total+(offer.tax*total/100))|number_format('2',',','.') }} &euro;</td>
+    {% endif %}
+</tr>
+{{ save('total') }}
+{% if offer.tax > 0 %}
+    <tr class="mt-3">
+        <td style="border-bottom: none !important;"></td>
+        <td class="last pad-l pl-0" colspan="5" style="padding-left: 40px;"><small>{{ 'zeroTaxHelp'|trans }}</small></td>
+    </tr>
+{% endif %}

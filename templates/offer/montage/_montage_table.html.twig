@@ -1,0 +1,112 @@
+{% macro box(number, customer, text) %}
+    <div class="card mt-1">
+        <div class="card-header" style="padding: 10px !important;">
+            <h1 style="float: left">{{ number }}</h1>
+            <div style="float: right;font-weight: bold">{{ customer }}</div>
+        </div>
+        <div class="card-body p-0">
+            <div class="p-0 m-1">
+                <p class="text-center"><strong>{{ text|raw }}</strong></p>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+{% macro emptybox(text) %}
+    <div class="card mt-1">
+        <div class="card-body p-0">
+            <div class="p-0 m-1">
+                {{ text }}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+<style>
+    h5 {
+        margin-bottom: 0;
+        font-size: large;
+        color: {{ sfColorDark }};
+        font-weight: bold;
+        text-align: left !important;
+    }
+</style>
+<div class="customer_block w-100">
+    {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}
+        <form action="{{ path('sf_montage', {'all':'uuuu'}) }}" method="get">
+            <div class="input-group">
+                <select title="user_push" name="all" class="user_push form-control" style="padding-left: 10px;font-size: inherit;height: auto;">
+                    <option {% if app.request.query.get('all') == 'all' %}selected{% endif %} value="all">Alle</option>
+                    {% for user in getTopUsers() %}
+                        {% if user.id != 1 and user.status == 1 %}
+                            <option{% if app.request.query.get('all') == user.id %} selected{% endif %} value="{{ user.id }}">{{ user.username|capitalize }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <div class="input-group-append">
+                    <button data-action="{{ path('sf_montage') }}" type="submit" class="btn btn-light btn-sm">{{ 'w.select'|trans }}</button>
+                </div>
+            </div>
+        </form>
+    {% endif %}
+
+    <script>
+        function toggleDiv2(div) {
+            console.log(div);
+            var x = document.getElementById(div);
+            if (x.style.display === "none") {
+                document.getElementById('aimg').src = '{{ asset('app/images/Close.png') }}';
+                x.style.display = "block";
+            } else {
+                document.getElementById('aimg').src = '{{ asset('app/images/Open.png') }}';
+                x.style.display = "none";
+            }
+        }
+    </script>
+    {% set jetzt = [] %}
+    {% set zurueck = [] %}
+    {% set vor = [] %}
+    {% for a in auftraege %}
+        {% set status = a.status %}
+        {% set btext = '' %}
+        {% for k, b in a.bookings  %}
+            {% if b.title != 'Anrufen' %}
+                {% set bbutton = '<form action="'~path('sf_montage_offer', {'id':a.id})~'"><button class="btn btn-'~(b.beginAt|date('ymd') == 'now'|date('ymd') ? 'danger' : 'success')~' p-2 w-100" type="submit">'~('m.toMassProtocoll'|trans)~'</button></form>' %}
+                {% set btext = '<div class="w-100 m-0 py-0 text-center" style="color:'~sfColor~';font-size:1.1rem;font-weight:bold;">'~ b.title|trans ~'</div>' %}
+            {% if a.stationAddress %}
+                {% set btext = btext~'<div class="w-100 py-2 text-center" style="font-size:1rem"><strong style="font-weight:bold;">'~ a.stationAddress~', '~a.stationZip ~'<br><a class="btn btn-white" href="https://www.google.com/maps/dir/?api=1&origin=&destination='~ (a.stationAddress~','~a.stationZip)|replace({' ':'+'}) ~',+Deutschland" target="_blank"><img src="'~asset('app/images/google_maps.svg')~'" style="width:30px;height:30px;"></a> </strong></div>' %}
+            {% endif %}
+                {% set btext = btext~'<div class="w-100 py-2 text-center" style="font-size:1.2rem"><strong style="font-weight:bold;">'~ b.beginAt|ago ~'</strong><br><small> ('~ (b.beginAt|date('d') != b.endAt|date('d') ? b.beginAt|date('d.m H:i')~'Uhr -' : b.beginAt|date('d.m')) ~' '~(b.beginAt|date('d') == b.endAt|date('d') ? b.beginAt|date('H:i')~'-'~b.endAt|date('H:i')~'Uhr' : b.endAt|date('d.m H:i')~'Uhr')~')</small></div>' %}
+                {% set btext = btext~'<div class="w-100 m-0 py-0 text-left">'~bbutton~'</div>' %}
+                {% if (b.beginAt|date('ymd') <= 'now'|date('ymd') and b.endAt|date('ymd') >= 'now'|date('ymd')) %}
+                    {% set jetzt = jetzt|merge([{'sort':b.beginAt|date('ymd'),'customer':a.customer.fullName,'number':a.number,'text':btext}]) %}
+                {% elseif (b.beginAt|date('ymd') > 'now'|date('ymd')) %}
+                    {% set vor = vor|merge([{'sort':b.beginAt|date('ymd'),'customer':a.customer.fullName,'number':a.number,'text':btext}]) %}
+                {% else %}
+                    {% set zurueck = zurueck|merge([{'sort':b.beginAt|date('ymd'),'customer':a.customer.fullName,'number':a.number,'text':btext}]) %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+     {% endfor %}
+
+    <h5>Heute </h5>
+    {% for k, b in jetzt|sort((a,b) => a.sort <=> b.sort) %}
+        {% if b and b.number %}
+            {{ _self.box(b.number, b.customer, b.text) }}
+        {% endif %}
+    {% else %}
+        {{ _self.emptybox('Keine  heutigen Termine') }}
+    {% endfor %}
+    <h5>Anstehende Termine</h5>
+    {% for k, c in vor|sort((a,b) => a.sort <=> b.sort) %}
+        {{ _self.box(c.number, c.customer, c.text) }}
+    {% else %}
+        {{ _self.emptybox('Keine anstehenden Termine') }}
+    {% endfor %}
+    <h5>Archivierte Termine {#<a onclick="toggleDiv2('tog')">#}<img id="aimg" style="cursor:pointer;margin:4px 10px; width: 20px;" src="{{ asset('app/images/Open.png') }}">{#</a>#}</h5>
+    <div id="tog">
+    {% for k, c in zurueck|sort((a,b) => b.sort <=> a.sort) %}
+        {{ _self.box(c.number, c.customer, c.text) }}
+    {% else %}
+        {{ _self.emptybox('Keine archivierten Termine') }}
+    {% endfor %}
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="row headBoxSalutation page-wellcome m-0" style="width: 100%;padding: 20px 0 0 50px;overflow: visible;height: 300px !important;">
+    <div class="col-8 py-0 m-0 pr-4 pl-0">
+        <div class="contactPerson px-0 pt-0 pb-4 m-0">
+            <h3 style="margin-bottom: 0;margin-top: 20px">{% if offer.customer.companyName == '' %}{{ offer.customer.sex|trans }} {% endif %} {{ offer.customer.fullName }}</h3>
+            <p style="margin-bottom: 0;margin-top: 6px;">{{ offer.customer.address }}</p>
+            <p style="margin-bottom: 6px;">{{ offer.customer.zip }} {{ offer.customer.city }}</p>
+            <p style="margin-bottom: 0"><img alt="{{ 'w.email'|trans }}" style="width: 14px;" src="{{ absolute_url(asset('svgs/black/email.png')) }}"> {{ offer.customer.email }}</p>
+{#            <p style="margin-bottom: 2px;"><img alt="{{ 'w.phone'|trans }}" style="width: 14px;" src="{{ absolute_url(asset('svgs/black/phone.png')) }}"> {{ offer.customer.phone }}</p>#}
+        </div>
+        <p class="mb-2 mt-2">
+            <strong>{% include appTemplate~'pdf/_salutation.html.twig' with {'customer': offer.customer} %}</strong>
+        </p>
+        <p>{{ invoice.text|raw }}</p>
+{#        <p>Bitte begleichen Sie den Rechnungsbetrag innerhalb von 14 Tagen.</p>#}
+    </div>
+    <div class="col-4 p-0 m-0" style="padding-left: 12px !important;">
+        <div class="contactPerson contactPerson2 p-0 m-0">
+            {% include appTemplate~'pdf/_company_in_anrede.html.twig' %}
+        </div>
+    </div>
+</div>

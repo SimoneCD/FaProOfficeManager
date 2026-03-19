@@ -1,0 +1,15 @@
+<div class="col-6" style="color: #0a0a0a">
+    <span>{{ 'w.attachment'|trans }} (Dokumente aus dem Protokoll können hinzugefügt werden)</span>
+    <select name="attachment" class="form-control" data-modal-action-target="attachment">
+        <option></option>
+        {% if offer.documents %}
+            {% for attachment in offer.documents %}
+                <option value="{{ attachment.id }}">{{ attachment.filename }}</option>
+            {% endfor %}
+        {% endif %}
+    </select>
+</div>
+<div class="col-6" style="color: #0a0a0a">
+    <span data-modal-action-target="title">{{ 'w.attachmentHelp'|trans }}</span>
+    <input name="attachmentName" class="form-control" data-modal-action-target="attachmentname">
+</div>

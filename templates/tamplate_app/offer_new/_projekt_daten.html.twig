@@ -1,0 +1,87 @@
+<div class="row hBox headBoxBlank page-condition">
+    <div class="text-left col-9 m-0 p-0" style="border: none;">
+        <p class="p-0 m-0" style="font-weight: 600">{{ 'w.projectData'|trans }}</p>
+    </div>
+    <div class="text-left col-3 m-0 p-0" style="border: none;">
+        <p class="p-0 m-0" style="font-weight: 600">{{ 'w.contactPerson'|trans }}</p>
+    </div>
+</div>
+{% set offerName = getOfferName(offer.id,false,true) %}
+<div class="row hBox headBox3" style="height: auto">
+    <div class="padding-box col-9 m-0 p-0">
+        <div class="row">
+            <form id="ajax_update_offer_context_kv" class="ajax_update_offer_context col-12 p-0" action="{{ path('ajax_update_offer_option_context',{'id':offer.id}) }}">
+                {% for kv in offer.subCategory.keyValueSubCategoryData %}
+                    {% set index = loop.index-1 %}
+                    <div class="row pl-0" style="padding: 0 30px 0 0;">
+                        <div class="col-6 pl-0">
+                            <div class="input-group">
+                                <input class="form-control" name="offer_option[context][kv][name][{{ index}}]" value="
+                                    {%- if offer.option.context['kv']['name'][index] is defined -%}
+                                    {{ offer.option.context['kv']['name'][index] }}
+                                    {%- else -%}
+                                    {{ kv.keyName|replace({
+                                    '##offerName##':offerName,
+                                    '##offerNumber##':offer.number,
+                                    '##angebotsName##':offerName,
+                               }) }}
+                                    {%- endif %}" style="background-color: {{ sfColorForm }}">
+                            </div>
+                        </div>
+                        {# todo remove in 3 month from now (15.1.23) / altlast #}
+                        {% if kv.keyValue == '##address##' or kv.keyValue == '##bauAnschrift##'  %}
+                            <div class="col-6 p-0">{{ offer.stationAddress }}<br>{{ offer.stationZip }}</div>
+                        {% elseif kv.keyValue == '##offerNumber##' or kv.keyValue == '##angebotsNummer##' %}
+                            <div class="col-6 ml-2 pl-0">{{ kv.keyValue|replace({
+                                    '##offerNumber##':offer.number,
+                                    '##angebotsNummer##':offer.number,
+                                }) }}</div>
+                        {% else %}
+                        <div class="col-6 pl-0">
+                            <div class="input-group pr-3">
+                                <input class="form-control" name="offer_option[context][kv][value][{{ index }}]" value="
+                                {%- if offer.option.context['kv']['value'][index] is defined -%}
+                                {{ offer.option.context['kv']['value'][index]|replace({
+                                    '##offerName##':offerName,
+                                    '##offerNumber##':offer.number,
+                                    '##angebotsName##':offerName,
+                                }) }}
+                                {%- else -%}
+                                {{- kv.keyValue|replace({
+                                    '##offerName##':offerName,
+                                    '##offerNumber##':offer.number,
+                                    '##angebotsName##':offerName,
+                                }) -}}
+                                {%- endif %}" style="background-color: {{ sfColorForm }}">
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+                <div style="z-index: 9;position: absolute;right: 50px;bottom: -10px;">
+                    <button type="submit" class="btn btn-danger p-1">
+                        {%- if offer.option.jsonOptions['kv'] is defined -%}
+                            <i class="material-icons p-1">send</i>
+                        {% else %}
+                            {{ 'approveLeftAndRight'|trans }}
+                        {% endif %}
+                    </button>
+                </div>
+            </form>
+            <p class="col-6 p-0 mt-3"><span style="font-weight: bold">Auftragswert (incl. <select class="changeOfferTax" name="offer[tax]">
+                    <option{% if offer.tax == appTax %} selected{% endif %}
+                            value="{{ appTax }}">{{ 'w.procentTax'|trans({'%procent%':appTax}) }}</option>
+                    <option{% if offer.tax == 7 %} selected{% endif %}
+                            value="7">{{ 'w.procentTax'|trans({'%procent%':'7'}) }}</option>
+                    <option{% if offer.tax == 0 %} selected{% endif %}
+                            value="0">{{ 'w.procentTax'|trans({'%procent%':'0'}) }}</option>
+                </select>{% if offer.tax == 0 %}<sup>*</sup>{% endif %})</span>:
+
+            </p>
+            <p class="col-6 pl-0 mt-3"><span style="font-weight: bold">{{ calculatePrice(offer.id)|number_format(2, ',', '.') }} &euro;</span></p>
+        </div>
+    </div>
+    <div class="padding-box col-3 m-0" style="padding:10px 0;">
+        {% include appTemplate~'offer_pdf/components/_offer_customer_data.html.twig' %}
+    </div>
+</div>

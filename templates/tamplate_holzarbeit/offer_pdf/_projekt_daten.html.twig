@@ -1,0 +1,44 @@
+<div class="row hBox headBoxLine page-condition">
+    <div class="col-9 p-0 m-0 text-left " style="border: none;">
+        <h2 class="cp-0 m-0">{{ 'w.projectData'|trans }}</h2>
+    </div>
+    <div class="col-3 p-0 my-0 mr-1 text-left " style="border: none;margin-left: -12px">
+        <h2 class="p-0 m-0">{{ 'w.contactPerson'|trans }}</h2>
+    </div>
+</div>
+<div class="row hBox headBoxData page-data m-0">
+    <div class="col-9 p-0 m-0">
+        <div class="row p-0 pb-0 m-0" style="padding-top: 4px !important;">
+            {% for kv in offer.subCategory.keyValueSubCategoryData %}
+                {% set index = loop.index-1 %}
+                <p class="col-6 m-0 p-0">
+                    {%- if offer.option.context['kv']['name'][index] is defined -%}
+                        {{ offer.option.context['kv']['name'][index] }}
+                    {%- else -%}
+                        {{ kv.keyName|replace({'##offerName##': getOfferName(offer.id)}) }}
+                    {%- endif %}
+                    {% if  kv.keyValue == '##address##' %}<br>&nbsp;{% else %}&nbsp;{% endif %}
+                </p>
+                {% if  kv.keyValue == '##address##' %}
+                    <p class="col-6 m-0 p-0">{{ offer.stationAddress }}<br>{{ offer.stationZip }}&nbsp;</p>
+                {% elseif kv.keyValue == '##offerNumber##' %}
+                    <p class="col-6 m-0 p-0">{{ kv.keyValue|replace({'##offerNumber##': offer.number}) }}&nbsp;</p>
+                {% else %}
+                    <p class="col-6 m-0 p-0">
+                        {%- if offer.option.context['kv']['value'][index] is defined -%}
+                            {{ offer.option.context['kv']['value'][index] }}
+                        {%- else -%}
+                            {{ kv.keyValue|replace({'##offerName##': getOfferName(offer.id)}) }}
+                        {%- endif %}
+                        &nbsp;
+                    </p>
+                {% endif %}
+            {% endfor %}
+            <p class="col-6 mt-3 p-0"><strong class="text_dark">{{ 'i.offerCostInclTax'|trans }}</strong>:</p>
+            <p class="col-6 mt-3 p-0"><strong>{{ calculatePrice(offer.id)|number_format(2, ',', '.') }} &euro;</strong></p>
+        </div>
+    </div>
+    <div class="col-3 p-0 my-0 mr-1" style="border: none;margin-left: -12px;padding-top: 4px !important;">
+        {% include appTemplate~'offer_pdf/components/_offer_customer_data.html.twig' %}
+    </div>
+</div>

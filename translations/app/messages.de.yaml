@@ -1,0 +1,835 @@
+Jan: Jan
+Feb: Feb
+Mar: Mar
+Apr: Apr
+May: Mai
+Jun: Jun
+Jul: Jul
+Aug: Aug
+Sep: Sep
+Oct: Okt
+Nov: Nov
+Dec: Dez
+january: 'Januar'
+february: 'Februar'
+march: 'März'
+april: 'April'
+may: 'Mai'
+juny: Juni
+july: Juli
+august: August
+september: September
+october: Oktober
+november: November
+december: Dezember
+week:
+  mo: Mo
+  di: Di
+  mi: Mi
+  do: Do
+  fr: Fr
+  sa: Sa
+  so: So
+
+salutations:
+  ms: 'Frau'
+  mr: 'Herr'
+  ma: 'Diverse'
+# altlast
+Frau: 'Frau'
+Herr: 'Herr'
+Diverse: ''
+ms: 'Frau'
+mr: 'Herr'
+ma: ''
+msShort: 'Fr.'
+mrShort: 'Hr.'
+maShort: ''
+
+#classicStuff
+agb:
+  title: 'Angebot Information'
+  a:
+    name: 'Allgemeine Geschäftsbedingungen'
+    text: 'Unser AGB finden Sie auf unserer Webseit %page%'
+  b:
+    name: 'Unverbindlichkeit'
+    text: 'Es bestehen keine Verbindlichkeiten bis zur einvernehmlichen Angebotsbestätigung/Auftragserteilung.'
+  c:
+    name: 'Angebot Gültigkeit'
+    text: 'Nach Auftragsannahme durch den Kunden, vereinbaren wir ggf. einen vor-Ort Termin zur Überprüfung auf Korrektheit der angegebenen Daten und Machbarkeit der Realisierung. Ausschließlich eine schriftliche Bestätigung des Bauvorhabens durch ZOE gilt als offizielle Auftragsbestätigung.'
+  d:
+    name: 'Informationen zum Zustandekommen des Vertrages'
+    text: 'Die technischen Schritte zum Vertragsschluss, der Vertragsschluss selbst und die Korrekturmöglichkeiten erfolgen nach Maßgabe der Regelungen unter § 2 „Angebot und Vertragsabschluss“.'
+openTimes: '(Mo. - Fa. 07:30 - 16:30 Uhr, Sa. nach Vereinbarung)'
+planAndPay: 'Zahlungsplan und Rechnungsstellung'
+oClock: '%clock% Uhr'
+totalMinusRabat: 'Gesamt abzgl. Rabatt'
+saveAndSend: 'Speichern und Senden'
+payBackTax: 'Nullsteuer (-MwSt.)'
+payToOrder: 'Zahlungseingang gilt als Auftragsbestätigung'
+finalPayIfFinished: 'Abschlusszahlung nach Fertigstellung'
+noApointment: 'Kein Termin festgelegt'
+approveLeftAndRight: 'Daten links und rechts absegnen!'
+aprovePfdSalutation: 'Anrede absegnen!'
+yourPrice: 'Ihr Preis'
+addPartPlusInvoice: 'Teil-Rechnung hinzufügen'
+sendInfo: 'Nur wenn das Kästchen aktiv ist,  wird  das Angebot an den Kunden gesendet!'
+zeroTaxHelp: 'Abzug der MwSt. (Nullsteuersatz)'
+conditions: '(Konditionen nachfolgend aufgeführt)'
+Kundenservice: 'Kundenservice'
+noRecordsFound: 'Keine Einträge gefunden'
+pageSumTransfer: 'Übertrag von Seite %page%'
+rights1: 'Alle Rechte vorbehalten.'
+rights2: 'Abdruck, datentechnische Vervielfältigung (auch auszugsweise)<br>oder Veränderung bedürfen der schriftlichen Zustimmung des Verlages.'
+
+lang:
+  de: Deutsch
+  gb: Englisch
+  es: Spanisch
+  tr: Türkisch
+
+#status
+s:
+  call: 'Anrufen'
+  callPlus: 'Bearbeiten'
+  storno: 'Storniert'
+  sendOffer: 'Angebot senden'
+  sendOfferInWork: 'Formular in Bearbeitung'
+  waitOffering: 'Angebotsbestätigung einholen'
+  offering: 'Kunde hat bestätigt'
+  sendPartInvoice: 'Abschlagsrechnung senden'
+  partInvoicePayed: 'Rechnung ist eingegangen'
+  sendRestInvoice: 'Schlussrechnung senden'
+  waitPartInvoice: 'Warten auf Zahlungseingang'
+  waitRestInvoice: 'Warten auf Schlussrechnung Eingang'
+  done: 'Arbeit abgeschlossen'
+  projectAppointment: 'Anträge'
+  appointed: 'Montage Termin wurde vereinbart und Material bestellt'
+  projectInstallation: 'Projekt Installation'
+  projectInstalled: 'Installation abgeschlossen'
+  finished: 'Abgeschlossen (Bezahlt)'
+  finishInvoicePayed: 'Abschluss-Rechnung eingegangen'
+  archived: 'Archiviert'
+
+impressum:
+  identity: 'Identität des Verkäufers'
+
+replace:
+  edit: '%name% bearbeiten'
+  questionnaire: '%name% Fragebogen'
+  question: '%name% Frage bearbeiten'
+
+#words
+w:
+  links: 'Empfehlungslinks'
+  link: 'Empfehlungslink'
+  certificats: 'Zertifikate'
+  ean: 'GTIN/EAN'
+  eanCode: 'Barcode'
+  partner: 'Partner'
+  order: 'Bestellen'
+  attachment: 'Anhang'
+  attachmentHelp: 'Anhang Name (ohne  Sonderz./Leerzeichen und Endung)'
+  no: 'Nein'
+  yes: 'Ja'
+  copy: 'Kopieren'
+  bold: 'Fett'
+  lineBreaks: 'Zeilenumbrüche'
+  message: 'Nachricht'
+  active: 'Activ'
+  group: 'Gruppieren'
+  ceo: 'Geschäftsführer'
+  abort: 'Abbrechen'
+  view: 'Ansicht'
+  fullname: 'Vor- und Nachname'
+  colors:
+    white: 'Weiß'
+    black: 'Schwarz'
+    grey: 'Grau'
+    silver: 'Silber'
+    anthrazit: 'Anthrazit'
+    collorfull: 'Bunt'
+    color: 'Einfarbig'
+  value: 'Value'
+  securityRole: 'Stellung im Unternehmen'
+  securityRoles:
+    ROLE_EMPLOYEE_ONE: 'Ausgeschiedene Mitarbeiter'
+    ROLE_MONTAGE: 'Monteur (Chat, Montagen, Termine)'
+    ROLE_CUSTOMER: 'Kunde'
+    ROLE_EMPLOYEE_EXTERN: 'Externer Mitarbeiter (wie Kundenservice, sieht aber nur eigene Angebote)'
+    ROLE_EMPLOYEE_SERVICE: 'Kundenservice-Mitarbeiter'
+    ROLE_ADMIN: 'Chef (ohne Userlösch Funktionen)'
+    ROLE_SUPER_ADMIN: 'Chef'
+  reset: 'Zurücksetzen'
+  crop: 'Zuschneiden und speichern'
+  flip: 'Vertikal spiegeln'
+  time: 'Uhrzeit'
+  back: 'zurück'
+  done: 'Erledigt am'
+  discount: 'Rabatt'
+  zeroTax: 'Nullsteuersatz'
+  germany: 'Deutschland'
+  installations: 'Installationen'
+  count: 'Menge'
+  from: 'Von'
+  until: 'Bis'
+  id: 'Id'
+  short:
+    sort: 'Sort.'
+    pauschal: 'pschl.'
+    country: 'DE'
+    mwst: 'MwSt.'
+    invoiceNr: 'Rechnung Nr.'
+    lvNumber: 'LV-Nr.'
+    custumerNumber: 'Kd-Nr.'
+  lv: 'LV-Bezeichnung'
+  buisiness: 'Gewerbe'
+  today: 'Heute'
+  tomorrow: 'Morgen'
+  save: 'Speichern'
+  delete: 'Löschen'
+  password: 'Passwort'
+  password_confirm: 'Passwort wiederholung'
+  password_forgott: 'Passwort vergessen'
+  notice: 'Notiz'
+  address: 'Adresse'
+  zip: 'PLZ'
+  city: 'Stadt'
+  country: 'Land'
+  generally: 'Allgemein'
+  name: 'Name'
+  surname: 'Nachname'
+  username: 'Benutzername'
+  email: 'E-Mail'
+  phone: 'Telefon'
+  overview: 'Übersicht'
+  productName: 'Produktname'
+  productCategories: 'Produktkategorien'
+  productCategory: 'Produktkategorie'
+  posShort: 'Pos.'
+  type: 'Produkttype'
+  date: 'Datum'
+  product: 'Produkt'
+  products: 'Produkte'
+  contactPerson: 'Ansprechpartner'
+  inquiry: 'Kundenanfrage'
+  offer: 'Angebot'
+  offers: 'Angebote'
+  categories: 'Kategorien'
+  category: 'Kategorie'
+  subCategories: 'Unterkategorien'
+  subCategory: 'Unterkategorie'
+  invoice: 'Rechnung'
+  invoicePart: 'Abschlagsrechnung'
+  invoicePartPlus: 'Teil-Rechnung'
+  invoiceRest: 'Schlussrechnung'
+  customerNumber: 'Kundennummer'
+  offerNumber: 'Angeotsnummer'
+  invoiceNumber: 'Rechnungsnummer'
+  else: 'Sonstiges'
+  select: 'Auswählen'
+  customer: 'Kunde'
+  customers: 'Kunden'
+  customerEdit: 'Kunden bearbeiten'
+  customerService: 'Kundenservice'
+  customerServiceMessage: 'Kundenservice Mitteilung'
+  serviceLogin: 'Service Login'
+  position: 'Position'
+  open: 'offen'
+  price: 'Preis'
+  ekprice: 'Einkaufspreis'
+  stock: 'Bestand'
+  betweenSum: 'Zwischensumme'
+  singlePrice: 'Einzelpreis'
+  completePrice: 'Gesamtpreis'
+  completesum: 'Gesamtmenge'
+  ordered: 'Bestellt'
+  brutto: 'Brutto'
+  bruttoprice: 'Bruttopreis'
+  nettoprice: 'Nettopreis'
+  nettoSum: 'Nettosumme'
+  netto: 'Netto'
+  tax: 'Steuern'
+  procentTax: '%procent%% MwSt.'
+  amount: 'Menge'
+  description: 'Beschreibung'
+  search: 'suche'
+  editor: 'Bearbeiter'
+  editorShort: 'Bearb.'
+  status: 'Status'
+  project: 'Projekt'
+  projectManager: 'Projektleiter'
+  projectData: 'Projektdaten'
+  team: 'Team'
+  teams: 'Teams'
+  appointment: 'Termin'
+  appointments: 'Termine'
+  all: 'Alle'
+  call: 'Anrufen'
+  callNew: 'Neukunden Aufnahme'
+  visit: 'Besichtigung'
+  montage: 'Montage'
+  montageOrt: 'Auftragsort'
+  installtion: 'Installation'
+  employee: 'Mitarbeiter'
+  employees: 'Mitarbeiter'
+  chat: 'Chat'
+  images: 'Bilder'
+  title: 'Titel'
+  salutation: 'Anrede'
+  send: 'Senden'
+  symbol: 'Symbol'
+  sort: 'Sortierung'
+  settings: 'Einstellungen'
+  protocolView: 'Ansicht in'
+  questions: 'Fragen'
+  question: 'Frage'
+  urgentView: 'Sofortansicht'
+  answer: 'Antwort'
+  answers: 'Antworten'
+  answerType: 'Antworttype'
+  color: 'Farbe'
+  measure: 'Einheit'
+  help: 'FAQ'
+
+#button
+b:
+  saveToOffer: 'Speichern und zum Angebot'
+  appointmentsToday: 'Termine heute'
+  appointmentsAll: 'Alle Termine'
+
+#user
+u:
+  image: 'Profilbild'
+  editYours: 'Profil bearbeiten'
+  edit: 'Mitarbeiter bearbeiten'
+
+#inquiry
+iq:
+  saveProcessing: 'Zum Bearbeiten speichern'
+  inWork: 'Angebot in Bearbeitung'
+  new: 'Neue Anfrage'
+  edit: 'Kundenanfrage bearbeiten'
+  delete: 'Kundenanfrage löschen'
+  confirmDelete: 'Kundenanfrage wirklich löschen?'
+  send: 'Angebot gesendet'
+  sendNumber: 'Angebot %offerNumber% gesendet'
+  info: 'Bestands-/Kundenanfrage aufnehmen'
+  refererFrom: 'Woher kommt der Kunde?'
+  callCustomer: 'Kunde muss noch anrufen werden'
+  stornoAt: 'Storniert am %date%'
+  doneAt: 'Erledigt am %date%'
+  notice: 'Information für den Ausführenden Mitarbeiter'
+  customerSelect: 'Bestandskunden auswählen'
+  import:
+    new:  '%count% neue Angebote Importiert.'
+    title:
+      storno: 'Reklamation - Anfragenummer'
+    error:
+      incorectData: 'die angegeben Kontaktdaten sind nicht korrekt.'
+      dontWant: 'der Kunde möchte keine Anfrage mehr.'
+      time: 'der gekaufte Lead, ist innerhalb der gebotenen Reklamationszeit nicht abzuwickeln, da er trotz mehrfacher Anrufe nicht zu erreichen ist.'
+
+#emails
+e:
+  from: 'E-Mails von %name%'
+  new: 'Neue E-Mail an'
+  send:
+    errorView: '%subjectName% - %subject% - Aktivieren Sie bitte html für diese Email-Ansicht.'
+
+#offer
+o:
+  copy:
+    include: 'Mit Daten (Bilder, Texte)'
+    exclude: 'Ohne Daten'
+  delete: 'Angebot löschen'
+  mark: 'Markieren'
+  datas: 'Angebotsdaten'
+  pageNumber: 'Seite %page%'
+  select: 'Angebots Auswahl'
+  send: 'Angebot versenden'
+  for: 'Angebot für %name%'
+  from: 'Angebote von %name%'
+  new: 'Neues Angebot'
+  moreOffersFrom: 'Angebote von %name%'
+  taxFree: 'Steuer befreit'
+  deletePlease: 'Angebot soll gelöscht werden'
+  urgentCall: 'Bitte Dringend zurückrufen'
+  lastChanges: 'Letzte Bearbeitung'
+  stotnoDaaMessage: 'Angebot %offerNumber% stornieren'
+  stotnoDaaMessageError: 'Angebot %offerNumber% muss direkt bei DAA storniert werden'
+  yourOffer: 'Ihr Angebot'
+  address: 'Auftrags Anschrift (Strasse, Hausnummer) '
+  city: 'Auftrags Anschrift  (Plz, Stadt) '
+  image: 'Angebots-Bild'
+  imagePreview: 'Bild-Vorschau'
+  name: 'Angebots Name'
+  questionnatre: 'Fragebogen Name'
+  questionnatreAdd: 'Fragebogen hinzufügen'
+  questionnatreCategoryEdit: 'Kategorie (%name%) bearbeiten'
+  categories: 'Kategorien'
+  category: 'Kategorie'
+  subCategories: 'Angebots Unterkategorien'
+  subCategory: 'Angebots Unterkategorie'
+  product: 'Angebot Produkt'
+  products: 'Angebot Produkte'
+  productAdd: 'Produkt dem Angebot hinzufügen'
+  sendAt: 'Gesendet am %date%'
+  settings:
+    autoReplace: 'Automatisch ersetzt werden folgende Angaben'
+    powerValuesTitle: 'Leistungsverzeichnis'
+    powerValuesText: 'Leistungsverzeichnis Text'
+    bau: 'Allgemeine Baubeschreibung'
+    partInvoice: 'Angebots Abschlagsrechnung Anrede'
+    invoice: 'Angebots Schlussrechnungs Anrede'
+    offerSettingsLabel: 'Einstellungen für %name% Angebote'
+  productMultiplicator:
+    name: 'Produktmultiplikator'
+    one: '1 mal'
+    two: '2 mal'
+    three: '3 mal'
+    four: '4 mal'
+    answer: 'mal Antwort'
+    amount: 'Angebotsposition Anzahl'
+    installAmount: 'Installations Anzahl'
+    length: 'Längenangabe(Frage muss definiert werden!)'
+  confirm:
+    viewBack: 'Das Angebot wird in der Übersicht wieder Angezeigt! Ist das gewünscht?'
+    view: 'Das Angebot kann anschließend nur noch beim Kunden oder im Terminkalender gesehen werden! Ist das gewünscht?'
+    delete: 'Angebot wirklich löschen?'
+    deletProduct: 'Das Produkt wirklich aus dem Angebot löschen?'
+  error:
+    server: 'Die Produktkategorie konnte nicht gelöscht werden. Bitte mit folgender Nachricht bei einem Administrator melden'
+    catDependencies: 'Folgende Fragebögen könnten betroffen sein, bitte prüfen ob Angebots-Produktkategorien neu zu setzen sind'
+    noAccessTo: 'Keine Berechtigung für %number%'
+    checkProjectData: 'Bitte Projektdaten Prüfen'
+    checkSalutation: 'Bitte Anrede Überprüfen'
+    checkEmailSalutation: 'Bitte E-Mail Überprüfen'
+    checkSendEmail: 'Das Angebot wurde gespeichert, konnte aber nicht gesendet werden. Bitte die E-Mail Daten überprüfen'
+    send: 'Mail konnte nicht gesendet werden.'
+    groupName: 'Der Gruppenname darf nicht leer sein!'
+    noGroup: 'Keine Zuordnung'
+  success:
+    saved: 'Das Angebot wurde zum Bearbeiten gespeichert.'
+    created: 'Das Angebot wurde erstellt.'
+    send: 'Das Angebot wurde versendet.'
+    noSend: 'Das Angebot wurde nicht versendet.'
+    delete: 'Das Angebot wurde gelöscht.'
+  headerLine:
+    left: 'Angebots Headline links'
+    right: 'Angebots Headline rechts'
+  productData:
+    from: 'Leistungszeitraum von'
+    until: 'Leistungszeitraum bis'
+    name: 'Produktdaten Name'
+    value: 'Produktdaten Wert'
+  #customer-block
+  b:
+    notice: 'Notizen für den Sachbearbeiter der Telefonanfrage'
+  #category
+  c:
+    teamCategories: 'Teams'
+    change: 'Angebot Kategorie wechseln'
+  #category
+  sc:
+    change: 'Angebot Unterkategorie ändern'
+  #text
+  t:
+    powerValueFor: 'Leistungsverzeichnis für'
+    globalDescription: 'Allgemeine Anforderungsbeschreibung'
+    email:
+      offer: 'vielen Dank, dass Sie sich für ein Angebot von %name% entschieden haben.<br>Sie finden Ihr Angebot mit der Nummer %offerNumber%, im Anhang.<br>Für Rückfragen stehen wir Ihnen zur unten genannten Öffnungszeiten zur Verfügung.'
+      individualInvoice: 'wir bedanken uns für Ihre Beauftragung und freuen uns Ihnen hiermit die Rechnung mit der Rechnungsnummer %invoiceNumber% überreichen zu dürfen.'
+      partInvoice: 'wir bedanken uns für Ihre Beauftragung bzgl. Angebot Nr. %offerNumber% und freuen uns Ihnen hiermit die Abschlagsrechnung überreichen zu dürfen.'
+      finalInvoice: 'wir bedanken uns für die freundliche Zusammenarbeit. <br>Anbei befindet sich Ihre Schlussrechnung mit der Nummer: %invoiceNumber%.'
+    offer:
+      offer: 'wir freuen uns, Ihnen hiermit Ihr Angebot bezüglich Ihrer %offerName%, zu nachfolgend aufgeführten Konditionen überreichen zu dürfen.'
+      partInvoice: 'wir bedanken uns für Ihre Beauftragung bzgl. Angebot Nr. %offerNumber% und freuen uns Ihnen hiermit die Abschlagsrechnung überreichen zu dürfen.'
+      finalInvoice: 'wir bedanken uns für die freundliche Zusammenarbeit. <br>Anbei befindet sich Ihre Schlussrechnung zum Angebot Nr. %offerNumber%.'
+
+#category
+oc:
+  edit: 'Angebotskategorie bearbeiten'
+  delete: 'Angebotskategorie löschen'
+  new: 'Neue Angebotskategorie anlegen'
+  questionAssinment: 'Gruppen, um die Fragen zu gruppieren.'
+
+#subCategory
+osc:
+  delete: 'Angebots-Fragebogen löschen'
+  new: 'Neuen Angebots-Fragebogen anlegen'
+  newIn: 'Neuen Angebots-Fragebogen in %name% erstellen'
+  productCategoryAssign: 'Produktkategorie zuweisen'
+  productCategoryAnswerAssign: 'Produkte bei dieser Antwort hinzufügen'
+  label:
+    needImage: 'Diese Frage benötigt ein Bild vom Kunden'
+    needImageShort: 'Kundenbild'
+    allwaysUse: 'Ausgewählte Produkte dem Angebot immer beifügen'
+  quest:
+    sort: 'Sortierung'
+    delete: '%name% Fragebogen Löschen'
+    selectProductCategory: 'Kategorie für die Produktauswahl'
+    #questionnaire
+    q:
+      count: 'Multiplikator'
+      delete: 'Diese Frage löschen?'
+      help:
+        sort: 'Wird für die Sortierung im Angebot benutzt.'
+        aPlus: 'Erfordert das Anlegen von Antworten für diese Frage.'
+        selectProduct: 'Erfordert das Auswählen einer Produktkategorie'
+      answerType: 'Antwort Type'
+      answerTypes:
+        help:
+          onePossible: '1 Antwort mgl.'
+          onePossiblePlus: '1 Antwort mgl. + Textfeld'
+          morePossible: 'mehrere Antworten mgl.'
+          useOneTime: 'wird 1 mal verwenden!'
+        radio:
+          name: 'Auswahl Buttons'
+        checkbox:
+          name: 'Kästchen'
+        select:
+          name: 'Auswahlfeld'
+        productSelect:
+          name: 'Produktauswahl'
+          help: 'Produktkategorie Auswahl im Anschluss'
+        mainProduct:
+          name: 'Angebots Produkt'
+          help: 'inkl. Anzahlfeld'
+        number:
+          name: 'Nummerfeld'
+          area: 'Nummer'
+        text:
+          name: 'Textfeld'
+          area: 'Viel Text'
+          help: 'Nur fürs Protokoll, Information'
+        amount:
+          name: 'Anzahl'
+          help: 'nur 1 mal verwenden'
+        installAmount:
+          name: 'Anzahl Installationen'
+        length:
+          name: 'Längenmaß'
+        kw:
+          name: 'Leistung'
+      name: 'Frage'
+      edit: 'Frage bearbeiten'
+      add: 'Neue Frage hinzufügen'
+      success:
+        add: 'Neue Frage wurde zu %name% hinzufügen'
+        addQuestionnaire: 'Neuer Fragebogen (%name%) wurde angelegt.'
+      addIn: '%name% eine neue Frage hinzufügen'
+    a:
+      add: 'Neue Antwort hinzufügen'
+      delete: 'Antwort löschen'
+      edit: 'Antwort bearbeiten'
+      showOnly: 'Markiere Fragen, die eingeblendet werden bei dieser Antwort.'
+      error:
+        format: 'Bitte das Bild im Format jpg oder png hochladen.'
+        size: 'Das Bild sollte 1024k nicht überschreiten.'
+      dependencies: 'Fragen einblenden'
+      name: 'Antwort'
+    edit: 'Fragebogen bearbeiten'
+    questionnaire: 'Angebots-Fragebogen'
+    questionnaires: 'Angebots-Fragebögen'
+    numberQuestions: 'Anzahl Fragen'
+
+material:
+  price: 'Materialpreis'
+  prices: 'Materialpreise'
+  order: 'Materialbestellung'
+  orders: 'Materialbestellungen'
+#montage
+m:
+  products:
+    stock: 'Im Lager'
+    inStock: 'Bestellt'
+    toOrder: 'Freigegeben zum Bestellen'
+  document: 'Dokument'
+  documents: 'Dokumente'
+  documentsUpload: 'Dokumente hochladen'
+  documentAdd: 'Dokument hinzufügen'
+  information: 'Aktueller Stand'
+  imageAdd: 'Projektbild Hinzufügen'
+  image: 'Projektbild'
+  imageUpload: 'Projektbilder hochladen'
+  images: 'Projektbilder'
+  notice: 'Aktueller Stand'
+  toMassProtocoll: 'Zum Aufmaß-Protokoll'
+  massProtocoll: 'Aufmaß-Protokoll'
+  mass: 'Aufmass'
+  protocoll: 'Protokoll'
+  protocolls: 'Protokolle'
+  montage:
+    time: 'Ausführungszeitraum'
+    onlyProtocoll: 'P'
+    onlyProtocollHelp: 'Nur fürs Protokoll'
+    protocoll: 'P+F'
+    protocollHelp: 'Für das Protokoll und den Fragebogen'
+    questionnaire: 'F'
+    questionnaireHelp: 'Nur für den Fragebogen'
+  customerProjectData: 'Aufmaßprotokoll'
+  customerProjectInfo: 'Auftragsinformation'
+  actualized: 'Aktuallisiert'
+
+#customer
+c:
+  zipCity: 'PLZ/Ort'
+  delete: 'Kunde löschen'
+  edit: 'Kunde bearbeiten'
+  new: 'Neuer Kunde'
+  exist: 'Betands Kunde'
+  companyName: 'Name der Kunden Firma'
+  yourCustomer: 'Deine Kunden'
+  welcomeAll: 'Sehr geehrte Damen und Herren,'
+  welcomeMale: 'Sehr geehrter Herr %name%,'
+  welcomeFemale: 'Sehr geehrte Frau %name%,'
+  welcomeGender: 'Sehr geehrte/r %name%,'
+
+#formular
+f:
+  a:
+    oneAnswer: 'Eine Antwortmöglichkeit'
+  button:
+    saveName: '%name% Speichern'
+  label:
+    invoiceMailText: 'Schlussrechnungs E-Mail Text, nach der Anrede'
+    partInvoiceMailText: 'Abschlagsrechnungs E-Mail Text, nach der Anrede'
+    offerMailText: 'Angebots E-Mail Text nach der Anrede'
+    invoiceText: 'Schlussrechnungs Text, nach der Anrede'
+    partInvoiceText: 'Abschlagsrechnungs Text, nach der Anrede'
+    offerText: 'Angebots Text nach der Anrede'
+    kwName: 'Leistung'
+    kwNameShort: 'Leist. Bez.'
+    fullname: 'Ganzer Name'
+    general: 'Allgemeine Angaben'
+    address: 'Adresse'
+    zip: 'Postleitzahl'
+    existCustomer: 'Bestandskunden wählen'
+    searchCustomer: 'Kundensuche'
+    shop: 'Einkauf-Link'
+  error:
+    imageSize: 'Das Bild sollte 1024k nicht überschreiten'
+    imageFormat: 'Bitte das Bild im Format jpg oder png hochladen!'
+    checkData: 'Bitte %miss% überprüfen!'
+    orMissing: '%miss% oder %missOr% müssen angegeben sein!'
+  success:
+    invoiceSend: 'Die Rechnung %invoiceNumber% wurde versendet'
+    invoiceSave: 'Die Rechnung %invoiceNumber% wurde gespeichert'
+  confirm:
+    pInvolved: '%number% Produkte sind involviert'
+    pscInvolved: '%number% Produktunterkategorie sind involviert'
+    pcDelete: 'Bitte bestätige, dass du die Produktkategorie wirklich löschen möchtest'
+    pscDelete: 'Bitte bestätige, dass du die Produktunterkategorie wirklich löschen möchtest'
+    offerConfirmed: 'Bitte bestätige, dass das Angebot bestätigt wurde'
+    partPaied: 'Bitte Bestätige, dass alle Abschlagsrechnungen bezahlt worden sind'
+    appointmentGiven: 'Bitte Bestätige, dass die Terminvereinbarung abgeschlossen ist'
+    workDone: 'Bitte Bestätige, dass die Installation komplett abgeschlossen ist'
+    payed: 'Bitte Bestätige, dass die Abschlussrechnung bezahlt ist'
+    storno: 'Bitte Bestätige, dass das Angebot storniert werden soll'
+    deleteItem: 'Product wirklich löschen?'
+    deleteAnswer: 'Antwort wirklich löschen?'
+    deleteQuestion: 'Frage wirklich löschen?'
+    deleteCustomer: 'Kunde (%name%) wirklich löschen?'
+    deleteCategory: 'Angebot Kategorie wirklich löschen?'
+    deleteQuestionnaire: 'Möchtest du den Angebots Fragebogen wirklich löschen?'
+
+#invoice
+i:
+  th:
+    nr: 'R-Nr.'
+    datum: 'R-Datum'
+    name: 'Rechnung-Bezug'
+    paid: 'Bezahlt'
+    sent: 'Versendet'
+    complete: 'Auftragswert Brutto'
+  error:
+    data: 'Bitte Rechnungsdaten Prüfen'
+    partDataMail: 'Bitte Abschlags-Rechnungs E-Mail Prüfen'
+    email: 'Bitte Rechnungs E-Mail Prüfen'
+  confirm:
+    delete: 'Diese Rechnung wirklich löschen?'
+  finalInvoice: 'Schlussrechnung %number%'
+  partInvoice: 'Abschlagsrechnung %number%'
+  data: 'Rechnungsdaten'
+  send: 'Rechnung an den Kunden versenden'
+  toPayName: 'Rechnungsbetrag'
+  toPayBruttoName: 'Brutto Rechnungsbetrag'
+  offerCostInclTax: 'Auftragswert (inkl. MwSt.)'
+  offerCostExclTax: 'Rechnungs-Gesamtsumme (Netto)'
+  toPay: 'Bitte zahlen Sie den genannten Rechnungsbetrag innerhalb von 7 Werktagen auf das unten genannte Konto.'
+ip:
+  t:
+    a: 'wir danken Ihnen für Ihre Beauftragung und senden Ihnen, Ihre Zwischenrechnung bzgl. des Angebots %offerNumber%.'
+    b: 'wir bedanken uns für Ihre Beauftragung bzgl. Ihres Angebots %offerNumber% und freuen uns Ihnen hiermit die Abschlagsrechnung überreichen zu dürfen.'
+    lineOne: 'Rechnung %offerNumber%.1 vom %date% (Netto):'
+    lineNext: 'Abschlagsrechnung %invoiceNumber% vom %date% (Netto):'
+  error:
+    exist: 'Eine noch nicht gesendete Zwischenrechnung existiert bereits (%invoiceNumber%)'
+ir:
+  billingText: 'Abschlussarbeiten Angebot %offerNumber%'
+pdf:
+  greetings: 'Mit freundlichen Grüßen'
+
+#pageTitles
+title:
+  app:
+    customerServiceInformation: 'Kundenservice Information'
+  login: 'Login'
+  product:
+    index: 'Produkte/Material Übersicht'
+  offer:
+    pdf: 'Ihr Angebot %offerNumber%'
+    index: 'Angebote - Übersicht'
+    archive: 'Abgeschlossene Angebote - Übersicht'
+
+inquiryNotice: 'Zusatzinformation von DAA (Kunde) wenn vorhanden, übernehmen)'
+
+#product
+p:
+  editSuccess: 'Das Produkt wurde gespeichert'
+  all: 'Alle Produkte'
+  description: 'Produktbeschreibung'
+  add: 'Produkt hinzufügen'
+  new: 'Neues Produkt anlegen'
+  edit: 'Perodukt bearbeiten'
+  delete: 'Perodukt löschen'
+  deleteSuccess: 'Das Produkt wurde gelöscht'
+  deleteError: 'Das Produkt konnte nicht gelöscht werden'
+  symbolHelp: 'Symbole die angezeigt werden können, finden Sie hier %link%'
+  assignment: 'Prudukt Zuordnung'
+  partner: 'Partnerprodukt'
+  KfW: 'KfW gefördert'
+  ibb: 'IBB gefördert'
+  bmvi: 'BMVI gefördert'
+  nettoPrice: 'Netto Preis'
+  bruttoPrice: 'Brutto Preis'
+  tax: 'Steuern'
+  notice: 'Notiz'
+  delivery: 'Lieferung(Tage)'
+  delivered: 'Geliefert'
+  subCategories: 'Produkt Unterkategorien'
+  subCategory: 'Produkt Unterkategorie'
+  images: 'Produktbilder'
+  image: 'Produktbild'
+  imgHelp:
+    trans: 'Transparent an den Kanten'
+  imagePreview: 'Product image preview'
+  color: 'Produktfarbe'
+  number: 'Positionsnummer'
+  kw: 'Leistung Bezeichnung'
+  kwOptional: 'Produkt Leistung'
+  priceInfo: 'Preisinformation'
+  workerProduct: 'Leistungsprodukt'
+  orderInfo: 'Bestellinformation'
+  order:
+    product: 'Produktbestellung'
+    save: 'Bestellung abgeschlossen'
+  offer: 'Angebot Produkt (Angebot besteht aus Produkten dieser Kategorie)'
+  help:
+    itemDescription: 'Produkteigenschaft auch im Titel und der Beschreibung unerbringen(3,7 kWh, weiß ...)'
+    allwaisIn: 'Diese Produkte sind als Standardauswahl in jedem Angebot-Fragebogen enthalten.'
+    mainProduct: 'Hauptprodukt (wird im Angebot farbig unterlegt).'
+    subCategoryChange: 'Die Unterkategorie zu Ändern, kann ohne Problem, zu jeder Zeit durchgeführt werden.'
+  products:
+    order: 'Produkte die mit diesem Produkt bestellt werden müssen'
+  manufacturer:
+    title: 'Herstellerinformation'
+    name: 'Hersteller'
+    garanty: 'Hersteller Garantie'
+    info: 'Verkäufer Information'
+    deliveryTime: 'Lieferzeit'
+  subCat:
+    available: 'Immer Verfügbar'
+    fromProduktCatName: 'Produktunterkategorie von %category%'
+  c:
+    deleteSuccess: 'Die Produktkategorie wurde gelöscht'
+    delete: 'Produktkategorie löschen'
+    add: 'Produktkategorie hinzufügen'
+    count: 'Produktanzahl'
+    edit: 'Produktkategorie bearbeiten'
+  sc:
+    edit: 'Produktunterkategorie bearbeiten'
+    in: 'Produkte in dieser Produktunterkategorie'
+    new: 'Neue Produktunterkategorie anlegen'
+    delete: 'Produktunterkategorie löschen'
+
+#appointments
+book:
+  what: 'Worum gehts?'
+  info: 'Termin Information'
+  from: 'Termine von %name%'
+  toLate: 'Termin verpasst'
+  type:
+    call: 'Anrufen'
+    visit: 'Besichtigung'
+    try: 'Terminvorschlag'
+    task: 'Aufgabe'
+    work: 'Montage/Installation'
+    other: 'Sonstiges'
+
+#questionnaire
+oq:
+  edit: 'Fragebogen bearbeiten'
+  viewSelectedQuestions: 'Ausgewählte Fragen einblenden'
+  viewState: 'Als Formular anzeigen in'
+oqa:
+  montageInfo: 'Wird zusätzlich im Auftragsprotokoll notiert.'
+  image: 'Antwort Bild'
+  imagePreview: 'Antwort Bildvorschau'
+
+chat:
+  send: 'Nachricht senden'
+  error:
+    oneWindow: 'Nur ein Chatfenster erlaubt.'
+
+#dashboard
+dash:
+  showMeName: 'Zeige mir'
+  showMeMaterialCost: 'Matrialkosten von Angebotsnummer'
+  showMe:
+    firstPayed: 'Projekttermine, die zu vereinbaren sind'
+    partInvoiceToSend: 'Abschlagsrechnungen, die gesendet werden müssen'
+    invoiceToSend: 'Schlussrechnungen, die gesendet werden müssen'
+    waitPartInvoice: 'Ausstehende Abschlagsrechnungen'
+    waitInvoice: 'Ausstehende Schlussrechnungen'
+
+dataTable:
+  processing: 'Daten werden geladen...'
+  search: 'In Tabelle suchen'
+  viewStart: 'Zeige _MENU_ Einträge an'
+  viewStartEnd: 'Zeige _START_ bis _END_ von _TOTAL_ Einträgen'
+  viewNull: 'Zeige 0 bis 0 von 0 Einträgen'
+  filter: '(Filter _MAX_ Einträge von allen)'
+  noData: 'Keine Daten in der Tabelle vorhanden'
+  start: 'Start'
+  back: 'zurück'
+  next: 'weiter'
+  toEnd: 'zum Ende'
+  sortUb: 'Aktivieren, um die Spalte in aufsteigender Reihenfolge zu sortieren.'
+  sortDown: 'Aktivieren, um die Spalte in absteigender Reihenfolge zu sortieren.'
+
+message:
+  new: 'Neue Nachricht'
+teams:
+  confirm:
+    delete: 'Soll das Team wirklich gelöscht werden?'
+  new: 'Neues Team anlegen'
+  edit: 'Projektteam bearbeiten'
+
+partner:
+  confirm:
+    delete: 'Soll der Partner wirklich gelöscht werden?'
+  edit: 'Partner bearbeiten'
+  address: 'Adresse inkl. PLZ'
+  description: 'Beschreibung'
+  link: 'Webseite'
+  type: 'Partner Art'
+  new: 'Neuen Partner anlegen'
+  handler: 'Händler'
+  employee: 'Mitarbeiter-Unternehmen'
+
+Schadensmeldung: 'Schadensmeldung'
+Kontaktanfragen: 'Kontaktanfragen'
+Hersteller: 'Hersteller'

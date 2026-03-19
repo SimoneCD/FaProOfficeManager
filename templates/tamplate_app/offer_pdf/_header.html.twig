@@ -1,0 +1,48 @@
+<div class="row headBox my-0 w-100" style="overflow: hidden">
+    <div class="text-left pl-0 pr-0 pt-1 pb-0 m-0 col-3" style="overflow: visible;z-index: 3">
+        <h3 class="header_title_small">
+            <strong style="color: #fff;font-size: 22px">
+            {%- if offer.status == 'estimate' or offer.status == 'besichtigung' -%}
+                Kostenvoranschlag
+            {%- else -%}
+                {% if headerTitle is defined %}{{ headerTitle }}{% else %}{{ 'o.yourOffer'|trans }}{% endif %}
+            {%- endif -%}
+            </strong>
+        </h3>
+        <p class="header_preview">{{ 'w.short.lvNumber'|trans }}: {{ offer.number }}</p>
+        <p class="header_preview" style="position: absolute;top: 64px;width: 400px; left: 0;">
+            {% if offer.customer.companyName %}{{ offer.customer.companyName|slice(0, 50) }}{% else %}{{ offer.customer.sex|trans }} {{ offer.customer.fullNormalName|slice(0, 50) }}{% endif %}
+        </p>
+    </div>
+    <div class="text-center pt-1 px-0 pb-0 m-0 col-6">
+        <p class="header_title p-0">
+            <strong style="color: #fff;font-size: 18px">
+            {%- if offer.option is not null and offer.option.jsonOptions['header']['title'] is defined -%}
+                {{ offer.option.jsonOptions['header']['title'] }}
+            {%- else -%}
+                {{ getOfferTitle(offer.id) }}
+            {%- endif -%}
+            </strong>
+        </p>
+        <div class="header_text p-0 m-0" style="font-size: 16px; padding: 0 20px !important;">{%- if offer.option is not null and offer.option.jsonOptions['header']['text'] is defined -%}
+                {{ offer.option.jsonOptions['header']['text']|raw }}
+            {%- else -%}
+                {{ getOfferName(offer.id, false, true)|raw }}
+            {%- endif -%}
+        </div>
+    </div>
+    <div class="text-left col-3 p-0 header-logo" style="margin-left: -12px">
+        {% if headerTitle is not defined %}
+            {% include appTemplate~'_pdf_logo.html.twig' with {'logo': getImgContent(asset(appAssetPath~'logo/logo_in.png'))} %}<br>
+        {% else %}
+            {% include appTemplate~'_pdf_logo.html.twig' with {'logo': getImgContent(asset(appAssetPath~'logo/logo_in.png'))} %}<br>
+        {% endif %}
+        <p class="m-0 pl-0" style="padding-top: 10px">
+            {% if offer.order is not null and offer.order.createdAt is not null %}
+                <span>{{ sf.city }} | {{ offer.order.createdAt|date('d.m Y') }}</span>
+            {% else %}
+                <span>{{ sf.city }} | {{ 'now'|date('d.m Y') }}<br></span>
+            {% endif %}
+        </p>
+    </div>
+</div>

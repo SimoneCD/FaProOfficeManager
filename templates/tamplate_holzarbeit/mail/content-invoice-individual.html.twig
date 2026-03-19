@@ -1,0 +1,6 @@
+{#<h3 id="mail-pre-title" style="padding-top: 0; padding-bottom: 0; font-weight: 500; vertical-align: baseline; font-size: 1.2rem; line-height: 1.2; letter-spacing: 3px; color: {{ sfColor }}; margin: 0;" align="left">{{ sf.name }} Rechnung</h3>#}
+{#<h1 id="mail-title" style="padding-top: 0; padding-bottom: 0; font-weight: 500; vertical-align: baseline; font-size: 1.9rem; line-height: 120%; color: #393939; margin: 0;" align="left">Rechnung: {{ invoice.number }}</h1>#}
+{% include appTemplate~'mail/_h2.html.twig' with {'customer': invoice.customer} %}
+<p id="mail-message" style="line-height: 24px; font-size: 16px; width: 100%; margin: 0;" align="left">
+    {{ emailtext|raw }}
+</p>

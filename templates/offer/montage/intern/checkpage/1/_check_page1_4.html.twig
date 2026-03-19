@@ -1,0 +1,106 @@
+<table class="mt5">
+    <tr>
+        <td colspan="9"><h3>Nenndaten Solargenerator</h3></td>
+    </tr>
+    <tr class="btTd">
+        <td class="brTd tdm"><p class="f10">Typ Nr.</p></td>
+        <td class="brTd tdm"><p class="f10">Modulehersteller</p></td>
+        <td class="brTd tdm"><p class="f10">Moduletyp</p></td>
+        <td class="brTd"><p class="f10">P<sub>mpp</sub><br>[Wp]</p></td>
+        <td class="brTd"><p class="f10">U<sub>mpp</sub><br>[V]</p></td>
+        <td class="brTd"><p class="f10">I<sub>mpp</sub><br>[A]</p></td>
+        <td class="brTd"><p class="f10">I<sub>sc</sub><br>[A]</p></td>
+        <td class="brTd"><p class="f10">U<sub>oc</sub><br>[V]</p></td>
+        <td class="brTd"><p class="f10">Temp.<br>Koeff.</p></td>
+    </tr>
+    {% for a in 1..4 %}
+    <tr class="btTd">
+        {% for e in 1..9 %}
+        <td class="brTd tdm"><p class="f10"><input style="text-align: center" class="check_i" type="text" name="offer_check[mess2][{{ a }}][{{ e }}]" value="{% if yes and ocp.mess2[a][e] is defined %}{{ ocp.mess2[a][e] }}{% endif %}"></p></td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+<table class="mt5">
+    <tr>
+        <td colspan="4"><h3>Maximale Generatorspannung <span style="font-weight: normal;padding-left: 30px">Unter Berücksichtigung der Umgebungsbedingungen, Bestimmung mit Hilfe von:</span></h3></td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <p class="inline-block"><input class="check_i" type="checkbox" name="offer_check[mess4][1]" {% if yes and ocp.mess4[1] is defined and ocp.mess4[1] == 1 %}checked{% endif %} value="1"></p>
+            <p class="inline-block">modulspezifischem&nbsp;Temperaturkoeffizient</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p class="inline-block"><input class="check_i" type="checkbox" name="offer_check[mess4][2]" {% if yes and ocp.mess4[2] is defined and ocp.mess4[2] %}checked{% endif %} value="1"></p>
+            <p class="inline-block">Korrekturfaktor&nbsp;TK</p>
+        </td>
+        <td>
+            <p class="inline-block" style="padding-left: 10px"><input class="check_i" type="checkbox" name="offer_check[mess4][3]" {% if yes and ocp.mess4[3] is defined and ocp.mess4[3] %}checked{% endif %} value="1"></p>
+            <p class="inline-block">1.15&nbsp;(<&nbsp;800&nbsp;m.ü.M)</p>
+        </td>
+        <td><p class="inline-block" style="padding-left: 10px"><input class="check_i" type="checkbox" name="offer_check[mess4][4]" {% if yes and ocp.mess4[4] is defined and ocp.mess4[4] %}checked{% endif %} value="1"></p>
+        <p class="inline-block">1.20&nbsp;(800-1500&nbsp;m.ü.M)</p></td>
+        <td><p class="inline-block" style="padding-left: 10px"><input class="check_i" type="checkbox" name="offer_check[mess4][5]" {% if yes and ocp.mess4[5] is defined and ocp.mess4[5] %}checked{% endif %} value="1"></p>
+        <p class="inline-block">1.25&nbsp;(>&nbsp;1500&nbsp;m.ü.M)</p></td>
+    </tr>
+</table>
+
+
+<table class="mt5">
+    <tr>
+        <td colspan="2"><h3>Messen</h3></td>
+        <td colspan="3"><p>Stromkreisverteiler Nr.::</p></td>
+        <td colspan="11"><input style="text-align: right;" class="check_i" type="text" name="offer_check[mess][7]" value="{% if yes and ocp.mess[7] is defined %}{{ ocp.mess[7] }}{% endif %}"></td>
+    </tr>
+    <tr class="btTd">
+        <td class="brTd tdm" colspan="2"><p class="f10">DC-Messungen</p></td>
+        <td class="brTd tdm lh21" colspan="4"><p class="f10">Verschaltung / STC-Werte</p></td>
+        <td class="brTd tdm lh21" colspan="2"><p class="f10">DC-Verkabelu.</p></td>
+        <td class="brTd tdm" colspan="2"><p class="f10">Überstromschutz</p></td>
+        <td class="brTd tdm" colspan="6"><p class="f10">Messungen</p></td>
+    </tr>
+    <tr class="btTd btcenter">
+        <td class="brTd tdm lh21">Strang&nbsp;Nr.</td>
+        <td class="brTd tdm lh21">ModuleTyp Nr.</td>
+
+        <td class="brTd tdm lh21">Anz. Mod.</td>
+        <td class="brTd tdm lh21">U<sub>OC Gen.max</sub><br>n x U<sub>OC STC</sub>xT<sub>K</sub></td>
+        <td class="brTd tdm lh21">I<sub>SC STC</sub> X 1.25</td>
+        <td class="brTd tdm lh21">max.<br>I<sub>Rück.</sub></td>
+
+        <td class="brTd tdm lh21">Art<br>Typ</td>
+        <td class="brTd tdm lh21">Quer.<br>[mm<sup>2</sup>]</td>
+
+        <td class="brTd tdm lh21">Typ<br>Charakt.</td>
+        <td class="brTd tdm lh21">I<sub>n</sub><br>[A]</td>
+
+        <td class="brTd tdm lh21">R<sub>PA</sub><br>[&#8486;]</td>
+        <td class="brTd tdm lh21">U<sub>OC</sub><br>[V]</td>
+        <td class="brTd tdm lh21">R<sub>iso</sub><br>[M&#8486;]</td>
+        <td class="brTd tdm lh21">I<sub>SC</sub><br>[A]</td>
+        <td class="brTd tdm lh21">U<sub>mpp</sub><br>[V]</td>
+        <td class="brTd tdm lh21">I<sub>mpp</sub><br>[A]</td>
+
+    </tr>
+    {% for p in 1..10 %}
+        <tr class="btTd">
+            {% for q in 1..16 %}
+                <td class="brTd"><p class="f10"><input style="text-align:center;" class="check_i" type="text" name="offer_check[messo][{{ p }}][{{ q }}]" value="{% if yes and ocp.messo[p][q] is defined %}{{ ocp.messo[p][q] }}{% endif %}"></p></td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+
+<table class="mt5">
+    <tr>
+        <td style="width: 90px;"><h3>Notizen:</h3></td>
+    </tr>
+
+    {% for p in 1..14 %}
+    <tr><td><p><input class="check_i" type="text" name="offer_check[note][{{ p }}]" value="{% if yes and ocp.note[p] is defined %}{{ ocp.note[p] }}{% endif %}"></p></td></tr>
+    {% endfor %}
+</table>
+{% include 'offer/montage/intern/checkpage/_copyrights.html.twig' %}

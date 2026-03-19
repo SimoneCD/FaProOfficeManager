@@ -1,0 +1,11 @@
+{% macro stationAddress(item) %}
+    <span style="margin-bottom: 3px;">
+        {%- if item.stationAddress -%}
+            {{ item.stationAddress }}, <br>{{ item.stationZip }}
+        {%- elseif item.stationZip -%}
+            {{ item.stationZip }}<br>&nbsp;
+        {%- else -%}
+            -<br>&nbsp;
+        {%- endif -%}
+    </span>
+{% endmacro %}

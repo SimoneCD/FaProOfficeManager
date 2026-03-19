@@ -1,0 +1,81 @@
+{% set help = '' %}
+    {{ restore('appAnswerChecked') }}
+<div style="clear: left;{% if question.offerAnswers|length and (question.offerAnswers|first).image %}text-align: center;{% endif %}">
+    {% for answer in question.offerAnswers|sort((a, b) => a.sort <=> b.sort) %}
+        <div class="floatbox" style="{% if answer.image %}float: left;{% else %}text-align: left;{% endif %}">
+            {% set selected = (context and context[aid] is defined and context[aid]['questions'][question.id]['answer']['n'] is defined and context[aid]['questions'][question.id]['answer']['n']  == answer.id) ? true : false %}
+            {% if selected and answer.dependencies is not null %}
+                {% set appAnswerChecked = appAnswerChecked|merge(answer.dependencies) %}
+            {% endif %}
+            {% set a = answer.id %}
+            <div class="form-check{% if answer.image %}{% else %}-inline answer_content{% endif %}">
+                {% if answer.image %}
+                    <label class="funnel{{ question.funnelEnd or answer.funnelEnd ? 'End' : 'Start' }} my-0 form-check-label"
+                           for="ra-{{ answer.id }}">
+                        <input value="{{ a }}"
+                               id="ra-{{ a }}"
+                               style="position: absolute;"
+                               type="radio"
+                               data-class="s-{{ question.id }}"
+                               data-question="{{ question.id }}"
+                               data-help-dependencies="{% for answer in question.offerAnswers %}{%- if answer.helptext %}{{ a }}{% if loop.index != question.offerAnswers|length %}-{% endif %}{% endif %}{% endfor %}"
+                               data-dependencies="{% for answer in question.offerAnswers %}{% if answer.dependencies is not null %}{{ answer.dependencies|join('-') }}-{% endif %}{% endfor %}"
+                               class="condition-change-check form-check-radio"
+                               name="offer_option[{{ question.id }}]"
+                                {%- if answer.helptext %} data-help="{{ a }}"{% endif %}
+                                {%- if answer.dependencies|length %} data-questions="{{ answer.dependencies|join(':') }}"{% endif %} {% if selected %}checked{% endif %} />
+                        {% include 'offer/types/recommendation/components/_answer_image.html.twig' %}
+                        <p class="panswerradio my-0 mx-auto p-0" style="width: max-content;">{{ answer.name|u.wordwrap(10) }}</p>
+                    </label>
+                {% else %}
+                    <label class="funnel{{ question.funnelEnd or answer.funnelEnd ? 'End' : 'Start' }} my-0 form-check-label"
+                           for="ra-{{ answer.id }}">
+                        <input value="{{ a }}"
+                               style="position: relative;
+    width: 20px;
+    height: 20px;
+    text-align: left;
+    opacity: 1;
+    float: left;"
+                               style="position: absolute;"
+                               id="ra-{{ a }}"
+                               type="radio"
+                               data-class="s-{{ question.id }}"
+                               data-question="{{ question.id }}"
+                               data-help-dependencies="{% for answer in question.offerAnswers %}{%- if answer.helptext %}{{ a }}{% if loop.index != question.offerAnswers|length %}-{% endif %}{% endif %}{% endfor %}"
+                               data-dependencies="{% for answer in question.offerAnswers %}{% if answer.dependencies is not null %}{{ answer.dependencies|join('-') }}-{% endif %}{% endfor %}"
+                               class="condition-change-check form-check-radio"
+                               name="offer_option[{{ question.id }}]"
+                                {%- if answer.helptext %} data-help="{{ a }}"{% endif %}
+                                {%- if answer.dependencies|length %} data-questions="{{ answer.dependencies|join(':') }}"{% endif %} {% if selected %}checked{% endif %} />&nbsp;<span class="panswerradio " style="width: max-content;">{{ answer.name|u.wordwrap(10) }}</span>
+                    </label>
+                {% endif %}
+                {% if answer.helptext %}
+                    {% set help = help~'<div id="help-'~a~'" class="help-'~question.id~' answer-helper" style="display:none">'~answer.helptext~'</div>' %}
+                {% endif %}
+                <div class="app_helpers app_helpers-{{ question.id }} col-sm-12">
+                    {{ help|raw }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+            <div style="float: left" >
+                <div class="answer_content form-check-inline pl-0" style="position: relative">
+                    {% set selected = context and context[aid] is defined and context[aid]['questions'][question.id]['answer']['np'] is defined and context[aid]['questions'][question.id]['answer']['np'] ? 'checked' : '' %}
+                    {% set value = context and context[aid] is defined and context[aid]['questions'][question.id]['answer']['np'] is defined and context[aid]['questions'][question.id]['answer']['np']  ? context[aid]['questions'][question.id]['answer']['np'] : '' %}
+                    <label class="funnel{{ question.funnelEnd ? 'End' : 'Start' }} my-0 p-2 form-check-label" for="ra-{{ question.offerAnswers|length }}">
+                        <input id="ra-{{ question.offerAnswers|length }}" {{ selected }} type="radio" data-class="s-{{ question.id }}"
+                               data-question="{{ question.id }}"
+                               data-help-dependencies=""
+                               data-dependencies=""
+                               class="form-check-input" style="width: 1em;float: left;margin-bottom: 24px"
+                               name="offer_option[{{ question.id }}]"
+                               value="plus" /><input type="text" class="answer_content_input form-control inline_text_input"
+                                                     style="margin-top:auto;height: 30px" name="offer_option_plus[{{ question.id }}]" value="{{ value }}">
+                        <p class="panswerradio mx-auto p-0" style="margin-top: revert;margin-bottom: 0">Eigene Angaben</p>
+
+                    </label>
+                </div>
+            </div>
+    </div>
+{{ save('appAnswerChecked') }}

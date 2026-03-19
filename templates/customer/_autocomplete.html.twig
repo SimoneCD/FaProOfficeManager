@@ -1,0 +1,5 @@
+{% for customer in customers|sort((a, b) => a.name <=> b.name) %}
+    <li style="cursor: pointer" class="list-group-item" {{ stimulus_action('customer-autosearch', 'select', 'click')}}  role="option" data-id="{{ customer.id }}" data-name="{{ customer.fullNormalName }}">{{ customer.fullNormalName }} {% if customer.companyName %}({{ customer.companyName }}){% endif %}</li>
+{% endfor %}
+
+

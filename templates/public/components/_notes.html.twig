@@ -1,0 +1,42 @@
+{% for m in user.customerNotes|sort((a, b) => b.id <=> a.id) %}
+    {% if m.type == 'sos' %}
+        <div class="container {% if m.user %}container_admin right{% else %}left{% endif %}">
+            <div class="date" style="font-size: 12px">{{ m.createdAt|date('d M') }}</div>
+            {% if m.user %}
+                <div data-controller="popover">
+                    <a href="javascript:void(0)" data-action="mouseenter->popover#show mouseleave->popover#hide">
+                        {% if m.user.image %}
+                            <img style="border: 2px solid #FF9800;" src="{{ asset(appAssetPath~'user/'~m.user.image) }}" alt="Avatar" class="avatar avaico">
+                        {% else %}
+                            <span style="border: 2px solid #FF9800" class="material-icons">support_agent</span>
+                        {% endif %}
+                    </a>
+                    <template data-popover-target="content">
+                        <div data-popover-target="card" style="cursor:none;background-color:#fff !important;z-index: 3;border-radius: 10px;position: absolute;top: 20px;left: 20px;border: 1px solid #e7e7e7">
+                            <div  style="padding: 10px;display: flex;">
+                                <div style="float: left;">
+                                    {% if m.user.image %}
+                                        <img src="{{ asset(appAssetPath~'user/'~m.user.image) }}" alt="{{ m.user.fullName }}" class="avatar" style="max-width: 70px">
+                                    {% else %}
+                                        <img src="{{ asset('hd/empty_profile_image.jpeg') }}" alt="{{ m.user.fullName }}" class="avatar" style="max-width: 70px">
+                                    {% endif %}
+                                </div>
+                                <div style="float: left;">
+                                    <h2 style="font-size:14px;margin:0 10px;color: {{ sfColor }}">{{ m.user.positionName ?? 'Kundenservice' }}</h2>
+                                    <p style="color:#313131;font-size: 12px;margin: 0 10px;font-weight: bold;">{{ m.user.salutation|trans }} {{ m.user.fullName }}</p>
+                                    <p style="color:#313131;font-size: 12px;margin: 0 10px">{{ m.user.phone }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            {% else %}
+                <span class="material-icons">person</span>
+            {% endif %}
+            <div class="content effect1">
+                <h2 style="font-size: 12px">{% if m.user %}Kundenservice - {% endif %}{{ m.createdAt|ago }}</h2>
+                <p>{{ m.note|raw }}</p>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}

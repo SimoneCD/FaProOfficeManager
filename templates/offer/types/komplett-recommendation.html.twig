@@ -1,0 +1,486 @@
+{% extends 'base.precommendation.html.twig' %}
+{% block title %}{{ 'o.new'|trans }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('app/select2.min.css') }}" rel="stylesheet"/>
+    <style>
+        .komplettcard{
+            border-radius: 10px;
+        }
+        h2{font-size: 18px !important;}
+        h4, p {font-size: 12px;}
+        p {margin-bottom: 0;}
+        h5 {font-size: 12px;}
+        .dot {
+            height: 12px;
+            width: 12px;
+            background-color: #d2d2d2;
+            border-radius: 50%;
+            box-shadow: 1px 1px #9d9d9d;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .dot-activ {
+            background-color: #34c517;
+        }
+        /*.dot-activ:hover {*/
+        /*    background-color: #c54017;*/
+        /*}*/
+        button[type="submit"], button[type="submit"]:hover {
+            background-color: #f3c615;
+            border: 1px solid #a18104;
+            color: #000
+        }
+
+        .select2-container--default .select2-selection--single {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 6px;
+            height: 44px;
+        }
+
+        /*.select2-results__message {display: none}*/
+        .select2-dropdown {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+        }
+
+        .select2-selection__rendered, #inquiry_customer_sex {
+            font-size: 12px !important;
+            color: #6d757d;
+        }
+
+        .select2-results__option {
+            text-align: left;
+        }
+        .produckt_img {
+            max-width: 130px;
+            max-height: 130px;
+            vertical-align: initial;
+            margin-top: -8px;
+            /*position: absolute;*/
+            /*top: -110px;*/
+            /*right: -20px;*/
+        }
+        .t-box {
+            width: -webkit-fill-available;
+            margin-right: -15px;
+            margin-left: -15px;
+            margin-top: -15px;
+            padding: 8px 8px;
+            background-color: #efefef;
+        }
+        .p-box {
+            vertical-align: bottom;
+            min-height: 70px;
+            width: -webkit-fill-available;
+            margin: 0 -15px -15px -15px;
+            background-color: #505050;
+            color: #fff;
+            padding: 10px;
+        }
+        .head_abs {position: absolute;
+            top: -14px;
+            left: 30px;}
+        .p-box-input {
+            display: none;
+            width: 40px;
+            position: absolute;
+            right: 0;
+            top: 138px;
+            color: darkgrey;
+            text-align: center;
+            border: none;
+            font-weight: bolder;
+            font-size: 14px;
+            border-radius: 2px;
+            box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px, rgba(0, 0, 0, 0.24) 0 1px 2px;
+            height: 30px !important;
+            padding: 0 !important;}
+
+        .p-box-input-txt {
+            display: none;
+            padding: 2px !important;
+            position: absolute;
+            right: 0;
+            top: 120px;
+            font-size: 11px;}
+        .yp-box-price {
+            padding: 0 10px !important;
+            position: absolute;
+            border-radius: 10px;
+            right: 0;
+            top: 180px;
+            font-size: 16px;
+            background: #ffd466;}
+    </style>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('app/select2.min.js') }}"></script>
+    <script>
+        const endpoint = '/geodata.json';
+
+        function GetPlaces() {
+            let dropdown = $('.SearchPlaces');
+
+            dropdown.empty();
+
+            dropdown.append('<option selected="true" disabled>PLZ Ort...</option>');
+            dropdown.prop('selectedIndex', 0);
+
+            const url = './Places.json';
+            $.getJSON('/lib/geo.json', function (data) {
+                $.each(data, function (key, entry) {
+                    dropdown.append($('<option></option>').attr('value', entry.plz_name_long).text(entry.plz_name_long));
+                })
+            });
+        }
+        function changer(that, event) {
+            let question = that.getAttribute("data-question") ?? false;
+            let dependencies = that.getAttribute("data-dependencies") ?? false;
+            let helpDependencies = that.getAttribute("data-help-dependencies") ?? false;
+
+            let selectedIndex = that;
+            let help = selectedIndex.getAttribute("data-help") ?? false;
+            let questions = selectedIndex.getAttribute("data-questions") ?? false;
+
+            if (help === false) {
+                $(that).closest('.answer-helper').text('')
+            }
+            selectedIndex.value
+            if (dependencies) {
+                let depend = dependencies.split('-');
+                for (let i = 0; i < depend.length; i++) {
+                    if (depend[i] !== '') {
+                        let dependend = $('#question-' + depend[i]);
+                        dependend.css('display', 'none');
+                        let input = $('input[name="offer_option[' + question + ']"]');
+                        if (input === undefined) {
+                            input = $('select[name="offer_option[' + question + ']"] :checked');
+                        }
+                        if (input.val() !== selectedIndex.value) {
+                            $("#question-" + depend[i] + " :input").each(function (e, t) {
+                                t.checked = false;
+                                t.selected = false;
+                                if ($(t).attr('type') === 'text') {
+                                    $(t).val('');
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+            if (questions) {
+                let qss = questions.split(':');
+                for (let i = 0; i < qss.length; i++) {
+                    $('#question-' + qss[i]).css('display', 'block')
+                    $('#question-' + qss[i]).css('width', 'auto');
+                }
+            }
+            if (helpDependencies) {
+                let arr2 = helpDependencies.split('-');
+                for (let i = 0; i < arr2.length; i++) {
+                    $('#help-' + arr2[i]).css('display', 'none')
+                    $('#help-' + arr2[i]).css('width', '0');
+                }
+            }
+
+            let helpTextDiv = $('.help-' + question);
+            let helpDiv = $('#help-' + help);
+            if (helpDiv && help) {
+                helpDiv.css('display', 'block');
+                helpDiv.css('width', 'auto');
+            }
+        }
+
+        function ValidateEmail(input) {
+            var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+            if (input.match(validRegex)) {
+                return true;
+            }
+            return false;
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            var myCarouselEl = document.getElementById('carouselFunnel')
+            $('#inquiry_customer_name').attr('required',false)
+            // var carousel = bootstrap.Carousel.getInstance(myCarouselEl) // Retrieve a Carousel instance
+            $('.carousel-control').css('visibility', 'hidden');
+            $('.carousel-control-next').css('visibility', 'visible');
+            $('label.form-check-label, label.form-label').on('click', function (event) {
+                //event.preventDefault();
+                $('#'+$(this).attr('for')).prop('checked','checked');
+                $('.form-check-label-active').removeClass('form-check-label-active')
+                $(this).addClass('form-check-label-active')
+                let $prev = $('.carousel-control-prev');
+                let $next = $('.carousel-control-next');
+                $next.css('visibility', 'visible');
+                if ($next.hasClass('funnelSubmit')) {
+                    $next.css('visibility', 'visible');
+                    $next.find('#nx').text('Senden');
+                }
+
+                if ($('.carousel-inner .carousel-item:last').hasClass('active')) {
+                    $next.css('visibility', 'visible');
+
+                } else if ($('.carousel-inner .carousel-item:first').hasClass('active')) {
+                    $prev.css('visibility', 'hidden');
+
+                } else {
+                    $prev.css('visibility', 'visible');
+                    $next.css('visibility', 'visible');
+                }
+                if ($(this).hasClass('funnelEnd')) {
+                    $next.attr('data-bs-slide-to', ($('.carousel-item').length - 1))
+                } else {
+                    $next.removeAttr('data-bs-slide-to');
+                }
+                let ccc = $(this).closest('.questionCount');
+                if (((ccc.find('input[type="text"]').length === 0 || ccc.find('input[type="text"]').hasClass('p-box-input')) &&
+                    ccc.find('select').length === 0 &&
+                    ccc.find('textarea').length === 0 &&
+                    ccc.find('input[type="checkbox"]').length === 0)
+                ) {
+
+                    //changer(event.target(), this);
+                    if($(this).hasClass('coninput') === false) {
+                        $next.click();
+                    } else {
+                        console.log('k')
+                        let tb = ccc.find('.t-box');
+                        let tbox = $(this).find('.t-box');
+                        tb.css('background-color', '#efefef');
+                        tb.css('color', '#000');
+                        tbox.css('background-color', '#182bb5');
+                        tbox.css('color', '#fff');
+
+                        // let pb = ccc.find('.p-box');
+                        // let pbox = $(this).find('.p-box');
+                        // pb.css('background-color', '#505050');
+                        // pb.css('color', '#fff');
+                        // pbox.css('background-color', '#ffce52');
+                        // pbox.css('color', '#000');
+
+                        let pbi = $(this).find('.p-box-input');
+                        let pbit = $(this).find('.p-box-input-txt');
+                        ccc.find('.p-box-input-txt').css('display', 'none');
+                        ccc.find('.p-box-input').css('display', 'none');
+                        pbit.css('display', 'block');
+                        pbi.css('display', 'block');
+                    }
+                }
+            })
+            myCarouselEl.addEventListener('slid.bs.carousel', function (event) {
+                let last = $('.carousel-item').length - 1;
+                var $this = $(this);
+                // var $label = $(this).find('.form-check-label-active');
+                var $left = $('.left.carousel-control');
+                var $right = $('.right.carousel-control');
+                let questioncount = $('.questionCount').length;
+                let $frame;
+                //$('.carousel-inner .item:last').hasClass('active')
+                for (let i = 1; i <= (questioncount+1); i++) {
+                    $frame = $('.ifrom'+i);
+                    if (i <= (event.to+1)) {
+                        if ($frame.hasClass('dot-activ') === false) {
+                            $frame.addClass('dot-activ');
+                        }
+                    } else {
+                        $frame.removeClass('dot-activ');
+                    }
+                }
+                // $('#ifrom').text((event.to + 1) + '/' + ($questioncount.length + 1))
+                if (event.from === event.to) {
+                } else if (event.direction === 'right') {
+                    $right.find('#nx').text('Weiter');
+                    if (event.to === 0) { // Startseite
+                        $left.css('visibility', 'hidden');
+                    }
+                    $left.removeAttr('data-bs-slide-to');
+                    $right.removeAttr('data-bs-slide-to');
+                    $right.attr('type', 'button');
+                    $right.attr('data-bs-target', '#carouselFunnel');
+                    $right.css('visibility', 'visible');
+                } else {
+                    $left.attr('data-bs-slide-to', event.from);
+                    if ($('#cstep').hasClass('active')) {
+                        $('.ifrom'+(questioncount+1)).addClass('dot-activ');
+                        $right.attr('type', 'submit');
+                        $right.removeAttr('data-bs-slide-to');
+                        $right.removeAttr('data-bs-target');
+                        $right.find('#nx').text('Senden');
+                        $right.attr('display', 'flex');
+                        $right.css('visibility', 'visible');
+                        return;
+                    } else {
+                        $('.ifrom'+(questioncount+1)).removeClass('dot-activ');
+                        $right.attr('type', 'button');
+                        $right.attr('data-bs-target', '#carouselFunnel');
+                    }
+                    if (($(document).find('input[type="text"]').length > 0 ||
+                        $(document).find('select').length > 0 ||
+                        $(document).find('textarea').length > 0 ||
+                        $(document).find('input[type="checkbox"]').length > 0)
+                    ) {
+                        $right.css('visibility', 'visible');
+                    } else {
+                        $right.css('visibility', 'hidden');
+                    }
+                    $left.css('visibility', 'visible');
+                    $left.attr('data-bs-slide-to', event.from);
+                    if ($this.hasClass('.funnelEnd')) {
+                        $right.attr('data-bs-slide-to', last);
+                    }
+                }
+            });
+            // $(document).on('mouseover', '.dot-activ', function (event) {});
+            $(document).on('submit', 'form[name="inquiry"]', function (event) {
+                event.preventDefault();
+                let $mail = $('#inquiry_customer_email');
+                let $name = $('#inquiry_customer_name');
+                if (ValidateEmail($mail.val())) {
+                    $mail.css('border','1px solid #ced4da');
+                    $.ajax({
+                        'url': $(this).attr('action'),
+                        'data': $(this).serialize(),
+                        'method': 'post',
+                        success: function (rx) {
+                            $('#cstep').html(rx);
+                            $('.carousel-control').hide();
+                        }
+                    });
+                } else {
+                    $mail.css('border','1px solid #c25a5a')
+                    $('#email_err').css('display', 'block');
+                }
+                if ($name.val() === '' ) {
+                    $('#name_err').css('display', 'block');
+                    $name.css('border','1px solid #c25a5a')
+                } else {
+                    $name.css('border','1px solid #ced4da')
+                }
+            })
+            function write(question){
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ path('app_funnel_log') }}',
+                    data: {'question':question},
+                })
+            }
+            $(document).on('click', '.condition-change-check', function (event) {
+                changer(this, event)
+                write($(this).attr('data-question'))
+            })
+            $(document).on('change', '.p-box-input', function (event) {
+                $('.p-box-input').val($(this).val());
+            })
+        })
+    </script>
+{% endblock %}
+{% set customerName = '' %}
+{# offer.customer.companyName ==''? (offer.customer.sex|trans)~' '~offer.customer.fullName : offer.customer.companyName %} #}
+{% set appAnswerChecked = [] %}
+{% block main %}
+    {{ parent() }}
+    {{ save('appAnswerChecked') }}
+    {% if form is defined and (done is not defined or done == false) %}
+        {{ form_start(form) }}
+        {% if categorie is defined and categorie is not null %}
+            <input type="hidden" name="inquiry[category]" value="{{ category.id }}">
+        {% endif %}
+        <div id="carouselFunnel" class="carousel slide" data-bs-touch="false" data-bs-interval="false"
+             style="position:relative;margin-top: 0;">
+            <div class="carousel-inner" style="">
+                {% set ll = 1 %}
+                {% if offer.subCategory is not null %}
+                    {% if offer.category is not null %}
+                        {% set category = offer.category %}
+                        {% set context = offer.inquiry.context %}
+                        {% for subCategory in category.offerSubCategories %}
+                            {% set dataClass = 'quest-block ' %}
+                            {% if offer.subCategory and offer.subCategory.id == subCategory.id %}
+                                {% set questCount = 0 %}
+                                {% for ai, area in subCategory.questionAreas|sort((a, b) => a.sort <=> b.sort) %}
+                                    {% set viewQuestCount = 0 %}
+                                    {% set ll = ll+1 %}
+                                    <div class="questionCount questionCount{{ area.questions|length }} first carousel-item datablocks {% if loop.index == 1 %}active{% endif %}"
+                                         style="text-align: center;/*overflow-x: scroll;min-width: 100px;width: auto !important;*/"
+                                         id="datablock-{{ subCategory.id }}">
+                                        {# <div class="progress"> #}
+                                        {# {% set progress = loop.index*100/(subCategory.questionAreas|length+1) %} #}
+                                        {# <div class="progress-bar" role="progressbar" style="width: {{ progress }}%" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100"></div> #}
+                                        {# </div> #}
+                                        {% for qi, question in area.questions|sort((a, b) => a.sort <=> b.sort) %}
+                                            {# <div style="float: left;" class="al{{ subCategory.questionAreas|length }}-ql{{ area.questions|length }}"> #}
+                                            {% set questCount = (questCount+1) %}
+                                            <div class="{{ dataClass }}">
+                                                <div id="question-{{ question.id }}"
+                                                     class="block-questions questionQ{% if question.view == false and question.id not in appAnswerChecked %} question-helper{% endif %}"
+                                                >
+                                                    <h2 style="margin-bottom: 20px;position: sticky">{{ question.name }}</h2>
+                                                    <div class="h2-div"
+                                                         style="clear: left;overflow: scroll;{% if question.view == false and question.id not in appAnswerChecked %}display: none;{% endif %}text-align:center;">
+                                                        {% include 'offer/types/komplett-recommendation/'~question.answerType~'.html.twig' with {'form':form, 'aid': question.questionArea ?question.questionArea.id: 0, 'context': context} %}
+                                                        {{ restore('appAnswerChecked') }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% set dataClass = dataClass ? dataClass~' s-'~question.id : 's-'~question.id %}
+                                            {# </div> #}
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                                <div id="cstep" class="carousel-item" style="overflow: scroll;margin:0 auto; ">
+                                    {% include 'recommendation/komplett.html.twig' %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="run" style="width: 60%;margin: 0 auto;text-align: center">
+                {# <button style="border: 1px solid #4e90a8;border-radius: 30px !important;;padding: 0 8px;" #}
+                <button class="bttsbutton left carousel-control carousel-control-prev" type="button"
+                        data-bs-target="#carouselFunnel" data-bs-slide="prev"
+                        style="text-align: center;font-size: 0.9rem;font-weight: 400;"><span id="px">Zurück</span>
+                </button>
+{#                <span style="margin-top: 10px;display: inline-block;font-size: 1.5rem;color: #ced4da;text-shadow: 1px 1px #707070;" id="ifrom" #}{#style="display: none"#}{#>1/{{ ll }}</span>#}
+                {% for i in range(1, ll) %}
+                    <span class="dot {% if i == 1 %}dot-activ {% endif %}ifrom{{ i }}"></span>
+                {% endfor %}
+                <button class="bttsbutton right carousel-control carousel-control-next" type="button"
+                        data-bs-target="#carouselFunnel" data-bs-slide="next"
+                        style="text-align: center;font-size: 0.9rem;font-weight: 400;"><span id="nx">Weiter</span>
+                </button>
+            </div>
+        </div>
+    {% else %}
+        <div id="carouselFunnel" class="carousel slide carousel-fade" data-bs-touch="false" data-bs-interval="false"
+             style="margin-top: 0;">
+            {% include 'recommendation/komplett.html.twig' %}
+        </div>
+    {% endif %}
+    {# {{ form_widget(form._token) }} #}
+    {{ form_end(form, {'render_rest':false}) }}
+    {# <div class="row text-left text-left" style="background-color: #fff"> #}
+    {# <div class="col-md-3" style="text-align: left;background: url('{{ asset('app/img/1x1.png') }}')"> #}
+    {# <p class="p-3 d-none">Wir schätzen Ihr Interesse an Photovoltaikanlagen und sind bereit, Sie bei Ihrer #}
+    {# grünen Energiereise zu begleiten. #}
+    {# <br><br> #}
+    {# Unsere Experten stehen Ihnen zur Seite, um alle Ihre Fragen zu beantworten und Ihnen maßgeschneiderte #}
+    {# Lösungen anzubieten, die Ihren Bedürfnissen entsprechen. #}
+    {# </p> #}
+    {# </div> #}
+    {# <div class="col-md-9" style="text-align: left;padding: 60px !important;"> #}
+    {# <h3>Anleitung:</h3> #}
+    {# <ol> #}
+    {# <li>Beantworten Sie bitte folgende Fragen</li> #}
+    {# <li>Sie bekommen innerhalb 24 Std. Werktags einen kostenlosen Kostenvoranschlag von uns.</li> #}
+    {# {% if error == false %} #}
+    {# <li>Bei Auftragsabschluss, erwartet Sie und {{ link.fullname }} ein Bonus von {{ link.amount }} #}
+    {# &euro;</li>{% endif %} #}
+    {# </ol> #}
+    {# </div> #}
+    {# </div> #}
+{% endblock %}

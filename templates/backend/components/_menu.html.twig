@@ -1,0 +1,127 @@
+<style>
+    /*ul.breadcrumb li:last-child a {*/
+    /*    padding: 0;*/
+    /*}*/
+    /*ul.breadcrumb li:last-child:hover {*/
+    /*    padding: 3px;*/
+    /*    margin-top: 0;*/
+    /*}*/
+    /*ul.breadcrumb li:last-child:hover a {*/
+    /*    width: 60px;*/
+    /*    height: 50px;*/
+    /*    line-height: 60px;*/
+    /*}*/
+   
+</style>
+<ul class="breadcrumb" style="background-color: transparent">
+    {% if listLi is defined %}
+    <li{% if listLi.k is not defined %} class="active"{% endif %}>
+        <a style="display: flex" {% if listLi.k is not defined %} class="a"{% else %}href="{{ path('backend_category_index') }}"{% endif %}>
+            <span class="material-symbols-outlined" style="font-size: 20px;">arrow_right</span>
+            {{ listLi.n }}
+        </a>
+    </li>
+    {% endif %}
+    {% if productlistLi is defined %}
+    <li{% if productlistLi.k is not defined %} class="active"{% endif %}>
+        <a style="display: flex" {% if productlistLi.k is not defined %} class="a"{% else %}href="{{ path('backend_product_category_index') }}"{% endif %}>
+            <span class="material-symbols-outlined" style="font-size: 20px;">arrow_right</span>
+            {{ productlistLi.n }}
+        </a>
+    </li>
+    {% endif %}
+    {% if categoryLi is defined %}
+    <li {% if categoryLi.k is not defined %}class="active"{% endif %}>
+        <a style="display: flex" {% if categoryLi.k is defined -%}
+            href="{{ path('backend_subcategory_index', {'category':categoryLi.k}) }}"
+        {%- else -%}
+           class="a"
+        {%- endif -%}><span class="material-symbols-outlined" style="font-size: 20px;">arrow_right</span>
+            {{ categoryLi.n }}
+        </a>
+    </li>
+    {% endif %}
+    {% if productcategoryLi is defined %}
+    <li {% if productcategoryLi.k is not defined %}class="active"{% endif %}>
+        <a style="display: flex" {% if productcategoryLi.k is defined -%}
+            href="{{ path('backend_product_subcategory_index', {'category':productcategoryLi.k}) }}"
+        {%- else -%}
+           class="a"
+        {%- endif -%}><span class="material-symbols-outlined" style="font-size: 20px;">arrow_right</span>
+            {{ productcategoryLi.n }}
+        </a>
+    </li>
+    {% endif %}
+    {% if productcategoryLi2 is defined %}
+    <li {% if productcategoryLi2.k is not defined %}class="active"{% endif %}>
+        <a style="display: flex" {% if productcategoryLi2.k is defined -%}
+            href="{{ path('backend_product_subcategory_index', {'category':productcategoryLi2.k}) }}"
+        {%- else -%}
+           class="a"
+        {%- endif -%}>
+            <span class="material-symbols-outlined" style="font-size: 20px;">arrow_right</span>
+            {{ productcategoryLi2.n }}
+        </a>
+    </li>
+    {% endif %}
+    {% if subCategoryLi is defined %}
+    <li {% if subCategoryLi.k is not defined %}class="active"{% endif %}>
+        <a style="display: flex" {% if subCategoryLi.k is defined -%}
+            href="{{ path('backend_subcategory_questions', {'questionnaire':subCategoryLi.k}) }}"
+        {%- else -%}
+            class="a"
+        {%- endif %}><span class="material-symbols-outlined" style="font-size: 20px;">arrow_right</span>
+{#            <span class="material-icons">psychology_alt</span>#}
+            {{ subCategoryLi.n }}
+        </a>
+    </li>
+    {% endif %}
+    {% if subCategoryLi2 is defined %}
+    <li {% if subCategoryLi2.k is not defined %}class="active"{% endif %}>
+        <a style="display: flex" {% if subCategoryLi2.k is defined -%}
+            href="{{ path('backend_subcategory_questions', {'questionnaire':subCategoryLi2.k}) }}"
+        {%- else -%}
+            class="a"
+        {%- endif %}>
+            <span class="material-symbols-outlined" style="font-size: 20px;">arrow_right</span>
+            {{ subCategoryLi2.n }}
+        </a>
+    </li>
+    {% endif %}
+    {% if questionLi is defined %}
+    <li {% if questionLi.k is not defined %}class="active"{% endif %}>
+        <a style="display: flex" {% if questionLi.k is defined -%}
+            href="{{ path('backend_answers_index', {'question':questionLi.k}) }}"
+        {%- else -%}
+            class="a"
+                {%- endif %}>
+            <span class="material-symbols-outlined" style="font-size: 20px;">arrow_right</span>
+            {{ questionLi.n }}
+        </a>
+    </li>
+    {% endif %}
+    {% if questionLi2 is defined %}
+    <li {% if questionLi2.k is not defined %}class="active"{% endif %}>
+        <a style="display: flex" {% if questionLi2.k is defined -%}
+            href="{{ path('backend_answers_index', {'question':questionLi2.k}) }}"
+        {%- else -%}
+            class="a"
+                {%- endif %}>
+            <span class="material-symbols-outlined" style="font-size: 20px;">arrow_right</span>
+            {{ questionLi2.n }}
+        </a>
+    </li>
+    {% endif %}
+    {% if answerLi is defined %}
+    <li {% if answerLi.k is not defined %}class="active"{% endif %}>
+        <a style="display: flex" {% if answerLi.k is defined -%}
+            href="{{ path('backend_answers_index', {'question':answerLi.k}) }}"
+        {%- else -%}
+            class="a"
+                {%- endif %}>
+            <span class="material-symbols-outlined" style="font-size: 20px;">arrow_right</span>
+            {{ answerLi.n }}
+        </a>
+    </li>
+    {% endif %}
+</ul>

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}IndexStates index{% endblock %}
+
+{% block body %}
+    <h1>IndexStates index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>State</th>
+                <th>ActionFirst</th>
+                <th>ActionLast</th>
+                <th>Help</th>
+                <th>AutoMoveByTime</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for index_state in index_states %}
+            <tr>
+                <td>{{ index_state.id }}</td>
+                <td>{{ index_state.name }}</td>
+                <td>{{ index_state.state }}</td>
+                <td>{{ index_state.actionFirst }}</td>
+                <td>{{ index_state.actionLast }}</td>
+                <td>{{ index_state.help }}</td>
+                <td>{{ index_state.autoMoveByTime ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_index_states_show', {'id': index_state.id}) }}">show</a>
+                    <a href="{{ path('app_index_states_edit', {'id': index_state.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            {% include 'backend/_no_entry.html.twig' with {'collSpan': 8} %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_index_states_new') }}">Create new</a>
+{% endblock %}

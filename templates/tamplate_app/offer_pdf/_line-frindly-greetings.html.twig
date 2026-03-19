@@ -1,0 +1,10 @@
+<div class="row hBox page-friendly">
+    <p class="text-left col-3 m-0 p-0" style="font-size: 13px !important;padding-top: 20px !important;line-height: 20px">
+        {{ 'pdf.greetings'|trans }},
+        <br>{{ offer.user.salutation|trans }} {{ offer.user.fullName }}
+    </p>
+    <p class="text-right col-9 m-0 p-0" style="font-size: 13px !important;line-height: 20px">
+        &copy; {{ sf.name|upper }} {{ 'rights1'|trans|raw }}<br>
+        {{ 'rights2'|trans|raw }}
+    </p>
+</div>

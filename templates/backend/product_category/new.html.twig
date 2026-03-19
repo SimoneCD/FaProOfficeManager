@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'p.sc.new'|trans }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {% include 'backend/_form_style.html.twig' %}
+{% endblock %}
+{% block main %}
+    <h2><a href="{{ path('backend_product_category_index') }}">{{ 'p.subCategories'|trans }}</a></h2>
+    <h1>{{ 'p.sc.new'|trans }}</h1>
+<div id="backend_form">
+    {{ include('backend/product_category/_form.html.twig') }}
+</div>
+{% endblock %}

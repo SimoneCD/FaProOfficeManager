@@ -1,0 +1,69 @@
+<script>
+    function counter() {
+        let allow = 77;
+        var str = document.getElementById("inhalt").value;
+        if (str.length > allow) {
+            document.getElementById("zeichen").innerText = (str.length-allow)+" Zeichen werden nicht dargestelt";
+        } else {
+            document.getElementById("zeichen").innerText = "Weitere Zeichen erlaubt: " + (allow- str.length);
+        }
+    }
+</script>
+<div class="row headBox" style="height:110px;">
+    <div class="text-left pl-0 pr-0 pt-0 pb-0 m-0 col-3" style="position:relative;overflow: visible">
+        <h3 class="header_title_small">
+            {%- if offer.status == 'estimate' or offer.status == 'besichtigung' -%}
+                Kostenvoranschlag
+            {% else %}
+                {{ 'o.yourOffer'|trans }}
+            {% endif %}
+        </h3>
+        <p class="header_preview">{{ 'w.short.lvNumber'|trans }}: {{ offer.number }}</p>
+        <p class="header_preview" style="position: absolute;top: 60px;width: 400px; left: 0;">
+            <span>{% if offer.customer.companyName %}{{ offer.customer.companyName|slice(0, 50) }}{% else %}{{ offer.customer.sex|trans }} {{ offer.customer.fullNormalName|slice(0, 50) }}{% endif %}</span>
+        </p>
+    </div>
+    <div class="col-6 p-0 m-0 text-center">
+        <form id="ajax_update_offer_context_title" class="ajax_update_offer_context" action="{{ path('ajax_update_offer_option_context',{'id':offer.id}) }}">
+            <p class="header_title text-center" style="margin: 0 10% 0 0;">
+                <input title="title" class="form-control" name="offer_option[context][header][title]" value="
+                        {%- if offer.option is not null and offer.option.jsonOptions is not null and offer.option.jsonOptions['header']['title'] is defined -%}
+                        {{ offer.option.jsonOptions['header']['title'] }}
+                        {%- else -%}
+                        {{ getOfferTitle(offer.id) }}
+                        {%- endif %}" style="text-align: center">
+            </p>
+            <div class="header_text text-center" style="margin: 0 10% 0 0;position: relative;">
+                <input title="Kurzbeschreibung" id="inhalt" onInput="counter()" class="form-control"
+                       name="offer_option[context][header][text]" value="
+                    {%- if offer.option is not null and offer.option.jsonOptions is not null and offer.option.jsonOptions['header']['text'] is defined -%}
+                        {{ offer.option.jsonOptions['header']['text'] }}
+                    {%- else -%}
+                        {{ getOfferName(offer.id, false, true) }}
+                    {%- endif %}" style="text-align: center">
+                <p class="m-0 p-0" style="font-size: 11px;color:#fff" id="zeichen"></p>
+                <button type="submit" class="btn btn-danger p-0" style="position: absolute;right: 4px;bottom: -14px;">
+                    <i class="material-icons p-1">send</i>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="text-left col-3 p-0 header-logo" style="margin-left: -12px">
+        {% include appTemplate~'_pdf_logo.html.twig' with {'logo': asset(appAssetPath~'logo/logo_in.png')} %}<br>
+        <p class="m-0 pt-1 pl-0">
+            {%- if offer.status == 'estimate' or offer.status == 'besichtigung' -%}
+                {% if offer.order is not null and offer.order.sendPreOfferAt is not null %}
+                    <span>{{ sf.city }} | {{ offer.order.sendPreOfferAt|date('d.m Y') }}</span>
+                {% else %}
+                    <span>{{ sf.city }} | {{ 'now'|date('d.m Y') }}<br></span>
+                {% endif %}
+            {% else %}
+                {% if offer.order is not null and offer.order.createdAt is not null %}
+                    <span>{{ sf.city }} | {{ offer.order.createdAt|date('d.m Y') }}</span>
+                {% else %}
+                    <span>{{ sf.city }} | {{ 'now'|date('d.m Y') }}<br></span>
+                {% endif %}
+            {% endif %}
+        </p>
+    </div>
+</div>

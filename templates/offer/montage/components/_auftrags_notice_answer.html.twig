@@ -1,0 +1,38 @@
+<div data-controller="note accordion" style="position:relative" data-offer-id="{{ offer.id }}">
+    <a data-note-target="button" style="cursor:pointer;border-radius:50%;z-index: 9999;position: absolute;top: 0;right: 0;" type="button" data-action="click->note#showModal">
+        <i style="background-color: #fff;font-size: 40px;border-radius: 50%;" class="material-symbols-outlined">add_circle</i>
+    </a>
+
+{#    {% include 'offer/montage/components/_notice_answers.html.twig' %}#}
+
+    <p><small><strong>Notizen: </strong></small> <a data-action="click->accordion#toggleAll"><i class="material-symbols-outlined">arrow_drop_up</i></a></p>
+    <div class="accordion" data-accordion-target="accordionItem">
+        {% for note in notes %}
+            <div class="accordion-item row">
+                <div class="col-3 p-0" style="font-size: 12px;text-align: center;">
+                    {% if note.user.image %}
+                        <img class="circle" title="{{ note.user.fullName }}" src="{{ '/'~appAssetPath~'user/'~note.user.image }}" alt="{{ note.user.fullName }} Avatar" style="border-radius: 50%;">
+                    {% else %}
+                        {{ note.user.username }}
+                    {% endif %}
+                    {#                                <i {% if note.type in ['info'] %}style="color: {{ sfColor }}" {% endif %}class="material-icons">{{ ActionLog[note.type].icon }}</i>#}
+                </div>
+                <div class="col-9 p-0" data-action="click->accordion#toggle">
+                    <div class="accordion-title">
+                        {{ note.note|nl2br }}
+                    </div>
+                </div>
+                <div class="col-3 p-2 accordion-content is-hidden">
+                    <div class="accordion-body">
+                        {{ note.createdAt|date('d.m.y H:i') }}
+                    </div>
+                </div>
+                <div class="col-9 p-2 accordion-content is-hidden">
+                    <div class="accordion-body">
+                        {{ note.name|nl2br }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

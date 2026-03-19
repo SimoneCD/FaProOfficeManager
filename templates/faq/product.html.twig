@@ -1,0 +1,11 @@
+<div class="card card-loaded" style="z-index:3;width: 330px;margin:0;position: absolute;top: 0;right: -20px"
+     data-popover-target="card">
+    <div class="card-body" style="cursor: auto;text-align:left;">
+        <p style="margin-bottom: 0;font-size: 14px;font-weight: bold">Produktdatenblätter/Zertifikate:</p>
+        {% for w in product.certificats %}
+            <p style="margin: 0">
+                <a style="font-size: 10px;color: {{ sfColorDark }}" href="{{ absolute_url('/'~appAssetPath~'products/docs/'~w.filename) }}" target="_blank">{{ w.originalName }}</a>
+            </p>
+        {% endfor %}
+    </div>
+</div>

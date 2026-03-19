@@ -1,0 +1,276 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            $('#tabber').on('change', function () {
+                let id = $(this).val();
+                $('.tab-pane').removeClass('active')
+                $('#'+id).addClass('active')
+            });
+        });
+    </script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .table-striped>tbody>tr:nth-of-type(odd) {
+            background-color: {{ sfColorForm }};
+        }
+        .btn-primary, .nav-tabs .nav-item .nav-link {
+            margin: 4px;
+            box-shadow: rgba(60, 64, 67, 0.3) 0 1px 2px 0, rgba(60, 64, 67, 0.15) 0 1px 3px 1px;
+        }
+        .nav-tabs .nav-item .nav-link.active {
+            background-color: {{ sfColor }};
+            color: #fff !important;
+            transition: background-color .3s .2s;
+        }
+        .nav-tabs .nav-item .nav-link, .nav-tabs .nav-item .nav-link:focus, .nav-tabs .nav-item .nav-link:hover {
+            /*color: #000 !important;*/
+            font-weight: 600;
+
+        }
+        .col-form-label, .col-form-label p, .form-check-label {font-size: 22px}
+    </style>
+    {# {{ path('ajax_offer_stats') }} https:\/\/zoomcharts.com\/data\/appl.json {{ path('ajax_update_call', {'offerName':'open'})}} #}
+{% endblock %}
+{% block main %}
+    <div data-controller="order">
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="card" style="z-index: auto">
+                    <div class="card-body">
+                        <div style="position: relative;width: 290px;" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 500}) }}">
+                            {{ 'material.order'|trans }}&nbsp;<a href="javascript:void(0)" data-action="mouseenter->popover#show">
+                                <span class="material-icons">info_outline</span>
+                            </a>
+                        </div>
+                        <div class="w-100 table-responsive">
+                            <form action="{{ path('backend_material_index') }}" method="get">
+                            <div class="form-group row">
+                                <label style="font-size: 14px" for="materialCost" class="col-6 col-form-label">Produkte aus Angebotsnummer:</label>
+                                <div class="col-6">
+                                    <div class="input-group">
+                                        <input type="text" id="offerNumber" placeholder="{{ 'w.offerNumber'|trans }}" name="offerNumberBasic" class="form-control" value="{{ app.request.query.get('offerNumber') ?? app.request.query.get('offerNumberBasic') }}">
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-light input-group-btn">{{ 'w.search'|trans }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label style="font-size: 14px" for="materialCost" class="col-6 col-form-label">{{ 'w.product'|trans }}:</label>
+                                <div class="col-6">
+                                    <div class="input-group">
+                                        <input type="text" id="productNumber" placeholder="{{ 'w.product'|trans }} ({{ 'w.name'|trans }}/{{ 'p.number'|trans }})" name="productNumber" class="form-control" value="{{ app.request.query.get('productNumber') }}">
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-light input-group-btn">{{ 'w.send'|trans }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
+
+                            <div style="position: relative;width: 290px;" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 500}) }}">
+                                <h2 class="pl-4">{{ 'Material'|trans }}&nbsp;</h2>
+                            </div>
+                            {% if offersMaterials|length %}
+                                <table {{ stimulus_controller('order-delivered')}} class="table table-striped mx-3 my-2" style="max-width: max-content">
+                                {% set loopIndex = [] %}
+                                {% set offer = null %}
+                                {% set index = 0 %}
+                                {% for k, p in offersMaterials %}
+                                    {% set index = index+1 %}
+                                    {% set product = getProduct(k) %}
+                                    {% if p.wp %}
+                                        {% set index = index-1 %}
+                                    {% endif %}
+                                    {% if p.wp == false %}
+                                    <tr{% if index == 1 %} style="background: #efefef;color: grey;"{% endif %}>
+                                        {% if index >= 2 %}
+                                            <th class="p-2" style="width: 20px" >{{ p.pnumber }}</th>
+                                            <th class="p-2" style="min-width: 200px"><a title="{{ p.name }}" href="{{ path('backend_product_edit', {'subCategory': p.scatId, 'category':p.catId, 'id':k}) }}">{{ p.name }}</a><br>
+                                            <small style="color: #575757">{{ p.description }}</small>
+                                            </th>
+                                        {% else %}
+                                            <th></th>
+                                            <th>{{ 'w.product'|trans }}</th>
+                                        {% endif %}
+                                        {% if index == 1 %}
+                                            {% if p.offers != 1 %}
+                                                <th class="p-2 text-right" style="min-width: 270px"><span style="width: 100px">{{ 'w.offers'|trans }}</span> | {{ 'w.ordered'|trans }} | {{ 'p.delivered'|trans }}</th>
+                                                <th class="p-2 text-right">{{ 'w.amount'|trans }}</th>
+                                            {% endif %}
+                                            <th class="p-2 text-right">{{ 'w.stock'|trans }}</th>
+                                            <th class="p-2 text-right">{{ 'w.order'|trans }}</th>
+                                            {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}<th class="p-2 text-right">{{ 'w.price'|trans }}</th>{% endif %}
+                                        {% else %}
+                                            {% if p.offers != 1 %}
+                                                <td class="p-2 text-right">
+                                                {% set ofs = p.offers|split(',') %}
+{#                                                    <div class="text-right"><input data-checkbox-select-all-target="checkboxAll" type="checkbox"></div>#}
+                                                {% set amount = 0 %}
+                                                {% set completeOfferAmount = 0 %}
+                                                {% for o in ofs %}
+                                                    {% set offer = getOff(o) %}
+                                                    {% set ordered = false %}
+                                                    {% set delivered = null %}
+                                                    {% set delivers = null %}
+                                                    {% for order in offer.productOrders %}
+                                                        {% if order.product.id == k and order.deliverd %}
+                                                            {% set delivered = true %}
+                                                            {% set delivers = order.id %}
+                                                        {% elseif order.product.id == k  %}
+                                                            {% set delivers = order.id %}
+                                                        {% endif %}
+                                                        {% if order.product.id == k %}
+                                                            {% set ordered = true %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% for its in offer.offerItems %}
+                                                        {% if its.item.id == k %}
+                                                            {% set amount = amount+its.amount %}
+                                                        {% endif %}
+                                                        {% if its.item.id == k and ordered %}
+                                                            {% set amount = amount-its.amount %}
+                                                            {% set completeOfferAmount = completeOfferAmount+its.amount %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <div style="position: relative;vertical-align: middle;">
+                                                        {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+                                                            <a style="position: relative;vertical-align: middle;" href="{{ path('offer_show', {'id':offer.id}) }}"><small>{{ offer.customer.fullName }}</small></a>
+                                                        {% else %}
+                                                            <small>{{ offer.customer.fullName }}</small>
+                                                        {% endif %}
+                                                        <small style="position: relative;vertical-align: middle;">{{ offer.number }}</small>&nbsp;<input style="position: relative;vertical-align: middle;" {% if ordered %}checked disabled {% else %} data-url="{{ path('ajax_product_order_save', {'id':k, 'offer':offer.id}) }}" data-id="{{ offer.id }}" {{ stimulus_action('order', 'order', 'change')}} {% endif %} type="checkbox">&nbsp;&nbsp;&nbsp;
+                                                        {#-  -#}<input style="position: relative;vertical-align: middle;" {% if delivered is not null %}checked disabled {% elseif ordered and delivers %} data-url="{{ path('ajax_product_deliver_save', {'id':k, 'order': delivers}) }}" data-id="{{ offer.id }}" {{ stimulus_action('order-delivered', 'delivered', 'change')}} {% else %} onchange="this.checked = false;" {% endif %} type="checkbox">
+                                                    </div>
+                                                {% endfor %}
+                                            </td>
+                                                <td class="p-2 text-right">{{ amount }}</td>
+                                            {% endif %}
+                                            <td class="p-2 text-right">{{ p.stock }}</td>
+                                            <td class="p-2 text-right">
+                                                    <button {%- if p.offers != 1 and completeOfferAmount == p.amount %} disabled{% endif%}
+                                                            data-price="{{ p.price }}" data-url="{{ path('ajax_product_order_modal', {'id':k}) }}"
+                                                            data-amount="{{ p.amount }}" data-offers="{{ p.offers }}" data-id="{{ k }}"
+                                                            data-name="{{ p.name }}"
+                                                            data-action="click->order#launchOrder" class="w-100 btn btn-sm">
+                                                        <span class="material-icons">shopping_cart</span>
+                                                    </button>
+                                            </td>
+                                            {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}<td class="p-2 text-right">{{ ((amount ?? 1) * p.price)|number_format(2,',','.') }}&euro;</td>{% endif %}
+                                        {% endif %}
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                </table>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include 'material/_modal.html.twig' %}
+    </div>
+    {% if offerNumber %}
+    <div data-controller="order">
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="card" style="z-index: auto">
+                    <div class="card-body">
+                        <div style="position: relative;width: 290px;" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 500}) }}">
+                            <h2 class="pl-4">{{ 'Leistung'|trans }}&nbsp;</h2>
+                        </div>
+                        <div class="w-100 table-responsive">
+                            {% if offersMaterials|length %}
+                                <table class="w-100 table table-striped mx-3 my-2" style="max-width: max-content">
+                                {% set loopIndex = [] %}
+                                {% set offer = null %}
+                                {% set index = 0 %}
+                                {% for k, p in offersMaterials %}
+                                    {% set index = index+1 %}
+                                    {% set product = getProduct(k) %}
+                                    {% if p.wp == false %}
+                                        {% set index = index-1 %}
+                                    {% endif %}
+                                    {% if p.wp == true %}
+                                    <tr{% if index == 1 %} style="background: #efefef;color: grey;"{% endif %}>
+                                        {% if index >= 2 %}
+                                            <th class="p-2" style="width: 20px" >{{ p.pnumber }}</th>
+                                            <th class="p-2" style="min-width: 200px">
+                                                <a title="{{ p.name }}" href="{{ path('backend_product_edit', {'subCategory': p.scatId, 'category':p.catId, 'id':k}) }}">{{ p.name }}</a><br>
+                                                <small style="color: #575757">{{ p.description }}</small>
+                                            </th>
+                                        {% else %}
+                                            <th></th>
+                                            <th>{{ 'w.product'|trans }}</th>
+                                        {% endif %}
+                                        {% if index == 1 %}
+                                            {% if p.offers != 1 %}
+                                                <th class="p-2 text-right" style="min-width: 270px"><span style="width: 100px">{{ 'w.offer'|trans }}</span></th>
+                                                <th class="p-2 text-right">{{ 'w.amount'|trans }}</th>
+                                            {% endif %}
+                                            {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}<th class="p-2 text-right">{{ 'w.price'|trans }}</th>{% endif %}
+                                        {% else %}
+                                            {% if p.offers != 1 %}
+                                                <td class="p-2 text-right">
+                                                {% set ofs = p.offers|split(',') %}
+{#                                                    <div class="text-right"><input data-checkbox-select-all-target="checkboxAll" type="checkbox"></div>#}
+                                                {% set amount = 0 %}
+                                                {% set completeOfferAmount = 0 %}
+                                                {% for o in ofs %}
+                                                    {% set offer = getOff(o) %}
+                                                    {% set ordered = false %}
+                                                    {% set delivered = null %}
+                                                    {% set delivers = null %}
+                                                    {% for order in offer.productOrders %}
+                                                        {% if order.product.id == k and order.deliverd %}
+                                                            {% set delivered = true %}
+                                                            {% set delivers = order.id %}
+                                                        {% elseif order.product.id == k  %}
+                                                            {% set delivers = order.id %}
+                                                        {% endif %}
+                                                        {% if order.product.id == k %}
+                                                            {% set ordered = true %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% for its in offer.offerItems %}
+                                                        {% if its.item.id == k %}
+                                                            {% set amount = amount+its.amount %}
+                                                        {% endif %}
+                                                        {% if its.item.id == k and ordered %}
+                                                            {% set amount = amount-its.amount %}
+                                                            {% set completeOfferAmount = completeOfferAmount+its.amount %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <div style="position: relative;vertical-align: middle;">
+                                                        {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+                                                            <a style="position: relative;vertical-align: middle;" href="{{ path('offer_show', {'id':offer.id}) }}"><small>{{ offer.customer.fullName }}</small></a>
+                                                        {% else %}
+                                                            <small>{{ offer.customer.fullName }}</small>
+                                                        {% endif %}
+                                                        <small style="position: relative;vertical-align: middle;">{{ offer.number }}</small>
+                                                    </div>
+                                                {% endfor %}
+                                            </td>
+                                                <td class="p-2 text-right">{{ amount }}</td>
+                                            {% endif %}
+                                            {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}<td class="p-2 text-right">{{ ((amount ?? 1) * p.price)|number_format(2,',','.') }}&euro;</td>{% endif %}
+                                        {% endif %}
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                </table>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include 'material/_modal.html.twig' %}
+    </div>
+    {% endif %}
+{% endblock %}

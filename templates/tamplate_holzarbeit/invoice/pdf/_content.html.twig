@@ -1,0 +1,85 @@
+<div class="row headboxContent m-0">
+    <style>td, th, strong{font-size: 14px;}</style>
+    <table class="table table-borderless m-0 p-0 align-text-top" style="font-size: 14px;border: none !important;
+">
+        <tr>
+            <th style="width:44px;border: none !important;">{{ 'w.posShort'|trans }}</th>
+            <th style="width: 96px;border: none !important;">{{ 'w.date'|trans }}</th>
+            <th style="border: none !important;">{{ 'w.description'|trans }}</th>
+            <th style="width:120px;border: none !important;" class="text-right pr-0">{{ 'w.price'|trans }}</th>
+        </tr>
+        <tr class="p-0">
+            <td>001</td>
+            <td>{{ invoice.pos0Date }}</td>
+            <td>{{ invoice.pos0Text }}</td>
+            <td class="text-right pr-0">{{ invoice.pos0Price|number_format(2,',','.') }} €</td>
+        </tr>
+
+        {% if invoice.pos1Price and invoice.pos1Text %}
+            <tr class="p-0">
+                <td>002</td>
+                <td>{{ invoice.pos1Date }}</td>
+                <td>{{ invoice.pos1Text }}</td>
+                <td class="text-right pr-0">{{ invoice.pos1Price|number_format(2,',','.') }} €</td>
+            </tr>
+            {% set price = price+(invoice.pos1Price??0) %}
+        {% endif %}
+
+        {% if invoice.pos2Price and invoice.pos2Text %}
+            <tr class="p-0">
+                <td>003</td>
+                <td>{{ invoice.pos2Date  }}</td>
+                <td>{{ invoice.pos2Text }}</td>
+                <td class="text-right pr-0">{{ invoice.pos2Price|number_format(2,',','.') }} €</td>
+            </tr>
+            {% set price = price+(invoice.pos2Price??0) %}
+        {% endif %}
+
+        {% set offer = invoice.invoiceOrder.offer %}
+        {% set tax = offer.tax %}
+        {{ save('tax') }}
+        {{ save('price') }}
+        {% include 'app/components/_taxCalc.html.twig' with {'price':price, 'taxX':tax} %}
+        {{ restore('tax') }}
+
+        {% set datum = invoice.date|date('d.m.Y') %}
+        {% if invoice.context['posPrices'] is not defined or invoice.context['posPrices']|length == 0 %}
+        <tr>
+            <td style="border: none"></td>
+            <td style="border: none"></td>
+            <td  style="border: none" class="text-right">{{ 'w.netto'|trans }}:</td>
+            <td id="calc_netto" class="text-right px-0">{{ price|number_format(2,',','.') }} {{ appCurrency|raw }}</td>
+        </tr>
+        <tr style="border: none">
+            <td style="border: none"></td>
+            <td style="border: none"></td>
+            <td  style="border: none" class="text-right">{{ 'w.procentTax'|trans({'%procent%':appTax}) }}. {% if invoice.context['solar'] is defined and invoice.context['solar'] %}<sup>*</sup>{% endif %}</td>
+            <td id="calc_tax" class="text-right px-0">{{  tax|number_format(2,',','.') }} €</td>
+        </tr>
+{#        {% if type == 'rest' %}#}
+{#            {% set rPrice = calculateNettoPrice(offer.id) %}#}
+{#            {% set rPartPrice = (order.partInvoice.pos1Price??0)+(order.partInvoice.pos2Price??0)+(order.partInvoice.pos3Price??0) %}#}
+{#            {% if order.partInvoice.context['solar'] == 0 %}#}
+{#                {% set rPartTax = 0 %}#}
+{#            {% else %}#}
+{#                {% set rPartTax = rPartPrice*offer.tax/100 %}#}
+{#            {% endif %}#}
+{#        {% endif %}#}
+        <tr>
+            <td colspan="3" class="text-right"><strong>{{ 'i.toPayBruttoName'|trans }}</strong></td>
+            <td class="text-right px-0"><strong id="calc_brutto" class="px-0">{{ (price+tax)|number_format(2,',','.') }} €</strong></td>
+        </tr>
+
+            {% if tax == 0 %}
+                <tr>
+                    <td colspan="4" style="border: none;" class="text-left small">* {{ 'zeroTaxHelp'|trans }}.</td>
+                </tr>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="3" class="text-right"><strong>{{ 'Zwischensumme'|trans }}</strong></td>
+                <td class="text-right px-0"><strong id="calc_brutto" class="px-0">{{ (price)|number_format(2,',','.') }} €</strong></td>
+            </tr>
+        {% endif %}
+    </table>
+</div>

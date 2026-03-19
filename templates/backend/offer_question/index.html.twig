@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+{% form_theme form _self %}
+
+{%- block form_row -%}
+        {%- set widget_attr = {} -%}
+        {%- if help is not empty -%}
+            {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+        {%- endif -%}
+        <div class="col-md-4 p-2">
+        {{- form_widget(form, widget_attr) -}}
+        </div>
+{%- endblock form_row -%}
+{% block javascripts %}
+    {{ parent() }}
+    {% include 'backend/offer_question/_script.html.twig' %}
+    <script>
+        $(document).on('change', '.addArea', function () {
+            $('.question_check').css('display', 'block');
+        })
+    </script>
+{% endblock %}
+{#
+{%- block text_row -%}
+    <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock text_widget %}#}
+
+{% block title %}{{ 'osc.quest.questionnaires'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .question_check{display: none;}
+        .form-check .form-check-label {display: block;}
+        .col-form-label {padding-left: 0;}
+        textarea {max-height: 200px}
+        a.disabled {
+            pointer-events: none;
+            cursor: default;
+        }
+    </style>
+{% endblock %}
+{% block main %}
+    {% include 'backend/components/_menu.html.twig' with {
+        'listLi': {'n':'o.categories'|trans,'k':true},
+        'categoryLi': {'n':category.name,'k':category.id,'i':category.icon},
+        'subCategoryLi': {'n':('replace.questionnaire'|trans({'%name%':subCategory.name})),'i':'document_scanner'}
+    } %}
+    <h1>{#{{ 'osc.quest.questionnaires'|trans }}#}
+        <div class="button-group">
+            <a class="btn btn-light btn-sm" href="{{ path('backend_subcategory_edit', {'category':subCategory.category.id,'id':subCategory.id}) }}">
+                <span class="material-icons">edit</span> <span class="hidden-xs">{{ 'replace.edit'|trans({'%name%':subCategory.name}) }}</span>
+            </a>
+        </div>
+    </h1>
+<form name="offer_sub_category_group" method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th><input data-group="{{ subCategory.questionAreas|length }}" name="questionArea" value="{{  subCategory.questionAreas|length }}" type="radio" class="addArea"></th>
+                <th><input type="text" name="offer_sub_category_group[questionAreas][{{ subCategory.questionAreas|length }}][sort]" required="required" class="form-control text-center" inputmode="decimal" value="0"></th>
+                <th colspan="4"><input type="text" name="offer_sub_category_group[questionAreas][{{ subCategory.questionAreas|length }}][name]" class="form-control"></th>
+                <th class="text-left" colspan="3">
+                    <button id="areabutton" disabled type="submit" class="btn btn-default btn-sm">{{ 'Zuordnung aktuallisieren'|trans }}</button>
+                </th>
+            </tr>
+            <tr style="background-color: {{ sfColor }};color: #fff">
+                <th></th>
+                <th class="text-center"><span class="material-icons">sort_by_alpha</span></th>
+                <th>{{ 'w.questions'|trans }}</th>
+                <th><span class="material-icons">visibility</span></th>
+                <th><span class="material-icons">photo_camera</span></th>
+                <th><span class="material-icons">question_answer</span></th>
+                <th>{{ 'w.answerType'|trans }}</th>
+                <th colspan="2">{{ 'w.protocolView'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% set groups = [] %}
+        {% set i = 0 %}
+        {% for ak, group in subCategory.questionAreas|sort((a, b) => a.sort <=> b.sort) %}
+            <tr>
+                <th><input data-group="{{ ak }}" name="questionArea" value="{{ ak }}" type="radio" class="addArea"></th>
+                <th><input type="text" name="offer_sub_category_group[questionAreas][{{ ak }}][sort]" required="required" class="form-control text-center" inputmode="decimal" value="{{ group.sort }}"></th>
+                <th colspan="6"><input type="text" name="offer_sub_category_group[questionAreas][{{ ak }}][name]" class="form-control" value="{{ group.name }}"></th>
+                <th>{% if group.id %}<a href="{{ path('backend_question_remove_group', {'questionnaire': subCategory.id, 'id': group.id}) }}"><span class="material-icons">clear</span></a>{% endif %}</th>
+            </tr>
+            {% for k, question in group.questions|sort((a, b) => a.sort <=> b.sort) %}
+                {% include 'backend/offer_question/components/_question_row.html.twig' with {'k':ak,'dataNull':false} %}
+            {% endfor %}
+        {% endfor %}
+        <tr>
+            <th></th>
+            <th colspan="7">{{ 'o.error.noGroup'|trans }}</th>
+            <th></th>
+        </tr>
+        {% for k, question in subCategory.offerQuestions|sort((a, b) => a.sort <=> b.sort) %}
+            {% if question.questionArea is null %}
+                {% include 'backend/offer_question/components/_question_row.html.twig' with {'k':subCategory.questionAreas|length,'dataNull':true} %}
+            {% endif %}
+        {% else %}
+            {% include 'backend/_no_entry.html.twig' with {'collSpan': 5} %}
+        {% endfor %}
+        </tbody>
+    </table>
+</form>
+    <div class="text-right">
+        {% if subCategory %}
+            <a class="btn btn-light btn-sm" href="{{ path('backend_question_new', {'questionnaire':subCategory.id}) }}">
+                <span class="material-icons">add_circle_outline</span> <span class="hidden-xs">{{ 'osc.quest.q.add'|trans }}</span>
+            </a>
+        {% else %}
+            <a class="btn btn-light btn-sm" href="{{ path('backend_category_edit', {'id':category.id}) }}">
+                <span class="material-icons">add_circle_outline</span> <span class="hidden-xs">Unterkategorie muss angelegt werden</span>
+            </a>
+        {% endif %}
+    </div>
+    {% if category.name == 'Funnel' %}
+        {% if subCategory.type is not null and subCategory.type == 'pv_hauptproduct' %}
+            <div class="card" style="padding: 20px;"><br>IFRAME html: <br>
+                <code style="background-color:#efefef;font-family: 'Consolas', 'Menlo', 'Courier', monospace;">
+                    {{ '<div class="embed-container"><iframe id="responsive-iframe" src="'~ absolute_url(path('app_komplett_recommendation', {'frame': 1,'ca':category.id,'sca':subCategory.id})) ~'"></iframe></div>' }}
+                    {#            {{ '<iframe style="min-height:320px;width:100%;border:none;" src="'~ absolute_url(path('app_recommendation', {'frame': 1,'ca':category.id,'sca':subCategory.id})) ~'"></iframe>' }}#}
+                    <span onauxclick="navigator.clipboard.writeText(this.value)"> </span>
+                </code>
+                <br>IFRAME testen: <br>
+                <a href="{{ absolute_url(path('app_komplett_recommendation', {'frame': 1,'ca':category.id,'sca':subCategory.id})) }}" target="_blank">Testen</a>
+                {#            {{ '<iframe style="min-height:320px;width:100%;border:none;" src="'~ absolute_url(path('app_recommendation', {'frame': 1,'ca':category.id,'sca':subCategory.id})) ~'"></iframe>' }}#}
+                <span onauxclick="navigator.clipboard.writeText(this.value)"> </span>
+            </div>
+        {% else %}
+            <div class="card" style="padding: 20px;"><br>IFRAME html: <br>
+                <code style="background-color:#efefef;font-family: 'Consolas', 'Menlo', 'Courier', monospace;">
+                {{ '<div class="embed-container"><iframe id="responsive-iframe" src="'~ absolute_url(path('app_recommendation', {'frame': 1,'ca':category.id,'sca':subCategory.id})) ~'"></iframe></div>' }}
+                {#            {{ '<iframe style="min-height:320px;width:100%;border:none;" src="'~ absolute_url(path('app_recommendation', {'frame': 1,'ca':category.id,'sca':subCategory.id})) ~'"></iframe>' }}#}
+                <span onauxclick="navigator.clipboard.writeText(this.value)"> </span>
+                </code>
+                <br>IFRAME testen: <br>
+                <a href="{{ absolute_url(path('app_recommendation', {'frame': 1,'ca':category.id,'sca':subCategory.id})) }}" target="_blank">Testen</a>
+                {#            {{ '<iframe style="min-height:320px;width:100%;border:none;" src="'~ absolute_url(path('app_recommendation', {'frame': 1,'ca':category.id,'sca':subCategory.id})) ~'"></iframe>' }}#}
+                <span onauxclick="navigator.clipboard.writeText(this.value)"> </span>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'partner.edit' |trans}} - {{ sf.name }}{% endblock %}
+
+{% block main %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">{{ 'partner.edit' |trans}}</h4>
+            </div>
+            <div class="card-body table-responsive">
+                {{ include('partner/_form.html.twig', {'button_label': 'Update'}) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 text-center">
+        {{ include('partner/_delete_form.html.twig') }}
+    </div>
+</div>
+{% endblock %}

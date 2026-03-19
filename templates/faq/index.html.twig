@@ -1,0 +1,11 @@
+<div class="card card-loaded" style="z-index:3;margin:0;width:auto;position: absolute;top: 0;left: 26px" data-popover-target="card">
+    <div class="card-body">
+        {{ title }}
+        {% if url is defined %}
+            <video controls style="width: 100%" autoplay="true">
+                <source src="{{ asset(url) }}" type="video/mp4">
+            </video>
+        {% endif %}
+        <p>{{ text|raw }}</p>
+    </div>
+</div>

@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de">
+{% include appTemplate~'mail/_head.html.twig' with {'title': 'Daa - Kontakt' } %}
+
+<body id="mail-body" style="outline: 0; width: 100%; min-width: 100%; height: 100%; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; font-family: Arial, Helvetica, sans-serif; line-height: 24px; font-weight: normal; font-size: 16px; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; color: #000000; margin: 0; padding: 0; border-width: 0;" bgcolor="{{ sfColorDark }}">
+<!--[if IE]><div class="ie-browser"><![endif]-->
+<table class="nl-container" style="table-layout: fixed; vertical-align: top; min-width: 320px; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0; mso-table-rspace: 0; background-color: {{ sfColorDark }}; width: 100%;" cellpadding="0" cellspacing="0" width="100%" bgcolor="{{ sfColorDark }}" valign="top">
+    <tbody>
+    <tr style="word-break: break-word; vertical-align: top;" valign="top">
+        <td style="border-bottom: 1px solid #014371;">
+
+            <div style="background-color:transparent;">
+                <div class="block-grid " style="min-width: 320px; max-width: 640px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; Margin: 0 auto; background-color: transparent;">
+                    <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
+                        <div class="col num12" style="min-width: 320px; max-width: 640px; display: table-cell; vertical-align: top; width: 640px;">
+                            <div class="col_cont" style="width:100% !important;">
+                                <!--[if (!mso)&(!IE)]><!-->
+                                <div style="border-top:0 solid transparent; border-left:0 solid transparent; border-bottom:0 solid transparent; border-right:0 solid transparent; padding-top:5px; padding-bottom:5px; padding-right: 0; padding-left: 0;">
+                                    <!--<![endif]-->
+                                    <div class="img-container center fixedwidth" align="center" style="padding-right: 5px;padding-left: 5px;">
+                                        <div style="font-size:1px;line-height:5px">&nbsp;</div><img class="center fixedwidth" align="center" border="0" src="{{ appAssetPath~'logo/logo_dark_in.png' }}" alt="ZOE i.G. - Ihr Fachbetrieb für Ladestation und Installation" title="ZOE i.G. - Ihr Fachbetrieb für Ladestation und Installation" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: 0; width: 256px; max-width: 100%; display: block;" width="256">
+                                        <div style="font-size:1px;line-height:5px">&nbsp;</div>
+                                    </div>
+                                    <!--[if (!mso)&(!IE)]><!-->
+                                </div>
+                                <!--<![endif]-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr style="vertical-align: top;" valign="top">
+        <td style="word-break: break-word; vertical-align: top;background-image: url(https://admin.zukunftsorientierte-energie.de/images/mails/blue-gradient2_2.jpeg);
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-color: {{ sfColorDark }};" valign="top">
+           <div class="block-grid two-up" style="min-width: 320px; max-width: 640px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; Margin: 0 auto; background-color: transparent;">
+                    <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
+                        <div class="col-num5" style="display: table-cell; vertical-align: top; max-width: 267px; min-width: 267px; width: 267px; "></div>
+                        <div class="col num7" style="display: table-cell; vertical-align: top;max-width: 440px; min-width: 440px;">
+                            <div class="col_cont" style="width:100% !important;">
+                                <!--[if (!mso)&(!IE)]><!-->
+                                <div style="text-align:left;border-top:0 solid transparent; border-left:0 solid transparent; border-bottom:0 solid transparent; border-right:0 solid transparent; padding-top:15px; padding-bottom:15px; padding-right: 0; padding-left: 0;">
+                                    <!--<![endif]-->
+                                    <div class="img-container right fixedwidth" align="right" style="text-align: left;padding-right: 10px;padding-left: 10px;">
+                                        <img class="right fixedwidth" alt="ZOE i.G. - Fachbetrieb für Ladestation" align="right" border="0" src="https://admin.zukunftsorientierte-energie.de/images/mails/worker_sf.png" style="margin-left: -15px;text-decoration: none; height: auto; border: 0; width: 260px; max-width: 100%; float: none; display: block;" width="260">
+                                    </div>
+                                    <div style="color:#ffffff;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;letter-spacing:3px;line-height:1.2;padding-top:10px;padding-right:10px;padding-bottom:5px;padding-left:10px;">
+                                        <div class="txtTinyMce-wrapper" style="font-size: 14px; line-height: 1.2; color: #ffffff; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; letter-spacing: 3px; mso-line-height-alt: 17px;">
+                                            <p style="margin: 0; font-size: 14px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 17px; letter-spacing: 3px; "><span style="color: #ffffff;"><strong><span style="font-size: 13px; mso-ansi-font-size: 14px;">Auftragsnummer: {{ inquiry.leadId }}</span></strong></span></p>
+                                        </div>
+                                    </div>
+                                    <table cellpadding="0" cellspacing="0" role="presentation" width="100%" style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0; mso-table-rspace: 0;" valign="top">
+                                        <tr style="vertical-align: top;" valign="top">
+                                            <td style="word-break: break-word; vertical-align: top; padding-bottom: 0; padding-left: 5px; padding-right: 5px; padding-top: 0; text-align: center; width: 100%;" width="100%" align="center" valign="top">
+                                                <h2 style="color:#48dbea;direction:ltr;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:31px;font-weight:normal;letter-spacing:normal;line-height:120%;text-align:left;margin-top:0;margin-bottom:0;"><span style="color: #1cf8f0;">REKLAMATION</span></h2>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table cellpadding="0" cellspacing="0" role="presentation" width="100%" style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0; mso-table-rspace: 0;" valign="top">
+                                        <tr style="vertical-align: top;" valign="top">
+                                            <td style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; padding-top: 5px; text-align: center; width: 100%;" width="100%" align="center" valign="top">
+                                                <h2 style="color:#ffffff;direction:ltr;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:26px;font-weight:normal;letter-spacing:normal;line-height:120%;text-align:left;margin-top:0;margin-bottom:0;">
+                                                    <strong>Sehr geehrtes DAA-Team,<br></strong><br>
+                                                </h2>
+                                                <p style="color:#ffffff;direction:ltr;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:18px;font-weight:normal;letter-spacing:normal;line-height:120%;text-align:left;margin-top:0;margin-bottom:0;">{{ reson}}</p>
+                                                <p style="color:#ffffff;direction:ltr;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:18px;font-weight:normal;letter-spacing:normal;line-height:120%;text-align:left;margin-top:0;margin-bottom:0;">
+                                                    Wir bitten daher, den Auftrag von {{ inquiry.offer.customer.fullNormalName }} zu Stornieren.
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div style="color:#ffffff;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;line-height:1.5;padding-top:5px;padding-right:5px;padding-bottom:5px;padding-left:5px;">
+                                        <div class="txtTinyMce-wrapper" style="font-size: 14px; line-height: 1.5; color: #ffffff; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; mso-line-height-alt: 21px;">
+                                            <p style="margin: 0; font-size: 17px; line-height: 1.5; word-break: break-word; mso-line-height-alt: 26px; mso-ansi-font-size: 18px; "><span style="font-size: 17px; mso-ansi-font-size: 18px;"></span></p>
+                                            <div class="button-container" align="left" style="padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:0;">
+                                                <div style="-webkit-text-size-adjust: none; text-decoration: none; display: inline-block; color: #00ffff; background-color: transparent; border-radius: 0; -webkit-border-radius: 0; -moz-border-radius: 0; width: auto; width: auto; border-top: 1px solid #FFFFFF; border-right: 1px solid #FFFFFF; border-bottom: 1px solid #FFFFFF; border-left: 1px solid #FFFFFF; padding-top: 5px; padding-bottom: 5px; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; text-align: center; mso-border-alt: none; word-break: keep-all;">
+                                                    <span style="padding-left:30px;padding-right:30px;font-size:18px;display:inline-block;">
+                                                        <span style="font-size: 16px; line-height: 2; word-break: break-word; mso-line-height-alt: 32px;">
+                                                            <span style="font-size: 18px; line-height: 36px;" data-mce-style="font-size: 18px; line-height: 36px;">
+                                                                <strong><span style="line-height: 24px;" data-mce-style="line-height: 24px;">AUFTRAGSNUMMER<br>{{ inquiry.leadId }}</span></strong>
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="color:#393d47;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;line-height:1.2;padding-top:5px;padding-right:5px;padding-bottom:5px;padding-left:5px;">
+                                        <div class="txtTinyMce-wrapper" style="font-size: 14px; line-height: 1.2; color: #393d47; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; mso-line-height-alt: 17px;">
+                                            <p style="margin: 0; font-size: 17px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 20px; mso-ansi-font-size: 18px; "><span style="color: #1cf8f0; font-size: 17px; mso-ansi-font-size: 18px;">Mit freundlichen Grüßen</span></p>
+                                            <p style="margin: 0; font-size: 17px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 20px; mso-ansi-font-size: 18px; "><span style="color: #ffffff; font-size: 17px; mso-ansi-font-size: 18px;">Ihr Installationsbetrieb</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="img-container left fixedwidth" align="left" style="padding-right: 5px;padding-left: 5px;">
+                                        <div style="font-size:1px;line-height:5px">&nbsp;</div><img class="left fixedwidth" border="0" src="https://admin.zukunftsorientierte-energie.de/images/mails/logo.png" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: 0; width: 224px; max-width: 100%; display: block;" width="224">
+                                        <div style="font-size:1px;line-height:5px">&nbsp;</div>
+                                    </div>
+                                    <!--[if (!mso)&(!IE)]><!-->
+                                </div>
+                                <!--<![endif]-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div style="background-color:transparent;">
+                <div class="block-grid " style="min-width: 320px; max-width: 640px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; Margin: 0 auto; background-color: transparent;">
+                    <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
+                        <div class="col num12" style="min-width: 320px; max-width: 640px; display: table-cell; vertical-align: top; width: 640px;">
+                            <div class="col_cont" style="width:100% !important;">
+                                <!--[if (!mso)&(!IE)]><!-->
+                                <div style="border-top:0 solid transparent; border-left:0 solid transparent; border-bottom:0 solid transparent; border-right:0 solid transparent; padding-top:15px; padding-bottom:10px; padding-right: 0; padding-left: 0;">
+                                    <!--<![endif]-->
+                                    <table class="divider" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0; mso-table-rspace: 0; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;" role="presentation" valign="top">
+                                        <tbody>
+                                        <tr style="vertical-align: top;" valign="top">
+                                            <td class="divider_inner" style="word-break: break-word; vertical-align: top; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;" valign="top">
+                                                <table class="divider_content" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0; mso-table-rspace: 0; border-top: 1px solid #BBBBBB; width: 100%;" align="center" role="presentation" valign="top">
+                                                    <tbody>
+                                                    <tr style="vertical-align: top;" valign="top">
+                                                        <td style="word-break: break-word; vertical-align: top; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;" valign="top"><span></span></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div style="color:#393d47;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;line-height:1.2;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
+                                        <div class="txtTinyMce-wrapper" style="font-size: 14px; line-height: 1.2; color: #393d47; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; mso-line-height-alt: 17px;">
+                                            <p style="margin: 0; line-height: 1.2; word-break: break-word; font-size: 20px; mso-line-height-alt: 24px; " align="center"><span style="font-size: 20px;"><strong><span style="color: #1cf8f0;">Unschlagbar</span><span style="color: #ffffff;">,</span>&nbsp;<span style="color: #1cf8f0;">qualitativ</span>&nbsp;<span style="color: #ffffff;">und</span>&nbsp;<span style="color: #1cf8f0;">günstig<span style="color: #ffffff;">!</span></span></strong></span></p>
+                                        </div>
+                                    </div>
+                                    <table class="divider" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0; mso-table-rspace: 0; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;" role="presentation" valign="top">
+                                        <tbody>
+                                        <tr style="vertical-align: top;" valign="top">
+                                            <td class="divider_inner" style="word-break: break-word; vertical-align: top; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;" valign="top">
+                                                <table class="divider_content" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0; mso-table-rspace: 0; border-top: 1px solid #BBBBBB; width: 100%;" align="center" role="presentation" valign="top">
+                                                    <tbody>
+                                                    <tr style="vertical-align: top;" valign="top">
+                                                        <td style="word-break: break-word; vertical-align: top; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;" valign="top"><span></span></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="social_icons" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0; mso-table-rspace: 0;" valign="top">
+                                        <tbody>
+                                        <tr style="vertical-align: top;" valign="top">
+                                            <td style="word-break: break-word; vertical-align: top; padding-top: 0; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;" valign="top">
+                                                <table class="social_table" align="center" cellpadding="0" cellspacing="0" role="presentation" style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-tspace: 0; mso-table-rspace: 0; mso-table-bspace: 0; mso-table-lspace: 0;" valign="top">
+
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <!--[if (!mso)&(!IE)]><!-->
+                                </div>
+                                <!--<![endif]-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+
+    <tr style="vertical-align: top;background-color: #02396a;" valign="top">
+        <td style="vertical-align: top;padding: 20px 0;">
+            {% include appTemplate~'mail/_footer.html.twig' %}
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<!--[if (IE)]></div><![endif]-->
+</body>
+</html>

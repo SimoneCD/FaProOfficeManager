@@ -1,0 +1,58 @@
+<div id="offer_order_documents" {{ stimulus_controller('upload', {'offerId':offer.id, 'docCount':form.documents|length}) }}>
+    <div class="card">
+        <div class="card-body">
+            <h4 style="color: {{ sfColor }}">{{ 'm.documents'|trans }}
+                <button class="btn btn-light btn-sm p-1" type="button" {{ stimulus_action('upload','clickDocument','click') }}>
+                    <span title="{{ 'm.documentAdd'|trans }}" class="material-icons">add_circle_outline</span>
+                </button><br>
+                <span class="form-text">(.doc,.pdf,.xls,.txt)</span>
+            </h4>
+
+            {% set customer = offer.customer %}
+            <div class="row m-0 p-0">
+                <div class="col-md-6">
+                    <div>
+                        <div class="">
+                            <input type="file" id="my_docfile" class="d-none"
+                                   name="offer_order[documents][{{ form.documents|length }}][file]"
+                                   data-upload-target="docfileclick"
+                                   accept=".doc,.pdf,.xls,.txt,.csv" {{ stimulus_action('upload','addDocumentPreview','change') }}>
+                        </div>
+                        <div class="">
+                            <div class="" id="docpreview" {{ stimulus_target('upload', 'docpreview') }}></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6"></div>
+            </div>
+            <div class="row d-none" id="upload_document_files">
+                <div class="col-12 text-center">
+                    <button type="submit" class="p-2 btn btn-sm btn-primary">{{ 'm.documentsUpload'|trans }}</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+            {% for doc in form.documents %}
+                {% set i = loop.index-1 %}
+                {% if doc.vars.value is null or doc.vars.value.id == '' %}
+                    {% set i = loop.index-1 %}
+                {% else %}
+                    <div class="" style="position: relative">
+                        <a target="_blank"
+                           href="{{ absolute_url(asset(appAssetPath~'uploads/'~offer.id~'/'~doc.vars.value.filename)) }}">
+                            {{ doc.vars.value.filename }}
+                        </a>
+                        <button title="" type="button" data-document-loop-id="{{ i }}"
+                                data-upload-id-param="{{ doc.vars.value.id }}"
+                                data-upload-url-param="{{ path('montage_document_remove', {'id': doc.vars.value.id}) }}"
+                                data-action="click->upload#removeDoc"
+                                class="p-1 btn btn-danger btn-xs"> x </button>
+                        <input class="d-none" type="file" id="offer_order_documents_{{ i }}_file" name="offer_order[documents][{{ i }}][file]" />
+                    </div>
+                {% endif %}
+            {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

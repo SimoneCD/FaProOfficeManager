@@ -1,0 +1,10 @@
+{% set datum = 'now'|date_modify('+1 month')|date('M Y') %}
+{% include appTemplate~'offer_pdf/_line-lv.html.twig' %}
+
+{% include appTemplate~'offer_pdf/_allgemeine_baubeschreibung.html.twig' %}
+
+{% include appTemplate~'offer_new/_product_list.html.twig' %}
+
+
+
+

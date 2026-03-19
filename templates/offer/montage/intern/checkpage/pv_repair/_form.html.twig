@@ -1,0 +1,19 @@
+{% macro checkNumber(offer) %}
+    {% include 'offer/montage/intern/pdf/_checkNumber.html.twig' %}
+{% endmacro %}
+{% macro header(sf, offer, count, pdf = false) %}
+    {% include 'offer/montage/intern/pdf/_header.html.twig' %}
+{% endmacro %}
+<form id="signatureForm" data-action="{{ path('ajax_protocol_changes', {'id':offer.id, 'type': 'pv_first'}) }}">
+    <div class="card page_card" data-controller="upload">
+        <div class="card-body" style="min-height: 900px;background: whitesmoke;">
+                {% if protocol is defined and protocol.id %}
+                    <input type="hidden" name="pv_repair[protocol][id]" value="{{ protocol.id }}">
+                {% endif %}
+                <input type="hidden" name="pv_repair[protocol][type]" value="pv_first">
+                <div id="checkerDiv3" class="ccd p-2">
+                    <h4 style="font-size: 16px !important;">Instandgesetzte elektronische Geräte - Inhaltsverzeichnis</h4>
+                </div>
+        </div>
+    </div>
+</form>

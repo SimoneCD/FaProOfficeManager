@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'c.new'|trans }}{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+{#            <a href="{{ path('customer_index') }}"><i class="material-symbols-outlined">list</i></a>#}
+        </div>
+    </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">{{ 'c.new'|trans }}</h4>
+            </div>
+            <div class="card-body">
+                {{ form_start(form) }}
+                <div id="step">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                                {{ form_label(form.sex) }}
+                                {{ form_widget(form.sex) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                                {{ form_label(form.companyName) }}
+                                {{ form_widget(form.companyName) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                                {{ form_label(form.email) }}
+                                {{ form_widget(form.email) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                                {{ form_label(form.phone) }}
+                                {{ form_widget(form.phone) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                                {{ form_label(form.name) }}
+                                {{ form_widget(form.name) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                                {{ form_label(form.surName) }}
+                                {{ form_widget(form.surName) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group bmd-form-group">
+                                {{ form_label(form.address) }}
+                                {{ form_widget(form.address) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                                {{ form_label(form.zip) }}
+                                {{ form_widget(form.zip) }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                                {{ form_label(form.city) }}
+                                {{ form_widget(form.city) }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                                {{ form_label(form.country) }}
+                                {{ form_widget(form.country) }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group bmd-form-group">
+                                {{ form_label(form.link) }}
+                                {{ form_widget(form.link) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary pull-right">{{ 'w.send'|trans }}</button>
+                <div class="clearfix"></div>
+                {{ form_end(form, {'render_rest':false}) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

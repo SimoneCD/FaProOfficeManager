@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bestellungen / Angebote{% endblock %}
+
+{% block main %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">Gesendete Angebote</h4>
+            </div>
+            <div class="card-body">
+    <table class="table table_data">
+        <thead>
+        <tr>
+            <th>LV-Nr.</th>
+            <th>Kunde</th>
+            <th>Angebot-Link</th>
+            <th>Bestätigungs-Link</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            {% set offer = order.offer %}
+            {% if offer is not null %}
+                <tr>
+                    <td>
+                        <a target="_blank" href="{{ path('offer_show', {'id': offer.id}) }}">{{ offer.customer.customerNumber~'.'~offer.customer.offers|length }}</a>
+                    </td>
+                    <td><a target="_blank" href="{{ path('customer_edit', {'id': offer.customer.id}) }}">{{ offer.customer.fullName }}</a></td>
+                    <td>
+                        <embed src="{{ path('invitationPDF')}}" width="500" height="400" type='application/pdf'>
+                        {{ absolute_url(path('pdf_offer_public', {'accessKey':order.accessKey})) }}</td>
+                    <td>{{ absolute_url(path('auftrag_offer_ok', {'accessKey':order.accessKey})) }}</td>
+                </tr>
+            {% endif %}
+        {% else %}
+            {% include 'backend/_no_entry.html.twig' with {'collSpan': 4} %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

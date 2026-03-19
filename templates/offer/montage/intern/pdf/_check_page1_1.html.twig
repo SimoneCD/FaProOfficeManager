@@ -1,0 +1,59 @@
+
+<table style="border: 3px solid {{ sfColor }}">
+    <tr><td colspan="2"><h3>Prüfung</h3></td></tr>
+    <tr>
+        <td style="width: 60%"><h3>Prüfergebnis:</h3></td>
+        <td style="width: 40%"><h3>Grund der Prüfung:</h3></td>
+    </tr>
+    <tr>
+        <td>
+            <p><input class="check_i" type="checkbox" name="offer_check[check][1]" {% if yes and ocp.check[1]  %}checked{% else %}{% endif %} value="1">&nbsp;&nbsp;&nbsp;&nbsp;Es wurden keine Mängel festgestellt.</p>
+        </td>
+        <td>
+            <p><input class="check_i" type="checkbox" name="offer_check[check][5]" {% if yes and ocp.check[5] %}checked{% else %}{% endif %} value="1">&nbsp;&nbsp;&nbsp;&nbsp;Erstprüfung</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p><input class="check_i" type="checkbox" name="offer_check[check][2]" {% if yes and ocp.check[2]  %}checked{% else %}{% endif %} value="1">&nbsp;&nbsp;&nbsp;&nbsp;Es wurden Mängel festgestellt.</p>
+        </td>
+        <td>
+            <p><input class="check_i" type="checkbox" name="offer_check[check][6]" {% if yes and ocp.check[6] %}checked{% else %}{% endif %} value="1">&nbsp;&nbsp;&nbsp;&nbsp;Wiederholungsprüfung</p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <p><input class="check_i" type="text" name="offer_check[check][3]" value="{% if yes %}{{ ocp.check[3] }}{% else %}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[check][31]" value="{% if yes %}{{ ocp.check[31] }}{% else %}{% endif %}"></p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <p><input class="check_i" type="checkbox" name="offer_check[check][4]" {% if yes and ocp.check[4]  %}checked{% else %}{% endif %} value="1">&nbsp;&nbsp;&nbsp;&nbsp;Die Photovoltaikanlage entspricht den anerkannten Regeln der Elektrotechnik</p>
+        </td>
+    </tr>
+    <tr style="border-bottom: 1px solid #dbdbdb">
+        <td colspan="2">
+            <p style="padding-left: 24px">Nächste Prüfung:&nbsp;&nbsp;&nbsp;&nbsp;<input style="width: 20%" class="check_i" type="date" name="offer_check[check][7]" value="{% if yes and ocp.check[7] %}{{ ocp.check[7] }}{% else %}{% endif %}"></p>
+        </td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td><p style="padding-top: 26px">Prüfdatum:</p></td>
+        <td>
+            <p style="padding-top: 26px"><input class="check_i" type="date" name="offer_check[signDate][1]" value="{% if yes %}{{ ocp.signDate[1] }}{% else %}{{ 'now'|date('d.m.Y') }}{% endif %}"></p>
+        </td>
+        <td><p style="padding-top: 26px">Unterschrift/Prüfer:</p></td>
+        <td style="padding-top: 0;position: relative">
+            <div id="signature1Text" style="margin-top:-20px;min-width: 200px;min-height: 60px;"></div>
+            {% if pdf is defined %}
+                <p style="border-bottom: 1px solid grey ">{% if yes and ocp.sign[1] %}<img src="{{ absolute_url(asset(appAssetPath~'user/'~ocp.sign[1])) }}">{% else %}{% endif %}</p>
+            {% else %}
+                <p><input id="signature1" class="check_i" type="hidden" name="offer_check[sign][1]" value="{% if yes %}{{ ocp.sign[1] }}{% else %}{% endif %}"></p>
+            {% endif %}
+            <div><img style="position: absolute;bottom: -14px;right: 30px;" src="{{ absolute_url(asset(appAssetPath~'logo/stamp-logo.png')) }}"> </div>
+            {% if pdf is not defined %}<button type="button" data-id="1" style="position: absolute;height: -webkit-fill-available;top: 0;right: 0" class="p-0 signatur1_reset btn btn-danger btn-sm"><i class="material-icons">undo</i></button>{% endif %}
+        </td>
+    </tr>
+</table>

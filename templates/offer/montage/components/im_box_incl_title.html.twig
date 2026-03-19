@@ -1,0 +1,16 @@
+<div class="col-md-3 gallery gal-{{ img.id }}" style="margin: initial;">
+    <a target="_blank"
+       href="{{ absolute_url(asset(appAssetPath~'uploads/'~offer.id~'/'~img.filename)) }}">
+        <p>{{ img.question.title }}</p>
+        <img src="{{ asset(appAssetPath~'uploads/'~offer.id~'/'~img.filename) }}"
+             alt="{{ img.filename }}">
+    </a>
+    <div class="desc-{{ img.id }}">
+        <button style="color: orangered" title="Doppelklicken zum Löschen" type="button"
+                data-image-id="{{ img.id }}"
+                data-url="{{ path('montage_image_remove', {'id': img.id}) }}"
+                data-action="dblclick->upload#remove"
+                class="p-1 btn btn-light btn-xs">{#{{ img.filename }}&nbsp; #}{{ 'w.delete'|trans }}
+        </button><p>{{ img.updated|date('d.m.Y') }}</p>
+    </div>
+</div>

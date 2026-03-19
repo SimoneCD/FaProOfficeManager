@@ -1,0 +1,70 @@
+{{ form_start(form) }}
+<div class="form-group row" id="target_url" data-sendurl="{{ path('ajax_order_product_save_all', {'id':product.id}) }}">
+    <label class="col-4">{{ 'w.product'|trans }}</label>
+    <div class="col-8">
+        <div class="text-right">
+            <a href="{{ path('backend_product_edit', {'category':product.productCategory.id, 'subCategory': product.productSubCategory, 'id': product.id}) }}" target="_blank">{{ product.name }}</a>
+        </div>
+    </div>
+</div>
+<div class="form-group row" data-controller="checkbox-select-all">
+    <label class="col-2">{{ 'w.offers'|trans }}</label>
+    <div class="col-10">
+        <div class="text-right d-none">{{ 'w.all'|trans }} <input value="all" checked data-checkbox-select-all-target="checkboxAll" {{ stimulus_action('order-action', 'checkboxChanger', 'change')}}  type="checkbox"></div>
+        {% set amount = 0 %}
+        {% set ekPrice = 0 %}
+        {% for of in offers %}
+            {% set amount = amount+of.amount %}
+            {% set ekPrice = ekPrice+of.ekPrice %}
+            {% set offer = getOff(of.id) %}
+            {% set ordered = false %}
+            {% for order in offer.productOrders %}
+                {% if order.product.id == product.id %}
+                    {% set amount = amount-of.amount %}
+                    {% set ordered = true %}
+                {% endif %}
+            {% endfor %}
+            <div class="text-right">
+                {{ offer.customer.fullName }} ({{ offer.customer.surName }})
+                <a href="{{ path('offer_show', {'id':offer.id}) }}">{{ offer.number }}</a>
+                <input {% if ordered %}checked disabled {% else %} data-order-action-offers-value="{{ offer.id }}" data-order-action-url-param="{{ path('ajax_order_product_amount', {'id':of.itemId, 'offer':offer.id}) }}" {% endif %} data-checkbox-select-all-target="checkbox" name="offerId" {{ stimulus_action('order-action', 'checkboxChanger', 'change')}} data-order-action-target="checkbox" value="{{ offer.id }}" type="checkbox">
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="form-group row">
+    {{ form_label(form.name) }}
+    <div class="col-8">
+        {{ form_widget(form.name) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ form_label(form.amount) }}
+    <div class="col-3">
+        {{ form_widget(form.amount, {'value':0}) }}
+    </div>
+    {{ form_label(form.price) }}
+    <div class="col-4">
+        {{ form_widget(form.price, {'value': 0|number_format(2,',','')}) }}
+    </div>
+</div>
+
+<div class="form-group row">
+    <h2>{{ 'p.products.order'|trans }}</h2>
+    {% for produ in product.products %}
+    <div class="col-12">
+        {{ produ.productNumber }} {{ produ.name }}
+    </div>
+    {% endfor %}
+</div>
+<div class="form-group row">
+    <div class="col-sm-2">Bestellen bei: </div>
+    {% if product.shopLink %}
+    <div class="col-sm-10">
+        <a class="btn btn-sm w-100" href="{{ product.shopLink }}" target="_blank">{{ product.shopLink }}</a>
+    </div>
+    {% else %}
+        <div class="col-sm-10">Kein Shop-Link im <a href="{{ path('backend_product_edit', {'category':'x', 'subCategory':'x','id':product.id}) }}" target="_blank">Produkt</a> hinterlegt</div>
+    {% endif %}
+</div>
+{{ form_end(form, {'render_rest': false}) }}

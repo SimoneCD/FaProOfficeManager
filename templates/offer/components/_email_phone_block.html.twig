@@ -1,0 +1,12 @@
+<div class="small-9 clearfix" style="padding:16px 0;">
+    <p data-controller="clipboard" data-clipboard-supported-class="clipboard--supported" style="clear:both;padding: 0;margin: 0">
+        <strong>&nbsp;{{ 'w.phone'|trans }}:</strong>
+        <input type="text" value="{{ offer.customer.phone }}" readonly style="border: none !important;background-color: transparent" {{ stimulus_target('clipboard','source') }} />
+        <i data-action="click->clipboard#copy" class="clipboard-button material-symbols-outlined" style="float:right; cursor:pointer;">content_copy</i>
+    </p>
+    <p data-controller="clipboard" data-clipboard-supported-class="clipboard--supported" style="clear:both;padding: 0;margin: 0;">
+        <strong>&nbsp;{{ 'w.email'|trans }}:</strong>
+        <input type="text" value="{{ offer.customer.email }}" readonly style="width: 176px;border: none !important;background-color: transparent" {{ stimulus_target('clipboard','source') }} />
+        <i data-action="click->clipboard#copy" class="clipboard-button material-symbols-outlined" style="float:right;cursor: pointer">content_copy</i>
+    </p>
+</div>

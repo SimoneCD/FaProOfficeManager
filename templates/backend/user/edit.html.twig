@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'backend_user_edit' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        input:checked + label {
+            background: transparent !important;
+        }
+        .form-check .form-check-input {
+            z-index: 1;
+            width: auto;
+            height: auto;
+            opacity: 1;
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            $('#user_own_plainPassword_first').val('');
+        });
+    </script>
+    {% include 'backend/user/_script.html.twig' %}
+{% endblock %}
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">{{ 'u.edit'|trans }}</h4>
+                </div>
+                <div class="card-body">
+                    {% include 'backend/user/_form.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if formPass is not null and is_granted('ROLE_SUPER_ADMIN') %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">{{ 'Passwort für '~ user.fullName ~ ' setzen'|trans }}</h4>
+                </div>
+                <div class="card-body">
+                    {{ form_start(formPass) }}
+                    {{ form_widget(formPass) }}
+                    <button type="submit" class="btn btn-primary">{{ 'f.button.saveName'|trans({'%name%':'w.employee'|trans}) }}</button>
+                    {{ form_end(formPass) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,23 @@
+<div class="modal fade order_modal"
+     data-controller="modal booking" data-order-target="modal" tabindex="-1" role="dialog"
+     aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="w-100 modal-title" id="modalTitle">
+                    {{ 'book.what'|trans }}
+                    <p class="w-100" style="font-weight: bold; color: {{ sfColor }}" {{ stimulus_target('booking','name') }}></p>
+                </h5>
+                <button id="order_modal_close" data-action="click->modal#close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" data-order-action-target="result">
+                <div data-order-action-target="checkbox"></div>
+            </div>
+            <div class="modal-footer">
+                <button {{ stimulus_target('order-action','url') }} {{ stimulus_action('order-action', 'orderComplete', 'click')}} type="button" class="btn btn-danger">{{ 'p.order.save'|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>

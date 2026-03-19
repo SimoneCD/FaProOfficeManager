@@ -1,0 +1,6 @@
+{% set yes = offer.context is defined and offer.context[type] is defined -%}
+{% set ocp = yes ? offer.context[type] : null -%}
+{% set isPdf = (pdf is defined and pdf) -%}
+{% if type is defined and type %}
+    {%- include 'offer/montage/intern/checkpage/'~type~'/_form.html.twig' -%}
+{% endif %}

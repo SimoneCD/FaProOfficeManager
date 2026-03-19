@@ -1,0 +1,286 @@
+{% macro collection_item(form, subCategory) %}
+    <div data-requests-collection-target="field" class="row">
+        <div class="filename-item col-3">
+            {% if form.vars.value and form.vars.value.filename %}
+                {{ form_row(form.filename, {'label':false, 'attr': {'style': 'display:none;'}}) }}
+                {{- form.vars.value.originalName -}}
+            {% else %}
+                {{ form_row(form.filename) }}
+            {% endif %}
+        </div>
+        <div class="description-item col-3">
+            {% if form.vars.value and form.vars.value.description %}
+                {{ form_row(form.description, {'label':false, 'attr': {'style': 'display:none;'}}) }}
+                {{- form.vars.value.description -}}
+            {% else %}
+                {{ form_row(form.description) }}
+            {% endif %}
+        </div>
+        <div class="file-item col-4">
+            {% if form.vars.value and form.vars.value.filename and subCategory.id is defined %}
+                <object data="{{ asset(appAssetPath~'requests/'~subCategory.id~'/'~form.vars.value.filename) }}" type="application/pdf" width="200px" height="100%">
+                    <p>Unable to display PDF file. <a href="{{ asset(appAssetPath~'requests/'~subCategory.id~'/'~form.vars.value.filename) }}">Download</a> instead.</p>
+                </object>
+                {{ form_row(form.file, {'label_attr':{'style':'display:none'},'attr': {'style': 'display:none;'}}) }}
+            {% else %}
+            {{ form_row(form.file) }}
+            {% endif %}
+        </div>
+        <div class="col-2">
+            {% if form.vars.value and form.vars.value.filename and subCategory.id is defined %}
+                <a target="_blank" href="{{ asset(appAssetPath~'requests/'~form.vars.value.offerSubCategory.id~'/'~form.vars.value.filename) }}"><span class="material-icons">download</span></a>
+                <a href="javascript:" type="button" data-requests-collection-url-param="{{ path('ajax-remove-request', {'category':form.vars.value.offerSubCategory.category.id, 'id': form.vars.value.offerSubCategory.id, 'doc': form.vars.value.id}) }}" data-action="requests-collection#removeItem"><i class="material-icons">close</i> </a>
+            {% else %}
+                <a href="javascript:" type="button" data-action="requests-collection#removeItem"><i class="material-icons">close</i> </a>
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+{% import _self as formMacros %}
+{{ form_start(form) }}
+{#{% form_theme form with ['foundation_5_layout.html.twig'] only %}#}
+
+<div class="card allgemein">
+    <div class="card-body">
+        <div id="backend_form">
+            <h1 class="m-0 p-0 text-center">{{ 'Hauptinformationen'|trans }}{% if subCategory is defined and subCategory.id %} <button type="button" class="btn btn-light toggle_allgemein" style="padding: 8px;"><span class="material-symbols-outlined" style="font-size: x-large;">keyboard_arrow_down</span></button>{% endif %}</h1>
+            <div id="allgemein" class="card">
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        {{ form_label(form.name) }}
+                        {{ form_widget(form.name) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_label(form.category) }}
+                        {{ form_widget(form.category) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_label(form.type) }}
+                        {{ form_widget(form.type) }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        {{ form_label(form.teamCategories) }}
+                        {{ form_widget(form.teamCategories, {'attr':{'style':'height:100px'}}) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_label(form.productSubCategory) }}
+                        {{ form_widget(form.productSubCategory|raw, { 'separator': '=====' }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card settings">
+    <div class="card-body">
+
+        <div id="backend_form">
+            <h1 class="m-0 p-0 text-center">{{ 'o.settings.offerSettingsLabel'|trans({'%name%':subCategory.name}) }}{% if subCategory is defined and subCategory.id %} <button type="button" class="btn btn-light toggle_settings" style="padding: 8px;"><span class="material-symbols-outlined" style="font-size: x-large;">keyboard_arrow_down</span></button>{% endif %}</h1>
+            <div id="q_settings">
+                <div class="form-group row">
+                <div class="col-sm-6">
+                    {{ form_label(form.serviceTitle) }}
+                    {{ form_widget(form.serviceTitle) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form_label(form.serviceText) }}
+                    {{ form_widget(form.serviceText) }}
+                </div>
+            </div>
+                {% import "backend/macros/input/project_data.html.twig" as prototype %}
+                <div class="form-group row">
+                    {#            {{ form_label(form.specifications) }}#}
+                    <div class="col-md-3 p-0 m-0" >
+                        <label class="p-0 m-0">{{ 'o.settings.autoReplace'|trans }}:</label>
+                        <p class="form-text p-0 m-0">
+                            ##offerName##<br>
+                            ##offerNumber##<br>
+                            ##address##<br>
+                        </p>
+                    </div>
+                    <div class="col-md-9" style="max-height: 400px;padding: 0 10px 20px 10px">
+                        <div class="" {{ stimulus_controller('form-collection') }}
+                             data-form-collection-index-value="{{ form.keyValueSubCategoryData|length > 0 ? form.keyValueSubCategoryData|length : 0 }}"
+                             data-form-collection-prototype-value="{{ form_widget(form.keyValueSubCategoryData.vars.prototype, {'attr':{'class':'row'}})|e('html_attr') }}"
+                        >
+                            <div class="p-0 hhh" {{ stimulus_target('form-collection', 'collectionContainer') }}>
+                                {% for widget in form.keyValueSubCategoryData.children %}
+                                    {{ prototype.keyValueCollectionItem(subCategory, widget) }}
+                                {% endfor %}
+                            </div>
+                            <button type="button" class="btn btn-light add_item_link" {{ stimulus_action('form-collection', 'addCollectionElement') }} style="padding: 4px;float: right"><span style="font-size: x-large;" class="material-symbols-outlined">add</span></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-5">{{ form_label(form.products) }}</div>
+                    <div class="col-1"><span class="material-icons">keyboard_backspace</span></div>
+                    <div class="col-6 text-right"><button type="button" class="btn btn-light toggle_content_products" style="padding: 8px;float: right"><span class="material-symbols-outlined" style="font-size: x-large;">zoom_out_map</span></button></div>
+                </div>
+                <div class="row">
+                <div class="col-5">
+                    <select style="min-height: 150px;font-size:smaller;background-color: #fff !important;" name="offer_sub_category[products][]" id="multiselect" class="form-control" multiple="multiple">
+                        {% set ins = [] %}
+                        {% for k, product in form.products.vars.choices %}
+                            {% set insHtml = [] %}
+                            {% for pr in product.choices %}
+                                {% for pk, p in subCategory.products %}
+                                    {% if p.id == pr.value %}
+                                        {% set ins = ins|merge([p.id]) %}
+                                        {% set insHtml = insHtml|merge(['<option value="'~p.id~'">'~pr.label~'</option>']) %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                            {% if insHtml|length %}<optgroup label="{{ k }}">{% endif %}
+                            {% for ih in insHtml %}
+                                {{ ih|raw }}
+                            {% endfor %}
+                            {% if insHtml|length %}</optgroup>{% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-1">
+                    <button type="button" id="multiselect_rightAll" class="m-0 p-2 btn btn-block"><span class="material-icons">keyboard_double_arrow_right</span>
+                    </button>
+                    <button type="button" id="multiselect_rightSelected" class="m-0 p-2 btn btn-block"><span
+                                class="material-icons">navigate_next</span></button>
+                    <button type="button" id="multiselect_leftSelected" class="m-0 p-2 btn btn-block"><span
+                                class="material-icons">chevron_left</span></button>
+                    <button type="button" id="multiselect_leftAll" class="m-0 p-2 btn btn-block"><span class="material-icons">keyboard_double_arrow_left</span>
+                    </button>
+                </div>
+                <div class="col-6" style="min-height: 300px;height: max-content">
+                    <select style="font-size:smaller;min-height: 150px;" name="pr" id="multiselect_to" class="form-control" multiple="multiple">
+                        {% for k, product in form.products.vars.choices %}
+                            <optgroup label="{{ k }}">
+                                {% for pr in product.choices %}
+                                    {% if pr.value not in ins %}
+                                        <option value="{{ pr.value }}">{{ pr.label }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card pdf-email-text">
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-md-6">
+                <h1 class="m-0 p-0 text-center">{{ 'PDF Text'|trans }}</h1>
+            </div>
+            <div class="col-md-6">
+                <h1 class="m-0 p-0 text-center">{{ 'E-Mail Text'|trans }}{% if subCategory is defined and subCategory.id %} <button type="button" class="btn btn-light toggle_text" style="padding: 8px;"><span class="material-symbols-outlined" style="font-size: x-large;">keyboard_arrow_down</span></button>{% endif %}</h1>
+            </div>
+        </div>
+        <div id="emailText">
+            <div class="form-group row">
+                <div class="col-md-6">
+                    {{ form_label(form.estimateText) }}
+                    {{ form_widget(form.estimateText, {'attr':{'style':'min-height:80px'}}) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_label(form.estimateMailText) }}
+                    {{ form_widget(form.estimateMailText, {'attr':{'style':'min-height:80px'}}) }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    {{ form_label(form.offerText) }}
+                    {{ form_widget(form.offerText, {'attr':{'style':'min-height:80px'}}) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_label(form.mailText) }}
+                    {{ form_widget(form.mailText, {'attr':{'style':'min-height:80px'}}) }}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    {{ form_label(form.partInvoiceText) }}
+                    {{ form_widget(form.partInvoiceText, {'attr':{'style':'min-height:100px'}}) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_label(form.partMailText) }}
+                    {{ form_widget(form.partMailText, {'attr':{'style':'min-height:100px'}}) }}
+                </div>
+            </div>
+            <div class="form-group row">
+            <div class="col-md-6">
+                {{ form_label(form.invoiceText) }}
+                {{ form_widget(form.invoiceText, {'attr':{'style':'min-height:100px'}}) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_label(form.invoiceMailText) }}
+                {{ form_widget(form.invoiceMailText, {'attr':{'style':'min-height:100px'}}) }}
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<div class="form-group row">
+    <label class="col-12 col-form-label" for="offer_sub_category_offerImage" style="cursor: pointer">
+        <span>{{ 'o.image'|trans }}</span>
+        <span class="material-icons">backup</span>
+    </label>
+    <div class="col-12 previewer p-0">
+        {{ form_widget(form.offerImage) }}
+        {{ form_errors(form.offerImage) }}
+        {% if subCategory is defined and subCategory.image != '' %}
+            <img style="max-width: 1000px" id="preview_image{% if subCategory.id is null %}_active{% endif %}"
+                 src="{{ asset(appAssetPath~'offers/'~subCategory.image) }}?{{ 'now'|date('u') }}"
+                 alt="{{ 'o.imagePreview'|trans }}- {{ subCategory.name }}"/>
+        {% else %}
+            <img style="max-width: 1000px" id="preview_image{% if subCategory.id is null %}_active{% endif %}"
+                 src="{{ asset('app/img/1x1.png') }}?{{ 'now'|date('u') }}" alt="{{ 'o.imagePreview'|trans }}"/>
+        {% endif %}
+    </div>
+    {% if subCategory is defined and subCategory.id %}
+        {% include 'backend/components/_crop_buttons.html.twig' with {'full': true}%}
+    {% endif %}
+</div>
+<div class="card">
+    <div class="card-body">
+        {{ form_label(form.requests) }}
+        <div data-controller="requests-collection"
+             data-requests-collection-max-items-value="8"
+             data-requests-collection-prototype-value="{{ formMacros.collection_item(form.requests.vars.prototype)|json_encode }}">
+            <div data-requests-collection-target="fields">
+                {% do form.requests.setRendered %}
+                <div class="row">
+                    <div class="col-md-3"><h4>Name</h4></div>
+                    <div class="col-md-3"><h4>Beschreibung</h4></div>
+                    <div class="col-md-3"><h4>Originaldatei</h4></div>
+                </div>
+                {% for field in form.requests %}
+                    {{ formMacros.collection_item(field, subCategory) }}
+                {% endfor %}
+            </div>
+            <button class="btn btn-sm btn-light" type="button" style="color: orangered"
+                    data-action="requests-collection#addItem"
+                    data-requests-collection-target="addButton">+</button>
+        </div>
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-sm-7 offset-sm-5 text-left">
+        <button class="btn btn-primary">
+            {% if subCategory is defined and subCategory.id %}
+                {{ 'f.button.saveName'|trans({'%name%':subCategory.name}) }}
+            {% else %}
+                {{ 'w.save'|trans }}
+            {% endif %}
+        </button>
+    </div>
+</div>
+{{ form_row(form._token) }}
+{{ form_end(form, {'render_rest':false}) }}
+{% if subCategory is defined and subCategory.id %}
+    {{ include('backend/offer_sub_category/_delete_form.html.twig') }}
+{% endif %}

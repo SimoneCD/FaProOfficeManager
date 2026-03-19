@@ -1,0 +1,336 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'title.offer.index'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .btn.btn-primary {
+            background-color: {{ sfColorDark }};
+        }
+        .content {
+             background: #fff;
+        }
+        .today {
+            position: absolute;
+            top: -10px;
+            padding: 1px 6px;
+            right: -4px;
+            font-size: 9px;
+            background-color: #fff3e2 !important;
+            border: 1px solid #000 !important;
+            color: #dd0f0f !important;
+            font-weight: bold;
+        }
+        .product_block {
+            position: absolute;
+            border-radius: 4px;
+            bottom: -10px;
+            top: auto;
+            right: 0;
+            padding: 1px 3px;
+            font-size: 9px;
+            background-color: #fff !important;
+            border: 1px solid #d2d2d2 !important;
+            color: #000 !important;
+        }
+    #timetable th {
+        min-width: 300px;
+    }
+    .card {
+        font-size: .775rem;
+    }
+        .btn-group button{ height: 30px;width: 40px;padding: 6px!important;}
+        @media only screen and (min-width: 768px) {
+            .filter_table {position: fixed;width: -moz-fit-content;}
+            .filter_after_content {margin-top: 160px;}
+            .btn-group button {width: auto; padding: 6px 10px;}
+        }
+        #timetable th {
+            color: {{ sfColorDark }};
+        }
+        .numberCircle2{
+            font-size: 10px;
+            border-radius: 50%;
+            border: 1px solid {{ sfColor }};
+            padding: 2px 6px;
+            background-color: #13b865;
+            color: #fff;
+            margin-left: 4px;
+            font-weight: 600;
+        }
+        /*.card-box {*/
+        /*    margin: 0;*/
+        /*}*/
+        @media only screen and (min-width: 768px) {
+            .filter_after_content {
+                margin-top: 130px;
+            }
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include 'offer/_offer_script.html.twig' %}
+    <script src="{{ asset('app/moment.js') }}"></script>
+    <script>
+        {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+            jQuery(document).ready(function () {
+                $(document).on('click', '.set_payed', function (e) {
+                    if (confirm("\n"+'Ist die Zahlung eingegangen?')) {
+                        e.preventDefault();
+                        let url = $(this).attr('data-action');
+                        let that = this;
+                        $.ajax({
+                            'url': url,
+                            'data': {},
+                            'method': 'post',
+                            'success': function (ax) {
+                                if ($(that).hasClass('icon_save')) {
+                                    let id = $(that).attr('data-css');
+                                    $(that).remove();
+                                    $('.icon_save_'+id).css('display', 'inline');
+                                    $('.mahnung_'+id).css('display', 'none');
+
+                                } else {
+                                    $(that).css('background', 'repeating-linear-gradient( 135deg, #ffc500, #ffc500 10px, {{ sfColorDark}} 10px, {{ sfColor}} 20px )')
+                                }
+                                // window.location.reload();
+                                // if (ax === true) {
+                                //     window.location.reload();
+                                // }
+                            }
+                        })
+                    }
+                });
+                moment.locale('{{ app.request.locale }}');
+                jQuery('.copyButton').on('click', function () {
+                    let div = jQuery('.collapseI');
+                    if (div.hasClass('d-none')) {
+                        div.removeClass('d-none');
+                    } else {
+                        div.addClass('d-none');
+                    }
+                });
+                jQuery('.filterButton').on('click', function () {
+                    jQuery('#'+jQuery(this).attr('data-id')).val(jQuery(this).val())
+                    jQuery('#filter-form').submit();
+                });
+            })
+        {% elseif is_granted('ROLE_MONTAGE') %}
+            $('.set_payed').attr('disabled',true);
+            $('.copyButton').attr('disabled',true);
+            $('.filterButton').attr('disabled',true);
+        {% endif %}
+    </script>
+{% endblock %}
+{% block main %}
+    {% set montageGranted = is_granted('ROLE_MONTAGE') %}
+    {% set serviceGranted = is_granted('ROLE_EMPLOYEE_SERVICE') %}
+    {% set adminGranted = is_granted('ROLE_ADMIN') %}
+    {% if serviceGranted %}
+    <table class="filter_table" style="border-top: none;color: {{ sfColorText }};background-color: transparent !important;">
+        <thead>
+        <tr>
+            <td colspan="11">
+                <div>
+
+                    {% set name = category.name ?? 'w.all'|trans ~ ' - '~'w.customers'|trans%}
+                    {% set title = 'c.yourCustomer'|trans %}
+                    <form id="filter-form" style="z-index:999;float: left;{% if serviceGranted and search is defined %}height: 50px;{% endif %};background: transparent;" class="m-0" action="?search={{ app.request.query.get('search', '') }}" method="get">
+                        <div class="card-box m-0" style="color: black">
+                            <div class="btn-group mr-2 p-0" role="group" aria-label="{{ 'w.view'|trans }}">
+                                <input id="offer-filter" type="hidden" name="filter" value="{{ app.request.query.get('filter', filter) }}">
+                                <button data-id="offer-filter" value="all" type="button" class="filterButton btn btn-sm btn-{% if filter == 'all' %}primary{% else %}light{% endif %}">All</button>
+                                <button data-id="offer-filter" value="in" type="button" class="filterButton btn btn-sm btn-{% if filter == 'in' %}primary{% else %}light{% endif %}"><i class="material-symbols-outlined">visibility</i></button>
+                                <button data-id="offer-filter" value="out" type="button" class="filterButton btn btn-sm btn-{% if filter == 'out' %}primary{% else %}light{% endif %}"><i class="material-symbols-outlined">visibility_off</i></button>
+                            </div>
+                            <input id="filter_today" name="today" type="hidden" value="{% if today is defined and today != 0 %}1{% else %}0{% endif %}">
+                            <button type="button" value="1" data-id="filter_today" class="filterButton btn btn-sm{% if today is defined and today == '1' %} btn-primary{% else %} btn-white{% endif %}">
+                                {{ 'b.appointmentsToday'|trans }}
+                            </button>
+                            <button type="button" value="0" data-id="filter_today" class="filterButton btn btn-sm{% if today is defined and today == 0 %} btn-primary{% else %} btn-white{% endif %}">
+                                {{ 'b.appointmentsAll'|trans }}
+                            </button>
+{#                            <a href="javascript:void(0)" class="invoice_table_toggle btn btn-sm btn-secondary">#}
+{#                                {{ 'Rechnungen'|trans }}#}
+{#                            </a>#}
+                        </div>
+                        {% if serviceGranted and search is not defined %}
+                    <br>
+                        <div class="card-box m-0 py-0" style="color: black;width: max-content;">
+                            <input id="filter_user" name="user" type="hidden" value="{{ app.request.query.get('user', filterUser) }}">
+                            <button style="float: left;padding: 6px 10px !important;margin-top: 16px !important;" type="button" data-id="filter_user" value="all" class="mt-0 filterButton btn btn-sm{% if app.request.query.get('user', app.user.id) == 'all' %} btn-primary{% else %} btn-secound{% endif %}">
+                                {{ 'Alle Kundensevice-Mitarbeiter' }}
+                            </button>&nbsp;{#{{ 'w.editor'|trans }}&nbsp;#}
+{#                            <div style="float: left" data-controller="popover" data-popover-url-value="{{ path('ajax_faq') }}">#}
+{#                                {{ 'w.editor'|trans }}#}
+{#                                <a data-action="mouseenter->popover#show"><span class="material-icons">info_outline</span></a>#}
+{#                                <div data-popover-target="content">#}
+{#                                    <div data-popover-target="card">#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+                            {% for user in users %}
+                                    {% if user.image %}
+                                        <button href="javascript:" data-id="filter_user" value="{{ user.id }}" style="padding: 6px 10px !important;" class="circlebox mt-0 p-0 filterButton"><img {% if filterUser == user.id %}style="border-color: {{ sfColorDark }}"{% endif %} class="circle" title="{{ user.fullName }}" src="{{ '/'~appAssetPath~'user/'~user.image }}" alt="{{ user.fullName }} Avatar" style="border-radius: 50%;"></button>
+                                    {% else %}
+                                        <button data-id="filter_user" type="button" style="padding: 6px 10px !important;"   value="{{ user.id }}" class="mt-0 pl-1 pr-1 filterButton btn btn-sm{% if filterUser == user.id %} btn-primary{% else %} btn-secondary{% endif %}">
+                                            {% if user.id == app.user.id %}{{ title }} {% endif %}{{ user.username }}
+                                        </button>
+                                    {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </thead>
+    </table>
+    {% endif %}
+    <div class="filter_after_content" style="border-radius: 10px;color:{{ sfColorText }};position: relative">
+        <div id="page-wrapper table-responsive" data-controller="email" style="background-color: transparent">
+            <table id="timetable" style="height:100%;min-height:300px;border-radius:10px;border-top: none;color: {{ sfColorText }};background-color: #fff !important;">
+                <tr>
+                    <th>
+                        <div class="faq-content" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 1}) }}">
+                            {{ 'w.callNew'|trans }}
+                            <a class="faq-box" href="javascript:void(0)" data-action="mouseenter->popover#show">
+                                <span class="material-icons">info_outline</span>
+                            </a>
+                        </div>
+                    </th>{# call #}
+                    <th>
+                        <div class="faq-content" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 2}) }}">
+                            {{ 's.sendOfferInWork'|trans }}
+                            <a class="faq-box" href="javascript:void(0)" data-action="mouseenter->popover#show">
+                                <span class="material-icons">info_outline</span>
+                            </a>
+                        </div>
+                    </th>{# sendenInBearbeitung #}
+                    <th>
+
+                        <div class="faq-content" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 3}) }}">
+                            Kostenvoranschlag senden
+                            <a class="faq-box" href="javascript:void(0)" data-action="mouseenter->popover#show">
+                                <span class="material-icons">info_outline</span>
+                            </a>
+                        </div>
+                    </th>{# open #}
+                    <th>
+
+                        <div class="faq-content" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 4}) }}">
+                            Besichtigung durchführen
+                            <a class="faq-box" href="javascript:void(0)" data-action="mouseenter->popover#show">
+                                <span class="material-icons">info_outline</span>
+                            </a>
+                        </div>
+                    </th>{# besichtigung #}
+                    <th>
+
+                        <div class="faq-content" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 5}) }}">
+                            {{ 's.sendOffer'|trans }}
+                            <a class="faq-box" href="javascript:void(0)" data-action="mouseenter->popover#show">
+                                <span class="material-icons">info_outline</span>
+                            </a>
+                        </div>
+                    </th>{# gesendet #}
+                    {% if adminGranted %}
+{#                        <th style="min-width: 60px;"><i class="material-symbols-outlined" style="color: #c50d0d">unpublished</i></th>#}{# bestaetigt #}
+                    {% endif %}
+                    <th>
+                        <div class="faq-content" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 6}) }}">
+                            {{ 's.waitOffering'|trans }}
+                            <a class="faq-box" href="javascript:void(0)" data-action="mouseenter->popover#show">
+                                <span class="material-icons">info_outline</span>
+                            </a>
+                        </div>
+                    </th>{# warten auf Bestätigung #}
+                    <th style="background-color: #fdffe7">
+                        <div class="faq-content" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 7}) }}">
+                            {{ 's.sendPartInvoice'|trans }}
+                            <a class="faq-box" href="javascript:void(0)" data-action="mouseenter->popover#show">
+                                <span class="material-icons">info_outline</span>
+                            </a>
+                        </div>
+                    </th>{# bestaetigt #}
+                    <th>
+                        <div class="faq-content" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 8}) }}">
+                            {{ 's.waitPartInvoice'|trans }}
+                            <a class="faq-box" href="javascript:void(0)" data-action="mouseenter->popover#show">
+                                <span class="material-icons">info_outline</span>
+                            </a>
+                        </div>
+                    </th>{# rechnungPartSend #}
+
+                    <th>
+                        <div class="faq-content" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 9}) }}">
+{#                            {{ 's.projectAppointment'|trans }}#}
+                            Anträge stellen
+                            <a class="faq-box" href="javascript:void(0)" data-action="mouseenter->popover#show">
+                                <span class="material-icons">info_outline</span>
+                            </a>
+                        </div>
+                    </th>{# rechnungPartEingang #}
+                    <th>
+                        <div class="faq-content" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 10}) }}">
+                            {{ 's.projectInstallation'|trans }}
+                            <a class="faq-box" href="javascript:void(0)" data-action="mouseenter->popover#show">
+                                <span class="material-icons">info_outline</span>
+                            </a>
+                        </div>
+                    </th>{# work #}
+                    <th style="background-color: #fdffe7">
+                        <div class="faq-content" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 11}) }}">
+                            {{ 's.sendRestInvoice'|trans }}
+                            <a class="faq-box" href="javascript:void(0)" data-action="mouseenter->popover#show">
+                                <span class="material-icons">info_outline</span>
+                            </a>
+                        </div>
+                    </th>{# done #}
+                    <th>
+                        <div class="faq-content" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 12}) }}">
+                            {{ 's.waitRestInvoice'|trans }}
+                            <a class="faq-box" href="javascript:void(0)" data-action="mouseenter->popover#show">
+                                <span class="material-icons">info_outline</span>
+                            </a>
+                        </div>
+                    </th>{# rechnungEingangSend #}
+                    <th>
+                        <div class="faq-content" data-controller="popover" data-popover-url-value="{{ path('ajax_faq', {'id': 13}) }}">
+                            {{ 's.finished'|trans }}
+                            <a class="faq-box" href="javascript:void(0)" data-action="mouseenter->popover#show">
+                                <span class="material-icons">info_outline</span>
+                            </a>
+                        </div>
+                    </th>{# rechnungEingang #}
+                </tr>
+                <tbody id="containment">
+                <style>td{padding-right: 10px;padding-left: 10px;}</style>
+                <tr style="height: 100px">
+                    <td id="status_call">{% include 'offer/_offer_block_cover.html.twig' with {'block':'call','offers': inquiries, 'storno':false, 'ActionLog':ActionLog} %}</td>
+                    <td id="status_call-plus">{% include 'offer/_offer_block_cover.html.twig' with {'block':'call-plus', 'offers': inquiries, 'storno':false, 'ActionLog':ActionLog} %}</td>
+                    <td id="status_estimate">{% include 'offer/_offer_block_cover.html.twig' with {'block':'estimate','offers': inquiries, 'storno':false, 'ActionLog':ActionLog} %}</td>
+                    <td id="status_besichtigung">{% include 'offer/_offer_block_cover.html.twig' with {'block':'besichtigung','offers': inquiries, 'storno':false, 'ActionLog':ActionLog} %}</td>
+                    <td id="status_open">{% include 'offer/_offer_block_cover.html.twig' with {'block':'open','offers': inquiries, 'storno':false, 'ActionLog':ActionLog} %}</td>
+                    {% if adminGranted %}
+{#                        <td class="storno" id="status_storno">#}
+{#                            {% include 'offer/_offer_block_cover.html.twig' with {'block':'storno','offers': inquiries, 'storno':false} %}#}
+{#                        </td>#}
+                    {% endif %}
+                    <td id="status_gesendet">{% include 'offer/_offer_block_cover.html.twig' with {'block':'gesendet','offers': inquiries, 'storno':false, 'ActionLog':ActionLog} %}</td>
+                    <td style="background-color: #fdffe7" data-update-offer-target="bestaetigt" class="tddrop" id="status_bestaetigt">{% include 'offer/_offer_block_cover.html.twig' with {'block':'bestaetigt','offers': inquiries, 'storno':false, 'ActionLog':ActionLog} %}</td>
+                    <td id="status_rechnungPartSend">{% include 'offer/_offer_block_cover.html.twig' with {'block':'rechnungPartSend','offers': inquiries, 'storno':false, 'ActionLog':ActionLog} %}</td>
+                    <td class="tddrop1" id="status_rechnungPartEingang">{% include 'offer/_offer_block_cover.html.twig' with {'block':'rechnungPartEingang','offers': inquiries, 'storno':false, 'ActionLog':ActionLog} %}</td>
+                    <td class="tddrop2" id="status_work">{% include 'offer/_offer_block_cover.html.twig' with {'block':'work','offers': inquiries, 'storno':false, 'ActionLog':ActionLog} %}</td>
+                    <td style="background-color: #fdffe7" class="tddrop3" id="status_done">{% include 'offer/_offer_block_cover.html.twig' with {'block':'done','offers': inquiries, 'storno':false, 'ActionLog':ActionLog} %}</td>
+                    <td id="status_rechnungEingangSend">{% include 'offer/_offer_block_cover.html.twig' with {'block':'rechnungEingangSend','offers': inquiries, 'storno':false, 'ActionLog':ActionLog} %}</td>
+                    <td class="tddrop4" id="status_rechnungEingang">{% include 'offer/_offer_block_cover.html.twig' with {'block':'rechnungEingang','offers': inquiries, 'storno':false, 'ActionLog':ActionLog} %}</td>
+                </tr>
+                </tbody>
+            </table>
+            {% include 'offer/modals/_email_modal.html.twig' %}
+        </div>
+    </div>
+{% endblock %}

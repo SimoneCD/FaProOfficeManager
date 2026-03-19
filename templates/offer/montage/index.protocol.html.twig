@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8" />
+    <title>{{ 'w.offer'|trans }}</title>
+    <link rel="stylesheet" href="{{ absolute_url(asset('assets/css/material-dashboard.css')) }}?v=1{{ 'now'|date('u') }}">
+    {% set angebotNr = offer.number %}
+    {% set angebotName = getOfferName(offer.id)|raw %}
+    {#    {% if offer.wallboxProduct is not null and offer.wallboxProduct.productType == 'pvt' %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    {% endif %}#}
+    <link rel="stylesheet" href="{{ absolute_url(asset('assets/css/material-dashboard.css')) }}?v=1{{ 'now'|date('u') }}">
+
+    <style>
+        .row {display: flex;flex-wrap: wrap;margin-right: -15px;margin-left: -15px;clear: left}
+        .reportGraph {width:900px}
+        .col-4 {width: 33%;float: left}
+        .col-41 {width: 33%;float: left}
+        .col-441 {width: 36%;float: left}
+        .col-42 {width: 34%;float: left}
+        .col-442 {width: 31%;float: left}
+        .col-43 {width: 33%;float: left}
+        .col-443 {width: 33%;float: left}
+        .col-6 {width: 50%;float: left}
+        .col-5 {width: 41.5%;float: left}
+        .col-7 {width: 58%;float: left}
+        .col-2 {width: 17%;float: left}
+        .col-8 {width: 67%;float: left}
+        .col-3 {width: 25%;float: left}
+        .col-9 {width: 75%;float: left}
+        .col-12 {width: 100%;clear: left}
+        /* devanagari */
+        body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, * {
+            font-family: Mont, Arial, normal, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" ;
+            font-size: 12px;
+            background-color: #fff;
+        }
+        strong {
+            font-weight: bold;
+        }
+        p {
+            font-size: 14px;
+            line-height: 1.5em;
+            font-weight: 100 !important;
+        }
+        .row{margin: 0}
+        .main-box {
+            width: 21cm !important;
+            min-height: 29.7cm !important;
+            height: 29.72cm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .pdf_footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+        .headBox, .headBox *, .pdf_footer, .pdf_footer * {
+            background: #eaeaea !important;
+            color: darkgrey !important;
+        }
+        @media print {
+            .wrapper-full-page {
+                height: 29.7cm;
+                page-break-before: always;
+            }
+            .page-box {
+                height: 800px;
+                background-color: yellow;
+            }
+        }
+        .tabClick {
+            color: {{ sfColor }};
+        }
+    </style>
+    {% include appTemplate~'offer_pdf/_styles.html.twig' %}
+</head>
+<body>
+    <div class="wrapper-full-page">
+        <div class="section-to-print page">
+            <div class="main-box">
+                {% include appTemplate~'offer_pdf/_header.html.twig' with {'headerTitle': 'm.customerProjectData'|trans} %}
+                {% if offer is defined %}
+                    {% set viewedQuestions = [] %}
+                    {{ save('viewedQuestions') }}
+                    {% if offer.subCategory is not null %}
+                        {% set appAnswerChecked = [] %}
+                        {{ save('appAnswerChecked') }}
+                        {% set vc = 9 %}
+                        {% if offer.subCategory.questionAreas|length %}
+                            {% for area in offer.subCategory.questionAreas|sort((a,b) => a.sort <=> b.sort) %}
+                                <div class="my-0 mx-4 p-3  page-box">
+                                    {% set headerView = false %}
+                                    {% for question in area.questions|sort((a,b) => a.sort <=> b.sort) %}
+                                        {% if question.protocol != 'q' and question.view == true or question.id in appAnswerChecked %}
+                                            {% set headerView = true %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if headerView == true %}{% set vc = vc-2 %}<h4 class="text-left pl-2" style="font-weight:bold;color: {{ sfColorText }}">{{ area.name }}</h4>{% endif %}
+                                    {% set imagesCount = 0 %}
+                                    {% set i = 1 %}
+                                    <table class="table table-sm table-full-width table-borderless" style="border: none !important;">
+                                    {% for question in area.questions|sort((a,b) => a.sort <=> b.sort) %}
+                                        {% if question.protocol != 'q' and (question.view == true or question.id in appAnswerChecked) %}
+                                            {{ save('imagesCount') }}
+                                            {% set vc = vc-(question.needImage?3:1) %}
+                                            {% include 'offer/protocol_pdf/components/_card.html.twig' with { 'i':i, 'quetion':question} %}
+                                            {{ restore('imagesCount') }}
+                                            {% set i = i+1 %}
+                                            {% if vc <= 0  %}
+                                                {% set vc = 13 %}
+                                    </table>
+                                </div>
+                                {% include appTemplate~'offer_pdf/_footer.html.twig' %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrapper-full-page">
+                        <div class="section-to-print page">
+                            <div class="main-box">
+                                {% include appTemplate~'offer_pdf/_header.html.twig' with {'headerTitle': 'm.customerProjectData'|trans} %}
+                                <div class="m-0 p-3 page-box">
+                                <table class="table table-sm table-full-width table-borderless" style="border: none !important;">
+                {#                        <tr>#}
+                {#                            <td style="border: none !important;"></td>#}
+                {#                            <td style="border: none !important;">Vor-Ort Notizen</td>#}
+                {#                        </tr>#}
+                                            {% endif %}
+                                        {% endif %}
+                                        {{ restore('appAnswerChecked') }}
+                                    {% endfor %}
+                                    </table>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            {% for question in offer.subCategory.offerQuestions|sort((a,b) => a.sort <=> b.sort) %}
+                                {% include 'offer/montage/components/_card.html.twig' with {'quetion':question} %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                {% include appTemplate~'offer_pdf/_footer.html.twig' %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

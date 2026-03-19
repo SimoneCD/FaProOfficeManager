@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale ?? 'de' }}">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer-when-downgrade"/>
+    <meta name="keywords" content="Angebote Solaranlagen PV-Anlagen">
+    <meta name="description" content="">
+    <title>{% block title %}{{ sf.name }}{% endblock %}</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('favicon/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ asset('favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
+    {% block stylesheets %}
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+              crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+            .fa {padding: 10px;
+                font-size: 20px;
+                text-align: center;
+                text-decoration: none;
+                margin: 5px 2px;
+                border-radius: 50%;
+            }
+            .fa:hover {opacity: 0.7;}
+            .fa-facebook {background: #3B5998;color: white;}
+            .fa-whatsapp {background: #4ac047;color: white;}
+            .fa-twitter {background: #55ACEE;color: white;}
+            .fa-google {background: #dd4b39;color: white;}
+            .fa-linkedin {background: #007bb5;color: white;}
+            .fa-youtube {background: #bb0000;color: white;}
+            .fa-instagram {background: #125688;color: white;}
+
+            .logo {
+                max-width: 70% !important;
+            }
+
+            h1, h2 {
+                color: #a9d1dd;
+                font-size: 1.0rem;
+                line-height: 1.5rem;
+                margin: 10px auto;
+                padding: 10px 10%;
+                /* text-shadow: 2px 2px #2b6d80; */
+                /*background-color: #255f72;*/
+            }
+
+            h2 {
+                margin: 0;
+                padding: 20px;
+                color: #262626;
+                font-size: 1.2rem;
+            }
+
+        </style>
+    {% endblock %}
+    {% block javascripts %}
+        <script class="u-script" type="text/javascript" src="{{ asset('app/js/jquery3.6.0.js') }}" defer=""></script>
+        {# <script src="{{ asset('app/bootstrap-4.0.0/dist/js/bootstrap.min.js') }}"></script> #}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js"></script>
+        {# <script class="u-script" type="text/javascript" src="{{ asset('app/customer_js/page.js') }}?p=61" defer=""></script> #}
+    {% endblock %}
+</head>
+<body class="u-body u-xl-mode text-{% block bodyCss %}center{% endblock %}" data-lang="de" style="background-color: #4d91a8;font-size: 16px;">
+<img style="max-width:10%;width: 300px;margin-top:20px /*position: absolute;top: 1%;right: 4%;*/" src="{{ asset(appAssetPath~'logo/logo_dark_in.png') }}">
+
+{% block main %}
+    <h1 style="padding: 10px 10% 20px;"><span style="color: #fff; font-size: 1.2rem">Herzlich willkommen bei {{ sf.name }}!</span></h1>
+{% endblock %}
+
+<footer class="text-center text-lg-start" style="margin-top: 10px;background-color: #4e90a8;height: 90px;">
+    <div class="container d-flex justify-content-center pt-3">
+        <a href="#" class="fa fa-facebook"></a>
+        <a href="#" class="fa fa-twitter"></a>
+        <a href="#" class="fa fa-google"></a>
+        <a href="#" class="fa fa-linkedin"></a>
+        <a href="#" class="fa fa-youtube"></a>
+        <a href="#" class="fa fa-instagram"></a>
+        <a href="#" class="fa fa-whatsapp"></a>
+    </div>
+    <div class="text-center text-white p-3" style="margin-top:10px;width:100%;padding-top:30px;">
+        © 2020 Copyright:
+        <a class="text-white" href="https://zoe-solar.de/">ZOE-Solar.de</a>
+    </div>
+
+    <!-- Copyright -->
+
+    <!-- Copyright -->
+</footer>
+
+</body>
+</html>

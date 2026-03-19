@@ -1,0 +1,35 @@
+<div class="card">
+    <div class="card-body">
+        <h4>{{ 'm.images'|trans }}</h4>
+        {% set customer = offer.customer %}
+        <div id="offer_order_images" {{ stimulus_controller('upload', {'offerId':offer.id, 'imgCount':form.images|length}) }}>
+            <div class="">
+                <button type="button" {{ stimulus_action('upload','clickImage','click') }}>{{ 'm.imageAdd'|trans }}</button>
+            </div>
+            <div class="">
+                <input type="file" id="my_file" class="d-none" name="offer_order[images][{{ form.images|length }}][file]" data-upload-target="fileclick" accept="image/*" capture {{ stimulus_action('upload','addImagePreview','change') }}>
+            </div>
+            <div class="">
+                <div class="" id="impreview" {{ stimulus_target('upload', 'preview') }}>
+                {% for img in form.images %}
+                    {% set i = loop.index-1 %}
+                    {% if img.vars.value is null or img.vars.value.id == '' %}
+                        {% set i = loop.index-1 %}
+                    {% else %}
+                        <div style="max-width: 92.5em;" class="row image_file" id="image_file_{{ i }}" data-target="upload-preview">
+                            <div class="col-sm-12 col-md-6" data-target="upload-image">
+                                <a href="{{ absolute_url(asset(appAssetPath~'uploads/'~offer.id~'/'~img.vars.value.filename)) }}" target="_blank"><img alt="{{ 'm.image'|trans }} {{ loop.index }}" class="thumb_img" src="{{ asset('public/uploads/'~customer.id~'/'~img.vars.value.filename) }}" /></a>
+                                <div class="d-none"><div id="offer_order_images_{{ i }}"><div><label for="offer_order_images_{{ i }}_file">File</label><input type="file" id="offer_order_images_{{ i }}_file" name="offer_order[images][{{ i }}][file]" /></div></div></div>
+                            </div>
+                            <div class="col-sm-12 col-md-4" data-target="upload-name">{{ img.vars.value.filename }}</div>
+                            <div class="col-sm-12 col-md-2 text-right" data-target="upload-action">
+                                <button title="" type="button" data-loop-id="{{ i }}" data-image-id="{{ img.vars.value.id }}" data-url="{{ path('montage_image_remove', {'id': img.vars.value.id}) }}" data-action="click->upload#remove" class="btn btn-danger btn-xs">x</button>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

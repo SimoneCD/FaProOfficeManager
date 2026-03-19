@@ -1,0 +1,52 @@
+<div style="width: max-content;overflow-x: scroll;">
+    {% set products = getHauptproducts(question.subCategory.productSubCategory) %}
+    {% for product in products %}
+        {% set selected = (context and context[aid] is defined
+            and context[aid]['questions'][question.id]['answer'] is defined
+            and context[aid]['questions'][question.id]['answer']['name'] is defined
+            and context[aid]['questions'][question.id]['answer']['name'] == product.id) ? true : false %}
+        {% if product.funnel %}
+            <label for="lq-{{ product.id }}" class="coninput funnel{{ question.funnelEnd ? 'End' : 'Start' }} form-label">
+                <div style="float: left;width: 250px;margin:10px;">
+                    <div class="card komplettcard p-3" data-id="{{ product.id }}" style="clear: left;">
+                        <div class="t-box">{{ product.name|replace({' ': '&nbsp;'})|raw }}<br>({{ product.kw }} {{ product.valueName }})</div>
+                        <div class="justify-content-between align-items-center ">
+                            <div class="image w-100">
+                                {% if product.image != '' %}
+                                    <img class="produckt_img" title="{{ product.description }}" alt="{{ product.description }}" src="{{ asset(appAssetPath~'products/'~product.image) }}">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <small class="p-box-input-txt">Anzahl</small>
+                        <input type="text" name="offer[amount][{{ product.id }}]" class="p-box-input text-center" style="background: #efefef;color:grey;padding-left: 2px !important;" value="1"/>
+                        <p class="mt-2 p-box">{{ product.description }}</p>
+                        <input type="radio" {{ selected ? 'checked' : '' }} value="{{ product.id }}" id="lq-{{ product.id }}" title="{{ question.name }}" data-class="s-{{ question.id }}"
+                               data-question="{{ question.id }}"
+                               data-product="{{ product.id }}"
+                               data-help-dependencies="{% for answer in question.offerAnswers %}
+        {%- if answer.helptext %}{{ answer.id }}{% if loop.index != question.offerAnswers|length %}-{% endif %}{% endif %}
+        {% endfor %}" data-dependencies="{% for answer in question.offerAnswers -%}
+        {%- if answer.dependencies is not null -%}
+        {{- answer.dependencies|join('-') -}}
+        {%- set appAnswerChecked = appAnswerChecked|merge(answer.dependencies) -%}
+        {%- endif -%}
+        {%- endfor %}" name="offer[wallboxProduct]" class="answer_content condition-change-check"
+                               style="position: absolute;top:10px;left:10px;">
+                        <p class="yp-box-price">{{ product.price|number_format(2, ',', '.') }} &euro;</p>
+                    </div>
+                </div>
+            </label>
+        {% endif %}
+    {% endfor %}
+{#        <h2>{{ question.name }}</h2>#}
+{#        <div class="m-0 p-0">#}
+{#            {{ form_widget(form.wallboxProduct, {'attr': {'class':'form-control condition-change-check form-select'}}) }}#}
+{#        </div>#}
+
+{#        {% set questCount = questCount+1 %}#}
+{#        {{ save('questCount') }}#}
+{#        {{ form_label(form.offer.amount, 'w.amount'|trans, {'label_attr': {'class':' col-sm-'~col1~' col-form-label'}}) }}#}
+{#        <div class=" m-0 p-0">#}
+{#            {{ form_widget(form.offer.amount) }}#}
+{#        </div>#}
+</div>

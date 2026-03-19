@@ -1,0 +1,138 @@
+{% set all = 0 %}
+<div class="row w-100 headBoxData" style="height: min-content">
+    <div class="padding-box col-12" style="overflow-x:auto;padding-left:0;padding-top:0;padding-right: 5px">
+        <table class="table" style="border:none !important;margin: 0;padding: 20px;">
+            <form id="add_item_to_offer" class="form_offer_add"
+                  action="{{ path('ajax_product_add_offerItem',{'id':offer.id}) }}">
+                <tr>
+                    <td class="text-left" style="padding-left: 40px;"><strong></strong></td>
+                    <td class="pad-l pl-0" colspan="2">
+                        <label for="offer_item_item" class="required">{{ 'o.productAdd'|trans }}</label>
+                        <input class="form-control" id="offer_item_item" name="offer_item[item]" type="text"/>
+                    </td>
+                    <td class="text-center pl-0">{{ form_row(addOfferForm.amount, {'attr':{'value':'1'}}) }}</td>
+                    <td class="text-left pl-3" colspan="2"><button type="submit" class="offer_submits btn btn-danger btn-xs os_space mt-5"><i class="material-icons p-1">send</i></button></td>
+                </tr>
+            </form>
+{#            {% include appTemplate~'offer_pdf/components/_product_data_table_header.html.twig' %}#}
+
+            {% for key, offerItem in items %}
+                {% set style = 'background-color: #fff;color: '~sfColorDark~';' %}
+                {% if offerItem.item and offerItem.item.productSubCategory.mainProduct -%}
+                    {% set style = 'background-color: '~sfColor~';border-bottom:2px solid '~sfColorDark~';border-top:2px solid '~sfColorDark~';color: #fff' %}
+                {% endif %}
+                {% if setted is not defined -%}
+                    {% set setted=true %}
+                    {% if offer.wallboxProduct %}
+                        <tr style="background-color: {{ sfColor }};border-bottom:2px solid {{ sfColorDark }};border-top:2px solid {{ sfColorDark }};color: #fff">
+                            <td class="text-left" style="padding-left: 40px;width: 60px"><strong style="color: #fff">{{ offer.wallboxProduct.productNumber }}</strong></td>
+                            {{ form_start(boxform, {
+                                'attr': {
+                                    'id': 'offer_wallbox_l',
+                                    'action': path('update_offer_box', {'id': offer.id})
+                                }
+                            }) }}
+                            <td colspan="2" class="pad-l p-0">
+                                <div class="form-group row">
+                                    <div class="col-11 p-0 m-0">
+                                        {{ form_widget(boxform.wallboxProduct) }}
+                                    </div>
+                                    <div class="col-1 p-0 m-0">
+                                        <button type="submit" class="btn btn-xs offer_submits" style="padding: 3px"><i class="material-icons p-1">send</i></button>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-12 p-0 m-0">
+                                        {{ offer.wallboxProduct.description }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group px-2">
+                                    {{ form_widget(boxform.amount) }}
+                                    <div class="input-group-append">
+                                        &nbsp;{{ offer.wallboxProduct.einheit }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding-left: 0;" class="text-right">
+                                <div class="px-0">
+                                    {{ form_widget(boxform.wallboxPrice, {'value':boxform.wallboxPrice.vars.value ? boxform.wallboxPrice.vars.value : offer.wallboxProduct.price}) }}
+                                </div>
+                            </td>
+                            {{ form_end(boxform) }}
+                            <td class="text-right" style="padding-left: 0;padding-right: 40px;width: 110px">
+                                {% if offer.wallboxPrice %}
+                                    {{ (offer.wallboxPrice*offer.amount)|number_format('2',',','.') }}&nbsp;&euro;
+                                {% else %}
+                                    {{ (offer.wallboxProduct.price*offer.amount)|number_format('2',',','.') }}&nbsp;&euro;
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% if offer.wallboxPrice %}
+                            {% set total = total+(offer.wallboxPrice*offer.amount) %}
+                        {% else %}
+                            {% set total = total+(offer.wallboxProduct.price*offer.amount) %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                <form id="f_{{ offerItem.id }}" data-id="{{ offerItem.id }}" class="form_offer_update" method="post"
+                      action="{{ path('ajax_product_update_offerItem', {'id':offerItem.id}) }}">
+                    <tr id="tr-{{ offerItem.id }}" style="{{ style }}">
+                        <td class="text-right" style="padding-right: 20px; width: 60px">
+                            <strong{% if offerItem.item and offerItem.item.productSubCategory and offerItem.item.productSubCategory.mainProduct -%} style="color: #fff;"{% endif %}>{% if offerItem.item %}{{ offerItem.item.productNumber }}{% endif %}</strong>
+                        </td>
+                        <td class="p-0" colspan="2">
+                            <div class="input-group btn-group m-0" role="group" aria-label="">
+                                <input class="form-control list-input p-2" type="text"
+                                       id="offer_item_name{{ offerItem.id }}" name="offer_item[name]" required="required"
+                                       value="{% if offerItem.name %}{{ offerItem.name }}{% elseif offerItem.item %}{{ offerItem.item.name }}{% endif %}">
+                                <button type="submit" class="btn btn-xs os_space"><i class="material-icons p-1">send</i></button>
+                                <button type="button" data-tr="tr-{{ offerItem.id }}"
+                                        data-action="{{ path('ajax_product_delete_offerItem', {'id': offerItem.id}) }}"
+                                        data-id="{{ offerItem.id }}" class="delete_orderItem btn btn-xs os_space" style="color: #f44436"><i
+                                            class="material-symbols-outlined">delete</i></button>
+                            </div>
+                            <textarea class="form-control list-textarea p-2"
+                                      id="offer_item_description{{ offerItem.id }}"
+                                      name="offer_item[description]">{{ offerItem.description }}</textarea>
+                        </td>
+                        <td class="text-center" style="width: 130px">
+                            <div class="input-group px-2">
+                                <input class="form-control text-right p-2" style="width:40px;"
+                                       type="number" id="offer_item_amount{{ offerItem.id }}" name="offer_item[amount]"
+                                       required="required" value="{{ offerItem.amount }}">
+                                <div class="input-group-append">
+                                    &nbsp;{% if offerItem.einheit %}{{ offerItem.einheit|lower }}{% elseif offerItem.item %}{{ offerItem.item.einheit }}{% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center" style="width: 110px">
+                            <div class="input-group">
+                                {% if offerItem.price == 0 %}
+                                    <input class="form-control text-right p-2" type="text"
+                                           id="offer_item_price{{ offerItem.id }}" name="offer_item[price]"
+                                           style="font-weight: normal;width:80px;color: #000;background-color:{{ sfColorForm }}"
+                                           value="{{ offerItem.price }}">
+                                {% else %}
+                                    <input class="form-control text-right p-2" type="text"
+                                           id="offer_item_price{{ offerItem.id }}" name="offer_item[price]"
+                                           style="font-weight: normal;width:80px;color: #000;background-color:{{ sfColorForm }}"
+                                           value="{{ offerItem.price }}">
+                                    {% set total = total+(offerItem.price*offerItem.amount) %}
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td id="pp{{ offerItem.id }}" style="padding-right: 40px;width: 100px" class="text-right">
+                            &nbsp;{{ (offerItem.price*offerItem.amount)|number_format('2',',','.') }} &euro;
+                        </td>
+                    </tr>
+                </form>
+                {% set all = all+1 %}
+            {% endfor %}
+            {{ save('total') }}
+            {% include appTemplate~'offer_new/components/_product_data_end.html.twig' %}
+        </table>
+    </div>
+</div>
+{{ save('total') }}

@@ -1,0 +1,58 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'p.subCategories'|trans }}{% endblock %}
+
+{% block main %}
+    {% include 'backend/components/_menu.html.twig' with {
+        'productlistLi': {'n':'w.productCategories'|trans,'k':true},
+        'productcategoryLi2': {'n':('p.subCat.fromProduktCatName'|trans({'%category%':category.name})),'i':'qr_code_2'}
+    } %}
+    <h1>
+        <a class="btn btn-default btn-sm" href="{{ path('backend_product_subcategory_new', {'category': category.id}) }}">
+            <span style="color: {{ sfColorDark }};" class="material-symbols-outlined">add_circle</span>
+        </a>
+    </h1>
+
+    <table class="table">
+        <thead>
+            <tr style="background-color: {{ sfColor }};color: #fff">
+                <th class="w-5"></th>
+                <th class="w-auto">{{ 'w.name'|trans }}</th>
+                <th class="w-10">{{ 'p.subCat.available'|trans|replace({' ':'&nbsp;'})|raw }}</th>
+                <th class="w-15">{{ 'p.c.count'|trans }}</th>
+                <th class="w-5"></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product_sub_category in product_sub_categories %}
+            <tr>
+                <td>{{ (product_sub_category.mainProduct ? '<span style="color:'~sfColor~'" class="material-icons">star</span>' : '')|raw }}</td>
+                <td>{{ product_sub_category.name }}</td>
+                <td class="text-center">{% if product_sub_category.global %}<img src="{{ asset('app/images/ok.svg') }}">{% endif %}</td>
+                <td class="text-center">{{ product_sub_category.products|length }}</td>
+                <td class="text-right">
+                    <a href="{{ path('backend_product_subcategory_edit', {'category': product_sub_category.category.id, 'id': product_sub_category.id}) }}"><i class="material-symbols-outlined">edit</i></a>
+                </td>
+            </tr>
+        {% else %}
+            {% include 'backend/_no_entry.html.twig' with {'collSpan': 4} %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="card p-4 faq">
+        <div class="row">
+            <div class="col-md-12">{{ 'w.help'|trans }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><strong>{{ 'p.subCat.available'|trans }}</strong></div>
+            <div class="col-md-9">{{ 'p.help.allwaisIn'|trans }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-1"><span style="color:{{ sfColor }}" class="material-icons">star</span></div>
+            <div class="col-md-2"></div>
+            <div class="col-md-9">{{ 'p.help.mainProduct'|trans }}</div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% macro getBody(offer, question, context)%}
+    <div class="m-0 p-0" style="border: none"{% if question.needImage %} {{ stimulus_controller('upload', {'offerId':offer.id, 'question':question.id, 'imgCount':(question.images|length+1)}) }}{% endif %}>
+    <div class="m-0 p-1 w-100 row" style="border: none">
+            <div class="px-2 col-xs-12 col-md-6"><p class="mb-0">{{ question.title ? question.title : question.name }}</p></div>
+            <div class="px-2 col-xs-12 col-md-6" style="position: relative">
+                <textarea style="border:none;min-height: 40px !important;background-color: #fafafa !important;"
+                            data-id="{{ question.id }}"
+                            class="form-control module_contexttext_change"
+                            id="module_context_text_{{ question.id }}"
+                            name="module_context[{{ question.id }}][text]">
+                        {%- if context['questions'][question.id]['monteur']['text'] is defined and context['questions'][question.id]['monteur']['text'] -%}
+                            {{- context['questions'][question.id]['monteur']['text'] -}}
+                        {%- else -%}
+                            {%- if context['questions'][question.id]['answer'] is defined -%}
+                                {%- include 'offer/types/text/'~question.answerType~'.html.twig' -%}
+                           {%- endif -%}
+                        {% endif -%}
+                    </textarea>
+                {% if question.needImage %}
+                    <div class="px-2" style="cursor:pointer;width:16px;position: absolute;top:1px;right: 20px;" {{ stimulus_action('upload','clickImage','click') }}>
+                        <input type="file" multiple class="d-none" name="image[{{ question.id }}][]"
+                               data-url="{{ path('ajax_upload_images', {'id':offer.id, 'question': question.id}) }}"
+                               data-upload-target="fileclick"
+                               accept="image/*" {{ stimulus_action('upload','addImagePreview','change') }}>
+                        <span class="material-icons">add_a_photo</span> {# <span title="{{ 'm.imageAdd'|trans }}" class="material-icons">add_circle_outline</span> #}
+                    </div>
+                {% endif %}
+            </div>
+    </div>
+    {% if question.needImage %}
+        <div class="row p-1 m-0 radios text-right" data-upload-target="preview">
+            {% for img in offer.images %}
+                {% if img.question and img.question.id == question.id %}
+                    {% include 'offer/montage/components/img_box.html.twig' with {'img':img, 'imagesCount': loop.index, 'question': question} %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+    </div>
+{#            <td style="width: 2%;">#}
+{#                <label class="btn btn-sm"#}
+{#                       style="{% if context['questions'][question.id]['monteur']['ok'] is not defined or (context['questions'][question.id]['monteur']['ok'] is defined and context['questions'][question.id]['monteur']['ok'] != '1') %}{% else %}background-color:yellowgreen;color:#fff;{% endif %}cursor: pointer;"#}
+{#                       for="module_context_ok_{{ question.id }}">#}
+{#                    <span class="material-icons module_context_b1_{{ question.id }}">thumb_up{% if context['questions'][question.id]['monteur']['ok'] is not defined or (context['questions'][question.id]['monteur']['ok'] is defined and context['questions'][question.id]['monteur']['ok'] != '1') %}_off_alt{% else %}{% endif %}</span>#}
+{#                </label>#}
+{#                <input style="height: 0;width: 0" class="module_context_change" type="radio"#}
+{#                       data-offerid="{{ offer.id }}"#}
+{#                       data-id="{{ question.id }}"#}
+{#                       name="module_context[{{ question.id }}][ok]"#}
+{#                       id="module_context_ok_{{ question.id }}" value="1">#}
+{#            </td>#}
+{% endmacro %}
+{{ restore('viewedQuestions') }}
+{% for k, context in offer.inquiry.context %}
+    {% if context['questions'][question.id]['answer'] is defined and question.protocol != 'q' and question.protocol != 'p' %}
+        {% set viewedQuestions = viewedQuestions|merge([question.id]) %}
+        {{ _self.getBody(offer, question, context) }}
+    {% elseif question.id not in viewedQuestions and question.protocol == 'p'%}
+        {% set viewedQuestions = viewedQuestions|merge([question.id]) %}
+        {{ _self.getBody(offer, question, context) }}
+    {% endif %}
+{% endfor %}
+{{ save('viewedQuestions') }}

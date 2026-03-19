@@ -1,0 +1,875 @@
+{% extends('base.customer.html.twig') %}
+
+{% block javascripts %}
+     {{ parent() }}
+    <script>
+        window.addEventListener('scroll', () => {
+            document.body.style.setProperty('--scroll',window.pageYOffset / (document.body.offsetHeight - window.innerHeight));
+        }, false);
+    </script>
+{% endblock %}
+ {% block stylesheets %}
+     {{ parent() }}
+     <style>
+         .btn-svg {
+             background-color: rgba(225, 225, 225, 0.29) !important;
+             width: 26px;
+             padding: 4px;
+             box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+         }
+
+         .btn-svg:hover {
+             background-color: #dbdbdb !important;
+         }
+
+         body {
+             --h: 112deg;
+             --l: 23%;
+             --brandColor: hsl(var(--h), 71%, var(--l));
+             font-family: Montserrat, sans-serif;
+             margin: 0;
+             background-color: whitesmoke;
+         }
+
+         p {
+             margin: 0;
+             line-height: 1.6;
+         }
+
+         ol {
+             list-style: none;
+             counter-reset: list;
+             padding: 0 0;
+         }
+
+         li {
+             --stop: calc(100% / var(--length) * var(--i));
+             --l: 62%;
+             --l2: 88%;
+             --h: calc((var(--i) - 1) * (120 / var(--length)));
+             --c1: hsl(var(--h), 71%, var(--l));
+             --c2: hsl(var(--h), 71%, var(--l2));
+
+             position: relative;
+             counter-increment: list;
+             max-width: 45rem;
+             margin: 2rem auto;
+             padding: 2rem 1rem 1rem;
+             box-shadow: 0.1rem 0.1rem 1.5rem rgba(0, 0, 0, 0.3);
+             border-radius: 0.25rem;
+             overflow: hidden;
+             background-color: white;
+         }
+
+         li::before {
+             content: '';
+             display: block;
+             width: 100%;
+             height: 1rem;
+             position: absolute;
+             top: 0;
+             left: 0;
+             background: linear-gradient(to right, var(--c1) var(--stop), var(--c2) var(--stop));
+         }
+
+         h3 {
+             display: flex;
+             align-items: baseline;
+             margin: 0 0 1rem;
+             color: rgb(70 70 70);
+         }
+
+         /*h3::before {*/
+         /*    display: flex;*/
+         /*    justify-content: center;*/
+         /*    align-items: center;*/
+         /*    flex: 0 0 auto;*/
+         /*    margin-right: 1rem;*/
+         /*    width: 2rem;*/
+         /*    height: 2rem;*/
+         /*    content: counter(list);*/
+         /*    padding: 1rem;*/
+         /*    border-radius: 50%;*/
+         /*    background-color: var(--c1);*/
+         /*    color: white;*/
+         /*}*/
+
+         @media (min-width: 40em) {
+             li {
+                 margin: 3rem auto;
+                 /*padding: 3rem 2rem 2rem;*/
+                 padding: 36px 10px 10px 10px;
+             }
+
+             h3 {
+                 font-size: 1.25rem;
+                 margin: 0 0 2rem;
+             }
+
+             h3::before {
+                 margin-right: 1.5rem;
+             }
+         }
+
+         .card {
+             padding: 2px 10px;
+             background: #fff;
+             border: 0;
+             border-radius: 6px;
+             box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+             color: #333;
+             margin-bottom: 30px;
+             margin-top: 30px;
+             width: 100%;
+         }
+
+         a {
+             color: {{ sfColor }};
+         }
+     </style>
+     <style>
+         td, th {
+             vertical-align: top;
+             font-size: 12px;
+         }
+         .timeline {
+             position: relative;
+             width: 100%;
+             max-width: 1140px;
+             margin: 0 auto;
+             padding: 15px 0;
+         }
+
+         .timeline::after {
+             content: '';
+             position: absolute;
+             width: 2px;
+             background: {{ sfColor }};
+             top: 0;
+             bottom: 0;
+             left: 50%;
+             margin-left: -1px;
+         }
+
+         .container {
+             padding: 15px 30px;
+             position: relative;
+             background: inherit;
+             width: 50%;
+         }
+
+         .container.left {
+             left: 0;
+             background: #fff;
+         }
+
+         .container.right {
+             left: 50%;
+             background: #fff;
+         }
+
+         .container::after {
+             content: '';
+             position: absolute;
+             width: 16px;
+             height: 16px;
+             top: calc(50% - 4px);
+             right: -8px;
+             background: #ffffff;
+             border: 2px solid {{ sfColor }};
+             border-radius: 16px;
+             z-index: 1;
+         }
+         .container_admin::after {
+             border: 2px solid #FF9800;
+         }
+         .avatar {
+             vertical-align: middle;
+             max-width: 70px;
+             max-height: 70px;
+             border-radius: 50%;
+         }
+         .container.right::after {
+             left: -8px;
+         }
+
+         .container::before {
+             content: '';
+             position: absolute;
+             width: 50px;
+             height: 2px;
+             top: calc(50% + 2px);
+             right: 8px;
+             background: {{ sfColor }};
+             z-index: 1;
+         }
+
+         .container.right::before {
+             left: 8px;
+         }
+
+         .container .date {
+             position: absolute;
+             display: inline-block;
+             top: calc(50% - 8px);
+             text-align: center;
+             font-size: 14px;
+             font-weight: bold;
+             color: #000;
+             text-transform: uppercase;
+             letter-spacing: 1px;
+             z-index: 1;
+         }
+
+         .container.left .date {
+             right: -75px;
+         }
+
+         .container.right .date {
+             left: -75px;
+         }
+
+         .container .material-icons, .container img.avaico {
+             position: absolute;
+             display: inline-block;
+             width: 40px;
+             height: 40px;
+             padding: 9px 0;
+             top: calc(50% - 20px);
+             background: #fff;
+             border: 2px solid {{ sfColor }};
+             border-radius: 40px;
+             text-align: center;
+             font-size: 18px;
+             color: {{ sfColor }};
+             z-index: 1;
+         }
+
+         .container.left .material-icons {
+             right: 56px;
+         }
+         .container.left img.avaico {
+             left: 86px;
+             height: auto;
+             padding: 0;
+         }
+
+         .container.right .material-icons {
+             left: 56px;
+         }
+
+         .container.right img.avaico {
+             left: 86px;
+             height: auto;
+             padding: 0;
+         }
+
+         .container .content {
+             padding: 30px 90px 30px 50px;
+             background: #aa8e771a;
+             position: relative;
+             border-radius: 0 500px 500px 0;
+         }
+
+         .container.right .content {
+             padding: 30px 30px 30px 90px;
+             border-radius: 500px 0 0 500px;
+         }
+
+         .container .content h2 {
+             margin: 0 0 10px 0;
+             font-size: 14px;
+             font-weight: normal;
+             color: {{ sfColorDark }};
+         }
+
+         .container .content p {
+             margin: 0;
+             font-size: 12px;
+             line-height: 22px;
+             color: #000000;
+         }
+         .effect1{
+             -webkit-box-shadow: 0 6px 6px -6px #777;
+             -moz-box-shadow: 0 6px 6px -6px #777;
+             box-shadow: 0 6px 6px -6px #777;
+         }
+         .effect3
+         {
+             position: relative;
+         }
+         .effect3:before
+         {
+             z-index: -1;
+             position: absolute;
+             content: "";
+             bottom: 15px;
+             left: 10px;
+             width: 50%;
+             top: 80%;
+             max-width:300px;
+             background: #777;
+             -webkit-box-shadow: 0 15px 10px #777;
+             -moz-box-shadow: 0 15px 10px #777;
+             box-shadow: 0 15px 10px #777;
+             -webkit-transform: rotate(-3deg);
+             -moz-transform: rotate(-3deg);
+             -o-transform: rotate(-3deg);
+             -ms-transform: rotate(-3deg);
+             transform: rotate(-3deg);
+         }
+
+         /*==================================================
+          * Effect 4
+          * ===============================================*/
+         .effect4
+         {
+             position: relative;
+         }
+         .effect4:after
+         {
+             z-index: -1;
+             position: absolute;
+             content: "";
+             bottom: 15px;
+             right: 10px;
+             left: auto;
+             width: 50%;
+             top: 80%;
+             max-width:300px;
+             background: #777;
+             -webkit-box-shadow: 0 15px 10px #777;
+             -moz-box-shadow: 0 15px 10px #777;
+             box-shadow: 0 15px 10px #777;
+             -webkit-transform: rotate(3deg);
+             -moz-transform: rotate(3deg);
+             -o-transform: rotate(3deg);
+             -ms-transform: rotate(3deg);
+             transform: rotate(3deg);
+         }
+         @media (min-width: 1px) {
+             .timeline::after {
+                 left: 70px;
+             }
+
+             .container {
+                 width: 100%;
+                 padding-left: 100px;
+                 padding-right: 0;
+             }
+
+             .container.right {
+                 left: 0%;
+             }
+
+             .container.left::after,
+             .container.right::after {
+                 left: 62px;
+             }
+
+             .container.left::before,
+             .container.right::before {
+                 left: 70px;
+                 border-color: transparent #006E51 transparent transparent;
+             }
+             .container_admin.left::before,
+             .container_admin.right::before {
+                 background: #FF9800;
+                 border-color: transparent #FF9800 transparent transparent !important;
+             }
+
+             .container.left .date,
+             .container.right .date {
+                 right: auto;
+                 left: 0;
+             }
+
+             .container.left .material-icons,
+             .container.right .material-icons {
+                 right: auto;
+                 left: 86px;
+             }
+
+             .container.left .content,
+             .container.right .content {
+                 padding: 10px 20px 20px 36px
+                 /*border-radius: 500px 0 0 500px;*/
+             }
+         }
+
+         #fixed-chat {
+             position: fixed;
+             right: 0;
+             bottom: 45%;
+             display: block;
+             width: 70px;
+             height: 50px;
+             overflow: hidden;
+             z-index: 999;
+         }
+
+         #fixed-chat .btn {
+             background-color: #41c9fe;
+             moz-box-shadow: -2px 2px 3px rgba(0, 0, 0, .4);
+             -webkit-box-shadow: -2px 2px 3px rgba(0, 0, 0, .4);
+             box-shadow: -2px 2px 3px rgba(0, 0, 0, .4);
+             height: 50px;
+         }
+         #fixed-chat .chat {
+             width: 80px;
+             background-repeat: no-repeat;
+             border-top: 1px solid #f39985;
+             border-left: 1px solid #bd6445;
+             border-bottom: 1px solid #852d02;
+         }
+
+         #fixed-chat .btn:hover {
+             background-color: #f48266;
+         }
+         /* Sternebewertung */
+
+         span#Bewertung label {
+             line-height: 45px;
+             cursor: Pointer;
+         }
+
+         span#Bewertung input[type="radio"] {
+             /*display: None;*/
+         }
+
+         p.sternebewertung {
+             float: left;
+         }
+
+         p.sternebewertung:not(:checked) > input {
+             display: none;
+         }
+
+         p.sternebewertung:not(:checked) > label {
+             float: right;
+             width: 1em;
+             padding: 0 .1em;
+             overflow: Hidden;
+             white-space: Nowrap;
+             cursor: Pointer;
+             font-size: 200%;
+             line-height: 1.2;
+             color: #D0D0D0;
+             text-shadow: 1px 1px #B0B0B0, 2px 2px #606060, .1em .1em .2em rgba(0,0,0,.5);
+             transition: all .5s;
+         }
+
+         p.sternebewertung:not(:checked) > label::before {
+             content: '★ ';
+         }
+
+         p.sternebewertung > input:checked ~ label {
+             color: #FFD700;
+             /*text-shadow: 1px 1px #C06000, 2px 2px #904000, .1em .1em .2em rgba(0,0,0,.5);*/
+             /*filter: drop-shadow(0px 0px 3px #FFD700);*/
+         /*//    animation: twinkle 1s ease-in-out infinite alternate;*/
+         }
+
+         p.sternebewertung:not(:checked) > label:hover,
+         p.sternebewertung:not(:checked) > label:hover ~ label {
+             color: #FECF41;
+             /*text-shadow: 1px 1px #F29E02, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);*/
+             /*filter: drop-shadow(0px 0px 2px #FFD700);*/
+         }
+
+         p.sternebewertung > input:checked + label:hover,
+         p.sternebewertung > input:checked + label:hover ~ label,
+         p.sternebewertung > input:checked ~ label:hover,
+         p.sternebewertung > input:checked ~ label:hover ~ label,
+         p.sternebewertung > label:hover ~ input:checked ~ label {
+             color: #FBB600;
+             /*text-shadow: 1px 1px #F8BA01, 2px 2px #B57340, .1em .1em .1em rgba(0,0,0,.5);*/
+             /*filter: drop-shadow(0px 0px 2px #FFD700);*/
+         }
+
+         @keyframes twinkle {
+             to {
+                 text-shadow: 1px 1px #FFE653, 2px 2px #FFF5BF, .1em .1em .1em rgba(0,0,0,.5);
+                 filter: drop-shadow(0px 0px 5px #FFD700);
+                 transform: rotate(10deg);
+             }
+         }
+     </style>
+     <style>
+         body {
+             padding: 0;
+             margin: 0;
+             min-height: 360vh;
+             background-color: #fff;
+             animation: body 1s linear;
+         }
+         @media (max-width: 600px) {
+
+             body {
+                 min-height: 420vh;
+             }
+         }
+         @media (max-width: 767px) {
+             body {
+                 min-height: 550vh;
+             }
+         }
+         @keyframes body {
+             to {
+                 background-color: {{ sfColor }};
+             }
+         }
+
+         .cube-wrap {
+             --size: 20vmin;
+             position: fixed;
+             top: 50%;
+             left: 10%;
+             width: 0;
+             height: 0;
+             perspective: 100vmin;
+         }
+         .cube {
+             transform-style: preserve-3d;
+             transform: rotateX(0deg) rotateZ(45deg) rotateY(-45deg);
+             animation: cube 1s linear;
+         }
+         @keyframes cube {
+             to {
+                 transform: rotateX(360deg) rotateZ(45deg) rotateY(-45deg);
+             }
+         }
+
+         .side {
+             position: absolute;
+             width: var(--size);
+             height: var(--size);
+             background-color: #eee;
+             backface-visibility: visible;
+             top: calc(var(--size) * -.5);
+             left: calc(var(--size) * -.5);
+         }
+         .top {
+             background-color: #fff;
+             transform: rotateX(90deg) translateZ(calc(var(--size) * .5));
+         }
+         .bottom {
+             background-color: #fff;
+             transform: rotateX(90deg) translateZ(calc(var(--size) * -.5));
+         }
+         .left {
+             background-color: {{ sfColorLight }};
+             transform: rotateY(90deg) translateZ(calc(var(--size) * .5));
+         }
+         .right {
+             background-color: #ddd;
+             transform: rotateY(90deg) translateZ(calc(var(--size) * -.5));
+         }
+         .front {
+             background-color: {{ sfColorDark }};
+             transform: translateZ(calc(var(--size) * .5));
+         }
+         .back {
+             background-color: {{ sfColor }};
+             transform: translateZ(calc(var(--size) * -.5));
+         }
+
+         :root * {
+             /* Pause the animation */
+             animation-play-state: paused;
+             /* Bind the animation to scroll */
+             animation-delay: calc(var(--scroll) * -1s);
+             /* These last 2 properites clean up overshoot weirdness */
+             animation-iteration-count: 1;
+             animation-fill-mode: both;
+         }
+     </style>
+ {% endblock %}
+{% block body %}
+    <div class="cube-wrap">
+        <div class="cube">
+            <div class="side top"></div>
+            <div class="side bottom"></div>
+            <div class="side front"></div>
+            <div class="side back"></div>
+            <div class="side left"></div>
+            <div class="side right"></div>
+        </div>
+    </div>
+    <div {{ stimulus_controller('public', {'customer':user.id})}} class="u-gutter-0 u-layout">
+        <div class="u-layout-row">
+            <div class="u-size-26 u-size-60-sm u-size-60-md u-size-26-lg">
+                <div class="u-layout-col">
+                    <div class="u-align-left u-container-style u-layout-cell u-left-cell u-size-30 u-white u-layout-cell-1">
+                        <div class="u-container-layout u-container-layout-1" style="position: relative">
+                            <span class="u-icon u-icon-circle u-palette-3-base u-text-white u-icon-1">
+                                <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 60 60" style="">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-85de"></use>
+                                </svg>
+                                <svg class="u-svg-content" viewBox="0 0 60 60" x="0px" y="0px" id="svg-85de" style="enable-background:new 0 0 60 60;">
+                                    <g><path d="M38.914,0H6.5v60h47V14.586L38.914,0z M39.5,3.414L50.086,14H39.5V3.414z M8.5,58V2h29v14h14v42H8.5z"></path><path
+                                                d="M42.5,21h-16c-0.552,0-1,0.447-1,1s0.448,1,1,1h16c0.552,0,1-0.447,1-1S43.052,21,42.5,21z"></path><path
+                                                d="M22.875,18.219l-4.301,3.441l-1.367-1.367c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414l2,2
+C17.987,23.901,18.243,24,18.5,24c0.22,0,0.441-0.072,0.624-0.219l5-4c0.432-0.346,0.501-0.975,0.156-1.406
+C23.936,17.943,23.306,17.874,22.875,18.219z"></path><path
+                                                d="M42.5,32h-16c-0.552,0-1,0.447-1,1s0.448,1,1,1h16c0.552,0,1-0.447,1-1S43.052,32,42.5,32z"></path>
+                                        <path d="M22.875,29.219l-4.301,3.441l-1.367-1.367c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414l2,2
+C17.987,34.901,18.243,35,18.5,35c0.22,0,0.441-0.072,0.624-0.219l5-4c0.432-0.346,0.501-0.975,0.156-1.406
+C23.936,28.943,23.306,28.874,22.875,29.219z"></path>
+                                        <path d="M42.5,43h-16c-0.552,0-1,0.447-1,1s0.448,1,1,1h16c0.552,0,1-0.447,1-1S43.052,43,42.5,43z"></path>
+                                        <path d="M22.875,40.219l-4.301,3.441l-1.367-1.367c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414l2,2C17.987,45.901,18.243,46,18.5,46c0.22,0,0.441-0.072,0.624-0.219l5-4c0.432-0.346,0.501-0.975,0.156-1.406
+C23.936,39.943,23.306,39.874,22.875,40.219z"></path>
+                                    </g>
+                                </svg>
+                            </span>
+                            <h4 class="u-custom-font u-font-oswald u-text u-text-default u-text-5">Ihre Angebote</h4>
+                            <ol style="--length: 5" role="list">
+                                {% set indexText = {
+                                    1: 'Wir senden Ihnen in Kürze Ihre Abschlagsrechnung',
+                                    2: 'Ihre Abschlagsrechnung wurde Ihnen zugesendet. Der Zahlungseingang wird abgewartet.',
+                                    3: 'Montage / Installation',
+                                    4: 'Abschlussrechnung wurde Ihnen zugesendet.',
+                                    5: 'Auftrag abgeschlossen.',
+                                } %}
+                                {% for offer in user.offers %}
+                                    {% if offer.order is not null and offer.status not in ['archive', 'deleted', 'storno'] and offer.order.bestaetigt %}
+                                        {% if offer.status in ['bestaetigt'] %}
+                                            {% set index = 1 %}
+                                        {% elseif offer.status in ['rechnungPartSend'] %}
+                                            {% set index = 2 %}
+                                        {% elseif offer.status in ['rechnungPartEingang','work'] %}
+                                            {% set index = 3 %}
+                                        {% elseif offer.status in ['done','rechnungEingangSend'] %}
+                                            {% set index = 4 %}
+                                        {% elseif offer.status in ['rechnungEingang','archive'] %}
+                                            {% set index = 5 %}
+                                        {% endif %}
+                                        {% set header = offer.option.context.header ?? {'title':offer.subCategory.name,'text':offer.wallboxProduct ? offer.wallboxProduct.name : '-'} %}
+                                        <li title="Status: {{ indexText[index] }}" style="--i: {{ index }};position: relative">
+                                            <p style="position: absolute;top: 0.8rem;left: 1rem;font-size: 0.9rem">{{ offer.number }}</p>
+                                            <p style="position: absolute;top: 0.8rem;right: 1rem;font-size: 0.9rem">{{ offer.order.createdAt|date('d.m.Y') }}</p>
+                                            <p style="margin-bottom: 0"><strong>{{ header.title }}</strong></p>
+                                            <p style="margin-top: 0.3rem;font-size: 12px">{{ header.text }}</p>
+                                            <table style="font-size: 12px;width: 100%;">
+                                                <tr>
+                                                    <th class="btn-svg" style="width:50%;text-align: center;">
+                                                        <button {{ stimulus_action('public', 'dataWindowLoader', 'click') }} data-public-url-param="{{ path('public_offer_src', {'id': offer.id}) }}"
+                                                           style="background:transparent;border:none;font-size: 12px;padding: 4px;width: 50%"
+                                                           class="btn btn-sm"
+                                                           title="{{ 'w.offer'|trans }} {{ offer.number }}" {# style="position: absolute;top: 4rem;right: 1rem;" #}>
+                                                            Angebot
+                                                        </button>
+                                                    </th>
+                                                    <th class="btn-svg" style="width:50%;text-align: center">
+                                                        <button  {{ stimulus_action('public', 'dataWindowLoader', 'click') }} data-public-url-param="{{ path('public_products', {'offer': offer.id}) }}"
+                                                           style="border:none;background:transparent;font-size: 12px;padding: 4px;width: 50%"
+                                                           class="btn btn-sm"
+                                                           href="{{ path('public_products', {'offer':offer.id}) }}"
+                                                           title="{{ 'w.products'|trans }} {{ offer.number }}" {# style="position: absolute;top: 4rem;right: 1rem;" #}>
+                                                            Produkte
+                                                        </button>
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                            {% include 'public/components/_booking.html.twig' %}
+                                            {% set total = calculateNettoPrice(offer.id) %}
+                                            {#<p style="margin-bottom: 0"><strong>Zahlungsplan</strong></p>
+                                            <table style="font-size: 12px;width: 100%;">
+                                                <tr>
+                                                    <th></th>
+                                                    <th style="text-align: right;width:100px">{{ 'w.netto'|trans }}</th>
+                                                    <th style="text-align: right;width: 100px">{{ 'w.brutto'|trans }}</th>
+                                                </tr>
+                                                {% set restPercent = 100 %}
+                                                {% if offer.context['invoice_pay'] is defined %}
+                                                    {% for k, percent in offer.context['invoice_pay'] %}
+                                                        {% set p = percent['value']|length ?  percent['value']|number_format : 0 %}
+                                                        {% set restPercent = restPercent-p %}
+                                                        {% set summeNetto = (total*p/100) %}
+                                                        {% if offer.option.solar %}
+                                                            {% set summeSteuern = 0 %}
+                                                            {% set summeBrutto = summeNetto %}
+                                                        {% else %}
+                                                            {% set summeSteuern = (summeNetto*offer.tax/100)%}
+                                                            {% set summeBrutto = summeSteuern+summeNetto %}
+                                                        {% endif %}
+                                                        {% if percent['value'] > 0 %}
+                                                            <tr>
+                                                                <td colspan="3">{{ p }}% {{ percent['name'] }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td></td>
+                                                                <td style="text-align: right">{{ summeNetto|number_format('2',',','.') }} €</td>
+                                                                <td style="text-align: right">{{ summeBrutto|number_format('2',',','.') }} €</td>
+                                                            </tr>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                                {% set summeNetto = (total*restPercent/100) %}
+                                                {% if offer.option.solar %}
+                                                    {% set summeSteuern = 0 %}
+                                                    {% set summeBrutto = summeNetto %}
+                                                {% else %}
+                                                    {% set summeSteuern = (summeNetto*offer.tax/100)%}
+                                                    {% set summeBrutto = summeSteuern+summeNetto %}
+                                                {% endif %}
+                                                <tr>
+                                                    <td colspan="3">{{ restPercent }}% {{ 'finalPayIfFinished'|trans }}.</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td style="text-align: right">{{ summeNetto|number_format('2',',','.') }} €</td>
+                                                    <td style="text-align: right">{{ summeBrutto|number_format('2',',','.') }} €</td>
+                                                </tr>
+                                            </table>#}
+                                            <p style="margin-bottom: 0"><strong>Rechnungsstatus</strong></p>
+                                            <table style="font-size: 12px;width: 100%;">
+                                                <tr>
+                                                    <th>{{ 'w.short.invoiceNr'|trans }}</th>
+                                                    <th style="width:70px;text-align: right">{{ 'w.date'|trans }}</th>
+                                                    <th style="width:70px;text-align: right">Beglichen</th>
+                                                    <th style="width: 10px;text-align: center"><span title="Download" class="material-icons">file_download</span></th>
+                                                </tr>
+                                                {% for invoice in offer.order.invoices %}
+                                                    {% if invoice.sendDate is not null %}
+                                                        <tr>
+                                                            <td>{{ invoice.number ?? (offer.number~'.'~loop.index) }}</td>
+                                                            <td style="text-align: right">{{ invoice.sendDate|date('d.m.y') }}</td>
+                                                            <td style="text-align: center">
+                                                                {% if invoice.bezahlt is not null %}
+                                                                    <span style="width: 16px; color: green"
+                                                                          class="material-icons">check_circle</span>
+                                                                {% else %}
+                                                                    <span style="width: 16px; color: orangered"
+                                                                          class="material-icons">do_disturb_on</span>
+                                                                {% endif %}</td>
+                                                            <td style="text-align: right">
+                                                                <button {{ stimulus_action('public', 'dataWindowLoader', 'click') }}
+                                                                        data-public-url-param="{{ path('public_invoice_pdf', {'id': invoice.id}) }}"
+                                                                        style="border: none;background: transparent"
+                                                                        title="Rechnungsnummer: {{ invoice.number ?? (offer.number~'.'~loop.index) }}" {# style="position: absolute;top: 4rem;right: 1rem;" #}
+                                                                >
+                                                                    <svg class="btn-svg"
+                                                                         xmlns="http://www.w3.org/2000/svg"
+                                                                         viewBox="0 0 512 512">
+                                                                        <!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                                                                        <path d="M64 464H96v48H64c-35.3 0-64-28.7-64-64V64C0 28.7 28.7 0 64 0H229.5c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3V288H336V160H256c-17.7 0-32-14.3-32-32V48H64c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16zM176 352h32c30.9 0 56 25.1 56 56s-25.1 56-56 56H192v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V448 368c0-8.8 7.2-16 16-16zm32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24H192v48h16zm96-80h32c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48H304c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16zm32 128c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H320v96h16zm80-112c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16s-7.2 16-16 16H448v32h32c8.8 0 16 7.2 16 16s-7.2 16-16 16H448v48c0 8.8-7.2 16-16 16s-16-7.2-16-16V432 368z"/>
+                                                                    </svg>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </table>
+{#                                            {% include 'public/components/_bewertung.html.twig' %}#}
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="u-align-left u-container-style u-layout-cell u-left-cell u-size-30 u-white u-layout-cell-2">
+                        <div class="u-container-layout u-valign-bottom-sm u-container-layout-3">
+                            <span class="u-file-icon u-icon u-icon-circle u-palette-1-base u-text-white u-icon-2">
+                                <img alt="{{ 'w.email'|trans }}" style="width: 44px;" src="{{ asset('i.svg') }}">
+                            </span>
+                            <h4 class="u-custom-font u-font-oswald u-text u-text-default u-text-6">Angebotsstatus kurz erklärt</h4>
+                            <ol style="--length: 5;font-size: 14px;" role="list">
+                                <li title="Status:" style="--i: 1;position: relative">
+                                    {{ indexText[1] }}
+                                </li>
+                                <li title="Status:" style="--i: 2;position: relative">{{ indexText[2] }}</li>
+                                <li title="Status:" style="--i: 3;position: relative">{{ indexText[3] }}</li>
+                                <li title="Status:" style="--i: 4;position: relative">{{ indexText[4] }}</li>
+                                <li title="Status:" style="--i: 5;position: relative">{{ indexText[5] }}</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="u-size-34 u-size-60-sm u-size-60-md u-size-34-lg">
+                <div class="u-layout-col">
+                    <div class="u-align-left u-container-style u-layout-cell u-right-cell u-size-20 u-white u-layout-cell-4">
+                        <div id="loadData" style="background-color: #f2f2f2;" class="u-container-layout u-container-layout-5">
+                            <span style="background-color: {{ sfColor }};" class="u-custom-color-3 u-file-icon u-icon u-icon-circle u-palette-1-base u-text-white u-icon-4"><img src="{{ asset('app/images/149373-70aee76c.png') }}" alt=""></span>
+                            <h4 {{ stimulus_target('public', 'loadTitle') }} class="u-custom-font u-font-oswald u-text u-text-default u-text-5">Ihre Daten werden hier geladen.</h4>
+                            <div {{ stimulus_target('public', 'loadData') }} >
+                                <ol>
+                                    <li style="padding: 10px;font-size: 14px">
+                                    Um die gewünschten Informationen aus Ihren Angeboten/Rechnungen anzuzeigen, klicken Sie bitte auf den entsprechenden Button in Ihrer Angebotsbox. Die Daten werden hier geladen.
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="u-align-left u-container-style u-layout-cell u-right-cell u-size-20 u-white u-layout-cell-5">
+                        <div class="u-container-layout u-container-layout-6">
+                            <span class="u-icon u-icon-circle u-palette-2-base u-icon-5">
+                                <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 512.001 512.001" style="">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-d717"></use>
+                                </svg>
+                                <svg class="u-svg-content" viewBox="0 0 512.001 512.001"
+                                     x="0px" y="0px"
+                                     id="svg-d717"
+                                     style="enable-background:new 0 0 512.001 512.001;"><g><g><path d="M446.977,201.914L277.316,32.253c-17.539-17.54-46.081-17.541-63.622,0c-15.768,15.767-17.126,39.814-5.482,56.985    l-0.236,1.181c-12.232,61.165-42.011,116.809-86.12,160.917l-77.819,77.819c-17.582,17.583-17.585,46.039,0,63.622l42.414,42.414    c17.581,17.582,46.039,17.583,63.622,0l10.604-10.604l74.226,74.226c17.582,17.583,46.038,17.584,63.621,0    c17.541-17.54,17.541-46.081,0-63.621l-31.811-31.811l10.604-10.604c17.582-17.581,17.584-46.037,0-63.621l-7.206-7.207    c35.449-24.819,75.708-42.098,118.701-50.697l1.196-0.239c17.553,11.851,41.544,9.946,56.969-5.479h0.001    C464.516,247.995,464.516,219.455,446.977,201.914z M128.866,413.984c-5.86,5.859-15.348,5.86-21.208-0.001l-42.414-42.414    c-5.861-5.862-5.861-15.346,0-21.207l74.225-74.226l63.622,63.622C195.829,347.02,136.307,406.542,128.866,413.984z     M277.316,456.398c5.846,5.846,5.846,15.36,0,21.207c-5.846,5.846-15.361,5.846-21.207,0l-74.226-74.226l21.208-21.207    L277.316,456.398z M224.298,360.965c4.508-4.508,11.256-11.413,21.906-20.509l9.905,9.906c5.861,5.861,5.861,15.345,0,21.207    l-10.604,10.604L224.298,360.965z M224.935,319.189l-64.898-64.898c34.779-40.159,59.685-87.564,73.01-139.064l130.952,130.952    C312.499,259.503,265.095,284.409,224.935,319.189z M425.767,244.326c-5.861,5.86-15.346,5.86-21.207,0L234.901,74.667    c-5.861-5.862-5.861-15.346,0-21.207c5.861-5.861,15.347-5.861,21.208,0l169.658,169.658    C431.613,228.965,431.613,238.478,425.767,244.326z"></path>
+</g>
+</g><g><g><path d="M150.072,329.154c-5.855-5.856-15.351-5.856-21.207,0l-21.207,21.207c-5.856,5.856-5.856,15.351,0,21.207    c5.855,5.856,15.352,5.856,21.207,0l21.207-21.207C155.928,344.505,155.928,335.01,150.072,329.154z"></path>
+</g>
+</g><g><g><path d="M346.19,0c-8.282,0-14.996,6.714-14.996,14.996v29.992c0,8.282,6.714,14.996,14.996,14.996s14.996-6.714,14.996-14.996    V14.996C361.186,6.714,354.472,0,346.19,0z"></path>
+</g>
+</g><g><g><path d="M466.157,119.966h-29.992c-8.282,0-14.996,6.714-14.996,14.996s6.714,14.996,14.996,14.996h29.992    c8.282,0,14.996-6.714,14.996-14.996S474.438,119.966,466.157,119.966z"></path>
+</g>
+</g><g><g><path d="M446.769,34.383c-5.855-5.856-15.351-5.856-21.207,0L395.57,64.375c-5.856,5.856-5.856,15.351,0,21.207    c5.855,5.856,15.351,5.857,21.207,0l29.992-29.992C452.625,49.734,452.625,40.24,446.769,34.383z"></path>
+</g>
+</g></svg>
+                            </span>
+                            <h4 class="u-custom-font u-font-oswald u-text u-text-default u-text-10">Kundensupport</h4>
+                            <p style="margin-top:0;font-size: 14px;color: dimgrey;">Wir werden Ihre Anfrage so schnell wie möglich beantworten, spätestens innerhalb der nächsten 24 Stunden</p>
+                            <div class="u-form-group u-form-message u-label-none">
+                                <label for="message-da97" class="u-label">Nachricht</label>
+                                <textarea placeholder="Geben Sie hier Ihre Nachricht ein." rows="4" cols="50"
+                                          data-public-target="message"
+                                          style="background-color: #aa8e771a !important; border-radius: 10px; padding:20px;"
+                                          id="message-da97" name="message"
+                                          class="u-border-no-bottom u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle"
+                                          required=""></textarea>
+                            </div>
+
+                            <div class="u-align-right u-form-group u-form-submit">
+                                <a data-action="click->public#sendMessage" data-public-customer-param="{{ user.id }}" data-public-url-param="{{ path('ajax_public_add_notes') }}" style="width: 100%" href="javascript:void(0)" class="u-active-palette-2-light-1 u-border-none u-btn u-btn-submit u-button-style u-hover-palette-2-light-1 u-palette-2-base u-btn-3">
+                                    {% if is_granted('ROLE_EMPLOYEE_SERVICE') or is_granted('ROLE_SUPER_ADMIN') %}Als Kundenservice Antworten{% else %}{{ 'w.send'|trans }}{% endif %}
+                                </a>
+                                <p class="u-active-none u-btn u-button-style u-hover-none u-none u-text-hover-palette-1-base u-btn-4" id="loadedMessage">
+                                    <span class="u-icon u-text-palette-1-base">
+                                        <svg class="u-svg-content" viewBox="0 0 405.333 405.333" x="0px" y="0px" style="width: 1em; height: 1em;">
+                                            <path d="M373.333,266.88c-25.003,0-49.493-3.904-72.704-11.563c-11.328-3.904-24.192-0.896-31.637,6.699l-46.016,34.752    c-52.8-28.181-86.592-61.952-114.389-114.368l33.813-44.928c8.512-8.512,11.563-20.971,7.915-32.64    C142.592,81.472,138.667,56.96,138.667,32c0-17.643-14.357-32-32-32H32C14.357,0,0,14.357,0,32    c0,205.845,167.488,373.333,373.333,373.333c17.643,0,32-14.357,32-32V298.88C405.333,281.237,390.976,266.88,373.333,266.88z"></path>
+                                        </svg>
+                                    </span>&nbsp;{{ sf.service_phone }}
+                                </p>
+                            </div>
+                            <div class="u-form u-form-1" style="width: auto">
+                                <div id="chat" style="height: 600px; overflow: scroll;">
+                                    <div class="timeline" data-public-target="chat">
+                                        {% include 'public/components/_notes.html.twig' with {'user':user} %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="fixed-chat"></div>
+    <div style="width: 100%;position: relative;text-align: center">
+        <div style="right: auto;margin:0 auto;top: 50px;font-size: 45px;color: #fff">
+            <br>
+            {{ sf.www }}
+            <br>
+            <p style="color: #fff">{{ sf.email }}</p>
+            <img alt="ZOE-Solar" width="300px" style="/*position: absolute;top: 1%;right: 4%;*/" src="{{ asset(appAssetPath~'logo/logo.png') }}">
+            <br><br>
+        </div>
+    </div>
+{% endblock %}

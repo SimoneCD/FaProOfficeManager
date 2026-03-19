@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'p.new'|trans }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {% include 'backend/_form_style.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/dist/cropper.js') }}"></script>
+    {% include 'backend/product/_script.html.twig' %}
+{% endblock %}
+{% block main %}
+{#    <div class="row">#}
+{#        <div class="col-md-12">#}
+{#            <a href="{{ path('backend_product_index', {'category': category.id, 'subCategory': 'x'}) }}"><i class="material-symbols-outlined">list</i></a>#}
+{#        </div>#}
+{#    </div>#}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">{{ 'p.new'|trans }}</h4>
+                <p class="category"></p>
+            </div>
+            <div class="card-body">
+                {% include 'backend/product/_form.html.twig' with {'type':'product'} %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

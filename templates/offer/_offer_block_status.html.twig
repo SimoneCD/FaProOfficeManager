@@ -1,0 +1,90 @@
+{% set icon = '<a href="'~ path('offer_edit_plus', {'id':offer.id}) ~'"><i class="material-icons" style="margin:-10px 6px auto 4px;">design_services</i></a>' %}
+    {% if (offer.status == 'call' and offer.inquiry.context) or offer.status == 'call-plus' %}
+        {% set status = 0 %}
+        {% set icon = '<a title="Kundenformular aufrufen" href="'~ path('offer_edit', {'id':offer.id}) ~'"><i class="material-symbols-outlined">edit</i></a>' %}
+    {% elseif offer.status == 'call' %}
+        {% set status = 1 %}
+        {% set icon = '<a title="Kunden anrufen" href="'~ path('offer_edit', {'id':offer.id}) ~'"><i class="material-symbols-outlined">support_agent</i></a>' %}
+    {% elseif offer.status == 'estimate' %}
+        {% set status = 1.1 %}
+        {% set icon = icon~'<a title="Kostenvoranschlag" href="'~ path('offer_show', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">local_offer</i></a>' %}
+    {% elseif offer.status == 'besichtigung' %}
+        {% set status = 1.2 %}
+        {% set icon = icon~'<a title="Kostenvoranschlag" href="'~ path('offer_show', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">local_offer</i></a>' %}
+    {% elseif offer.status == 'open' %}
+        {% set status = 2 %}
+        {% set icon = icon~'<a title="Angebot bearbeiten und senden" href="'~ path('offer_show', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">content_paste</i></a>' %}
+    {% elseif offer.status == 'gesendet' %}
+        {% set status = 3 %}
+        {% set sendDate = offer.order ? offer.order.createdAt|date('d.m.Y') : null %}
+        {% set sendImportant = false %}
+        {% set allow = 'bestaetigt' %}
+        {% set icon = '<a title="'~(offer.order ? 'o.sendAt'|trans({'%date%':offer.order.createdAt|date('d.m.Y')}) : 'Fehler '~offer.id)~'" href="'~ path('offer_show', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">content_paste</i></a>' %}
+    {% elseif offer.status == 'storno' %}
+        {% set status = 0 %}
+        {% set allow = 'all' %}
+        {% set icon = '<a href="'~ path('offer_show', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">content_paste</i></a>' %}
+    {% elseif offer.status == 'bestaetigt' %}
+        {% set status = 4 %}
+        {% if offer.id == null or offer.order == null %}
+            {% set icon = '<br><i class="material-symbols-outlined">warning</i> Angebot NICHT gesendet/gespeichert!' %}
+        {% else %}
+            {% set icon = '<a title="'~('o.sendAt'|trans({'%date%':offer.order.createdAt|date('d.m.Y')}))~'" href="'~ path('offer_show', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">content_paste</i></a>
+            <a href="'~ path('invoice_part_index', {'id': offer.order.id}) ~'"><i class="material-symbols-outlined">receipt_long</i></a>' %}
+        {% endif %}
+    {% elseif offer.status == 'rechnungPartSend' %}
+        {% set status = 5 %}
+        {% set allow = 'rechnungPartEingang' %}
+        {% set sendDate = offer.order.invoices[0].sendDate|date('d.m.Y') %}
+        {% set icon = '
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.createdAt|date('d.m.Y')}))~'" href="'~ path('offer_show', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">content_paste</i></a>
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.invoices[0].sendDate|date('d.m.Y')}))~'" href="'~ path('invoice_part_index', {'id': offer.order.id}) ~'" class=""><i class="material-symbols-outlined">receipt_long</i></a>' %}
+    {% elseif offer.status == 'rechnungPartEingang' %}
+        {% set status = 6 %}
+        {% set allow = 'work' %}
+        {% set icon = '
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.createdAt|date('d.m.Y')}))~'" href="'~ path('offer_show', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">content_paste</i></a>
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.invoices[0].sendDate|date('d.m.Y')}))~'" href="'~ path('invoice_part_index', {'id': offer.order.id}) ~'" class=""><i class="material-symbols-outlined">receipt_long</i></a>
+        <a title="'~('title.product.index'|trans)~'" href="'~ path('sf_montage_offer', {'id': offer.id,'a':true}) ~'" class=""><i class="material-symbols-outlined">inventory</i></a>' %}
+    {% elseif offer.status == 'work' %}
+        {% set status = 7 %}
+        {% set allow = 'done' %}
+        {% set icon = '
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.createdAt|date('d.m.Y')}))~'" href="'~ path('offer_show', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">content_paste</i></a>
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.invoices[0].sendDate|date('d.m.Y')}))~'" href="'~ path('invoice_part_index', {'id': offer.order.id}) ~'"><i class="material-symbols-outlined">receipt_long</i></a>
+        ' %}
+    {% elseif offer.status == 'done' %}
+        {% set status = 8 %}
+        {% set icon = '
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.createdAt|date('d.m.Y')}))~'" href="'~ path('offer_show', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">content_paste</i></a>
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.invoices[0].sendDate|date('d.m.Y')}))~'" href="'~ path('invoice_part_index', {'id': offer.order.id}) ~'" class="" ><i class="material-symbols-outlined">receipt_long</i></a>
+        <a href="'~ path('invoice_rest_index', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">receipt</i></a>' %}
+    {% elseif offer.status == 'rechnungEingangSend' %}
+        {% set status = 9 %}
+        {% set allow = 'rechnungEingang' %}
+        {% set sendDate = offer.order.invoices[(offer.order.invoices|length-1)].sendDate|date('d.m.Y') %}
+        {% set icon = '
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.createdAt|date('d.m.Y')}))~'" href="'~ path('offer_show', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">content_paste</i></a>
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.invoices[0].sendDate|date('d.m.Y')}))~'" href="'~ path('invoice_part_index', {'id': offer.order.id}) ~'"><i class="material-symbols-outlined">receipt_long</i></a>
+        <a title="'~('title.product.index'|trans)~'" href="'~ path('backend_material_index', {'offerNumberBasic': offer.number}) ~'" class=""><i class="material-symbols-outlined">production_quantity_limits</i></a>
+        <a href="'~ path('invoice_rest_index', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">receipt</i></a>' %}
+    {% elseif offer.status == 'rechnungEingang' %}
+        {% set status = 10 %}
+        {% set icon = '
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.createdAt|date('d.m.Y')}))~'" href="'~ path('offer_show', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">content_paste</i></a>
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.invoices[0].sendDate|date('d.m.Y')}))~'" href="'~ path('invoice_part_index', {'id': offer.order.id}) ~'"><i class="material-symbols-outlined">receipt_long</i></a>
+        <a title="'~('title.product.index'|trans)~'" href="'~ path('backend_material_index', {'offerNumberBasic': offer.number}) ~'" class=""><i class="material-symbols-outlined">production_quantity_limits</i></a>
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.invoices[(offer.order.invoices|length)-1].sendDate|date('d.m.Y')}))~'" href="'~ path('invoice_rest_index', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">receipt</i></a>' %}
+    {% elseif offer.status == 'archive' %}
+        {% set status = 11 %}
+        {% set icon = '
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.createdAt|date('d.m.Y')}))~'" href="'~ path('offer_show', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">content_paste</i></a>
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.invoices[0].sendDate|date('d.m.Y')}))~'" href="'~ path('invoice_part_index', {'id': offer.order.id}) ~'"><i class="material-symbols-outlined">receipt_long</i></a>
+        <a title="'~('title.product.index'|trans)~'" href="'~ path('backend_material_index', {'offerNumberBasic': offer.number}) ~'" class=""><i class="material-symbols-outlined">production_quantity_limits</i></a>
+        <a title="'~('o.sendAt'|trans({'%date%':offer.order.invoices[(offer.order.invoices|length)-1].sendDate|date('d.m.Y')}))~'" href="'~ path('invoice_rest_index', {'id': offer.id}) ~'" class=""><i class="material-symbols-outlined">receipt</i></a>' %}
+    {% endif %}
+{% if is_granted('ROLE_EMPLOYEE_EXTERN') == false %}
+    {% set icon = '' %}
+{% endif %}
+{{ save('icon') }}
+{{ save('status') }}

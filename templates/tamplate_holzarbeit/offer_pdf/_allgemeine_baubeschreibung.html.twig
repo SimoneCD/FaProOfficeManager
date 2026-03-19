@@ -1,0 +1,36 @@
+<div class="row hBox headBoxBlank page-bau" style="height: 160px;">
+    <div class="col-12 p-0 m-0">
+                {# todo old remove in 6 month from now 15.1.23 #}
+
+                {% if offer.subCategory is not null and (offer.subCategory.specifications|lower == '##address##' or offer.subCategory.specifications|lower == '##bauAnschrift##') %}
+                    <h3><strong style="color: {{ sfColorDark }}">{{ 'o.t.powerValueFor'|trans }}:</strong></h3>
+                    <h4>{{ offer.customer.fullName }}</h4>
+                    <p>{{ offer.customer.fullAddress }}, {{ offer.customer.country }}</p>
+                {% elseif offer.subCategory is not null and offer.subCategory.specifications %}
+{#                    <h3><strong style="color: {{ sfColorDark }}">{{ 'o.t.globalDescription'|trans }}</strong></h3>#}
+                    {{ offer.subCategory.specifications|nl2br|replace({
+                        '##address##': '<h4>'~offer.customer.fullName~'</h4><p>'~offer.customer.fullAddress~'</p>',
+                        '##bauAnschrift##': '<h4>'~offer.customer.fullName~'</h4><p>'~offer.customer.fullAddress~'</p>',
+                    })|raw }}
+
+                {# todo #}
+{#                {% elseif offer.category.id == 2 %}#}
+{#                    <p><strong>{{ 'o.t.globalDescription'|trans }}</strong>#}
+{#                    <br><br>#}
+{#                    Bei den hier ausgeschriebenen Leistungen handelt es sich um die Installation von Energiesystemen. Die Photovoltaik-Anlagen Installation entspricht den Vorgaben nach DIN VDE 0100-420 (VDE 0100-420): 2016- 02.#}
+{#                    Eine Meldung an das zuständige Stromnetz ist erforderlich.#}
+{#                    </p>#}
+{#                    #}{# todo  #}
+{#                {% elseif offer.subCategory is not null  and  offer.subCategory.productSubCategory is not null and offer.category.id == 1 %}#}
+{#                    <p><strong>{{ 'o.t.globalDescription'|trans }}</strong>#}
+{#                    <br><br>#}
+{#                    Bei den hier ausgeschriebenen Leistungen handelt es sich um die Installation/Wartung von Ladestation/en, Messung und/oder Zuarbeiten. Die Ladestation-Installation entspricht den Vorgaben nach DIN EN IEC 61851-1:2019-12; VDE 0122-1:2019-12.#}
+{#                    Eine Meldung an das zuständige Stromnetz ist erforderlich.#}
+{#                    </p>#}
+                {% else %}
+                    <p><strong>{{ 'o.t.powerValueFor'|trans }}:</strong></p>
+                    <h4>{{ offer.customer.fullName }}</h4>
+                    <p>{{ offer.customer.fullAddress }}</p>
+                {% endif %}
+    </div>
+</div>

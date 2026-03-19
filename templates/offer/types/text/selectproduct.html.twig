@@ -1,0 +1,2 @@
+{% if context['questions'][question.id]['answer'] is defined and context['questions'][question.id]['answer']['name'] is defined -%}
+{{ getProduct(context['questions'][question.id]['answer']['name']|number_format) }}{% endif %}

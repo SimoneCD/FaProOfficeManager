@@ -1,0 +1,131 @@
+{% if is_granted('POST_EDIT', offer) %}
+    <div class="row section-to-print">
+        <div class="main-box p-0 m-0">
+            {% if disabled == true %}
+                {% include appTemplate~'offer_pdf/_header.html.twig' %}
+                {% include appTemplate~'offer_pdf/page1.html.twig' with {'preview': true} %}
+            {% else %}
+                {% include appTemplate~'offer_new/_header.html.twig' %}
+                {% include appTemplate~'offer_new/preview_page1.html.twig' %}
+            {% endif %}
+            {% include appTemplate~'offer_pdf/_footer.html.twig' %}
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="row">
+                <div class="col-12" style="border: none">
+                    <div class="text-left"><strong style="color: #1b416c">{{ 'w.customerService'|trans }}:</strong></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-left"><strong style="color: #1b416c"></strong></div>
+                    <div style="padding-left: 0;">{{ offer.note|nl2br }}</div>
+                </div>
+            </div>
+            <form id="ajax_update_offer_info" class="ajax_update_offer_info form-group"
+                  action="{{ path('ajax_update_tp',{'offer':offer.id,'type':'notice'}) }}">
+                <div class="row">
+                    <div class="col-12" style="border: none">
+                        <div class="text-left"><strong style="color: #1b416c">{{ 'm.information'|trans }}:</strong></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-11">
+                        <div class="text-left"><strong style="color: #1b416c"></strong></div>
+                        <div style="padding-left: 0;">
+                            <textarea style="padding: 2px 20px;min-height: 200px !important;" class="form-control"
+                                      name="notice">{{ offer.notice }}</textarea>
+                        </div>
+                    </div>
+                    <div class="col-1 text-right" style="padding-top: 190px">
+                        <button type="submit" class="btn btn-light btn-xs offer_submits p-1"><i class="material-icons p-1">send</i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br>
+    <div class="row section-to-print">
+        <div class="main-box p-0 m-0">
+            {% include appTemplate~'offer_pdf/_header.html.twig' %}
+            {% if disabled %}
+                {% include appTemplate~'offer_pdf/all.html.twig' with {'offer': offer} %}
+                {% include appTemplate~'offer_pdf/_line-pay_plan.html.twig' %}
+                <div id="payplan" class="m-0 p-0">
+                    {% include appTemplate~'offer_pdf/_zahlungsplan.html.twig' %}
+                </div>
+            {% else %}
+                {% include appTemplate~'offer_new/preview_product_list.twig' with {'total': total} %}
+                {% include appTemplate~'offer_pdf/_line-pay_plan.html.twig' %}
+                <div id="payplan" class="m-0 p-0">
+                    {% include 'app/offer_new/zahlungsplan.html.twig' %}
+                </div>
+            {% endif %}
+            {% include appTemplate~'offer_pdf/_seite.html.twig' with {'page': '2', 'text': ''~('payToOrder'|trans)~''} %}
+            {% include appTemplate~'offer_pdf/_footer.html.twig' %}
+        </div>
+    </div>
+
+    {% if disabled == false %}
+        {% if offer.status != 'storno' %}
+            <div class="card" style="margin-left: -12px">
+                <div class="card-body p-5">
+                    <div class="text-center">
+                        <form method="post" action="{{ path('order_save',{'id':offer.id}) }}">
+                            <p class="p-3 text-center" style="font-weight: bold;color: {{ sfColorDark }}">{{ 'f.label.offerMailText'|trans }}:</p>
+                            <div class="danger pl-3" style="background-color: {{ sfColorForm }};color: #fff;border: 1px solid #fff;padding: 10px;">
+                                <textarea id="offerEmailText" class="form-control" style="height: 160px;" name="offer_option[context][{% if offer.status == 'estimate' or offer.status == 'besichtigung' %}estimate{% else %}offer{% endif %}EmailText]">
+                                {%- if offer.status == 'estimate' or offer.status == 'besichtigung' -%}
+                                    {%- if offer.option is not null and offer.option.context is not null and offer.option.context['estimateEmailText'] is defined -%}
+                                        {{- offer.option.context['estimateEmailText'] -}}
+                                    {%- else -%}
+                                        {{- offer.subCategory.estimateMailText|replace({
+                                            '##offerName##':angebotName,
+                                            '##offerNumber##':offer.getNumber,
+                                            '##angebotsName##':angebotName,
+                                            '##angebotsNummer##':offer.number,
+                                        }) -}}
+                                    {%- endif -%}
+                                {%- else -%}
+                                    {%- if offer.option is not null and offer.option.context is not null and offer.option.context['offerEmailText'] is defined -%}
+                                        {{- offer.option.context['offerEmailText'] -}}
+                                    {%- else -%}
+                                        {{- offer.subCategory.mailText|replace({
+                                            '##offerName##':angebotName,
+                                            '##offerNumber##':offer.getNumber,
+                                            '##angebotsName##':angebotName,
+                                            '##angebotsNummer##':offer.number,
+                                        }) -}}
+                                    {%- endif -%}
+                                {%- endif -%}
+                                </textarea>
+                            </div>
+                            <div class="danger" style="background-color: #f44336;color: #fff;border: 1px solid #fff;padding: 10px;">{{ 'sendInfo'|trans }}&nbsp;&nbsp;<input id="soll_send" style="height: 16px;width: 16px;visibility: visible" type="checkbox" name="sendMail" value="1"></div>
+                            <button id="id_senden" type="submit" class="btn btn-primary">{{ 'w.save'|trans }}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="card" style="margin-left: -12px">
+            <div class="card-body p-5">
+                <div class="text-center">
+                    <form method="post" action="{{ path('offer_delete_offer',{'offer':offer.id}) }}">
+                        <button data-confirm="{{ 'o.confirm.delete'|trans }}{% if offer.status == 'storno' %} ({{ 's.storno'|trans }}){% endif %}" type="button" class="px-5 confirm btn btn-danger">{{ 'o.delete'|trans }}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% else %}
+    <div class="row section-to-print">
+        <div class="main-box p-0 m-0">
+            {{ 'o.error.noAccessTo'|trans }}
+        </div>
+    </div>
+{% endif %}
+<br>

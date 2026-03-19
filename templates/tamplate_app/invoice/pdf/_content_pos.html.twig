@@ -1,0 +1,64 @@
+{{ restore('price') }}
+<div class="row headboxContent m-0" style="padding-top: 20px !important;">
+    <style>td, th, strong{font-size: 14px;}</style>
+    <table class="table table-borderless m-0 p-0 align-text-top" style="font-size: 14px;border: none !important;
+">
+        <tr>
+            <th style="width:44px;border: none !important;">{{ 'w.posShort'|trans }}</th>
+            <th style="width: 96px;border: none !important;">{{ 'w.date'|trans }}</th>
+            <th style="border: none !important;">{{ 'w.description'|trans }}</th>
+            <th style="width:120px;border: none !important;" class="text-right pr-0">{{ 'w.price'|trans }}</th>
+        </tr>
+        <tr class="p-0" style="background-color: #efefef">
+            <td>000</td>
+            <td>{{ 'now'|date('d.m.Y') }}</td>
+            <td>{{ 'Übertrag aus Seite 1'|trans }}</td>
+            <td class="text-right pr-0">{{ price|number_format(2,',','.') }} €</td>
+        </tr>
+
+        {% if invoice.context and invoice.context['posPrices'] is defined %}
+                {% include appTemplate~'invoice/_key_value_pos.html.twig' with {
+                    'context' : invoice.context,
+                    'i' : 20,
+                    'x' : 0,
+                } %}
+            {{ restore('price') }}
+        {% endif %}
+
+            {% set tax = 0 %}
+            {{ save('tax') }}
+            {% include 'app/components/_taxCalc.html.twig' with {'price':price, 'tax':tax} %}
+            {{ restore('tax') }}
+            {% set datum = invoice.date|date('d.m.Y') %}
+            <tr>
+                <td style="border: none"></td>
+                <td style="border: none"></td>
+                <td  style="border: none" class="text-right">{{ 'w.netto'|trans }}:</td>
+                <td id="calc_netto" class="text-right px-0">{{ price|number_format(2,',','.') }} {{ appCurrency|raw }}</td>
+            </tr>
+            <tr style="border: none">
+                <td style="border: none"></td>
+                <td style="border: none"></td>
+                <td  style="border: none" class="text-right">{{ 'w.procentTax'|trans({'%procent%':appTax}) }}. {% if tax == 0 %}<sup>*</sup>{% endif %}</td>
+                <td id="calc_tax" class="text-right px-0">{{  tax|number_format(2,',','.') }} €</td>
+            </tr>
+            {% if type == 'rest' %}
+                {% set rPrice = calculateNettoPrice(offer.id) %}
+                {% set rPartPrice = (order.partInvoice.pos1Price??0)+(order.partInvoice.pos2Price??0)+(order.partInvoice.pos3Price??0) %}
+                {% if offer.option and offer.option.solar %}
+                    {% set rPartTax = 0 %}
+                {% else %}
+                    {% set rPartTax = rPartPrice*appTax/100 %}
+                {% endif %}
+            {% endif %}
+            <tr>
+                <td colspan="3" class="text-right"><strong>{{ 'i.toPayBruttoName'|trans }}</strong></td>
+                <td class="text-right px-0"><strong id="calc_brutto" class="px-0">{{ (price+tax)|number_format(2,',','.') }} €</strong></td>
+            </tr>
+            {% if tax == 0 %}
+                <tr>
+                    <td colspan="4" style="border: none;" class="text-left small">* {{ 'zeroTaxHelp'|trans }}.</td>
+                </tr>
+            {% endif %}
+    </table>
+</div>

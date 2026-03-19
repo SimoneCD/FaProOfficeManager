@@ -1,0 +1,72 @@
+<div class="m-0 p-0" {{ stimulus_controller('protocol') }}>
+    <div class=" row w-100 p-0 m-0 text-center">
+        <div class="col-md-6">
+            <div class="card" style="background-color: whitesmoke;">
+                {% if offer.category and (offer.category.id == 2) %}
+                    <h3>Neue Prüfberichte für PV-Anlagen</h3>
+                    <button type="button" {{ stimulus_action('protocol', 'loadProtocolPage') }}
+                            data-protocol-type-param="pv_first" data-id="1"
+                            data-protocol-url-param="{{ path('ajax_new_protocol', {'type':'pv_first','id':offer.id}) }}"
+                            class="btn btn-light btn-sm innerCheckMenu checker p-1" tabindex="1"
+                            style="display:inline-block;">
+                        &nbsp;Erstprüfung <span class="material-icons">local_police</span>
+                    </button>
+                    <button type="button" {#{{ stimulus_action('protocol', 'loadProtocolPage') }}#}
+                            data-protocol-url-param="{{ path('ajax_new_protocol', {'type':'pv_recurring','id':offer.id}) }}"
+                            class="disabled btn btn-light btn-sm innerCheckMenu checker p-1"
+                            style="display:inline-block;" {#href="{{ path('pdf_protocol', {'id':offer.id}) }}"#}>
+                        &nbsp;Wiederholungsprüfung <span class="material-icons">gpp_good</span>
+                    </button>
+                    <button type="button" {#{{ stimulus_action('protocol', 'loadProtocolPage') }}#}
+                            data-protocol-url-param="{{ path('ajax_new_protocol', {'type':'pv_repair','id':offer.id}) }}"
+                            class="disabled btn btn-light innerCheckMenu btn-sm checker p-1"
+                            style="display:inline-block;">
+                        &nbsp;Instandsetzung / Reperatur <span class="material-icons">health_and_safety</span>
+                    </button>
+                    <div class="btn-group" role="group" aria-label="FAQ++">
+
+                    <button type="button" {{ stimulus_action('protocol', 'loadProtocolPage') }}
+                            data-protocol-url-param="{{ path('ajax_new_protocol', {'type':'pv_faq100','id':offer.id}) }}"
+                            class="w-50 btn btn-light btn-sm innerCheckMenu checker p-1">
+                        <strong>DIN VDE 0100-600</strong> <span class="material-icons">safety_check</span>
+                    </button>
+                    <button type="button" {#{{ stimulus_action('protocol', 'loadProtocolPage') }}#}
+                            data-protocol-url-param="{{ path('ajax_new_protocol', {'type':'pv_faq105','id':offer.id}) }}"
+                            class="disabled w-50 btn btn-light btn-sm innerCheckMenu checker p-1">
+                        <strong>DIN VDE 0105-100</strong> <span class="material-icons">safety_check</span>
+                    </button>
+                    </div>
+                    <button type="button" {{ stimulus_action('protocol', 'loadProtocolPage') }}
+                                  data-protocol-url-param="{{ path('ajax_new_protocol', {'type':'pv_deck','id':offer.id}) }}"
+                                  class="btn btn-light btn-sm innerCheckMenu checker p-1">
+                    Anlagenbuch-Deckblatt
+                </button>
+                {% elseif offer.category and offer.category.id == 1 %}
+                    <h3>Neues Protokoll für Ladeeinrichtungen</h3>
+                    <button type="button" {{ stimulus_action('protocol', 'loadProtocolPage') }}
+                            data-protocol-url-param="{{ path('ajax_new_protocol', {'type':'em_first','id':offer.id}) }}" data-id="w1" class="btn btn-default btn-sm innerCheckMenu checker p-1" tabindex="1" style="color: {{ sfColor }};">
+                        &nbsp;Inbetriebnahmeprotokoll für Ladeeinrichtungen <span class="material-icons">local_police</span>
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card" style="background-color: whitesmoke;"><h3>Abgeschlossene Prüfungen ({{ offer.number }})</h3></div>
+        </div>
+    </div>
+    <style>
+        .page {box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px, rgba(0, 0, 0, 0.24) 0 1px 2px;}
+        .backB {position: absolute;
+            height: 24px;
+            top: 0;
+            right: 0;
+            border-radius: 50% !important;}
+        /*.bcf {background-color: #fcf7f6 !important;}*/
+    </style>
+    <div id="protocol_data" data-protocol-target="protocolcontent">
+    {% if type is defined %}
+            {% include 'offer/montage/intern/_selected_protocol.html.twig' %}
+    {% endif %}
+    </div>
+    <a style="position: fixed;top: 82%;right: 10px;z-index: 9999;" href="#pro_tops"><i style="font-size: 46px !important;" class="material-icons">arrow_circle_up</i></a>
+</div>

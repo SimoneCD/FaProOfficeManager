@@ -1,0 +1,39 @@
+{% macro getBody(offer, question, context)%}
+    <table style="border: none;padding:0;margin:0">
+        <tr>
+            <td style="padding: 2px;width: 50%"><p style="padding:0;margin:0">{{ question.title ? question.title : question.name }}</p></td>
+            <td style="padding: 2px;margin:0;position: relative">
+                {%- if context['questions'][question.id]['monteur']['text'] is defined and context['questions'][question.id]['monteur']['text'] -%}
+                    {{- context['questions'][question.id]['monteur']['text'] -}}
+                {%- else -%}
+                    {%- if context['questions'][question.id]['answer'] is defined -%}
+                        {%- include 'offer/types/text/'~question.answerType~'.html.twig' -%}
+                    {%- endif -%}
+                {% endif -%}
+            </td>
+        </tr>
+        {% if question.needImage %}
+            <tr class="row my-0 radios">
+                <td colspan="2">
+                    {% for img in offer.images %}
+                        {% if img.question and img.question.id == question.id %}
+                            <img style="margin:0 5px;max-width: 200px;max-height: 90px;" src="{{ absolute_url(asset(appAssetPath~'uploads/'~offer.id~'/'~img.filename)) }}" alt="{{ img.filename }}">
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endif %}
+    </table>
+{% endmacro %}
+
+{{ restore('viewedQuestions') }}
+{% for k, context in offer.inquiry.context %}
+    {% if context['questions'][question.id]['answer'] is defined and question.protocol != 'q' and question.protocol != 'p' %}
+        {% set viewedQuestions = viewedQuestions|merge([question.id]) %}
+        {{ _self.getBody(offer, question, context) }}
+    {% elseif question.id not in viewedQuestions and question.protocol == 'p'%}
+        {% set viewedQuestions = viewedQuestions|merge([question.id]) %}
+        {{ _self.getBody(offer, question, context) }}
+    {% endif %}
+{% endfor %}
+{{ save('viewedQuestions') }}

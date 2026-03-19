@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}csv import{% endblock %}
+
+{% block main %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">Download CSV - Bundesweit</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form action="{{ path('backend_crawl_oeffentliche', {'crawl': 'cccc','cou': 'tttt'}) }}" id="search_csv">
+                            Suche <input id="searcher" type="text"> {#in folgender Stadt:#}
+                            Start <input id="cou" type="text" value="1">
+{#                            <select id="town">#}
+{#                                {% for t in towns %}#}
+{#                                    <option value="{{ t }}">{{ t }}</option>#}
+{#                                {% endfor %}#}
+{#                            </select>#}
+                            <button id="sender" class="btn btn-primary"><i class="material-symbols-outlined">send</i> </button>
+                        </form>
+                        <ul class="small" style="list-style: none">
+                            <li>Die Datei wird mit einem Zähler gespeichert (Tankstelle_123)</li>
+                            <li>Die Folgesuche mit diesem Zähler starten (unter <strong>Start</strong>)</li>
+                            <li><strong>Wichtig:</strong> Vor jeder neuen Suche mit einem Start-Wert, muss die Seite duch das Klicken im Menü neu geladen worden sein. Ansonsten sucht er mit dem alten Start-Wert erneut.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">Download CSV - Nach Stadt</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form action="{{ path('backend_crawl_one', {'crawl': 'cccc','town': 'tttt', 'page':'pppp'}) }}" id="search_town_csv">
+                            Suche <input id="searcher_town" type="text"> in folgender Stadt:
+                            <select id="town">
+                                {% for t in towns %}
+                                    <option value="{{ t }}">{{ t }}</option>
+                                {% endfor %}
+                            </select>
+                            Seite: <input id="page_town" type="number" name="page" value="1">
+                            <button id="sender_town" class="btn btn-primary"><i class="material-symbols-outlined">send</i> </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('#sender').on('click', function (e){
+            let sv = $('#searcher');
+            let cou = $('#cou');
+            let frm = $('#search_csv');
+            if (sv.val() !== '' && sv.val().length > 3){
+                let act = frm.attr('action');
+                act = act.replace('cccc',sv.val().replaceAll(' ','%20'));
+                act = act.replace('tttt',cou.val());
+                frm.attr('action', act);
+                frm.submit();
+
+            }
+        });
+        $('#sender_town').on('click', function (e){
+            let sv = $('#searcher_town');
+            let town = $('#town');
+            let frm = $('#search_town_csv');
+            if (sv.val() !== '' && sv.val().length > 3){
+                let act = frm.attr('action');
+                act = act.replace('cccc',sv.val().replaceAll(' ','%20'));
+                act = act.replace('tttt',town.val());
+                act = act.replace('pppp',$('#page_town').val());
+                frm.attr('action', act);
+                frm.submit();
+            }
+        });
+    </script>
+{% endblock %}

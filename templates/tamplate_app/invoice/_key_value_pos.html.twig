@@ -1,0 +1,13 @@
+{{ restore('price') }}
+{% for k, priceX in context['posPrices'] -%}
+    {% if loop.index <= i and loop.index > x %}
+        {%- set price = price+priceX['price'] -%}
+        <tr>
+            <td style="border: none">{{ priceX['number'] }}</td>
+            <td style="border: none">{{ priceX['date']|date('d.m.Y') }}</td>
+            <td  style="border: none">{{ priceX['text'] }}</td>
+            <td id="calc_netto" class="text-right px-0">{{ priceX['price']|number_format(2,',','.') }} {{ appCurrency|raw }}</td>
+        </tr>
+    {%- endif %}
+{%- endfor %}
+{{ save('price') }}

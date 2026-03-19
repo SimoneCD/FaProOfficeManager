@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New IndexStates{% endblock %}
+
+{% block body %}
+    <h1>Create new IndexStates</h1>
+
+    {{ include('index_states/_form.html.twig') }}
+
+    <a href="{{ path('app_index_states_index') }}">back to list</a>
+{% endblock %}

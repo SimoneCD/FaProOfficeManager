@@ -1,0 +1,54 @@
+
+{#<table style="margin-top: 5px">#}
+{#    <tr>#}
+{#        <td>Datum:</td>#}
+{#        <td><p><input class="check_i" type="date" name="offer_check[besichtigung][adate]" value="{% if yes %}{{ ocp.besichtigung.adate }}{% endif %}"></p></td>#}
+{#        <td>Datum:</td>#}
+{#        <td><p><input class="check_i" type="date" name="offer_check[besichtigung][bdate]" value="{% if yes %}{{ ocp.besichtigung.bdate }}{% endif %}"></p></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#        <td><p style="padding-top: 36px">Unterschrift/Auftraggeber:</p></td>#}
+{#        <td style="padding-top: 0;position: relative">#}
+{#            <div id="signature2Text" style="min-width: 200px;min-height: 60px;"></div>#}
+{#            {% if pdf is defined %}#}
+{#                <p style="border-bottom: 1px solid grey ">{% if yes and ocp.anlage.signaturText %}<img#}
+{#                        src="{{ absolute_url(asset(appAssetPath~'user/'~ocp.anlage.signaturText[2])) }}">{% endif %}</p>#}
+{#            {% else %}#}
+{#                <p><input id="signature2" class="check_i" type="hidden" name="offer_check[anlage][signaturText][2]"#}
+{#                          value="{% if yes %}{{ ocp.anlage.signaturText[2] }}{% endif %}"></p>#}
+{#            {% endif %}#}
+{#            <div>#}
+{#                {% if pdf is defined %}#}
+{#                    <img style="position: absolute;bottom: -14px;right: 30px;" src="{{ absolute_url(asset(appAssetPath~'logo/stamp-logo.png')) }}">#}
+{#                {% endif %}#}
+{#            </div>#}
+{#            {% if pdf is not defined %}#}
+{#                <button type="button" data-id="1"#}
+{#                        style="position: absolute;height: 100%;top: 0;right: 0"#}
+{#                        class="p-0 signatur2_reset btn btn-danger btn-sm"><i class="material-icons">undo</i>#}
+{#                </button>{% endif %}#}
+{#        </td>#}
+{#        <td><p style="padding-top: 36px">Unterschrift/Prüfer:</p></td>#}
+{#        <td style="padding-top: 0;position: relative">#}
+{#            <div id="signature3Text" style="min-width: 200px;min-height: 60px;"></div>#}
+{#            {% if pdf is defined %}#}
+{#                <p style="border-bottom: 1px solid grey ">{% if yes and ocp.anlage.signaturText %}<img#}
+{#                        src="{{ absolute_url(asset(appAssetPath~'user/'~ocp.anlage.signaturText)) }}">{% endif %}</p>#}
+{#            {% else %}#}
+{#                <p><input id="signature3" class="check_i" type="hidden" name="offer_check[anlage][signaturText][3]"#}
+{#                          value="{% if yes %}{{ ocp.anlage.signaturText[3] }}{% endif %}"></p>#}
+{#            {% endif %}#}
+{#            <div>#}
+{#                {% if pdf is defined %}#}
+{#                    <img style="position: absolute;bottom: -14px;right: 30px;" src="{{ absolute_url(asset(appAssetPath~'logo/stamp-logo.png')) }}">#}
+{#                {% endif %}#}
+{#            </div>#}
+{#            {% if pdf is not defined %}#}
+{#                <button type="button" data-id="1"#}
+{#                        style="position: absolute;height: 100%;top: 0;right: 0"#}
+{#                        class="p-0 signatur3_reset btn btn-danger btn-sm"><i class="material-icons">undo</i>#}
+{#                </button>{% endif %}#}
+{#        </td>#}
+{#    </tr>#}
+{#</table>#}
+{% include 'offer/montage/intern/checkpage/_copyrights.html.twig' %}

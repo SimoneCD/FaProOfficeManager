@@ -1,0 +1,80 @@
+{% macro checkNumber(offer) %}
+    {% include 'offer/montage/intern/pdf/_checkNumber.html.twig' %}
+{% endmacro %}
+{% macro header(sf, offer, count, type, pdf = false) %}
+    {% include 'offer/montage/intern/pdf/_header.html.twig' with {'type':type} %}
+{% endmacro %}
+<form id="signatureForm" data-action="{{ path('ajax_protocol_changes', {'id':offer.id, 'type': 'pv_first'}) }}">
+    <div class="card page_card" data-controller="upload">
+        <div class="card-body" style="min-height: 900px;background: whitesmoke;">
+            {# todo #}
+            {% if offer.category and offer.category.id == 2 %}
+                {% if protocol is defined and protocol.id %}
+                    <input type="hidden" name="pv_first[protocol][id]" value="{{ protocol.id }}">
+                {% endif %}
+                <input type="hidden" name="pv_first[protocol][type]" value="pv_first">
+                <div id="checkerDiv1" class="ccd p-2">
+                    <a class="p-1" style="
+                            color: {{ sfColor }};
+                            position: absolute;right:0;top:0;cursor: pointer" href="{{ path('app_offer_protocol_pdf', {'id': offer.id,'type': 'pv_first'}) }}" target="_blank">
+                        <span class="material-icons" style="font-size: 70px;">picture_as_pdf</span>
+                    </a>
+                    <h4 style="font-size: 16px !important;">Erstprüfung ortsfester elektrischer Anlagen - Inhaltsverzeichnis
+                        <p class="mb-1" style="color: grey">{{ getOfferName(offer.id) }}</p>
+                    </h4>
+
+                    {% set vdeData = [] %}
+                    {{ save('vdeData') }}
+                    {% include 'offer/montage/intern/checkpage/data.html.twig' %}
+                    {{ restore('vdeData') }}
+                    <ol class="w-100" style="font-size: 12px">
+                        {#                        <li>#}
+                        {#                            <a href="#p0"><strong>Deckblatt Anlagebuch</strong></a>#}
+                        {#                        </li>#}
+                        {% for d in vdeData[type] %}
+                            <li>
+                                <a href="#p{{ loop.index }}">Blatt {{ loop.index }} - Prüfbericht - <strong>{{ d.title }}</strong> <small>{{ d.vde }}</small></a>
+                            </li>
+                        {% endfor %}
+                    </ol>
+
+                    {% for d in vdeData[type] %}
+                        <div id="p{{ loop.index }}" style="display: inline-grid;min-height:600px;height: fit-content">
+                            <div class="page pt-0" style="padding-right: 0.5cm;">
+                                {{ _self.checkNumber(offer) }}
+                                <h2 style="margin-top: -36px">{{ d.title }}</h2>
+                                <p>{{ d.vde }} - <span>Blatt {{ loop.index }} von {{ vdeData|length }}</span></p>
+                                {% if d.vde2 is defined %}
+                                    <p>{{ d.vde2|raw }}</p>
+                                {% endif %}
+                                {{ _self.header(sf, offer, loop.index, type, isPdf) }}
+                                {% include 'offer/montage/intern/checkpage/'~type~'/_check_page_'~(d.page ?? loop.index)~'.html.twig' %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div id="checkerDiv2" class="ccd p-2">
+                    <h4 style="font-size: 16px !important;">Wiederholungsprüfung ortsfester elektrischer Anlagen - Inhaltsverzeichnis
+                        <a class="p-1" style="color: {{ sfColor }};text-align: right;cursor: pointer" href="{{ path('app_offer_protocol_pdf', {'id':offer.id,'type': 'pv_recurring'}) }}" target="_blank">
+                            <span class="material-icons">picture_as_pdf</span>
+                        </a>
+                        <p class="mb-1" style="color: grey">{{ getOfferName(offer.id) }}</p>
+                    </h4>
+                </div>
+                <div id="checkerDiv3" class="ccd p-2">
+                    <h4 style="font-size: 16px !important;">Instandgesetzte elektronische Geräte - Inhaltsverzeichnis</h4>
+                </div>
+            {% elseif offer.wallboxProduct and offer.wallboxProduct.productSubCategory.id in [11,13,14] %}
+                {% if protocol is defined and protocol.id %}
+                    <input type="hidden" name="pv_first[protocol][id]" value="{{ protocol.id }}">
+                {% endif %}
+                <input type="hidden" name="pv_first[protocol][type]" value="wallbox">
+                <div id="checkerDivw1" class="ccd p-2">
+                    <h4 style="font-size: 16px !important;">Inbetriebnahmeprotokoll für Ladeeinrichtungen - Inhaltsverzeichnis</h4>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+</form>

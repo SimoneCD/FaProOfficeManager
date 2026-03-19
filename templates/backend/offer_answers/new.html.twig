@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'osc.quest.a.add'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% include 'backend/_form_style.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/dist/cropper.js') }}"></script>
+    {% include 'backend/offer_answers/_script.html.twig' %}
+{% endblock %}
+{% block main %}
+    {% include 'backend/components/_menu.html.twig' with {
+        'listLi': {'n':'o.categories'|trans,'k':true},
+        'categoryLi': {'n':subCategory.category.name,'k':subCategory.category.id,'i':subCategory.category.icon},
+        'subCategoryLi': {'n':('replace.questionnaire'|trans({'%name%':subCategory.name})),'ki':subCategory.category.id,'k':subCategory.id,'i':'document_scanner'},
+        'questionLi': {'n':answer.question.name,'k':answer.question.id,'i':'psychology_alt'},
+        'answerLi': {'n':('osc.quest.a.add'|trans)}
+    } %}
+{#    <h1>{{ 'osc.quest.a.add'|trans }}</h1>#}
+    <div id="backend_form">
+        {{ include('backend/offer_answers/_form.html.twig', {'button_label': 'w.save'|trans}) }}
+    </div>
+{% endblock %}

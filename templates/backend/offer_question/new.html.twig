@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New OfferQuestion{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {% include 'backend/offer_question/_style.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include 'backend/offer_question/_script.html.twig' %}
+{% endblock %}
+{% block main %}
+    {% include 'backend/components/_menu.html.twig' with {
+        'listLi': {'n':'o.categories'|trans,'k':true},
+        'categoryLi': {'n':subCategory.category.name,'k':subCategory.category.id,'i':subCategory.category.icon},
+        'subCategoryLi': {'n':('replace.questionnaire'|trans({'%name%':subCategory.name})),'k':subCategory.id,'ki':subCategory.category.id, 'i':'document_scanner'},
+        'questionLi': {'n':('osc.quest.q.addIn'|trans({'%name%':'replace.questionnaire'|trans({'%name%':subCategory.name})}))}
+    } %}
+{#    <h1>{{ 'osc.quest.q.add'|trans }}</h1>#}
+<div id="backend_form">
+    {{ include('backend/offer_question/_form.html.twig') }}
+</div>
+{% endblock %}

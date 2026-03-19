@@ -1,0 +1,14 @@
+{{ restore('appAnswerChecked') }}
+{% for k,answer in question.offerAnswers|sort((a, b) => a.sort <=> b.sort) %}
+    {% set selected = (
+        context['questions'] is defined
+        and context['questions'][question.id] is defined
+        and context['questions'][question.id]['answer'] is defined
+        and answer.id in context['questions'][question.id]['answer']) ?
+        true : false -%}
+    {%- if selected %}
+        {% include 'offer/types/rows/components/_answer_image.html.twig' with {'value':answer.name} %}
+        {% set appAnswerChecked = appAnswerChecked|merge(answer.dependencies) %}
+    {% endif -%}
+{% endfor %}
+{{ save('appAnswerChecked') }}

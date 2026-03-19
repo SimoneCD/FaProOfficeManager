@@ -1,0 +1,7 @@
+{{ restore('total') }}
+<tr style="border-bottom: none !important;">
+    <td class="last"></td>
+    <td class="last pad-l pl-0" colspan="3"><strong style="color: {{ sfColorDark }}">{{ 'w.betweenSum'|trans }}:</strong></td>
+    <td style="padding-right: 40px;font-weight: bold" colspan="2" class="text-right">{{ total|number_format('2',',','.') }} &euro;</td>
+</tr>
+{{ save('total') }}

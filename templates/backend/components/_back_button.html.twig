@@ -1,0 +1,6 @@
+{% set r = app.request.server.get('HTTP_REFERER') ends with app.request.server.get('REQUEST_URI') %}
+{% if app.request.method == 'GET' and not r %}
+    <div class="col-sm-12 col-md-12">
+        <button class="btn btn xs btn-default" type="button" onclick="history.back()">{{ 'w.back'|trans }}</button>
+    </div>
+{% endif %}

@@ -1,0 +1,4 @@
+{% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+{#    <a href="{{ path('backend_product_show', {'category': 'x','subCategory': 'x','id': product.id}) }}"><i class="material-symbols-outlined">electrical_services</i></a>#}
+    <a href="{{ path('backend_product_edit', {'category': 'x','subCategory': 'x','id': product.id}) }}"><i class="material-symbols-outlined">mode_edit</i></a>
+{% endif %}

@@ -1,0 +1,25 @@
+<div class="row headBox headBoxSalutation page-wellcome m-0 " style="min-height: 400px !important;padding-right: 0 !important;max-height: 330px !important;">
+    <div class="col-8 py-0 m-0 pr-4 pl-0">
+        <div class="contactPerson px-0 pt-0 pb-4 m-0">
+            <h3>{% if offer.customer.companyName == '' %}{{ offer.customer.sex|trans }} {% endif %} {{ offer.customer.fullName }}</h3>
+            <p style="margin-bottom: 0;margin-top: 6px;">{{ offer.customer.address }}</p>
+            <p style="margin-bottom: 6px;">{{ offer.customer.zip }} {{ offer.customer.city }}</p>
+            <p style="margin-bottom: 0;">
+                <img style="width: 14px;" src="{{ getImgContent(asset('svgs/black/email.png')) }}"> {{ offer.customer.email }}
+            </p>
+{#            <p style="margin-bottom: 2px;">#}
+{#                <img style="width: 14px;" src="{{ getImgContent(asset('svgs/black/phone.png')) }}"> {{ offer.customer.phone }}#}
+{#            </p>#}
+        </div>
+        <p class="mb-2">
+            <strong>{% include appTemplate~'pdf/_salutation.html.twig' with {'customer': offer.customer} %}</strong>
+        </p>
+    </div>
+    <div class="col-4 p-0 m-0" style="padding-left: 12px !important;">
+        <div class="contactPerson contactPerson2 p-0 m-0">
+            {% include appTemplate~'pdf/_company_in_anrede.html.twig' %}
+        </div>
+    </div>
+    <div class="col-12 p-0 m-0">{{ form_widget(form.text, {'attr':{'class':'form-control','style':'min-height: 140px !important;font-size: 16px;'}}) }}
+    </div>
+</div>

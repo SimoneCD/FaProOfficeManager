@@ -1,0 +1,14 @@
+
+{% set headLine = '' %}
+{% if type == 'part' %}
+    {% set headLine = ('w.invoicePart'|trans)~' | '~('w.offer'|trans)~': '~ angebotNr ~'' %}
+{% elseif type == 'part-plus' %}
+    {% set headLine = 'Teilrechnung | '~('w.offer'|trans)~': '~ angebotNr ~'' %}
+{% elseif type == 'rest' %}
+    {% set headLine = ('w.invoiceRest'|trans)~' | '~('w.offer'|trans)~': '~ angebotNr ~'' %}
+{% elseif type == 'individual' %}
+    {% set headLine = 'ZOE '~('w.invoice'|trans) %}
+{% endif %}
+<div class="boxHeadLine w-100">
+    <p>{{ headLine }}</p>
+</div>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% macro checkNumber(offer) %}
+    {% include 'offer/montage/intern/pdf/_checkNumber.html.twig' %}
+{% endmacro %}
+{% macro header(sf, offer, count, pdf) %}
+    {% include 'offer/montage/intern/pdf/_header.html.twig' %}
+{% endmacro %}
+{% set yes = offer.context is defined and offer.context.protocol is defined %}
+{% set ocp = yes ? offer.context.protocol : null %}
+<html lang="de">
+    <head>
+        <meta charset="utf-8" />
+        <title>{{ 'w.offer'|trans }}</title>
+        <link rel="stylesheet" href="{{ absolute_url(asset('assets/css/normalize.css')) }}"/>
+        <link rel="stylesheet" href="{{ absolute_url(asset('assets/css/foundation.css')) }}"/>
+        {% include 'offer/montage/intern/pdf/_style.html.twig' %}
+        <style>
+            .wrl {
+                position: relative;
+            }
+            .wrl p {
+                padding: 0;
+                margin-top: 12px;
+            }
+            .short-text {
+                margin: 0 auto;
+            }
+            .vertical-text {
+                -webkit-transform: rotate(90deg);
+                /*-webkit-transform-origin: center bottom auto;*/
+                /*margin: 14px auto 0;*/
+            }
+        </style>
+    </head>
+    <body style="background-color: #fff;">
+        <div class="main-box" style="page-break-before: always;">
+            <div class="page" style="margin: 20px 20px 20px 36px;">
+                <img class="logo-zoe" src="{{ absolute_url(asset(appAssetPath~'logo/logo_dark_in.png')) }}">
+                <img class="logo-e" src="{{ absolute_url(asset(appAssetPath~'logo/e-marke.png')) }}">
+                <h1 style="padding-top:30px;display:block;margin-bottom:50px;text-align:center;font-size: 3rem !important;font-weight: bolder">
+                    <br>Anlagenbuch Ihrer<br>elektronischen PV-Anlage
+                </h1>
+                {% include 'offer/montage/intern/checkpage/1/_check_page1_deckblatt.html.twig' %}
+            </div>
+        </div>
+    </body>
+</html>

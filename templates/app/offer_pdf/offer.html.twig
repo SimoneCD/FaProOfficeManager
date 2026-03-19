@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8" />
+    <title>{{ 'w.offer'|trans }}</title>
+    <link rel="stylesheet" href="{{ absolute_url(asset('assets/css/material-dashboard.css')) }}?v=1{{ 'now'|date('u') }}">
+    {% set angebotNr = offer.number %}
+    {% set angebotName = getOfferName(offer.id)|raw %}
+{#    {% if offer.wallboxProduct is not null and offer.wallboxProduct.productType == 'pvt' %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    {% endif %}#}
+    {% if offer.order is not null %}
+        {% set dat = offer.order.createdAt %}
+    {% else %}
+        {% set dat = offer.offerDate %}
+    {% endif %}
+    {% set datum = (dat|date_modify('+1 month')|date('M'))|trans  %}
+    {% set datum = datum ~' '~ dat|date('Y')  %}
+    <link rel="stylesheet" href="{{ absolute_url(asset('assets/css/material-dashboard.css')) }}?v=1{{ 'now'|date('u') }}">
+
+    <style>
+        .row {display: flex;flex-wrap: wrap;margin-right: -15px;margin-left: -15px;clear: left}
+        .reportGraph {width:900px}
+        .col-4 {width: 33%;float: left}
+        .col-41 {width: 33%;float: left}
+        .col-441 {width: 36%;float: left}
+        .col-42 {width: 34%;float: left}
+        .col-442 {width: 31%;float: left}
+        .col-43 {width: 33%;float: left}
+        .col-443 {width: 33%;float: left}
+        .col-6 {width: 50%;float: left}
+        .col-5 {width: 41.5%;float: left}
+        .col-7 {width: 58%;float: left}
+        .col-2 {width: 17%;float: left}
+        .col-8 {width: 67%;float: left}
+        .col-3 {width: 25%;float: left}
+        .col-9 {width: 75%;float: left}
+        .col-12 {width: 100%;clear: left}
+        /* devanagari */
+         body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, * {
+             font-family: Mont, Arial, normal, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" ;
+             font-size: 14px;
+         }
+        strong {
+            font-weight: bold;
+        }
+        p {
+            font-size: 14px;
+            line-height: 1.5em;
+            font-weight: 100 !important;
+        }
+.row{margin: 0}
+        .main-box {
+            width: 21cm !important;
+            min-height: 29.7cm !important;
+            height: 29.72cm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .headBoxData div:first-child {
+            font-size: 12px !important;
+        }
+</style>
+    {% include appTemplate~'offer_pdf/_styles.html.twig' %}
+</head>
+{% set total = 0 %}
+<body>
+    {% include appTemplate~'offer_pdf/_wrap_offer.html.twig' %}
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;" lang="{{ app.request.locale ?? 'de' }}">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <meta name="keywords" content="Angebote Solaranlagen PV-Anlagen">
+    <meta name="description" content="">
+    <title>{% block title %}{{ sf.name }}{% endblock %}</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('favicon/site.webmanifest') }}">
+    <link rel="mask-icon" href="{{ asset('favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
+    {% block stylesheets %}
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('app/bootstrap-4.0.0/dist/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('app/customer_css/page.css') }}?p=00" media="screen">
+        <link rel="stylesheet" href="{{ asset('app/customer_css/app.css') }}?p=21" media="screen">
+        <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+        <link id="u-page-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:200,300,400,500,600,700">
+        <style>
+            .logo {
+                max-width: 70% !important;
+            }
+        </style>
+    {% endblock %}
+    {% block javascripts %}
+        <script class="u-script" type="text/javascript" src="{{ asset('app/js/jquery3.6.0.js') }}" defer=""></script>
+{#        <script src="{{ asset('app/bootstrap-4.0.0/dist/js/bootstrap.min.js') }}"></script>#}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js"></script>
+        {{ encore_entry_script_tags('app') }}
+{#        <script class="u-script" type="text/javascript" src="{{ asset('app/customer_js/page.js') }}?p=61" defer=""></script>#}
+
+        <script>
+            {% if user is defined and user is null %}
+            $(document).ready(function () {
+                window.location.reload();
+            });
+            {% endif %}
+        </script>
+    {% endblock %}
+</head>
+<body class="u-body u-xl-mode" data-lang="de">
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% set is_customer = is_granted('ROLE_CUSTOMER') %}
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% if user is defined and user is not null and currentRoute != 'login_password' %}
+    <a style="position: absolute;border-radius:50%;top: 20px;right: 20px;margin: 0;padding: 4px 4px 0;z-index: 3;font-size: 12px" class="u-active-palette-2-light-1 u-border-none u-btn u-btn-submit u-button-style u-hover-palette-2-light-1 u-palette-2-base u-btn-3" title="Logout" href="{{ path('security_logout') }}"><span class="material-icons" style="color: #fff">remove_circle_outline</span></a>
+    <section data-controler="customer" class="u-align-center u-clearfix u-grey-5 u-section-1" id="carousel_d20d">
+        <img width="300px" style="max-width:25%; /*position: absolute;top: 1%;right: 4%;*/" src="{{ asset(appAssetPath~'logo/logo_dark_in.png') }}">
+        <h5 class="u-text u-text-1">Kundennummer: {{ constant('App\\Entity\\Customer::CUSTOMER_START')+(user.id) }}</h5>
+        <h2 class="u-custom-font u-font-oswald u-text u-text-2" style="margin-top: 20px; margin-bottom: 2px">Ihr&nbsp;Angebotsstatus</h2>
+        <div class="u-clearfix u-gutter-60 u-layout-wrap u-layout-wrap-1" style="margin: 0 auto">
+            <p class="u-text u-text-0"> {{ include(appTemplate~'pdf/_salutation.html.twig', {'customer':user}) }} vielen
+                Dank, dass Sie sich für uns entschieden haben. Wir freuen uns darauf, Sie bei jedem Schritt auf Ihrer
+                Reise zu einer saubereren und nachhaltigeren Energiezukunft zu begleiten.
+            </p>
+{% endif %}
+
+{% block body %}{% endblock %}
+
+{% if user is defined %}
+    </div>
+</section>
+{% endif %}
+<section class="u-clearfix u-section-2" id="sec-cfaa">
+    <div class="u-clearfix u-sheet u-sheet-1"></div>
+</section>
+
+</body>
+</html>

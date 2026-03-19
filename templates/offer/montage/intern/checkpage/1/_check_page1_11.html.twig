@@ -1,0 +1,72 @@
+
+
+<table style="margin-top: 5px">
+    <tr>
+        <td colspan="4"><h3>PV-Module</h3></td>
+    </tr>
+    <tr>
+        <td style="width: 25%"><p>ModuleHersteller:</p>
+            <p>PV-Modulleistung:</p>
+            <p>Kurzschlussstrom Isc (A):</p>
+            <p>Leerlaufspannung Uoc (V):</p>
+        </td>
+        <td>
+            <p><input class="check_i" type="text" name="offer_check[anlage][13]" value="{% if yes %}{{ ocp.anlage[13] }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[anlage][14]" value="{% if yes %}{{ ocp.anlage[14] }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[anlage][15]" value="{% if yes %}{{ ocp.anlage[15] }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[anlage][16]" value="{% if yes %}{{ ocp.anlage[16] }}{% endif %}"></p>
+        </td>
+        <td style="width: 25%"><p>Modultyp:</p>
+            <p>Modulanzahl:</p>
+            <p>MPP-Strom (A):</p>
+            <p>MPP-Spannung (V):</p></td>
+        <td>
+            <p><input class="check_i" type="text" name="offer_check[anlage][17]"
+                      value="{% if yes %}{{ ocp.anlage[17] }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[anlage][18]"
+                      value="{% if yes %}{{ ocp.anlage[18] }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[anlage][19]"
+                      value="{% if yes %}{{ ocp.anlage[19] }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[anlage][20]"
+                      value="{% if yes %}{{ ocp.anlage[20] }}{% endif %}"></p>
+        </td>
+    </tr>
+</table>
+<table style="margin-top: 5px">
+    <tr>
+        <td colspan="4"><h3>PV-Wechselrichter</h3></td>
+    </tr>
+    <tr>
+        <td><p>Hersteller:</p>
+            <p>Seriennummer:</p>
+            <p>AC-Nennleistung (W):</p>
+            <p>AC-Maximalleistung (W):</p></td>
+        <td>
+            <p><input class="check_i" type="text" name="offer_check[anlage][21]"
+                      value="{% if yes %}{{ ocp.anlage[21] }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[anlage][22]"
+                      value="{% if yes %}{{ ocp.anlage[22] }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[anlage][23]"
+                      value="{% if yes %}{{ ocp.anlage[23] }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[anlage][24]"
+                      value="{% if yes %}{{ ocp.anlage[24] }}{% endif %}"></p>
+        </td>
+        <td><p>Wechselrichtertyp:</p>
+            <p>Wechselrichteranzahl:</p>
+            <p>DC-Maximalleistung (W):</p>
+            <p>Bemerkung</p></td>
+        <td>
+            <p><input class="check_i" type="text" name="offer_check[anlage][25]"
+                      value="{% if yes %}{{ ocp.anlage[25] }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[anlage][26]"
+                      value="{% if yes %}{{ ocp.anlage[26] }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[anlage][27]"
+                      value="{% if yes %}{{ ocp.anlage[27] }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[anlage][28]"
+                      value="{% if yes %}{{ ocp.anlage[28] }}{% endif %}"></p>
+        </td>
+    </tr>
+</table>
+
+
+{% include 'offer/montage/intern/checkpage/_copyrights.html.twig' %}

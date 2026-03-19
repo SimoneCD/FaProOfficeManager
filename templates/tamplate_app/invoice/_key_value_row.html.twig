@@ -1,0 +1,10 @@
+{% if context[key]['name'][i] is defined -%}
+<div class="row m-0 p-0">
+    <p class="col-7 p-0 m-0" style="font-size: 13px;">
+        {{ context[key]['name'][i] }}
+    </p>
+    <p class="col-5 p-0 m-0" style="font-size: 13px;">
+        {{ context[key]['text'][i] }}
+    </p>
+</div>
+{% endif %}

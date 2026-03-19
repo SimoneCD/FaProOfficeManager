@@ -1,0 +1,28 @@
+{#<h3 id="mail-pre-title" style="padding-top: 0; padding-bottom: 0; font-weight: 500; vertical-align: baseline; font-size: 1.2rem; line-height: 1.2; letter-spacing: 3px; color: {{ sfColor }}; margin: 0;" align="left">{{ getOfferName(offer.id,false,true) }}</h3>#}
+{#<h1 id="mail-title" style="padding-top: 0; padding-bottom: 0; font-weight: 500; vertical-align: baseline; font-size: 1.9rem; line-height: 120%; color: #393939; margin: 0;" align="left">{{ 'w.offer'|trans }}: {{ offer.number }}</h1>#}
+{% include appTemplate~'mail/_h2.html.twig' with {'customer': offer.customer} %}
+<p id="mail-message" style="line-height: 24px; font-size: 16px; width: 100%; margin: 0;" align="left">
+    {% if offer.status in ['besichtigung','estimate'] %}
+        {%- if offer.option is not null and offer.option.context is not null and offer.option.context['estimateEmailText'] is defined -%}
+            {{ offer.option.context['estimateEmailText']|raw}}
+        {%- else -%}
+            {{ offer.subCategory.estimateMailText|replace({
+                '##name##':sf.name,
+                '##offerName##':angebotName,
+                '##offerNumber##':offer.getNumber,
+                '##angebotsName##':angebotName,
+            })|raw }}
+        {%- endif -%}
+    {% else %}
+        {%- if offer.option is not null and offer.option.context is not null and offer.option.context['offerEmailText'] is defined -%}
+            {{ offer.option.context['offerEmailText']|raw}}
+        {%- else -%}
+            {{ offer.subCategory.mailText|replace({
+                '##name##':sf.name,
+                '##offerName##':angebotName,
+                '##offerNumber##':offer.getNumber,
+                '##angebotsName##':angebotName,
+            })|raw }}
+        {%- endif -%}
+    {% endif %}
+</p>

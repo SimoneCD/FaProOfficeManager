@@ -1,0 +1,18 @@
+{{ restore('vdeData') }}
+{% set vdeData = {
+    'pv_first': [
+        {'title':'Prüfbericht - Erstprüfung ortsfester elektrischer Anlagen', 'vde': 'gemäß DIN VDE 0100-600'},
+        {'title':'Prüfbericht - Sicherheit/Besichtigen/Erproben elektrischer Anlagen/Betriebsmittel', 'vde': 'gemäß DIN VDE 0100-600 (IEC 60364-6)','vde2':'<small>(Ok = in Ordnung, n.Ok = nicht in Ordnung, k.A = Nicht geprüft/keine Angaben)</small>'},
+        {'title':'Prüfbericht - Messen(1/2)', 'vde': 'gemäß DIN VDE 0100-600'},
+        {'title':'Prüfbericht - Messen(2/2)', 'vde': 'gemäß DIN VDE 0100-600'},
+        {'title':'Prüfbericht - Übergabebericht/Dokumentation', 'vde': 'gemäß DIN VDE 0100-600','vde2':'<small>(Ok = in Ordnung, n.Ok = nicht in Ordnung, k.A = Nicht geprüft/keine Angaben)</small>'},
+        {'page':'help', 'title':'Prüfbericht - Erläuterungen', 'vde': 'gemäß DIN VDE 0100-600'}
+    ],
+    'em_first': [],
+    'pv_recurring': [],
+    'pv_repair': [],
+    'pv_deck': [
+        {'title':'Deckblatt - Prüfbericht ortsfester elektrischer Anlagen', 'vde': ''},
+    ],
+} %}
+{{ save('vdeData') }}

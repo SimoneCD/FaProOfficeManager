@@ -1,0 +1,9 @@
+{% for offer in offers %}
+    {% if is_granted('ROLE_EMPLOYEE_EXTERN') or is_granted('POST_EDIT', offer) %}
+        {% if (offer.status == block or block == 'customer') and offer.status == 'archive' %}
+            <div class="col-4 customer_block" style="display: flex">
+                {% include 'offer/_offer_block.html.twig' with {'offer': offer, 'users':users} %}
+            </div>
+        {% endif %}
+    {% endif %}
+{% endfor %}

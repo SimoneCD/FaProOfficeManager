@@ -1,0 +1,35 @@
+<tr class="group_question_{{ k }}">
+    <td class="text-center"><input style="margin-left: 0;" type="checkbox" {% if dataNull %}data-null="true" {% endif %}data-key="{{ k }}" value="{{ question.id }}" name="offer_sub_category_group[questionAreas][{{ k }}][questions][]" class="question_check form-check-input"></td>
+    <td class="text-center" style="font-size: smaller">{{ question.sort }}</td>
+    <td style="font-size: smaller">
+        {% if question.answerType in ['radio','radio-plus','checkbox','number','select','hauptproduct','productselect'] %}
+            <a href="{{ path('backend_answers_index', {'question': question.id}) }}">{{ question.name }}</a>
+        {% else %}
+            {{ question.name }}
+        {% endif %}
+    </td>
+    <td>{% if question.view  %}<img src="{{ asset('app/images/ok.svg') }}">{% else %}<img src="{{ asset('app/images/eq.svg') }}">{% endif %}</td>
+    <td>{% if question.needImage %}<span class="material-icons">photo_camera</span>{% endif %}</td>
+    <td><p data-toggle="tooltip" data-placement="top" title="Tooltip on top"></p>{{ question.offerAnswers|length ? question.offerAnswers|length : '' }}</td>
+    <td class="px-0 small">
+        {% if question.answerType in ['radio', 'checkbox'] %}
+            <input type="{{ question.answerType }}"> {{ constant('App\\Entity\\OfferQuestion::ANSWER_HTML_TYPES_FORM')[question.answerType]|trans }}
+        {% elseif question.answerType in ['radio-plus'] %}
+            <input type="radio"><input type="{{ question.answerType }}" style="width: 40px;"> {{ constant('App\\Entity\\OfferQuestion::ANSWER_HTML_TYPES_FORM')[question.answerType]|trans }} +T
+        {% elseif question.answerType in ['number'] %}
+            <input type="{{ question.answerType }}" step="any" value="{{ constant('App\\Entity\\OfferQuestion::ANSWER_HTML_TYPES_FORM')[question.answerType]|trans }}">
+        {% elseif question.answerType in ['textarea'] %}
+            <textarea style="min-height: 10px !important;max-height: 23px !important;height: 23px ">{{ constant('App\\Entity\\OfferQuestion::ANSWER_HTML_TYPES_FORM')[question.answerType]|trans }}</textarea>
+        {% elseif question.answerType in ['select'] %}
+            <select><option>{{ constant('App\\Entity\\OfferQuestion::ANSWER_HTML_TYPES_FORM')[question.answerType]|trans }}</option></select>
+        {% else %}
+            {{ constant('App\\Entity\\OfferQuestion::ANSWER_HTML_TYPES_FORM')[question.answerType]|trans }}
+        {% endif %}
+    </td>
+    <td>
+        {{ question.protocol|replace({'p':'m.protocoll'|trans,'q':'m.montage.questionnaire'|trans,'fq': ''|trans}) }}
+    </td>
+    <td>
+        <a href="{{ path('backend_question_edit', {'questionnaire': question.subCategory.id, 'id': question.id}) }}"><i class="material-symbols-outlined">edit</i></a>
+    </td>
+</tr>

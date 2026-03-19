@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+{% macro checkNumber(offer) %}
+    {% include 'offer/montage/intern/pdf/_aufmassCheckNumber.html.twig' %}
+{% endmacro %}
+{% macro header(sf, offer, count) %}
+    {% include 'offer/montage/intern/pdf/_aufmassHeader.html.twig' %}
+{% endmacro %}
+{% set yes = offer.context is defined and offer.context.protocol is defined %}
+{% set ocp = yes ? offer.context.protocol : null %}
+<html lang="de">
+    <head>
+        <meta charset="utf-8" />
+        <title>{{ 'w.offer'|trans }}</title>
+{#        <link rel="stylesheet" href="{{ absolute_url(asset('assets/css/material-dashboard.css')) }}">#}
+        <link rel="stylesheet" href="{{ absolute_url(asset('assets/css/normalize.css')) }}"/>
+        <link rel="stylesheet" href="{{ absolute_url(asset('assets/css/foundation.css')) }}"/>
+        {% include 'offer/montage/intern/pdf/_style.html.twig' %}
+        <style>
+            .page {border: none}
+            /*.page{display:inline-block;overflow:visible;height:1124px;width:790px;margin:0;padding:10px 20px 10px 30px;page-break-inside:avoid;}*/
+            .main-box {
+                width: 21cm !important;
+                min-height: 29.7cm !important;
+                height: 29.72cm !important;
+                margin: 0 !important;
+            }
+        </style>
+    </head>
+    <body style="background-color: #fff;">
+        {% if offer is defined and offer.subCategory is not null and offer.subCategory.questionAreas|length %}
+            {% set viewedQuestions = [] %}
+            {{ save('viewedQuestions') }}
+            {% set appAnswerChecked = [] %}
+            {{ save('appAnswerChecked') }}
+            {% set vc = 9 %}
+            {% set headerViewCount = 0 %}
+            {% set i = 1 %}
+            <div class="main-box" style="page-break-before: always;">
+                <div class="page" style="margin: 20px 20px 20px 36px;">
+
+                    {{ _self.checkNumber(offer) }}
+                    <h2 style="margin-top: -30px;margin-bottom: 0">Aufmassprotokoll</h2>
+                    <p style="margin-top: 0;"><strong>Installierte Anlage:</strong> {{ getOfferName(offer.id) }}</p>
+                    {{ _self.header(sf, offer, 1) }}
+                    <table style="border: none;padding: 0;margin: 0">
+                        {% for area in offer.subCategory.questionAreas|sort((a,b) => a.sort <=> b.sort) %}
+
+                            <tr>
+                            <td style="position: relative">{% set headerView = false %}
+                            {% for question in area.questions|sort((a,b) => a.sort <=> b.sort) %}
+                                {% if question.protocol != 'q' and (question.view == true or question.id in appAnswerChecked) %}
+                                    {% set headerView = true %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if headerView == true %}
+                                {% set headerViewCount = headerViewCount+1 %}
+                                <table style="border: none">
+                                    <tr>
+                                        <td>
+                                            <h4 id="area_{{ area.id }}" class="mt-4 mb-0 pl-2" style="font-size:14px !important;">{{ area.name }}</h4>
+                                        </td>
+                                    </tr>
+                                </table>
+                                {% set imagesCount = 0 %}
+                                {% set viewedQuestions = [] %}
+                                {{ save('viewedQuestions') }}
+
+                                {% for question in area.questions|sort((a,b) => a.sort <=> b.sort) %}
+                                    {% if question.view == true or question.id in appAnswerChecked %}
+                                        {{ save('imagesCount') }}
+                                        {% include 'offer/montage/components/_aufmass_table.html.twig' with {'quetion':question} %}
+                                        {{ restore('imagesCount') }}
+                                    {% endif %}
+                                    {{ restore('appAnswerChecked') }}
+                                {% endfor %}
+
+                                {% if headerViewCount > 1 and headerViewCount % 3 == 0 %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="main-box" style="page-break-before: always;">
+                <div class="page" style="margin: 20px 20px 20px 36px;">
+
+                    {{ _self.checkNumber(offer) }}
+                    <h2 style="margin-top: -30px;margin-bottom: 0">Aufmassprotokoll</h2>
+                    <p style="margin-top: 0;"><strong>Installierte Anlage:</strong> {{ getOfferName(offer.id) }}</p>
+                    {{ _self.header(sf, offer, 1) }}
+
+                    <table style="border: none;padding: 0;margin: 0">
+                        <tr>
+                            <td style="position: relative">
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </body>
+</html>

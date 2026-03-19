@@ -1,0 +1,193 @@
+<script>
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     jQuery.datetimepicker.setLocale('de');
+    //     let vars = {
+    //         toolbarCanCollapse: true,
+    //         toolbarStartupExpanded: false,
+    //         scayt_autoStartup:true,
+    //         scayt_sLang:'de_DE',
+    //         modal: true,
+    //         autoOpen: false,
+    //         language: 'de',
+    //         uiColor: '#ffffff',
+    //         toolbarGroups: [
+    //             { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+    //             { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+    //             { name: 'links', groups: [ 'links' ] },
+    //             { name: 'insert', groups: [ 'insert' ] },
+    //             { name: 'forms', groups: [ 'forms' ] },
+    //             { name: 'tools', groups: [ 'tools' ] },
+    //             { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+    //             { name: 'others', groups: [ 'others' ] },
+    //             '/',
+    //             { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+    //             { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+    //             { name: 'styles', groups: [ 'styles' ] },
+    //             { name: 'colors', groups: [ 'colors' ] },
+    //             { name: 'about', groups: [ 'about' ] }
+    //         ],
+    //         removeButtons: 'Subscript,Superscript,Copy,Image,Paste,PasteText,PasteFromWord,Cut,Maximize,About'
+    //     };
+    //     if ($('#invoice_mail_text')) {
+    //         CKEDITOR.replace('invoice_mail_text', vars);
+    //     }
+    //     if ($('#invoice_part_mail_text')) {
+    //         CKEDITOR.replace('invoice_part_mail_text', vars);
+    //     }
+    //     if ($('#invoice_final_mail_text')) {
+    //         CKEDITOR.replace('invoice_final_mail_text', vars);
+    //     }
+    //     CKEDITOR.replace('invoice_text', vars);
+    //     // jQuery('#invoice_leistungsdatum').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+    //     jQuery('#invoice_pos0Date').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+    //     jQuery('#invoice_pos1Date').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+    //     jQuery('#invoice_pos2Date').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+    //     $(document).on('change','#invoice_pos0Price, #invoice_pos1Price, #invoice_pos2Price, #invoice_pos3Price', function () {
+    //         let price = 0;
+    //         let price0 = parseFloat(($('.price0').val()).replace(',','.'));
+    //         let price1 = parseFloat(($('.price1').val()).replace(',','.'));
+    //         let price2 = parseFloat(($('.price2').val()).replace(',','.'));
+    //         let price3 = parseFloat(0);
+    //         if ($('.price3').length) {
+    //              price3 = parseFloat(($('.price3').val()).replace(',','.'));
+    //         }
+    //
+    //         price = price0;
+    //         if (price1 !== 0) {
+    //             price = price+price1;
+    //         }
+    //         if (price2 !== 0) {
+    //             price = price+price2;
+    //         }
+    //         if (price3 !== 0) {
+    //             price = price+price3;
+    //         }
+    //
+    //         let t = 19*price/100;
+    //         let netto = (new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(price))
+    //         let tax = (new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(t))
+    //         let brutto = (new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(t+price))
+    //
+    //         $('#calc_netto').html(netto.fixed(2));
+    //         $('#calc_tax').html(tax.fixed(2));
+    //         $('#calc_brutto').html(brutto.fixed(2));
+    //
+    //         let v = 0;
+    //         $('#calc_brutto_all').html((new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(t+price-v)));
+    //
+    //     })
+    // });
+    // function addCommas(nStr)
+    // {
+    //     nStr += '';
+    //     x = nStr.split('.');
+    //     x1 = x[0];
+    //     x2 = x.length > 1 ? '.' + (x[1]).substr(0,2) : '';
+    //     var rgx = /(\d+)(\d{3})/;
+    //     while (rgx.test(x1)) {
+    //         x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    //     }
+    //     return x1 + x2;
+    // }
+
+        // document.addEventListener('tzrbo:load', () => {
+        document.addEventListener('DOMContentLoaded', function() {
+            jQuery.datetimepicker.setLocale('de');
+            let vars = {
+                toolbarCanCollapse: true,
+                toolbarStartupExpanded: false,
+                scayt_autoStartup:true,
+                scayt_sLang:'de_DE',
+                modal: true,
+                autoOpen: false,
+                language: 'de',
+                uiColor: '#ffffff',
+                toolbarGroups: [
+                    { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+                    { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+                    { name: 'links', groups: [ 'links' ] },
+                    { name: 'insert', groups: [ 'insert' ] },
+                    { name: 'forms', groups: [ 'forms' ] },
+                    { name: 'tools', groups: [ 'tools' ] },
+                    { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+                    { name: 'others', groups: [ 'others' ] },
+                    '/',
+                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                    { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+                    { name: 'styles', groups: [ 'styles' ] },
+                    { name: 'colors', groups: [ 'colors' ] },
+                    { name: 'about', groups: [ 'about' ] }
+                ],
+                removeButtons: 'Subscript,Superscript,Copy,Image,Paste,PasteText,PasteFromWord,Cut,Maximize,About'
+            };
+            if ($('#invoice_mail_text').length) {
+                CKEDITOR.replace('invoice_mail_text', vars);
+            }
+            if ($('#invoice_part_mail_text').length) {
+                CKEDITOR.replace('invoice_part_mail_text', vars);
+            }
+
+            if ($('#invoice_final_mail_text').length) {
+                CKEDITOR.replace('invoice_final_mail_text', vars);
+            }
+            if ($('#invoice_text').length) {
+                CKEDITOR.replace('invoice_text', vars);
+                jQuery('#invoice_leistungsdatum').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+                jQuery('#invoice_pos0Date').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+                jQuery('#invoice_pos1Date').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+                jQuery('#invoice_pos2Date').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+                jQuery('#invoice_pos3Date').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+            }else {
+                CKEDITOR.replace('invoice_individual_text', vars);
+                jQuery('#invoice_individual_leistungsdatum').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+                jQuery('#invoice_individual_pos0Date').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+                jQuery('#invoice_individual_pos1Date').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+                jQuery('#invoice_individual_pos2Date').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+                jQuery('#invoice_individual_pos3Date').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+            }
+
+
+            $(document).on('change','.changeTax, .posPrice', function () {
+                let valTax = $('.changeTax').val();
+                {% if invoice.id %}
+                if ($(this).hasClass('changeTax')) {
+                    $.ajax('{{ path('ajax_update_invoice_context',{'id':invoice.id}) }}', {
+                        method: 'POST',
+                        data: {'invoice_option':{'context':{'solar': valTax}}},
+                        success(xr) {
+                            $('#apptax').val(valTax);
+                        },
+                    });
+                }
+                {% endif %}
+                let price = 0;
+                $('.posPrice').each(function (index) {
+                    price += $(this).val() ? parseFloat(($(this).val()).replace(',','.')) : 0;
+                })
+                let t = parseFloat(valTax)*price/100;
+{#                {% if (invoice.context and invoice.context['solar'] is defined) %}#}
+{#                t = {{ invoice.context['solar'] }};#}
+{#                {% endif %}#}
+                let netto = (new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(price))
+                let tax = (new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(t))
+                let brutto = (new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(t+price))
+
+                $('#calc_netto').html(netto.fixed(2));
+                $('#calc_tax').html(tax.fixed(2));
+                $('#calc_brutto').html(brutto.fixed(2));
+                $('#calc_brutto_all').html((new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(t+price)));
+            })
+        });
+        function addCommas(nStr)
+    {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + (x[1]).substr(0,2) : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+        return x1 + x2;
+    }
+</script>

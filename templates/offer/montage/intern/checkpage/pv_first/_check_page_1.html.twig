@@ -1,0 +1,382 @@
+
+<table class="mt5 bcf">
+    <tr>
+        <td style="width: 100px;"><h2>Anlage<sup class="numberCircle">5</sup></h2></td>
+        <td>
+{#            <p><input class="check_i" type="text" name="pv_first[app][1111]" value="{% if yes %}{{ ocp.app[1111] }}{% endif %}"></p>#}
+            <p><input class="check_i" type="text" name="pv_first[app][1]" value="{% if yes %}{{ ocp.app[1] }}{% else %}{% if offer.wallboxProduct %}{{ getOfferName(offer.id) }}{% endif %}{% endif %}"></p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <table class="innerTable">
+                <tr>
+                    <td>
+                        <p class="inline-block"><input class="check_i" type="radio" name="pv_first[app][dach][2]" {% if yes and ocp.app.dach[2] is defined and ocp.app.dach[2] == 1 %}checked{% endif %} value="1"></p>
+                        <p class="inline-block">Schrägdach</p>
+                    </td>
+                    <td>
+                        <p class="inline-block"><input class="check_i" type="radio" name="pv_first[app][dach][2]" {% if yes and ocp.app.dach[2] is defined and ocp.app.dach[2] == 3 %}checked{% endif %} value="3"></p>
+                        <p class="inline-block">Dachintegration</p>
+                    </td>
+                    <td>
+                        <p class="inline-block"><input class="check_i" type="radio" name="pv_first[app][dach][2]" {% if yes and ocp.app.dach[2] is defined and ocp.app.dach[2] is defined and ocp.app.dach[2] == 5 %}checked{% endif %} value="5"></p>
+                        <p class="inline-block">Freistehend</p>
+                    </td>
+                    <td>
+                        <p class="inline-block"><input class="check_i" type="radio" name="pv_first[app][dach][insel]" {% if yes and ocp.app.dach.insel is defined and ocp.app.dach.insel == 1 %}checked{% endif %} value="1"></p>
+                        <p class="inline-block">Inselanlage</p>
+                    </td>
+                    <td style="text-align: left">
+                        <p>Neigung:</p>
+                    </td>
+                    <td>
+                        <p><input class="check_i" type="text" name="pv_first[app][dach][neigung]" value="{% if yes and ocp.app.dach.neigung is defined %}{{ ocp.app.dach.neigung }}{% endif %}"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="inline-block"><input class="check_i" type="radio" name="pv_first[app][dach][2]" {% if yes and ocp.app.dach[2] is defined and ocp.app.dach[2] == 2 %}checked{% endif %} value="2"></p>
+                        <p class="inline-block">Flachdach</p>
+                    </td>
+                    <td>
+                        <p class="inline-block"><input class="check_i" type="radio" name="pv_first[app][dach][2]" {% if yes and ocp.app.dach[2] is defined and ocp.app.dach[2] == 4 %}checked{% endif %} value="4"></p>
+                        <p class="inline-block">Fasade</p></td>
+                    <td>
+                        <p class="inline-block"><input class="check_i" type="radio" name="pv_first[app][dach][2]" {% if yes and ocp.app.dach[2] is defined and ocp.app.dach[2] == 5 %}checked{% endif %} value="5"></p>
+                        <p class="inline-block" style="width: 90%"><input class="check_i" type="text" name="pv_first[app][dach][so2]" value="{% if yes and ocp.app.dach.so2 is defined %}{{ ocp.app.dach.so2 }}{% else %}{% endif %}"></p>
+                    </td>
+                    <td><p class="inline-block"><input class="check_i" type="radio" name="pv_first[app][dach][insel]" {% if yes and ocp.app.dach.insel is defined and ocp.app.dach.insel == 2 %}checked{% endif %} value="2"></p>
+                        <p class="inline-block">Netzverbund</p>
+                    </td>
+                    <td style="text-align: left"><p>Ausrichtung:</p></td>
+                    <td>
+                        <p><input class="check_i" type="text" name="pv_first[app][dach][ausr]" value="{% if yes and ocp.app.dach.ausr is defined %}{{ ocp.app.dach.ausr }}{% else %}{% endif %}"></p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <table class="innerTable">
+                <tr>
+                    <td style="width: 100px;"><h3>Straße/Nr.:</h3>
+                        <h3>PLZ Ort:</h3>
+                    </td>
+                    <td style="width: 290px;">
+                        <p><input class="check_i" type="text" name="pv_first[app][address]"
+                                  value="{% if yes and ocp.app.address is defined %}{{ ocp.app.address }}{% else %}{{ offer.stationAddress }}{% endif %}"></p>
+                        <p><input class="check_i" type="text" name="pv_first[app][zip]"
+                                  value="{% if yes and ocp.app.zip is defined %}{{ ocp.app.zip }}{% else %}{{ offer.stationZip }}{% endif %}"></p>
+                    </td>
+                    <td style="width: 170px;text-align: right;">
+                        <h3>Gebäudeart:</h3>
+                        <p>Bemerkung:</p>
+                    </td>
+                    <td>
+                        <p>
+                            {% if pdf is defined %}
+                                <input class="check_i" type="text" name="pv_first[app][zip]"
+                                       value="{% if yes and ocp.app[11] is defined %}{{ ocp.app[11] }}{% else %}{% endif %}">
+                            {% else %}
+                                <select style="border: none;border-bottom: 1px solid lightgrey" class="check_i" name="pv_first[app][11]">
+                                    <option value="" {% if yes == false or (yes and ocp.app[11] is defined and ocp.app[11] == '') %}selected{% endif %}></option>
+                                    <option value="Einfamilinhaus" {% if yes and ocp.app[11] is defined and ocp.app[11] == 'Einfamilinhaus' %}selected{% endif %}>Einfamilinhaus</option>
+                                    <option value="Gewerbe" {% if yes and ocp.app[11] is defined and ocp.app[11] == 'Gewerbe' %}selected{% endif %}>Gewerbe</option>
+                                    <option value="Öffentliche Institution" {% if yes and ocp.app[11] is defined and ocp.app[11] == 'Öffentliche Institution' %}selected{% endif %}>Öffentliche Institution</option>
+                                </select>
+                            {% endif %}
+                        </p>
+                        <p><input class="check_i" type="text" name="pv_first[app][12]" value="{% if yes and ocp.app[12] is defined %}{{ ocp.app[12] }}{% endif %}"></p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 200px;"><h3>Wechselrichterkonzept<br><small>anz. Module/Wechselrichter</small></h3></td>
+        <td>
+            <p><input class="check_i" type="text" name="pv_first[app][zm]" value="{% if yes and ocp.app.zm is defined %}{{ ocp.app.zm }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="pv_first[app][zm2]" value="{% if yes and ocp.app.zm2 is defined %}{{ ocp.app.zm2 }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="pv_first[app][zm3]" value="{% if yes and ocp.app.zm3 is defined %}{{ ocp.app.zm3 }}{% endif %}"></p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <table class="innerTable">
+                <tr>
+                    <td style="width: 170px;"><p>Installierte <strong>Anlagen-Leistung</strong>:</p></td>
+                    <td style="width: 15%">
+                        <p><input class="check_i" type="text" name="pv_first[app][2]" value="{% if yes %}{{ ocp.app[2] }}{% endif %}"></p>
+                    </td>
+                    <td style="width: 10px">
+                        <p>kWp, </p>
+                    </td>
+
+                    <td style="width: 34%"><p>Prognostizierter <strong>Anlagenertrag</strong> pro Jahr:</p></td>
+                    <td><p><input class="check_i" type="text" name="pv_first[app][3]" value="{% if yes %}{{ ocp.app[3] }}{% endif %}"></p></td>
+                    <td style="width: 10px">
+                        <p>kWp</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <table class="innerTable">
+                <tr>
+                    <td style="width: 34%">
+                        <table style="margin:0;border: none">
+                            <tr>
+                                <td><p>Netz(DIN&nbsp;IEC&nbsp;38):</p></td>
+                                <td><input class="check_i" type="text" name="pv_first[app][3]" value="{% if yes %}{{ ocp.app[3] }}{% endif %}"></td>
+                                <td style="width: 6px">V</td>
+                                <td style="width: 30px"><input style="width: 30px" class="check_i" type="text" name="pv_first[app][31]"
+                                                               value="{% if yes %}{{ ocp.app[31] }}{% endif %}">
+                                </td>
+                                <td style="width: 10px">Hz</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table style="margin:0;border: none;width: 100%">
+                            <tr>
+                                <td>Netzsystem(VDE&nbsp;0100-100):</td>
+                                <td>
+                                    {% if pdf is defined and pdf %}
+                                        <input style="width: 30px" class="check_i" type="text" name="pv_first[app][sel1]"
+                                               value="{% if yes and ocp.app.sel1 is defined %}{{ ocp.app.sel1 }}{% endif %}">
+                                    {% else %}
+                                    <select style="border: none;border-bottom: 1px solid lightgrey" class="check_i" name="pv_first[app][sel1]">
+                                        <option value="10"{% if yes == false or (yes and ocp.app.sel1 == 10) %}{ selected{% endif %}></option>
+                                        <option value="TN-C"{% if yes and ocp.app.sel1 is defined and ocp.app.sel1 == 1 %}{ selected{% endif %}>TN-C</option>
+                                        <option value="TN-S"{% if yes and ocp.app.sel1 is defined and ocp.app.sel1 == 2 %}{ selected{% endif %}>TN-S</option>
+                                        <option value="TN-C-S"{% if yes and ocp.app.sel1 is defined and ocp.app.sel1 == 3 %}{ selected{% endif %}>TN-C-S</option>
+                                        <option value="TT"{% if yes and ocp.app.sel1 is defined and ocp.app.sel1 == 4 %}{ selected{% endif %}>TT</option>
+                                        <option value="IT"{% if yes and ocp.app.sel1 is defined and ocp.app.sel1 == 5 %}{ selected{% endif %}>IT</option>
+                                    </select>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="innerTable">
+                            <tr>
+                                <td>Netzbetreiber:</td>
+                                <td><p><input class="check_i" type="text" name="pv_first[app][4]" value="{% if yes and ocp.app[4] is defined %}{{ ocp.app[4] }}{% endif %}"></p></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <table class="innerTable" style="margin-top: 10px">
+                <tr>
+                    <th><p><strong>Montage Zeitraum:</strong></p></th>
+                    <th>
+                        <p>von <input class="check_i" type="date" name="pv_first[app][8]" value="{% if yes and ocp.app[8] is defined %}{{ ocp.app[8] }}{% endif %}">
+                            bis <input class="check_i" type="date" name="pv_first[app][9]" value="{% if yes and ocp.app[9] is defined %}{{ ocp.app[9] }}{% endif %}">
+                        </p>
+                    </th>
+                    <th><p><strong>Inbetriebnahme Datum:</strong></p></th>
+                    <th><p><input class="check_i" type="date" name="pv_first[app][10]"
+                                  value="{% if yes and ocp.app[10] is defined %}{{ ocp.app[10] }}{% endif %}"></p></th>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<table class="mt5">
+    <tr>
+        <td colspan="2"><h3>Verwendete Messgeräte gemäß</h3></td>
+        <td colspan="6"><p><input class="check_i" type="text" name="pv_first[erproben][mvde]" value="{% if yes and ocp.erproben.mvde is defined %}{{ ocp.erproben.mvde }}{% else %}DIN EN 61010-1 VDE 0411-1{% endif %}"></p></td>
+    </tr>
+    <tr>
+        <td><p>Fabrikat</p></td>
+        <td><p><input style="width: 160px" class="check_i" type="text" name="pv_first[erproben][mvde1]" value="{% if yes and ocp.erproben.mvde1 is defined and ocp.erproben.mvde1 != '' %}{{ ocp.erproben.mvde1 }}{% else %}HT Instruments{% endif %}"></p></td>
+        <td><p>Type</p></td>
+        <td><p><input class="check_i" type="text" name="pv_first[erproben][mvde2]" value="{% if yes and ocp.erproben.mvde2 is defined and ocp.erproben.mvde2 != '' %}{{ ocp.erproben.mvde2 }}{% else %}HT PV Isotest 1500V{% endif %}"></p></td>
+        <td><p>Fabrikat</p></td>
+        <td><p><input style="width: 160px" class="check_i" type="text" name="pv_first[erproben][mvde3]" value="{% if yes and ocp.erproben.mvde3 is defined %}{{ ocp.erproben.mvde3 }}{% endif %}"></p></td>
+        <td><p>Type</p></td>
+        <td><p><input class="check_i" type="text" name="pv_first[erproben][mvde4]" value="{% if yes and ocp.erproben.mvde4 is defined %}{{ ocp.erproben.mvde4 }}{% endif %}"></p></td>
+    </tr>
+    <tr>
+        <td><p>Fabrikat</p></td>
+        <td><p><input class="check_i" type="text" name="pv_first[erproben][mvde5]" value="{% if yes and ocp.erproben.mvde5 is defined and ocp.erproben.mvde5 != '' %}{{ ocp.erproben.mvde5 }}{% else %}Benning{% endif %}"></p></td>
+        <td><p>Type</p></td>
+        <td><p><input class="check_i" type="text" name="pv_first[erproben][mvde6]" value="{% if yes and ocp.erproben.mvde6 is defined and ocp.erproben.mvde6 != '' %}{{ ocp.erproben.mvde6 }}{% else %}IT 105{% endif %}"></p></td>
+        <td><p>Fabrikat</p></td>
+        <td><p><input class="check_i" type="text" name="pv_first[erproben][mvde7]" value="{% if yes and ocp.erproben.mvde7 is defined %}{{ ocp.erproben.mvde7 }}{% endif %}"></p></td>
+        <td><p>Type</p></td>
+        <td><p><input class="check_i" type="text" name="pv_first[erproben][mvde8]" value="{% if yes and ocp.erproben.mvde8 is defined %}{{ ocp.erproben.mvde8 }}{% endif %}"></p></td>
+    </tr>
+</table>
+<table class="mt5">
+    <tr>
+        <td colspan="3"><h2>Information zu den Besichtigungen, Prüfungen und Messungen:</h2></td>
+    </tr>
+    <tr>
+        <td colspan="3">
+            <p>Der verantwortliche Prüfer, der dieses Dokument unterzeichnet, bestätigt, dass die geprüfte elektrische Anlage und ihre fest angeschlossenen Geräte den geltenden VDE-Normen entsprechen.
+                In einem separaten Anhang namens "Kundeninformation" können Teile der Anlage aufgeführt sein, auf die diese Aussage nicht zutrifft, sowie Änderungen, die der Prüfer für notwendig hält, um die Elektrosicherheit zu verbessern und die Gebrauchsfähigkeit zu erhöhen.
+                Die Prüfung der elektrischen Anlage oder Teilanlage wurde vom Prüfer nach bestem Wissen und Gewissen durchgeführt.
+            </p>
+        </td>
+    </tr>
+</table>
+
+<table class="mt5">
+    <tr>
+        <td style="width: 24%"></td>
+        <td style="width: 38%"><h2>DIN VDE 0100-600</h2></td>
+        <td><h2>DIN VDE 0105-100</h2></td>
+    </tr>
+    <tr style="background-color: #f3f3f3;">
+        <td style="background-color: #f3f3f3;width: 24%"><h2>Prüfung nach <sup class="numberCircle">6</sup>: </h2></td>
+        <td style="background-color: #f3f3f3;width: 38%;">
+            <table style="padding:0;margin: 0;border: none">
+                <tr style="background-color: #f3f3f3;">
+                    <td><input class="check_i" type="radio" name="pv_first[app][n1]" {% if (yes and ocp.app.n1 is defined and ocp.app.n1 == 1) or ocp.app.n1 is not defined %}checked{% elseif yes == false %}checked{% endif %} value="1"></td>
+                    <td>Neuanlage</td>
+                    <td><input class="check_i" type="radio" name="pv_first[app][n1]" {% if yes and ocp.app.n1 is defined and ocp.app.n1 == 2 %}checked{% endif %} value="2"></td>
+                    <td>Änderung</td>
+                    <td><input class="check_i" type="radio" name="pv_first[app][n1]" {% if yes and ocp.app.n1 is defined and ocp.app.n1 == 3 %}checked{% endif %} value="3"></td>
+                    <td>Erweiterung</td>
+                </tr>
+            </table>
+        </td>
+        <td style="background-color: #f3f3f3;">
+            <table style="padding:0;margin: 0;border: none">
+                <tr style="background-color: #f3f3f3;">
+                    <td><input class="check_i" type="radio" name="pv_first[app][n1]" {% if yes and ocp.app.n1 is defined and ocp.app.n1 == 4 %}checked{% endif %} value="4"></td>
+                    <td>Wiederholungsprüfung</td>
+                    <td><input class="check_i" type="radio" name="pv_first[app][n1]" {% if yes and ocp.app.n1 is defined and ocp.app.n1 == 5 %}checked{% endif %} value="5"></td>
+                    <td colspan="3">Instandsetzung</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="background-color: #f3f3f3;padding-top: 6px;padding-bottom: 0">
+            <p><input class="check_i" type="checkbox" name="pv_first[app][echeck]" {% if yes and ocp.app.echeck is defined and ocp.app.echeck %}checked{% endif %} value="1">E-CHECK<sup style="font-size:10px;padding: 2px;" class="numberCircleHelp">10</sup></p>
+            <p><input class="check_i" type="checkbox" name="pv_first[app][dguv]" {% if yes and ocp.app.dguv is defined and ocp.app.dguv %}checked{% endif %} value="1">DGUV Vorschrift 3<sup style="padding: 2px;" class="numberCircleHelp">11</sup></p>
+            <p><input class="check_i" type="checkbox" name="pv_first[app][sichv]" {% if yes and ocp.app.sichv is defined and ocp.app.sichv %}checked{% endif %} value="1">BetrSichV.<sup style="padding: 2px;" class="numberCircleHelp">12</sup></p>
+        </td>
+        <td colspan="2">
+            <table class="innerTable">
+                <tr>
+                    <td><h3>Prüfungergebnis:</h3></td>
+                    <td><h3>Prüferbefund:</h3></td>
+                    <td><h3>Prüfplakette:</h3></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p><input class="check_i" type="radio" name="pv_first[app][ok]" {% if yes and ocp.app.ok is defined and ocp.app.ok == 1 %}checked{% endif %} value="1">Bestanden.</p>
+                        <p><input class="check_i" type="radio" name="pv_first[app][ok]" {% if yes and ocp.app.ok is defined and ocp.app.ok == 2 %}checked{% endif %} value="2">Nicht bestanden</p>
+                    </td>
+                    <td>
+                        <p><input class="check_i" type="radio" name="pv_first[app][mm]" {% if yes and ocp.app.mm is defined and ocp.app.mm == 1 %}checked{% endif %} value="1">Keine Mängel festgestellt.</p>
+                        <p><input class="check_i" type="radio" name="pv_first[app][mm]" {% if yes and ocp.app.mm is defined and ocp.app.mm == 2 %}checked{% endif %} value="2">Mängel festgestellt.</p>
+                    </td>
+                    <td>
+                        <p><input class="check_i" type="radio" name="pv_first[app][pp]" {% if yes and ocp.app.pp is defined and ocp.app.pp == 1 %}checked{% endif %} value="1">Ja</p>
+                        <p><input class="check_i" type="radio" name="pv_first[app][pp]" {% if yes and ocp.app.pp is defined and ocp.app.pp == 2 %}checked{% endif %} value="2">Nein</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr class="btTd">
+        <td colspan="3">
+            <p class="inline-block" style="width: 14px"><input class="check_i" type="checkbox" name="pv_first[app][35]" {% if yes and ocp.app[35] is defined and ocp.app[35] %}checked{% endif %} value="1"></p>
+            <p class="inline-block" style="width: 600px">Die Photovoltaikanlage entspricht den anerkannten Regeln der Elektrotechnik</p>
+        </td>
+    </tr>
+</table>
+<table class="mt5">
+    <tr>
+        <td style="width: 90px;"><h3>Bemerkung:</h3></td>
+        <td>
+            <p><input class="check_i" type="text" name="pv_first[bsi][b1]" value="{% if yes and ocp.bsi.bemerkung1 is defined %}{{ ocp.bsi.bemerkung1 }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="pv_first[bsi][b2]" value="{% if yes and ocp.bsi.bemerkung2 is defined %}{{ ocp.bsi.bemerkung2 }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="pv_first[bsi][b3]" value="{% if yes and ocp.bsi.bemerkung3 is defined %}{{ ocp.bsi.bemerkung3 }}{% endif %}"></p>
+            {#            <p><input class="check_i" type="text" name="pv_first[bsi][bemerkung5]" value="{% if yes %}{{ ocp.bsi.bemerkung5 }}{% endif %}"></p>#}
+            {#            <p><input class="check_i" type="text" name="pv_first[bsi][bemerkung6]" value="{% if yes %}{{ ocp.bsi.bemerkung6 }}{% endif %}"></p>#}
+        </td>
+    </tr>
+</table>
+<table class="mt5">
+    <tr>
+        <td><p>Beginn der Prüfung (Uhrzeit):</p></td>
+        <td><p><input class="check_i" type="time" name="pv_first[app][sp]" value="{% if yes and ocp.app.sp is defined %}{{ ocp.app.sp }}{% endif %}"></p></td>
+        <td><p>Ende der Prüfung (Uhrzeit)::</p></td>
+        <td><p><input class="check_i" type="time" name="pv_first[app][ep]" value="{% if yes and ocp.app.ep is defined %}{{ ocp.app.ep }}{% endif %}"></p></td>
+    </tr>
+</table>
+
+<table class="mt5">
+    <tr>
+        <td>
+            <p class="t10">Prüfdatum:</p>
+            <p class="t5">Nächster Prüftermin:</p>
+        </td>
+        <td>
+            <p class="t10"><input class="check_i" type="date" name="pv_first[app][d1]"
+                                                value="{% if yes and ocp.app.d1 %}{{ ocp.app.d1 }}{% else %}{{ 'now'|date('d.m.Y') }}{% endif %}">
+            </p>
+            <p class="t5"><input class="check_i" type="date" name="pv_first[app][d2]"
+                                               value="{% if yes and ocp.app.d2 %}{{ ocp.app.d2 }}{% endif %}"></p>
+        </td>
+        <td><p style="padding-top: 36px">Unterschrift/Prüfer:</p></td>
+        <td style="position: relative">
+            <div id="signature1Text" style="min-width: 200px;min-height: 60px;"></div>
+            {% if pdf is defined %}
+                <p style="border-bottom: 1px solid grey ">
+                    {% if yes and ocp.app.signaturText[1] is defined and ocp.app.signaturText[1] %}<img style="position: absolute;top: 10px;left: 20px;" src="{{ ocp.app.signaturText[1] }}">{% endif %}
+                </p>
+            {% else %}
+                <p>{% if yes and ocp.app.signaturText[1] is defined and ocp.app.signaturText[1] %}<img id="sigImg1" style="position: absolute;top: 10px;left: 20px;" src="{{ ocp.app.signaturText[1] }}">{% endif %}
+                    <input id="signature1" class="check_i" type="hidden" name="pv_first[app][signaturText][1]" value="{% if yes and ocp.app.signaturText[1] is defined and ocp.app.signaturText[1] %}{{ ocp.app.signaturText[1] }}{% endif %}"></p>
+            {% endif %}
+            {% if pdf is defined and pdf %}
+                <img style="position: absolute;bottom: -14px;right: 0px;" src="{{ absolute_url(asset(appAssetPath~'logo/stamp-logo.png')) }}">
+            {% endif %}
+            {% if pdf is not defined %}
+                <button type="button"
+                        style="position: absolute;height: 100%;top: 0;right: 0"
+                        data-id="1"
+                        class="p-0 signatur1_reset btn btn-danger btn-sm"><i class="material-icons">undo</i>
+                </button>{% endif %}
+        </td>
+    </tr>
+</table>
+<table class="mt5">
+    <tr>
+        <td colspan="2" style="width: 70px"><h2>Anlagen:</h2></td>
+    </tr>
+{#    <tr>#}
+{#        <td>#}
+{#            {% for ea in 0..2 %}#}
+{#                {% if vdeData[ea] is defined %}#}
+{#            <p><strong>Blatt {{ (ea+1) }}</strong> {{ vdeData[ea]['title'] }}</p>#}
+{#                {% endif %}#}
+{#            {% endfor %}#}
+{#        </td>#}
+{#        <td>#}
+{#            {% for ee in 3..5 %}#}
+{#                {% if vdeData[ee] is defined %}#}
+{#                    <p><strong>Blatt {{ (ee+1) }}</strong> {{ vdeData[ee]['title'] }}</p>#}
+{#                {% endif %}#}
+{#            {% endfor %}#}
+{#        </td>#}
+{#    </tr>#}
+</table>
+{% include 'offer/montage/intern/checkpage/_copyrights.html.twig' %}

@@ -1,0 +1,580 @@
+
+<table class="mt5">
+    <tr>
+        <td>
+            <h3 class="inline-block">Wetter</h3>
+        </td>
+        <td colspan="3">
+            <p class="inline-block" style="width: 20px;padding-left: 18px;"><input style="width: 100%" class="check_i" type="radio" name="pv_first[mess][3]" {% if yes and ocp.mess[3] is defined and ocp.mess[3] == 1 %}checked{% endif %} value="1"></p>
+            <p class="inline-block" style="width: 90px;padding-left: 12px">Sonnig</p>
+            <p class="inline-block" style="width: 20px;padding-left: 18px;"><input style="width: 100%" class="check_i" type="radio" name="pv_first[mess][3]" {% if yes and ocp.mess[3] is defined and ocp.mess[3] == 2 %}checked{% endif %} value="2"></p>
+            <p class="inline-block" style="width: 150px;padding-left: 12px">Wechselhaft</p>
+            <p class="inline-block" style="width: 20px;"><input style="width: 100%" class="check_i" type="radio" name="pv_first[mess][3]" {% if yes and ocp.mess[3] is defined and ocp.mess[3] == 3 %}checked{% endif %} value="3"></p>
+            <p class="inline-block" style="width: 60%;padding-left: 12px"><input class="check_i" type="text" name="pv_first[mess][4]" value="{% if yes and ocp.mess[4] is defined %}{{ ocp.mess[4] }}{% endif %}"></p>
+        </td>
+    </tr>
+    <tr class="btTd">
+        <td>
+            <h3 class="inline-block">Umgebungsbedingung</h3>
+        </td>
+        <td>
+            <p class="inline-block" style="padding-left: 18px;">Temperatur:</p>
+            <p class="inline-block"><input style="text-align: right;padding-right: 6px;"  class="check_i" type="text" name="pv_first[mess][5]" value="{% if yes and ocp.mess[5] is defined %}{{ ocp.mess[5] }}{% endif %}"></p>
+            <p class="inline-block" style="width: 10px;padding-left: 10px;"><strong>&#8451;</strong></p>
+        </td>
+        <td>
+            <p class="inline-block" style="padding-left: 18px;">Einstrahlung:</p>
+            <p class="inline-block" ><input style="text-align: right;padding-right: 6px;" class="check_i" type="text" name="pv_first[mess][6]" value="{% if yes and ocp.mess[6] is defined %}{{ ocp.mess[6] }}{% endif %}"></p>
+            <p class="inline-block" style="width: 15px;padding-left: 10px;"><strong>W/m<sup style="font-size: 10px !important;top: -0.5em;">2</sup></strong></p>
+        </td>
+        <td></td>
+    </tr>
+</table>
+<table style="border: none;margin: 0;padding: 0">
+    <tr>
+        <td style="padding-right: 5px">
+            <table class="mt5" style="margin-right:10px;height: 126px;">
+                <tr>
+                    <td><h3>Zugänglichkeit ist gewährleistet</h3></td>
+                    <td><h3 title="ohne (Persönliche Schutzausrüstung gegen Absturz) erreichbar">o. PSAgA</h3></td>
+                    <td><h3 title="nur mit (Persönliche Schutzausrüstung gegen Absturz) erreichbar">m. PSAgA</h3></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>PV-Generator</p>
+                        <p>PV-Generatoranschlusska. (GAK)</p>
+                        <p>Wechselrichter</p>
+                        <p>Elektroverteilung</p>
+                    </td>
+                    <td>
+                        <p><input class="check_i" type="radio" name="pv_first[zg][1]" {% if yes and ocp.zg[1] is defined and ocp.zg[1] == 1 %}checked{% endif %} value="1"></p>
+                        <p><input class="check_i" type="radio" name="pv_first[zg][2]" {% if yes and ocp.zg[2] is defined and ocp.zg[2] == 1 %}checked{% endif %} value="1"></p>
+                        <p><input class="check_i" type="radio" name="pv_first[zg][3]" {% if yes and ocp.zg[3] is defined and ocp.zg[3] == 1 %}checked{% endif %} value="1"></p>
+                        <p><input class="check_i" type="radio" name="pv_first[zg][4]" {% if yes and ocp.zg[4] is defined and ocp.zg[4] == 1 %}checked{% endif %} value="1"></p>
+                    </td>
+                    <td>
+                        <p><input class="check_i" type="radio" name="pv_first[zg][1]" {% if yes and ocp.zg[1] is defined and ocp.zg[1] == 2 %}checked{% endif %} value="2"></p>
+                        <p><input class="check_i" type="radio" name="pv_first[zg][2]" {% if yes and ocp.zg[2] is defined and ocp.zg[2] == 2 %}checked{% endif %} value="2"></p>
+                        <p><input class="check_i" type="radio" name="pv_first[zg][3]" {% if yes and ocp.zg[3] is defined and ocp.zg[3] == 2 %}checked{% endif %} value="2"></p>
+                        <p><input class="check_i" type="radio" name="pv_first[zg][4]" {% if yes and ocp.zg[4] is defined and ocp.zg[4] == 2 %}checked{% endif %} value="2"></p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td style="border: none;width: 0px;"></td>
+        <td>
+            <table class="mt5" style="height: 126px">
+                <tr>
+                    <td colspan="2"><h3>Absturzhöhen an Betriebsmittel Standorten</h3></td>
+                </tr>
+                <tr>
+                    <td style="width: 10px">
+                        <p><input class="check_i" type="radio" name="pv_first[zgb][1]" {% if yes and ocp.zgb[1] is defined and ocp.zgb[1] == 1 %}checked{% endif %} value="1"></p>
+                        <p><input class="check_i" type="radio" name="pv_first[zgb][1]" {% if yes and ocp.zgb[1] is defined and ocp.zgb[1] == 2 %}checked{% endif %} value="2"></p>
+                    </td>
+                    <td>
+                        <p>Absturzhöhe <= 3m oder für Laien gesichert</p>
+                        <p>Absturzhöhe > 3m, Massnahmen erforderlich:</p>
+                        <table style="border: none;margin: 0;padding: 0">
+                            <tr>
+                                <td style="width: 10px">
+                                    <p><input class="check_i" type="checkbox" name="pv_first[zgb][3]" {% if yes and ocp.zgb[3] is defined and ocp.zgb[3] %}checked{% endif %} value="1"></p>
+                                    <p><input class="check_i" type="checkbox" name="pv_first[zgb][4]" {% if yes and ocp.zgb[4] is defined and ocp.zgb[4] %}checked{% endif %} value="1"></p>
+                                    <p><input class="check_i" type="checkbox" name="pv_first[zgb][5]" {% if yes and ocp.zgb[5] is defined and ocp.zgb[5] %}checked{% endif %} value="1"></p>
+                                </td>
+                                <td>
+                                    <p> Einzelanschlagpunkte</p>
+                                    <p> temporäres System</p>
+                                    <p> festinstalliertes Sicherungssystem</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<table class="mt5">
+    <tr>
+        <td><h3>Dachflächen sind:</h3></td>
+        <td style="width: 10px;"><p><input class="check_i" type="checkbox" name="pv_first[ab][1]" {% if yes and ocp.ab[1] is defined and ocp.ab[1] %}checked{% endif %} value="1"></p></td>
+        <td><p>Asbestfrei</p></td>
+        <td style="width: 10px;"><p><input class="check_i" type="checkbox" name="pv_first[ab][2]" {% if yes and ocp.ab[2] is defined and ocp.ab[2] %}checked{% endif %} value="1"></p></td>
+        <td><p>Asbesthaltig</p></td>
+        <td style="width: 10px;"><p><input class="check_i" type="checkbox" name="pv_first[ab][3]" {% if yes and ocp.ab[3] is defined and ocp.ab[3] %}checked{% endif %} value="1"></p></td>
+        <td><p>Asbest-Prüfbericht ist Bestandteil der Dokumentation</p></td>
+    </tr>
+</table>
+{# wiederholungsprüfung #}
+{#<table style="margin-top: 5px">#}
+{#    <tr>#}
+{#        <td colspan="2"><h3>Besichtigen gemäß DIN VDE 0100-600</h3></td>#}
+{#    </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>1.</p></td>#}
+{#        <td style="width: 10px;"><p><input class="check_i" type="checkbox" name="pv_first[construction][1]" {% if yes and ocp.construction[1] is defined and ocp.construction[1] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>Schutzmaßnahme gegen elektrischen Schlag (siehe DIN VDE 0100-410)</p></td>#}
+{#    </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>2.</p></td>#}
+{#        <td style="width: 10px;vertical-align:top;"><input class="check_i" type="checkbox" name="pv_first[construction][2]" {% if yes and ocp.construction[2] is defined and ocp.construction[2] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>Vorhandensein von Brandabschottungen und anderen Vorkehrungen gegen die Ausbreitung von Feuer sowie Maßnahmen zum Schutz gegen thermische Einflüsse (siehe DIN VDE 0100-420 und DIN VDE 0100-520 Abschn. 527)</p></td>#}
+{#    </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>3.</p></td>#}
+{#        <td style="width: 10px;vertical-align:top;"><input class="check_i" type="checkbox" name="pv_first[construction][3]" {% if yes and ocp.construction[3] is defined and ocp.construction[3] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>Auswahl der Kabel, Leitungen und Stromschienen hinsichtlich Strombelastbarkeit und Spannungsfall (siehe DIN VDE 0100-430 und DIN VDE 0298-4)</p></td>#}
+{#    </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>4.</p></td>#}
+{#        <td style="width: 10px;vertical-align:top;"><input class="check_i" type="checkbox" name="pv_first[construction][4]" {% if yes and ocp.construction[4] is defined and ocp.construction[4] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>Auswahl, Einstellung, Selektivität und Koordinierung von Schutz- und Überwachungsgeräten (siehe DIN VDE 0100-530 Abschn. 535)</p></td>#}
+{#    </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>5.</p></td>#}
+{#        <td style="width: 10px;vertical-align:top;"><input class="check_i" type="checkbox" name="pv_first[construction][5]" {% if yes and ocp.construction[5] is defined and ocp.construction[5] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>Auswahl, Anordnung und Errichtung von geeigneten Überspannungs-Schutzeinrichtungen (SPDs), wenn diese verlangt sind (siehe DIN VDE 0100-534)</p></td>#}
+{#    </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>6.</p></td>#}
+{#        <td style="width: 10px;vertical-align:top;"><input class="check_i" type="checkbox" name="pv_first[construction][6]" {% if yes and ocp.construction[6] is defined and ocp.construction[6] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>Auswahl, Anordnung und Errichtung von geeigneten Trenn- und Schaltgeräten (siehe DIN VDE 0100-530 Abschn. 536)</p></td>#}
+{#    </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>7.</p></td>#}
+{#        <td style="width: 10px;vertical-align:top;"><input class="check_i" type="checkbox" name="pv_first[construction][7]" {% if yes and ocp.construction[7] is defined and ocp.construction[7] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>Auswahl der elektrischen Betriebsmittel und der Schutzmaßnahmen unter Berücksichtigung der äußeren Einflüsse und mechanischen Beanspruchungen (siehe DIN VDE 0100-420 Abschn. 422; DIN VDE 0100-510 Abschn. 512.2; DIN VDE 0100-520 Abschn. 522)</p></td>#}
+{#    </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>8.</p></td>#}
+{#        <td style="width: 10px;vertical-align:top;"><input class="check_i" type="checkbox" name="pv_first[construction][8]" {% if yes and ocp.construction[8] is defined and ocp.construction[8] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>ordnungsgemäße Kennzeichnung von Neutral- und Schutzleitern (siehe DIN VDE 0100-510 Abschn. 514.3)</p></td>#}
+{#    </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>9.</p></td>#}
+{#        <td style="width: 10px;vertical-align:top;"><input class="check_i" type="checkbox" name="pv_first[construction][9]" {% if yes and ocp.construction[9] is defined and ocp.construction[9] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>Vorhandensein von Schaltungsunterlagen, Warnhinweisen und anderen ähnlichen Informationen (siehe DIN VDE 0100-510 Abschn. 514.5)</p></td>#}
+{#    </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>10.</p></td>#}
+{#        <td style="width: 10px;vertical-align:top;"><input class="check_i" type="checkbox" name="pv_first[construction][10]" {% if yes and ocp.construction[10] is defined and ocp.construction[10] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>Kennzeichnung der Stromkreise, Überstrom-Schutzeinrichtungen, Schalter, Klemmen und dergleichen (siehe DIN VDE 0100-510 Abschn. 514)</p></td>#}
+{#    </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>11.</p></td>#}
+{#        <td style="width: 10px;vertical-align:top;"><input class="check_i" type="checkbox" name="pv_first[construction][11]" {% if yes and ocp.construction[11] is defined and ocp.construction[11] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>ordnungsgemäße Klemmen und Verbindungen von Kabeln und Leitern (siehe DIN VDE 0100-520 Abschn. 526)</p></td>#}
+{#    </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>12.</p></td>#}
+{#        <td style="width: 10px;vertical-align:top;"><input class="check_i" type="checkbox" name="pv_first[construction][12]" {% if yes and ocp.construction[12] is defined and ocp.construction[12] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>Auswahl und Errichtung von Erdungsanlagen, Schutzleiter (einschließlich Schutzpotenzialausgleichsleitern) und ihre Anschlüsse an die Haupterdungsschiene (siehe DIN VDE 0100-540)</p></td>#}
+{#   </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>13.</p></td>#}
+{#        <td style="width: 10px;vertical-align:top;"><input class="check_i" type="checkbox" name="pv_first[construction][13]" {% if yes and ocp.construction[13] is defined and ocp.construction[13] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>leichte Zugänglichkeit der elektrischen Betriebsmittel zur Bedienung, Kennzeichnung und Instandhaltung (siehe DIN VDE 0100-510 Abschn. 513 und 514)</p></td>#}
+{#    </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>14.</p></td>#}
+{#        <td style="width: 10px;vertical-align:top;"><input class="check_i" type="checkbox" name="pv_first[construction][14]" {% if yes and ocp.construction[14] is defined and ocp.construction[14] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>Maßnahmen gegen elektromagnetische Störungen (siehe DIN VDE 0100-444)</p></td>#}
+{#    </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>15.</p></td>#}
+{#        <td style="width: 10px;vertical-align:top;"><input class="check_i" type="checkbox" name="pv_first[construction][15]" {% if yes and ocp.construction[15] is defined and ocp.construction[15] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>Anschluss der Körper an die Erdungsanlage (siehe DIN VDE 0100-410 Abschn. 411)</p></td>#}
+{#    </tr>#}
+{#    <tr >#}
+{#        <td style="text-align: right"><p>16.</p></td>#}
+{#        <td style="width: 10px;vertical-align:top;"><input class="check_i" type="checkbox" name="pv_first[construction][16]" {% if yes and ocp.construction[16] is defined and ocp.construction[16] %}checked{% endif %} value="1"></td>#}
+{#        <td><p>geeignete Auswahl und Errichtung von Kabel- und Leitungssystemen (siehe DIN VDE 0100-520 Abschn. 521 und 522)</p></td>#}
+{#    </tr>#}
+{#</table>#}
+
+{#<table style="margin-top: 5px">#}
+{#    <tr>#}
+{#        <td colspan="4"><h3>PV-Module</h3></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#        <td style="width: 25%"><p>ModuleHersteller:</p>#}
+{#            <p>PV-Modulleistung:</p>#}
+{#            <p>Kurzschlussstrom Isc (A):</p>#}
+{#            <p>Leerlaufspannung Uoc (V):</p>#}
+{#        </td>#}
+{#        <td>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][13]" value="{% if yes %}{{ ocp.anlage[13] }}{% endif %}"></p>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][14]" value="{% if yes %}{{ ocp.anlage[14] }}{% endif %}"></p>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][15]" value="{% if yes %}{{ ocp.anlage[15] }}{% endif %}"></p>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][16]" value="{% if yes %}{{ ocp.anlage[16] }}{% endif %}"></p>#}
+{#        </td>#}
+{#        <td style="width: 25%"><p>Modultyp:</p>#}
+{#            <p>Modulanzahl:</p>#}
+{#            <p>MPP-Strom (A):</p>#}
+{#            <p>MPP-Spannung (V):</p></td>#}
+{#        <td>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][17]"#}
+{#                      value="{% if yes %}{{ ocp.anlage[17] }}{% endif %}"></p>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][18]"#}
+{#                      value="{% if yes %}{{ ocp.anlage[18] }}{% endif %}"></p>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][19]"#}
+{#                      value="{% if yes %}{{ ocp.anlage[19] }}{% endif %}"></p>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][20]"#}
+{#                      value="{% if yes %}{{ ocp.anlage[20] }}{% endif %}"></p>#}
+{#        </td>#}
+{#    </tr>#}
+{#</table>#}
+{#<table style="margin-top: 5px">#}
+{#    <tr>#}
+{#        <td colspan="4"><h3>PV-Wechselrichter</h3></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#        <td><p>Hersteller:</p>#}
+{#            <p>Seriennummer:</p>#}
+{#            <p>AC-Nennleistung (W):</p>#}
+{#            <p>AC-Maximalleistung (W):</p></td>#}
+{#        <td>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][21]"#}
+{#                      value="{% if yes %}{{ ocp.anlage[21] }}{% endif %}"></p>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][22]"#}
+{#                      value="{% if yes %}{{ ocp.anlage[22] }}{% endif %}"></p>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][23]"#}
+{#                      value="{% if yes %}{{ ocp.anlage[23] }}{% endif %}"></p>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][24]"#}
+{#                      value="{% if yes %}{{ ocp.anlage[24] }}{% endif %}"></p>#}
+{#        </td>#}
+{#        <td><p>Wechselrichtertyp:</p>#}
+{#            <p>Wechselrichteranzahl:</p>#}
+{#            <p>DC-Maximalleistung (W):</p>#}
+{#            <p>Bemerkung</p></td>#}
+{#        <td>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][25]"#}
+{#                      value="{% if yes %}{{ ocp.anlage[25] }}{% endif %}"></p>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][26]"#}
+{#                      value="{% if yes %}{{ ocp.anlage[26] }}{% endif %}"></p>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][27]"#}
+{#                      value="{% if yes %}{{ ocp.anlage[27] }}{% endif %}"></p>#}
+{#            <p><input class="check_i" type="text" name="pv_first[anlage][28]"#}
+{#                      value="{% if yes %}{{ ocp.anlage[28] }}{% endif %}"></p>#}
+{#        </td>#}
+{#    </tr>#}
+{#</table>#}
+
+
+<table class="mt5">
+    <tr>
+        <td style="width: 260px !important;"><h3>Besichtigte Stromkreise:</h3></td>
+        <td class="rcen"><p>Ok</p></td>
+        <td class="rcen"><p>n.Ok</p></td>
+        <td class="rcen"><p>k.A</p></td>
+        <td rowspan="6" style="position:relative;width: 300px">
+            <input type="file" multiple class="d-none" name="file_check"
+                   data-url="{{ path('ajax_upload_image', {'id':offer.id, 'name':"pv_first.energy_2"}) }}"
+                   data-upload-target="fileclick"
+                   accept="image/*" {{ stimulus_action('upload','addImagePreview','change') }}>
+            <div data-upload-target="preview" style="max-width:300px;max-height:150px;overflow:hidden;position: absolute;top: 0;right: 20px;">
+                {% set noimage = 0 %}
+                {% if offer.images|length %}
+                    {% set imagesCount = 0 %}
+                    {% for img in offer.images %}
+                        {% if 'offer-check-energy-2' in img.filename %}
+                            {% set noimage = 1 %}
+                            <div class="gal-{{ img.id }}">
+                                <img class="compo1" src="{{ absolute_url(asset(appAssetPath~'uploads/'~offer.id~'/'~img.filename)) }}" alt="{{ img.filename }}">
+                                {% if pdf is not defined %}
+                                    <div class="desc-{{ img.id }}">
+                                        <button style="position: absolute;bottom: 0;right: 0;" title="Doppelklicken zum Löschen" type="button"
+                                                data-loop-id="{{ imagesCount }}"
+                                                data-image-id="{{ img.id }}"
+                                                data-url="{{ path('montage_image_remove', {'id': img.id}) }}"
+                                                data-action="dblclick->upload#remove"
+                                                id="compo1del"
+                                                class="p-1 btn btn-danger btn-xs">x</button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if noimage == 0 %}
+                    <img class="compo1" src="{{ absolute_url(asset('app/na.png')) }}" alt="Kein PV-Anlagenbild">
+                {% endif %}
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td><p>Gesamte Photovoltaikanlage{% if pdf is not defined %}
+                <span type="button" onclick="removeElementsByClass('compo1')" style="cursor: pointer;" {{ stimulus_action('upload','clickImage','click') }}>
+                <span class="material-icons">add_a_photo</span> {# <span title="{{ 'm.imageAdd'|trans }}" class="material-icons">add_circle_outline</span> #}
+                </span>{% endif %}
+            </p></td>
+        <td class="rcen" style="width: 20px"><input class="check_i" type="radio" name="pv_first[energy][0]" {% if yes and ocp.energy[0] is defined and ocp.energy[0] == 1 %}checked{% endif %} value="1"></td>
+        <td class="rcen" style="width: 20px"><input class="check_i" type="radio" name="pv_first[energy][0]" {% if yes and ocp.energy[0] is defined and ocp.energy[0] == 2 %}checked{% endif %} value="2"></td>
+        <td class="rcen" style="width: 20px"><input class="check_i" type="radio" name="pv_first[energy][0]" {% if yes and ocp.energy[0] is defined and ocp.energy[0] == 3 %}checked{% endif %} value="3"></td>
+    </tr>
+    <tr>
+        <td colspan="4"><p>Folgende Stromkreise: </p></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="text" name="pv_first[energy][21]" value="{% if yes %}{{ ocp.energy[21] }}{% else %}{% endif %}"></p></td>
+        <td class="rcen" style="width: 20px"><input class="check_i" type="radio" name="pv_first[energy][1]" {% if yes and ocp.energy[1] is defined and ocp.energy[1] == 1 %}checked{% endif %} value="1"></td>
+        <td class="rcen" style="width: 20px"><input class="check_i" type="radio" name="pv_first[energy][1]" {% if yes and ocp.energy[1] is defined and ocp.energy[1] == 2 %}checked{% endif %} value="2"></td>
+        <td class="rcen" style="width: 20px"><input class="check_i" type="radio" name="pv_first[energy][1]" {% if yes and ocp.energy[1] is defined and ocp.energy[1] == 3 %}checked{% endif %} value="3"></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="text" name="pv_first[energy][31]" value="{% if yes %}{{ ocp.energy[31] }}{% else %}{% endif %}"></p></td>
+        <td class="rcen" style="width: 20px"><input class="check_i" type="radio" name="pv_first[energy][2]" {% if yes and ocp.energy[2] is defined and ocp.energy[2] == 1 %}checked{% endif %} value="1"></td>
+        <td class="rcen" style="width: 20px"><input class="check_i" type="radio" name="pv_first[energy][2]" {% if yes and ocp.energy[2] is defined and ocp.energy[2] == 2 %}checked{% endif %} value="2"></td>
+        <td class="rcen" style="width: 20px"><input class="check_i" type="radio" name="pv_first[energy][2]" {% if yes and ocp.energy[2] is defined and ocp.energy[2] == 3 %}checked{% endif %} value="3"></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="text" name="pv_first[energy][41]" value="{% if yes %}{{ ocp.energy[41] }}{% else %}{% endif %}"></p></td>
+        <td class="rcen" style="width: 20px"><input class="check_i" type="radio" name="pv_first[energy][3]" {% if yes and ocp.energy[3] is defined and ocp.energy[3] == 1 %}checked{% endif %} value="1"></td>
+        <td class="rcen" style="width: 20px"><input class="check_i" type="radio" name="pv_first[energy][3]" {% if yes and ocp.energy[3] is defined and ocp.energy[3] == 2 %}checked{% endif %} value="2"></td>
+        <td class="rcen" style="width: 20px"><input class="check_i" type="radio" name="pv_first[energy][3]" {% if yes and ocp.energy[3] is defined and ocp.energy[3] == 3 %}checked{% endif %} value="3"></td>
+    </tr>
+</table>
+<table class="mt5">
+    <tr>
+        <td><h3>Besichtigen</h3></td>
+        <td class="rcen" style="width: 20px"><p>Ok</p></td>
+        <td class="rcen" style="width: 20px"><p>n.Ok</p></td>
+        <td class="rcen" style="width: 20px"><p>k.A</p></td>
+        <td></td>
+        <td class="rcen" style="width: 20px"><p>Ok</p></td>
+        <td class="rcen" style="width: 20px"><p>n.Ok</p></td>
+        <td class="rcen" style="width: 20px"><p>k.A</p></td>
+        {#        <td><p>Bemerkung</p></td>#}
+    </tr>
+    <tr>
+
+        <td style="width: 350px;">
+            <p>Schutz-,&nbsp;Sicherheits-&nbsp;und&nbsp;Überwachungseinr.</p>
+            <p>Schutz&nbsp;gegen&nbsp;direktes&nbsp;berühren&nbsp;(Basisschutz)</p>
+            <p>Zugänglichkeit (HAK/Verteiler)</p>
+            <p>Schutzpotentialausgleich</p>
+            <p>Zus. Schutzpotentialausgleich</p>
+            <p>Funktionspotentialausgleich</p>
+            <p>Dokumentation (siehe Ergänzungsdokumente)</p>
+            <p>Leiterverbindungen</p>
+            <div>
+                <p class="inline-block" style="float:left"><input class="check_i" type="checkbox" name="pv_first[energy][nii1]" value="1" {% if yes and ocp.energy.nii1 is defined and ocp.energy.nii1 == 1 %}checked{% endif %}"></p>
+                <p class="inline-block" style="float:left"><input class="check_i" style="width: 200px !important;" type="text" name="pv_first[energy][nii2]" value="{% if yes and ocp.energy.nii2 is defined %}{{ ocp.energy.nii2 }}{% endif %}"></p>
+            </div>
+        </td>
+        <td>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia1]" {% if yes and ocp.energy.nia1 is defined and ocp.energy.nia1 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia2]" {% if yes and ocp.energy.nia2 is defined and ocp.energy.nia2 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia3]" {% if yes and ocp.energy.nia3 is defined and ocp.energy.nia3 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia4]" {% if yes and ocp.energy.nia4 is defined and ocp.energy.nia4 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia5]" {% if yes and ocp.energy.nia5 is defined and ocp.energy.nia5 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia6]" {% if yes and ocp.energy.nia6 is defined and ocp.energy.nia6 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia7]" {% if yes and ocp.energy.nia7 is defined and ocp.energy.nia7 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia8]" {% if yes and ocp.energy.nia8 is defined and ocp.energy.nia8 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia9]" {% if yes and ocp.energy.nia9 is defined and ocp.energy.nia9 == 1 %}checked{% endif %} value="1"></p>
+        </td>
+        <td>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia1]" {% if yes and ocp.energy.nia1 is defined and ocp.energy.nia1 == 2 %}checked{% endif %} value="2"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia2]" {% if yes and ocp.energy.nia2 is defined and ocp.energy.nia2 == 2 %}checked{% endif %} value="2"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia3]" {% if yes and ocp.energy.nia3 is defined and ocp.energy.nia3 == 2 %}checked{% endif %} value="2"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia4]" {% if yes and ocp.energy.nia4 is defined and ocp.energy.nia4 == 2 %}checked{% endif %} value="2"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia5]" {% if yes and ocp.energy.nia5 is defined and ocp.energy.nia5 == 2 %}checked{% endif %} value="2"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia6]" {% if yes and ocp.energy.nia6 is defined and ocp.energy.nia6 == 2 %}checked{% endif %} value="2"></pv>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia7]" {% if yes and ocp.energy.nia7 is defined and ocp.energy.nia7 == 2 %}checked{% endif %} value="2"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia8]" {% if yes and ocp.energy.nia8 is defined and ocp.energy.nia8 == 2 %}checked{% endif %} value="2"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia9]" {% if yes and ocp.energy.nia9 is defined and ocp.energy.nia9 == 2 %}checked{% endif %} value="2"></p>
+        </td>
+        <td>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia1]" {% if yes and ocp.energy.nia1 is defined and ocp.energy.nia1 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia2]" {% if yes and ocp.energy.nia2 is defined and ocp.energy.nia2 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia3]" {% if yes and ocp.energy.nia3 is defined and ocp.energy.nia3 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia4]" {% if yes and ocp.energy.nia4 is defined and ocp.energy.nia4 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia5]" {% if yes and ocp.energy.nia5 is defined and ocp.energy.nia5 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia6]" {% if yes and ocp.energy.nia6 is defined and ocp.energy.nia6 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia7]" {% if yes and ocp.energy.nia7 is defined and ocp.energy.nia7 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia8]" {% if yes and ocp.energy.nia8 is defined and ocp.energy.nia8 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nia9]" {% if yes and ocp.energy.nia9 is defined and ocp.energy.nia9 == 3 %}checked{% endif %} value="3"></p>
+        </td>
+        <td style="width: 300px;">
+            <p>Betriebsmittel</p>
+            <p>Trenn-&nbsp;und&nbsp;Schaltgeräte</p>
+            <p>Brandabschottungen</p>
+            <p>Gebäudesystemtechnik</p>
+            <p>Kabel,&nbsp;Leitungen,&nbsp;Stromschienen</p>
+            <p>Kennzeichnung&nbsp;Stromkreis,&nbsp;Betriebsmittel</p>
+            <p>Kennzeichnung&nbsp;N-&nbsp;und&nbsp;PE&nbsp;Leiter</p>
+            <div>
+                <p class="inline-block" style="float: left"><input class="check_i" type="checkbox" name="pv_first[energy][nii3]" value="1" {% if yes and ocp.energy.nii3 is defined and ocp.energy.nii3 == 1 %}checked{% endif %}"></p>
+                <p class="inline-block"><input class="check_i" style="width: 200px !important;" type="text" name="pv_first[energy][nii4]" value="{% if yes and ocp.energy.nii4 is defined %}{{ ocp.energy.nii4 }}{% endif %}"></p>
+            </div>
+            <div>
+                <p class="inline-block" style="float: left"><input class="check_i" type="checkbox" name="pv_first[energy][nii31]" value="1" {% if yes and ocp.energy.nii31 is defined and ocp.energy.nii31 %}checked{% endif %}"></p>
+                <p class="inline-block"><input class="check_i" style="width: 200px !important;" type="text" name="pv_first[energy][nii41]" value="{% if yes and ocp.energy.nii41 is defined %}{{ ocp.energy.nii41 }}{% endif %}"></p>
+            </div>
+        </td>
+        <td>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio1]" {% if yes and ocp.energy.nio1 is defined and ocp.energy.nio1 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio2]" {% if yes and ocp.energy.nio2 is defined and ocp.energy.nio2 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio3]" {% if yes and ocp.energy.nio3 is defined and ocp.energy.nio3 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio4]" {% if yes and ocp.energy.nio4 is defined and ocp.energy.nio4 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio5]" {% if yes and ocp.energy.nio5 is defined and ocp.energy.nio5 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio6]" {% if yes and ocp.energy.nio6 is defined and ocp.energy.nio6 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio7]" {% if yes and ocp.energy.nio7 is defined and ocp.energy.nio7 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio8]" {% if yes and ocp.energy.nio8 is defined and ocp.energy.nio8 == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio9]" {% if yes and ocp.energy.nio9 is defined and ocp.energy.nio9 == 1 %}checked{% endif %} value="1"></p>
+        </td>
+        <td>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio1]" {% if yes and ocp.energy.nio1 is defined and ocp.energy.nio1 == 2 %}checked{% endif %} value="2"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio2]" {% if yes and ocp.energy.nio2 is defined and ocp.energy.nio2 == 2 %}checked{% endif %} value="2"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio3]" {% if yes and ocp.energy.nio3 is defined and ocp.energy.nio3 == 2 %}checked{% endif %} value="2"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio4]" {% if yes and ocp.energy.nio4 is defined  and ocp.energy.nio4 == 2 %}checked{% endif %} value="2"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio5]" {% if yes and ocp.energy.nio5 is defined  and ocp.energy.nio5 == 2 %}checked{% endif %} value="2"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio6]" {% if yes and ocp.energy.nio6 is defined and ocp.energy.nio6 == 2 %}checked{% endif %} value="2"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio7]" {% if yes and ocp.energy.nio7 is defined and ocp.energy.nio7 == 2 %}checked{% endif %} value="2"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio8]" {% if yes and ocp.energy.nio8 is defined and ocp.energy.nio8 == 2 %}checked{% endif %} value="2"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio9]" {% if yes and ocp.energy.nio9 is defined and ocp.energy.nio9 == 2 %}checked{% endif %} value="2"></p>
+        </td>
+        <td>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio1]" {% if yes and ocp.energy.nio1 is defined and ocp.energy.nio1 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio2]" {% if yes and ocp.energy.nio2 is defined and ocp.energy.nio2 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio3]" {% if yes and ocp.energy.nio3 is defined and ocp.energy.nio3 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio4]" {% if yes and ocp.energy.nio4 is defined and ocp.energy.nio4 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio5]" {% if yes and ocp.energy.nio5 is defined and ocp.energy.nio5 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio6]" {% if yes and ocp.energy.nio6 is defined and ocp.energy.nio6 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio7]" {% if yes and ocp.energy.nio7 is defined and ocp.energy.nio7 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio8]" {% if yes and ocp.energy.nio8 is defined and ocp.energy.nio8 == 3 %}checked{% endif %} value="3"></p>
+            <p class="rcen"><input class="check_i" type="radio" name="pv_first[energy][nio9]" {% if yes and ocp.energy.nio9 is defined and ocp.energy.nio9 == 3 %}checked{% endif %} value="3"></p>
+        </td>
+        {#        <td>#}
+        {#            <p><input class="check_i" type="text" name="pv_first[energy][niaText1]" value="{% if yes  %}{{ ocp.energy.niaText1 }}{% endif %}"></p>#}
+        {#            <p><input class="check_i" type="text" name="pv_first[energy][niaText2]" value="{% if yes  %}{{ ocp.energy.niaText2 }}{% endif %}"></p>#}
+        {#            <p><input class="check_i" type="text" name="pv_first[energy][niaText3]" value="{% if yes  %}{{ ocp.energy.niaText3 }}{% endif %}"></p>#}
+        {#            <p><input class="check_i" type="text" name="pv_first[energy][niaText4]" value="{% if yes  %}{{ ocp.energy.niaText4 }}{% endif %}"></p>#}
+        {#            <p><input class="check_i" type="text" name="pv_first[energy][niaText5]" value="{% if yes  %}{{ ocp.energy.niaText5 }}{% endif %}"></p>#}
+        {#            <p><input class="check_i" type="text" name="pv_first[energy][niaText6]" value="{% if yes  %}{{ ocp.energy.niaText6 }}{% endif %}"></p>#}
+        {#            <p><input class="check_i" type="text" name="pv_first[energy][niaText7]" value="{% if yes  %}{{ ocp.energy.niaText7 }}{% endif %}"></p>#}
+        {#            <p><input class="check_i" type="text" name="pv_first[energy][niaText8]" value="{% if yes  %}{{ ocp.energy.niaText8 }}{% endif %}"></p>#}
+        {#        </td>#}
+    </tr>
+</table>
+<table class="mt5">
+    <tr>
+        <td style="width: 10px;"><p><input class="check_i" type="checkbox" name="pv_first[energy][3]" {% if yes and ocp.energy[3] is defined and ocp.energy[3] %}checked{% endif %} value="1"></p></td>
+        <td><p>Die Photovoltaikanlage wurde nach den Anforderungen in DIN VDE 0100-600 (IEC 60364-6) besichtigt</p></td>
+    </tr>
+</table>
+<table class="mt5">
+    <tr>
+        <td style="width: 294px"><h3>Erproben</h3></td>
+        <td class="rcen" style="width: 20px"><p>Ok</p></td>
+        <td class="rcen" style="width: 20px"><p>n.Ok</p></td>
+        <td class="rcen" style="width: 20px"><p>k.A</p></td>
+        <td></td>
+        <td class="rcen" style="width: 20px"><p>Ok</p></td>
+        <td class="rcen" style="width: 20px"><p>n.Ok</p></td>
+        <td class="rcen" style="width: 20px"><p>k.A</p></td>
+    </tr>
+    <tr>
+        <td><p>Funktionsprüfung der Anlage</p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][a]" {% if yes and ocp.ep.a is defined and ocp.ep.a == 1 %}checked{% endif %} value="1"></p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][a]" {% if yes and ocp.ep.a is defined and ocp.ep.a == 2 %}checked{% endif %} value="2"></p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][a]" {% if yes and ocp.ep.a is defined and ocp.ep.a == 3 %}checked{% endif %} value="3"></p></td>
+        <td><p>FI Schutzschalter (RCD)</p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][b]" {% if yes and ocp.ep.b is defined and ocp.ep.b == 1 %}checked{% endif %} value="1"></p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][b]" {% if yes and ocp.ep.b is defined and ocp.ep.b == 2 %}checked{% endif %} value="2"></p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][b]" {% if yes and ocp.ep.b is defined and ocp.ep.b == 3 %}checked{% endif %} value="3"></p></td>
+    </tr>
+    <tr >
+        <td><p>Rechtsdrehfeld (Drehstromsteckdosen)</p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][c]" {% if yes and ocp.ep.c is defined and ocp.ep.c == 1 %}checked{% endif %} value="1"></p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][c]" {% if yes and ocp.ep.c is defined and ocp.ep.c == 2 %}checked{% endif %} value="2"></p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][c]" {% if yes and ocp.ep.c is defined and ocp.ep.c == 3 %}checked{% endif %} value="3"></p></td>
+        <td><p>Überprüfung Spannungsabfall</p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][d]" {% if yes and ocp.ep.d is defined and ocp.ep.d == 1 %}checked{% endif %} value="1"></p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][d]" {% if yes and ocp.ep.d is defined and ocp.ep.d == 2 %}checked{% endif %} value="2"></p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][d]" {% if yes and ocp.ep.d is defined and ocp.ep.d == 3 %}checked{% endif %} value="3"></p></td>
+    </tr>
+    <tr >
+        <td rowspan="2"><p>Funktion der Schutz. Sicherheits- und Überwachungseinr.</p></td>
+        <td rowspan="2"><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][e]" {% if yes and ocp.ep.e is defined and ocp.ep.e == 1 %}checked{% endif %} value="1"></p></td>
+        <td rowspan="2"><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][e]" {% if yes and ocp.ep.e is defined and ocp.ep.e == 2 %}checked{% endif %} value="2"></p></td>
+        <td rowspan="2"><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][e]" {% if yes and ocp.ep.e is defined and ocp.ep.e == 3 %}checked{% endif %} value="3"></p></td>
+        <td><p>Gebäudesystemtechnik</p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][f]" {% if yes and ocp.ep.f is defined and ocp.ep.f == 1 %}checked{% endif %} value="1"></p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][f]" {% if yes and ocp.ep.f is defined and ocp.ep.f == 2 %}checked{% endif %} value="2"></p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][f]" {% if yes and ocp.ep.f is defined and ocp.ep.f == 3 %}checked{% endif %} value="3"></p></td>
+    </tr>
+    <tr>
+        <td><p>Spannungspolarität</p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][h]" {% if yes and ocp.ep.h is defined and ocp.ep.h == 1 %}checked{% endif %} value="1"></p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][h]" {% if yes and ocp.ep.h is defined and ocp.ep.h == 2 %}checked{% endif %} value="2"></p></td>
+        <td><p class="rcen"><input class="check_i" type="radio" name="pv_first[ep][h]" {% if yes and ocp.ep.h is defined and ocp.ep.h == 3 %}checked{% endif %} value="3"></p></td>
+    </tr>
+</table>
+<table class="mt5">
+    <tr>
+        <td><h3>Spannungsabfall nachgewiesen <sup class="numberCircle">7</sup></h3></td>
+        <td><p><input class="check_i" type="text" name="pv_first[ep][i1]" value="{% if yes and ocp.ep.i1 is defined %}{{ ocp.ep.i1 }}{% endif %}"></p></td>
+        <td style="width: 6px;"><p>%</p></td>
+        <td><h3>Erdungswiederstand</h3></td>
+        <td style="width: 10px;"><p>R<sub>E</sub></p></td>
+        <td><p><input class="check_i" type="text" name="pv_first[ep][i2]" value="{% if yes and ocp.ep.i2 is defined %}{{ ocp.ep.i2 }}{% endif %}"></p></td>
+    </tr>
+</table>
+<table class="mt5">
+    <tr>
+        <td colspan="8"><h3>Durchgängigkeit Potentialausgleichsystem <sup class="numberCircle">8</sup> (&#8804; 1&#8486; nachgewiesen)</h3></td>
+     </tr>
+    <tr>
+        <td>
+            <p>Fundamenterder</p>
+            <p>Ringerder</p>
+            <p>Haupterdungsschiene</p>
+            <p>Wasserzwischenzähler</p>
+        </td>
+        <td>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][a]" {% if yes and ocp.dp.a is defined and ocp.dp.a == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][b]" {% if yes and ocp.dp.b is defined and ocp.dp.b == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][c]" {% if yes and ocp.dp.c is defined and ocp.dp.c == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][d]" {% if yes and ocp.dp.d is defined and ocp.dp.d == 1 %}checked{% endif %} value="1"></p>
+        </td>
+        <td>
+            <p>Hauptwasserleitung</p>
+            <p>Hauptschutzleiter</p>
+            <p>Gasinnenleitung</p>
+            <p>Heizungsanlage</p>
+        </td>
+        <td>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][e]" {% if yes and ocp.dp.e is defined and ocp.dp.e == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][f]" {% if yes and ocp.dp.f is defined and ocp.dp.f == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][g]" {% if yes and ocp.dp.g is defined and ocp.dp.g == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][h]" {% if yes and ocp.dp.h is defined and ocp.dp.h == 1 %}checked{% endif %} value="1"></p>
+        </td>
+        <td>
+            <p>Klimaanlage</p>
+            <p>Aufzuganlage</p>
+            <p>EDV-Anlage</p>
+            <p>Telefonanlage</p>
+        </td>
+        <td>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][i]" {% if yes and ocp.dp.i is defined and ocp.dp.i == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][j]" {% if yes and ocp.dp.j is defined and ocp.dp.j == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][k]" {% if yes and ocp.dp.k is defined and ocp.dp.k == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][l]" {% if yes and ocp.dp.l is defined and ocp.dp.l == 1 %}checked{% endif %} value="1"></p>
+        </td>
+        <td>
+            <p>Blitzschutzanl.</p>
+            <p>Anntenenanl.(BK)</p>
+            <p>Gebäudekonstruktion</p>
+            <p><input class="check_i" type="text" name="pv_first[dp][t]" value="{% if yes and ocp.dp.t is defined %}{{ ocp.dp.t }}{% endif %}"></p>
+        </td>
+        <td>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][i]" {% if yes and ocp.dp.i is defined and ocp.dp.i == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][j]" {% if yes and ocp.dp.j is defined and ocp.dp.j == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][k]" {% if yes and ocp.dp.k is defined and ocp.dp.k == 1 %}checked{% endif %} value="1"></p>
+            <p class="rcen"><input class="check_i" type="checkbox" name="pv_first[dp][l]" {% if yes and ocp.dp.l is defined and ocp.dp.l == 1 %}checked{% endif %} value="1"></p>
+        </td>
+    </tr>
+</table>
+{% include 'offer/montage/intern/checkpage/_copyrights.html.twig' %}

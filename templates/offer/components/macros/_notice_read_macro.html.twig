@@ -1,0 +1,174 @@
+{% macro readNoticeBlock(notes, appAssetPath, ActionLog, small, offerId) %}
+    <div class="m-2">
+        <div class="p-0" id="_note_answers_box_{{ offerId }}">
+            {% set today = "now"|date("d.m.Y") %}
+            {% for note in notes %}
+                {% set noteAnswerShow = note.type in ['info', 'phone','ordered','delivered','miss','done'] %}
+                <div class="card" data-controller="accordion" style="margin-top: 1px;margin-bottom: 6px">
+                    <div class="card-body p-0" id="_note_answers_box">
+                        <div {% if noteAnswerShow %}data-controller="note" data-note-id="{{ note.id }}"{% endif %}
+                             class="card-body p-0">
+                            <div class="accordion-item" style="border: none">
+                                <div class="row" id="noteRow{{ note.id }}"
+                                     style="margin: 6px 0 0 10px;min-height: 70px;">
+                                    <div class="col-1 p-0 text-center">
+                                        {% if note.user.image %}
+                                            <img class="circle" title="{{ note.user.fullName }}"
+                                                 src="{{ '/'~appAssetPath~'user/'~note.user.image }}"
+                                                 alt="{{ note.user.fullName }} Avatar"
+                                                 style="border-radius: 50%;">
+                                        {% else %}
+                                            {{ note.user.username }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-1 p-0 text-center">
+                                        <i {% if note.type in ['info'] %}style="color: {{ sfColor }}"
+                                           {% endif %}class="material-icons">{{ ActionLog[note.type].icon }}</i>
+                                    </div>
+                                    <div class="col-{% if noteAnswerShow %}8{% else %}10{% endif %} p-0" style="cursor: pointer" data-action="click->accordion#toggle">
+                                        <div style="padding:6px 12px;">
+                                            {% if noteAnswerShow == false %}{{ note.name|nl2br }}{% else %}{{ note.note|nl2br }}{% endif %}
+                                        </div>
+                                    </div>
+                                    {% if noteAnswerShow %}
+                                        <div class="col-2 p-0 text-center{% if small == 0 %} position-absolute"
+                                             style="height: calc(100% + 56px); top: 0;right: -10px;{% endif %}">
+                                            <button data-note-target="button"
+                                                    class="btn btn-white btn-sm p-2"
+                                                    data-value=""
+                                                    style="margin: 1px; cursor:pointer;border-radius:5px;"
+                                                    type="button"
+                                                    data-action="click->note#showAnswer">
+                                                <i style="pointer-events: none;background-color: #fff;font-size: 20px;border-radius: 5px;color: {{ sfColor }}"
+                                                   class="material-symbols-outlined">post_add</i>
+                                            </button>
+                                            <br>
+                                            {% if note.offer.status not in ['call', 'call-plus'] and offerId == 0 %}
+                                                <button class="btn btn-white btn-sm p-2"
+                                                   style="cursor:pointer;border-radius:5px;z-index: 999"
+                                                        type="button"
+                                                   data-action="click->note#loadUrl"
+                                                        data-note-url-param="{{ url('sf_montage_offer', {'id':note.offer.id}) }}">
+                                                        <i style="pointer-events: none;background-color: #fff;font-size: 20px;border-radius: 5px;color: black"
+                                                        class="material-symbols-outlined">description</i>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="custom-select-button"
+                                                 style="display: none"
+                                                 data-note-target="modal">
+                                                <div class="form-group">
+                                                    <input type="hidden" id="auser_answer_url_{{ note.id }}" name="type"
+                                                           value="{{ '/'~appAssetPath~'user/' }}">
+                                                    <input type="hidden" id="action_answer_type_{{ note.id }}"
+                                                           name="type" value="answer">
+                                                    <textarea
+                                                            style="min-height: 100px !important;padding: 10px;border-radius: 10px;"
+                                                            data-url="{{ path('note_answer_offer', {'note':note.id}) }}"
+                                                            class="form-control"
+                                                            data-note-target="content"
+                                                            name="noteContent" required></textarea>
+                                                </div>
+                                                <button data-answer-id="{{ note.id }}" type="button"
+                                                        style="margin: 0;width: 100%;" class="btn btn-white"
+                                                        data-action="note#saveAnswer"
+                                                >Antworten
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                {% if small == 0 and noteAnswerShow != false %}
+                                    <div class="row" id="noteRow{{ note.id }}" style="margin: 6px 0 0 10px">
+                                        <div class="col-2 p-0 text-center">
+                                            <div style="font-size: 9px;padding: 0;">{{ note.createdAt|date('d.m H:i') }}</div>
+                                        </div>
+                                        <div class="col-{% if noteAnswerShow %}8{% else %}10{% endif %} p-0"
+                                             data-action="click->accordion#toggle"></div>
+                                        {% if noteAnswerShow %}
+                                            <div class="col-2"></div>
+                                        {% endif %}
+
+                                    </div>
+                                {% endif %}
+                                <div class="row accordion-content is-hidden">
+                                    <div class="col-2"></div>
+                                    <div class="col-8 p-1">
+                                        <div class="accordion-body" style="font-size: 10px">
+                                            {% if is_granted('ROLE_EMPLOYEE_EXTERN') and note.offer %}
+                                            <a href="{{ path('offer_show', {'id': note.offer.id}) }}">{{ note.customer.fullName }} ({{ note.offer.number }})</a>
+                                        {% else %}{{ note.customer.fullName }} ({{ note.offer.number }}){% endif %}<br>
+                                            {{ note.name|nl2br }}
+                                        </div>
+                                    </div>
+                                    <div class="col-2{% if small == 0 %} position-absolute"
+                                         style="height: calc(100% + 56px); top: 62%;right: -10px;{% endif %}">
+                                        {% if note.user.id == app.user.id or is_granted('ROLE_EMPLOYEE_SERVICE') %}
+                                            <button data-note-target="button"
+                                                    class="btn btn-white btn-sm p-2"
+                                                    data-url="{{ path('note_delete',{'note':note.id}) }}"
+                                                    data-id="{{ note.id }}"
+                                                    style="margin: 1px;cursor:pointer;border-radius:5px;color: #f54848;"
+                                                    type="button"
+                                                    data-action="dblclick->note#deleteNoteItem">
+                                                <i style="background-color: #fff;font-size: 20px;border-radius: 5px;"
+                                                   class="material-symbols-outlined">delete_forever</i>
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row accordion-content is-hidden">
+                                    <div class="col-2"></div>
+                                    <div class="col-10 p-1">
+                                        <div class="accordion-body" style="font-size: 10px">
+                                            {{ note.createdAt|date('d.m.Y H:i') }} Uhr
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-0 p-0" data-note-target="answers" style="background-color: #f3f3f3">
+                                    {% if note.answers|length %}
+                                        {% for answer in note.answers %}
+                                            <div class="row" id="answerRow{{ answer.id }}">
+                                                <div class="col-3" style="font-size: 10px;text-align: center;">
+                                                    {% if answer.user.image %}<img class="circle"
+                                                                                   title="{{ answer.user.fullName }}"
+                                                                                   src="{{ '/'~appAssetPath~'user/'~answer.user.image }}"
+                                                                                   alt="{{ answer.user.fullName }} Avatar"
+                                                                                   style="width:26px;height:26px;border-radius: 50%;">
+                                                    {% else %}
+                                                        {{ answer.user.username }}
+                                                    {% endif %}<br>
+                                                    <div style="font-size: 9px;padding: 0;">{{ answer.createdAt|date('d.m H:i') }}</div>
+                                                </div>
+                                                <div class="col-7 text-left p-1">
+                                                    <div class="">
+                                                        {{ answer.note }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-2 d-flex text-center">
+                                                    {% if answer.user.id == app.user.id or is_granted('ROLE_EMPLOYEE_SERVICE') %}
+                                                        <div class="m-auto">
+                                                            <button class="btn btn-white btn-sm p-0"
+                                                                    data-url="{{ path('note_delete',{'note':answer.id}) }}"
+                                                                    data-id="{{ answer.id }}"
+                                                                    data-action="dblclick->note#deleteAnswerItem"
+                                                                    style="padding: 4px;color: #f54848;">
+                                                                <i class="material-symbols-outlined"
+                                                                   style="background-color: #fff;font-size: 16px;border-radius: 5px;">delete_forever</i>
+                                                            </button>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endmacro %}

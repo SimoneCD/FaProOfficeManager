@@ -1,0 +1,15 @@
+{% for flash_message in app.session.flashbag.get('success') %}
+    <div style="background-color: #fff;margin: 30px 30px 30px 300px;" class="alert alert-dismissible border border-success" style="padding: 20px;text-align: center">
+        {{ flash_message }}
+    </div>
+{% endfor %}
+{% for flash_message in app.session.flashbag.get('danger') %}
+    <div style="background-color: #fff;margin: 30px 30px 30px 300px;" class="alert alert-dismissible border border-danger" style="padding: 20px;text-align: center">
+        {{ flash_message }}
+    </div>
+{% endfor %}
+{% for flash_message in app.session.flashbag.get('info') %}
+    <div style="background-color: #fff;margin: 30px 30px 30px 300px;" class="alert alert-dismissible border border-info" style="padding: 20px;text-align: center">
+        {{ flash_message }}
+    </div>
+{% endfor %}

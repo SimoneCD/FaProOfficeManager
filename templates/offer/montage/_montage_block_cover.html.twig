@@ -1,0 +1,11 @@
+{% for offer in appointments %}
+    {% if parts[part] is defined and parts[part]['i'] == offer.id %}
+        <div class="customer_block w-100">
+           {% include 'offer/montage/_montage_block.html.twig' with {'offer': offer, 'part':parts[part]} %}
+        </div>
+    {% elseif search is defined %}
+        <div class="customer_block w-100">
+           {% include 'offer/montage/_montage_block.html.twig' with {'offer': offer, 'part':{'k':''}} %}
+        </div>
+    {% endif %}
+{% endfor %}

@@ -1,0 +1,19 @@
+
+
+{% include appTemplate~'offer_pdf/_line-1.html.twig' %}
+
+{% include appTemplate~'offer_new/_anrede.html.twig' %}
+
+{% include appTemplate~'offer_new/_projekt_daten.html.twig' %}
+
+{% include appTemplate~'offer_pdf/_line-konditionen.html.twig' %}
+
+{% include appTemplate~'offer_new/_line-1-werbung.html.twig' with {
+    'img1': asset(offer.subCategory and offer.subCategory.image ? appAssetPath~'offers/'~offer.subCategory.image: 'app/1x1.png'),
+    'img2': asset(offer.wallboxProduct and offer.wallboxProduct.image ? appAssetPath~'products/'~offer.wallboxProduct.image: 'app/1x1.png')
+} %}
+
+{% include appTemplate~'offer_pdf/_line-frindly-greetings.html.twig' %}
+{% include appTemplate~'offer_pdf/_seite.html.twig' with {'page': 1} %}
+
+

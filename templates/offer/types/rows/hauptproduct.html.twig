@@ -1,0 +1,5 @@
+<strong>{% if offer.wallboxProduct %}{{ offer.wallboxProduct.name }}{% endif %}</strong>
+{% if offer.wallboxProduct %} {{ offer.wallboxProduct.description }}{% endif %}
+<div class="d-none m-0 p-0" id="answer_from-{{ question.id }}">{{ offer.wallboxProduct.name }}
+{% if offer.wallboxProduct %} {{ offer.wallboxProduct.description }}{% endif %}
+</div>

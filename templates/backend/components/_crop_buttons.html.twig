@@ -1,0 +1,9 @@
+<div class="{%- if full is defined %}col-12{% else %}col-md-6 offset-md-6{% endif%} text-sm-center">
+    <button class="btn btn-default btn-sm" type="button" id="btnRestore">{{ 'w.reset'|trans }}</button>
+    <button title="Vertikal spiegeln" class="btn btn-default btn-sm" type="button" id="btnFlip"><span class="material-icons">swap_vert</span></button>
+    <button title="Horizontal spiegeln" class="btn btn-default btn-sm" type="button" id="btnFlipH"><span class="material-icons">swap_horiz</span></button>
+    <button class="btn btn-primary btn-sm" type="button" id="btnCrop"><span title="{{ 'w.crop'|trans }}" class="material-icons">crop_free</span></button>
+    {%- if delbutton is defined %}
+        <button id="offer_image_delete" type="button" class="offer_image_delete btn btn-danger btn-sm"><span title="Bild löschen" class="material-icons">clear</span></button>
+    {% endif %}
+</div>

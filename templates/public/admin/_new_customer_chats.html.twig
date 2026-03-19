@@ -1,0 +1,12 @@
+{% for m in chats|sort((a, b) => b.createdAt <=> a.createdAt) %}
+    {% if m.type == 'sos' %}
+        <div class="pr-0" style="font-size: 12px;{% if chat is defined %}border: 1px solid red;{% endif %}">
+            <button data-action="click->public-comunicate#loadChat"
+                    data-public-comunicate-customername-param="{{ m.customer.fullname }}"
+                    data-public-comunicate-url-param="{{ path('ajax_chat_customer', {'id':m.customer.id}) }}"
+                    class="btn btn-sm chat-customer-btn"
+                    style="font-size: 10px;padding: 2px;"
+            ><span style="color: {{ sfColor }}">{{ m.customer.fullname }}</span>&nbsp;|&nbsp;<strong>{{ m.createdAt|ago }}</strong></button>
+        </div>
+    {% endif %}
+{% endfor %}

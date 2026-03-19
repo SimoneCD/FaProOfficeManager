@@ -1,0 +1,4 @@
+{% macro projectDate(item) %}
+    <p class="project-date">{{ item.serviceDateFrom|date('d M Y') }}&nbsp;</p>
+    <p class="project-date">{{ item.serviceDateTo|date('d M Y') }}&nbsp;</p>
+{% endmacro %}

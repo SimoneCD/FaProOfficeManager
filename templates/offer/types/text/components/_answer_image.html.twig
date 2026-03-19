@@ -1,0 +1,9 @@
+<div style="position: relative">
+    <div class="my-0">
+        <p class="m-0" style="float: left" id="answer_from-{{ question.id }}">{{ value }}</p>
+        {% if answer.image %}<img alt="" src="{{ absolute_url(asset('app/img/1x1.png')) }}" style="height: 60px;float: left">{% endif %}
+    </div>
+{% if answer.image %}
+    <div class="m-0 p-0" style="position: absolute;top: 0;right: 0;"><img alt="{{ answer.name }}" src="{{ absolute_url(asset(appAssetPath~'offers/answers/'~answer.image)) }}" style="max-height: 60px;box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;"></div>
+{% endif %}
+</div>

@@ -1,0 +1,33 @@
+{{ form_start(form, {'id': 'link_form' }) }}
+<div id="step">
+    <br>
+    <div class="form-group row">
+        {{ form_label(form.fullname) }}
+        <div class="col-md-9">
+            {{ form_widget(form.fullname) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        {{ form_label(form.email) }}
+        <div class="col-md-9">
+            {{ form_widget(form.email) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        {{ form_label(form.amount) }}
+        <div class="col-md-9">
+            {{ form_widget(form.amount) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        {{ form_label(form.notice) }}
+        <div class="col-md-9">
+            {{ form_widget(form.notice) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-10 offset-2 text-right">
+            <button data-action="{{ path('ajax_link_submit') }}" id="add_link" type="button" class="btn">{{ 'w.save'|trans }}</button>
+        </div>
+    </div>
+{{ form_end(form) }}

@@ -1,0 +1,8 @@
+<form id="category_delete" method="post" action="{{ path('backend_category_delete', {'id': category.id}) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete_category_' ~ category.id) }}">
+    <div class="form-group row">
+        <div class="col-md-8 offset-md-4">
+            {% if category.id is not null %}<button data-confirm="{{ 'f.confirm.deleteCategory'|trans }}" class="confirm btn btn-danger" type="button">{{ 'p.c.delete'|trans }}</button>{% endif %}
+        </div>
+    </div>
+</form>

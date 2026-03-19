@@ -1,0 +1,284 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="{{ asset('app/timesheet/calendar_white.css') }}"/>
+    <style>
+        .generated { color: #999; margin: 5px 0; }
+        .generated a { color: #999; }
+        .calendar_default_event_bar_inner {
+            background-color: #{{ user.color }} !important;
+            height: 100% !important;
+        }
+        .calendar_default_rowheader_inner {
+            font-size: inherit !important;
+        }
+        .navigator_default_title,.navigator_default_titleleft,.navigator_default_titleright{
+            background-color: {{ sfColor }} !important;color: #fff !important;
+
+        }
+        .modal_default_form_item textarea {
+            border: 1px solid #dfdfdf;
+            max-height: 100px !important;
+        }
+        .modal_default_main {
+            border: 4px solid {{ sfColorDark }} !important;
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('app/timesheet/dp.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).on('click', '.navd', function () {
+                if ($(this).css('z-index') === '9') {
+                    $(this).css('z-index','')
+                } else {
+                    $(this).css('z-index','9')
+                }
+            });
+        })
+        const form = [
+            {name: "Kurze Beschreibung der Tätigkeit", id: "text", type: 'textarea'},
+            // {name: "Start", id: "start", type: 'time', locale:'de-de'},
+            // {name: "Ende", id: "end", type: 'time',locale:'de-de'},
+        ];
+        const nav = new DayPilot.Navigator("nav", {
+            showMonths: 1,
+            skipMonths: 1,
+            selectMode: 'Week',
+            locale:'de-de',
+            onTimeRangeSelected: args => {
+                dp.update({
+                    startDate: args.day
+                });
+                app.loadEvents();
+            }
+        });
+        nav.init();
+
+        const dp = new DayPilot.Calendar("dp", {
+            viewType: "Week",
+            locale:'de-de',
+            headerDateFormat:'ddd dd.MM',
+            businessBeginsHour: 7,
+            businessEndsHour: 21,
+            /* eventDeleteHandling: "Update",*/
+            onEventDeleted: async (args) => {
+                const id = args.e.id();
+                url = url.replace('{{ path('ajax_timesheet_delete') }}', id);
+                await DayPilot.Http.delete(url);
+                console.log('Deleted.');
+            },
+            onEventMoved: async (args) => {
+                const id = args.e.id();
+                const data = {
+                    id: args.e.id(),
+                    start: args.newStart,
+                    end: args.newEnd,
+                    text: args.e.text()
+                };
+                await DayPilot.Http.post('{{ path('ajax_timesheet_update') }}', data);
+                console.log('Moved.');
+            },
+            onEventResized: async (args) => {
+                const id = args.e.id();
+                const data = {
+                    id: args.e.id(),
+                    start: args.newStart,
+                    end: args.newEnd,
+                    text: args.e.text()
+                };
+                await DayPilot.Http.post('{{ path('ajax_timesheet_update') }}', data);
+                console.log('Resized.');
+            },
+            onTimeRangeSelected: async (args) => {
+
+                const datai = {
+                    start: args.start,
+                    end: args.end,
+                };
+                const modal = await DayPilot.Modal.form(form, datai);
+                if (modal.canceled) { return; }
+
+                const dp = args.control;
+                dp.clearSelection();
+
+                const event = {
+                    start: args.start,
+                    end: args.end,
+                    text: modal.result.text
+                };
+                const {data} = await DayPilot.Http.post('{{ path('ajax_timesheet_create') }}', event);
+
+                dp.events.add({
+                    start: args.start,
+                    end: args.end,
+                    id: data.id,
+                    text: modal.result.text
+                });
+                console.log("Created.");
+
+            },
+            onEventClick: async (args) => {
+                app.editEvent(args.e);
+            },
+            onBeforeEventRender: args => {/*
+                if (args.data.tags && args.data.tags.type) {
+                    alert(args.data.tags.type)
+                    args.data.rightClickDisabled = true;
+                    args.data.barColor = "red";
+                }*/
+                args.data.areas = [
+                    {
+                        top: 5,
+                        right: 5,
+                        width: 16,
+                        height: 16,
+                        symbol: "{{ asset('app/timesheet/ts.svg') }}#minichevron-down-4",
+                        fontColor: "#666",
+                        visibility: "Hover",
+                        action: "ContextMenu",
+                        style: "background-color: #f9f9f9; border: 1px solid #666; cursor:pointer; border-radius: 15px;"
+                    }
+                ];
+            },
+            contextMenu: new DayPilot.Menu({
+                items: [
+                    {
+                        text: "Bearbeiten",
+                        onClick: args => {
+                            app.editEvent(args.source);
+                        }
+                    },
+                    {
+                        text: "Löschen",
+                        onClick: args => {
+                            app.deleteEvent(args.source);
+                        }
+                    },
+                    {
+                        text: "-"
+                    },
+                    // {
+                    //     text: "Duplizieren",
+                    //     onClick: args => {
+                    //         app.duplicateEvent(args.source);
+                    //     }
+                    // },
+                ]
+            })
+        });
+        dp.init();
+
+
+        const app = {
+            elements: {
+                theme: document.querySelector("#theme")
+            },
+            loadEvents() {
+                dp.events.load('{{ path('ajax_timesheet_list') }}');
+            },
+            async editEvent(e) {
+
+                const modal = await DayPilot.Modal.form(form, e.data);
+                if (modal.canceled) {
+                    return;
+                }
+
+                const id = e.id();
+                let time = e.start()
+                console.log(time)
+                const data = {
+                    id: e.id(),
+                    start: modal.result.start,
+                    end: e.end(),
+                    text: modal.result.text,
+                    barColor: green,
+                    tags: ['important']
+                };
+                await DayPilot.Http.post('{{ path('ajax_timesheet_update') }}', data);
+
+                dp.events.update({
+                    ...e.data,
+                    text: modal.result.text
+                });
+                console.log("Updated.");
+            },
+            async deleteEvent(e) {
+                const modal = await DayPilot.Modal.confirm("Diesen Eintrag wirklich löschen");
+                if (modal.canceled) {
+                    return;
+                }
+                const id = e.id();
+                const params = {
+                    id
+                };
+                await DayPilot.Http.post('{{ path('ajax_timesheet_delete') }}', params);
+
+                dp.events.remove(id);
+
+                console.log("Deleted.");
+            },
+            async duplicateEvent(e) {
+                const event = {
+                    start: args.start,
+                    end: args.end,
+                    // start: e.start(),
+                    // end: e.end(),
+                    text: e.text() + " (Kopie)"
+                };
+                const { data } = await DayPilot.Http.post('{{ path('ajax_timesheet_create') }}', event);
+
+                dp.events.add({
+                    ...event,
+                    id: data.id,
+                });
+                console.log("Duplicated.");
+            },
+            init() {
+                // app.elements.theme.addEventListener("change", () => {
+                //     dp.update({
+                //         theme: app.elements.theme.value
+                //     });
+                // });
+
+                app.loadEvents();
+            }
+        };
+        app.init();
+
+    </script>
+    <script type="text/javascript">
+        // Clock Script Generated By Maxx Blade's Clock v2.0d
+        // [url=http://www.maxxblade.co.uk/clock]MaxxBlade's JavaScripts :: [ Clock v2.0d ] :: Build custom JavaScript clocks.[/url]
+        function tS(){ x=new Date(tN().getUTCFullYear(),tN().getUTCMonth(),tN().getUTCDate(),tN().getUTCHours(),tN().getUTCMinutes(),tN().getUTCSeconds()); x.setTime(x.getTime()+dS()+3600000); return x; }
+        function tN(){ return new Date(); }
+        function dS(){ return ((tN().getTime()>fD(0,2,2,-1).getTime())&&(tN().getTime()<fD(0,9,2,-1).getTime()))?3600000:0; }
+        function fD(d,m,h,p){ var week=(p<0)?7*(p+1):7*(p-1),nm=(p<0)?m+1:m,x=new Date(tN().getUTCFullYear(),nm,1,h,0,0),dOff=0; if(p<0){ x.setTime(x.getTime()-86400000); } if(x.getDay()!=d){ dOff=(x.getDay()<d)?(d-x.getDay()):0-(x.getDay()-d); if(p<0&&dOff>0){ week-=7; } if(p>0&&dOff<0){ week+=7; } x.setTime(x.getTime()+((dOff+week)*86400000)); } return x; }
+        function lZ(x){ return (x>9)?x:'0'+x; }
+        function dT(){ document.getElementById('tP').innerHTML=eval(oT); setTimeout('dT()',1000); }
+        function y4(x){ return (x<500)?x+1900:x; }
+        var dN=new Array('So','Mo','Di','Mi','Do','Fr','Sa'),oT="dN[tS().getDay()]+' '+tS().getDate()+'.'+lZ((tS().getMonth()+1))+'.'+y4(tS().getYear())+' '+' - '+' '+lZ(tS().getHours())+':'+lZ(tS().getMinutes())+':'+lZ(tS().getSeconds())";
+        if(!document.all){ window.onload=dT; }else{ dT(); }
+    </script>
+{% endblock %}
+
+{% block main %}
+    <input id="theme" type="hidden" value="calendar_white">{#White</option>
+        <option value="calendar_green">Green</option>
+        <option value="calendar_traditional">Traditional</option>
+        <option value="calendar_transparent">Transparent</option>
+    </input>#}
+    <div id="tP"></div>
+    <div style="position: relative;inset: 0;">
+        <div class="navd m-0 p-0 d-inline-block" style="width: 214px;position: fixed;">
+            <div id="nav"></div>
+        </div>
+        <div class="d-inline-block m-0 p-0" style="top: 30px;position: inherit;">
+            <div id="dp" class="calendar_default_main" style="user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); position: relative; height: 570px; visibility: visible;"></div>
+        </div>
+    </div>
+{% endblock %}

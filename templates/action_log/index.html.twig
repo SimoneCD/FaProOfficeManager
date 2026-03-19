@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ActionLog index{% endblock %}
+
+{% block body %}
+    <h1>ActionLog index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>CreatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for action_log in action_logs %}
+            <tr>
+                <td>{{ action_log.id }}</td>
+                <td>{{ action_log.name }}</td>
+                <td>{{ action_log.type }}</td>
+                <td>{{ action_log.createdAt ? action_log.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_action_log_show', {'id': action_log.id}) }}">show</a>
+                    <a href="{{ path('app_action_log_edit', {'id': action_log.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            {% include 'backend/_no_entry.html.twig' with {'collSpan': 5} %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_action_log_new') }}">Create new</a>
+{% endblock %}

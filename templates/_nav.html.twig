@@ -1,0 +1,144 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-transparent navigator" style="z-index: 999;">
+    <div class="container-fluid">
+        <div class="navbar-wrapper">
+            <a class="navbar-brand" href="javascript:"></a>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end">
+{#            {% if currentRoute in ['offer_category_isearch', 'offer_category_index', 'offer_subcategory_index', 'offer_archive'] %}#}
+                {% if app.request.query.get('search') is not null %}
+                    {% set filterUser = 'all' %}
+                {% endif %}
+            {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}
+                <form action="{{ path('offer_category_isearch') }}" class="navbar-form">
+                    <div class="input-group no-border" style="padding: 0 15px;">
+                        <input type="text" name="search" value="{{ app.request.query.get('search') }}" class="form-control search_input" placeholder="{{ 'w.search'|trans }}..." style="padding: 0 20px;border-left: 3px solid {{ sfColor }};">
+                        <button type="submit" class="btn btn-white btn-round btn-just-icon search_icon">
+                            <i class="material-symbols-outlined">search</i>
+                            <div class="ripple-container"></div>
+                        </button>
+                    </div>
+                </form>
+            {% elseif is_granted('ROLE_MONTAGE') %}
+                <form action="{{ path('sf_montage_search') }}" class="navbar-form">
+                    <div class="input-group no-border" style="padding: 0 15px;">
+                        <input type="text" name="search" value="{{ app.request.query.get('search') }}" class="form-control search_input" placeholder="{{ 'w.search'|trans }}..." style="padding: 0 20px;border-left: 3px solid {{ sfColor }};">
+                        <button type="submit" class=" btn btn-white btn-round btn-just-icon search_icon" style="height: 29px">
+                            <i class="material-symbols-outlined">search</i>
+                            <div class="ripple-container"></div>
+                        </button>
+                    </div>
+                </form>
+            {% endif %}
+            <ul class="navbar-nav">
+{#                <li class="nav-item dropdown">#}
+{#                    <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+{#                        <i class="material-symbols-outlined">notifications</i>#}
+{#                        <span class="notification">5</span>#}
+{#                        <p class="d-lg-none d-md-block">#}
+{#                            Some Actions#}
+{#                        </p>#}
+{#                    </a>#}
+{#                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">#}
+{#                        <a class="dropdown-item" href="#">Deine Aufgaben (in Arbeit)</a>#}
+{#                    </div>#}
+{#                </li>#}
+
+                <li class="nav-item dropdown">
+
+{#                <div class="sl-nav">#}
+{#                    <ul>#}
+{#                        <li>{% set loci = app.request.locale|replace({'en':'gb'}) %}</li>#}
+{#                        <li><span class="fi fi-{{ loci ?? 'de' }}"></span><div id="{{ app.request.locale }}-locale"></div></i> <i class="fa fa-angle-down" aria-hidden="true"></i>#}
+{#                            <div class="triangle w-100 text-left"></div>#}
+{#                            {% set language = 'lang.'~app.request.locale|replace({'en':'gb'}) %}#}
+{#                            <ul class="text-left">#}
+{#                                {% if language != 'lang.de' %}<li><a title="{{ 'lang.de'|trans }}" class="nav-link {% if language == 'lang.de' %}active{% endif%} p-0" href="{{ app.request.requestUri|replace({'/tr/':'/', '/en/':'/', '/gb/':'/', '/es/':'/', '/de/':'/'}) }}"><span class="fi fi-de"></span> {{ 'lang.de'|trans }}</a></li>{% endif %}#}
+{#                                {% if language != 'lang.gb' and language != 'lang.en' %}<li><a title="{{ 'lang.gb'|trans }}" class="nav-link {% if language == 'lang.gb' or language == 'lang.en' %}active{% endif%} p-0" href="/en{{ app.request.requestUri|replace({'/tr/':'/', '/en/':'/', '/gb/':'/', '/es/':'/', '/de/':'/'}) }}"><span class="fi fi-gb"></span>  {{ 'lang.gb'|trans }}</a></li>{% endif %}#}
+{#                                {% if language != 'lang.es' %}<li><a title="{{ 'lang.es'|trans }}" class="nav-link {% if language == 'lang.es' %}active{% endif%} p-0" href="/es{{ app.request.requestUri|replace({'/tr/':'/', '/en/':'/', '/gb/':'/', '/es/':'/', '/de/':'/'}) }}"><span class="fi fi-es"></span>  {{ 'lang.es'|trans }}</a></li>{% endif %}#}
+{#                                {% if language != 'lang.tr' %}<li><a title="{{ 'lang.tr'|trans }}" class="nav-link {% if language == 'lang.tr' %}active{% endif%} p-0" href="/tr{{ app.request.requestUri|replace({'/tr/':'/', '/en/':'/', '/gb/':'/', '/es/':'/', '/de/':'/'}) }}"><span class="fi fi-tr"></span>  {{ 'lang.tr'|trans }}</a></li>{% endif %}#}
+{#                            </ul>#}
+{#                        </li>#}
+{#                    </ul>#}
+{#                </div>#}
+                </li>
+                <style>
+                    /*.avatar {*/
+                    /*    vertical-align: middle;*/
+                    /*    width: 150px;*/
+                    /*    height: 150px;*/
+                    /*    border-radius: 50%;*/
+                    /*}*/
+                    .circle {
+                        line-height: 0;		/* remove line-height */
+                        display: inline-block;	/* circle wraps image */
+                        margin: 5px 0 0 0;
+                        border: 4px solid rgba(200,200,200,0.4);
+                        border-radius: 50%;	/* relative value */
+                        /*box-shadow: 0px 0px 5px rgba(0,0,0,0.4);*/
+                        transition: linear 0.25s;
+                        height: 50px;
+                        width: 50px;
+                    }
+                    button.circlebox {
+                        padding: 0 !important;
+                        border-radius: 50%;
+                        background: none !important;
+                        border: none !important;
+                    }
+                    .circle img {
+                        border-radius: 50%;	/* relative value for
+				   adjustable image size */
+                    }
+                    .circle:hover {
+                        transition: ease-out 0.2s;
+                        border: 4px solid rgba(0,0,0,0.2);
+                        -webkit-transition: ease-out 0.2s;
+                    }
+                    a.circle {
+                        color: transparent;
+                    } /* IE fix: removes blue border */
+                </style>
+                <li class="nav-item dropdown">
+                    {%  if is_granted('ROLE_MONTAGE') %}
+                        <a class="nav-link" href="javascript:void (0);" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {%  if app.user.image %}
+                                <img class="circle" title="{{ app.user.fullName }}" src="{{ '/'~appAssetPath~'user/'~app.user.image }}" alt="{{ app.user.fullName }} Avatar" style="border-radius: 50%;">
+                            {%  else %}
+                            <img title="{{ app.user.fullName }}" src="{{ app.user.avatarUri }}" alt="{{ app.user.fullName }} Avatar" style="border-radius: 50%;">
+                            {%  endif %}
+                        </a>
+                    {% endif %}
+                    <div style="text-align: center;background-color: #fff" class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
+                        <a class="dropdown-item" href="{{ path('backend_user_edit', {'id': app.user.id}) }}">Dein Account</a>
+                        <div class="dropdown-divider"></div>
+                        {%  if is_granted('ROLE_ADMIN') %}
+                            {% if is_granted('IS_IMPERSONATOR') %}{% else %}
+                                {% for us in getTopUsers() %}
+                                    <a style="background: #fff;margin: 0 10%; width: 90%;" class="nav-link" href="{{ path('homepage') }}?_switch_user={{ us.id }}">{{ us.username }}</a>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                        {#            {% if is_granted('IS_IMPERSONATOR') %}#}
+                        {#                <a href="{{ impersonation_exit_path(path('offer_index') ) }}">Exit impersonation</a>#}
+                        {#                <div class="dropdown-divider"></div>#}
+                        {#            {% endif %}#}
+                        {%  if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                            <div class="dropdown-divider"></div>
+                            <a class="nav-link" href="{{ path('homepage', {'_switch_user': '_exit'}) }}">Exit UserSwitch</a><br>
+                        {% endif %}
+                        <div class="dropdown-divider"></div>
+                        <a class="nav-link" onclick="signOut()" href="{{ path('security_logout') }}">Log out</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- End Navbar -->

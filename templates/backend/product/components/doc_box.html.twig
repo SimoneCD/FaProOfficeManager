@@ -1,0 +1,15 @@
+<div class="doc-md-{{ doc.id }}">
+    <a target="_blank"
+       href="{{ absolute_url(asset(appAssetPath~'uploads/'~product.id~'/'~doc.filename)) }}">
+        {{ doc.originalName }}
+    </a>
+    <div class="desc-{{ doc.id }}">
+        <button style="color: orangered" title="Doppelklicken zum Löschen" type="button"
+                data-loop-id="{{ docsCount }}"
+                data-doument-id="{{ doc.id }}"
+                data-url="{{ path('montage_document_remove', {'id': doc.id}) }}"
+                data-action="dblclick->upload#removeDoc"
+                class="p-1 btn btn-light btn-xs">x
+        </button>
+    </div>
+</div>

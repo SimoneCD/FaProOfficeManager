@@ -1,0 +1,62 @@
+<div class="table-responsive">
+    <table class="table" style="width: 1024px">
+    <thead>
+    <tr>
+        <th colspan="7">
+            {%- if invoices|length -%}
+            <a href="{{ path('customer_edit', {'id': 277}) }}">{{ invoices[0].customer.companyName }}</a>
+            {%- endif -%}
+        </th>
+    </tr>
+    <tr>
+        <th style="width: 70px"><strong>R-Nr.</strong></th>
+        <th style="width: 120px"><strong>R-Datum</strong></th>
+        <th><strong>Projekt</strong></th>
+        <th class="text-center">Bezahlt</th>
+        <th class="text-center">Versendet</th>
+        <th style="max-width: 150px;" class="text-right"><strong>Auftragswert Brutto</strong></th>
+        <th style="min-width: 90px"><strong></strong></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% set so = 1 %}
+    {% for invoice in invoices %}
+        {% if invoice.type == 'part' %}
+            {% set price = invoice.pos1Price %}
+        {% else %}
+            {% set price = invoice.pos0Price+invoice.pos1Price %}
+        {% endif %}
+        {% if invoice.pos2Price %}
+            {% set price = price+invoice.pos2Price %}
+        {% endif %}
+        {% if invoice.pos3Price %}
+            {% set price = price+invoice.pos3Price %}
+        {% endif %}
+{#        {% set tax = 19*price/100 %}#}
+        {% set tax = 0 %}
+        {% set datum = invoice.date|date('d.m.Y') %}
+        {% if invoice.invoiceOrder is not null %}
+            {% set offer = invoice.invoiceOrder.offer %}
+        {% endif %}
+        <tr id="table_achor" class="">
+            <td style="border-bottom: none">{% if offer is defined %}{{ offer.number }}.{% if invoice.type == 'part' %}1{% else %}2{% endif %}{% else %}{{ invoice.number }}{% endif %}</td>
+            <td style="border-bottom: none">{{ datum }}</td>
+            <td style="border-bottom: none">{{ invoice.ladestation }}</td>
+            <td style="border-bottom: none">{% if invoice.bezahlt %}{{ invoice.bezahlt|date('d.m.Y') }}{% endif %}</td>
+            <td class="text-center" style="border-bottom: none">{% if invoice.sendDate %}{{ invoice.sendDate|date('d.m.Y') }}{% endif %}</td>
+            <td class="text-right" style="border-bottom: none">{{ (price+tax)|number_format('2',',','.') }} &euro;</td>
+            <td class="text-right" style="border-bottom: none;">
+                <a href="{{ path('invoice_user_edit',{'id': invoice.id}) }}"><i class="material-symbols-outlined">edit</i></a>
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <a class="delete_invoice" style="color: orangered;padding-left: 10px;" href="{{ path('invoice_delete',{'id': invoice.id}) }}"><i class="material-symbols-outlined">delete</i></a>
+                {% endif %}
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="7">Keine Einträge</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>

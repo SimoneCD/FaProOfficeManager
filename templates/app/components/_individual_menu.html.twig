@@ -1,0 +1,24 @@
+
+<div class="row irow" style="width: 1024px" data-controller="email">
+    <div class="col-12 pl-0">
+        <div class="btn-group" role="group" aria-label="">
+            {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}
+                <a class="btn btn-xs p-1 btn-light" href="{{ path('customer_edit', {'id':invoice.customer.id}) }}"><i class="material-symbols-outlined">person</i></a>
+                {# User Icon #}
+                {# PDF Icon #}
+                {% if invoice.id %}
+                    <a class="btn btn-xs p-1 btn-light" href="{{ path('invoice_individual_pdf', {'id': invoice.id}) }}" target="_blank"><i class="material-symbols-outlined">picture_as_pdf</i></a>
+                {% endif %}
+                    <button class="btn btn-xs p-1 btn-light a_static_progress"
+                        data-action="click->email#launchEmail"
+                        type="button"
+                        data-type="default"
+                        data-email-url-param="{{ path('ajax_load_detail_mail',{'id':invoice.customer.id,'template':'default'}) }}"
+                        data-id="{{ invoice.customer.id }}"
+                        data-name="{{ invoice.customer.fullNormalName }} ({{ invoice.customer.email }})"
+                        data-title="{{ 'w.customerServiceMessage'|trans }}"><small><i class="material-symbols-outlined">email</i></small></button>
+            {%- endif -%}
+        </div>
+    </div>
+    {% include 'offer/modals/_email_modal.html.twig' %}
+</div>

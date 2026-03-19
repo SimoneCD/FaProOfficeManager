@@ -1,0 +1,4 @@
+when@dev:
+  zenstruck_foundry:
+    persistence:
+      flush_once: true

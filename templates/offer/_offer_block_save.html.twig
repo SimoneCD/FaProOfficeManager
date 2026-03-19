@@ -1,0 +1,477 @@
+{% set allow = '' %}
+{% set icon = '' %}
+{% set sendDate = '' %}
+{% if offer.inquiry is not null and offer.status != 'deleted' %}
+    {% set lateDatum = 'now'|date_modify('-8 days')|date('ymd') %}
+{#    {% set istDatum = 'now'|date_modify('-5 days')|date('ymd') %}#}
+{#    {% set istDatumDate = 'now'|date('d.m.Y') %}#}
+    {% set importDatum = offer.inquiry is not null ? offer.inquiry.date|date('ymd') : offer.offerDate|date('ymd') %}
+    {% set importDatumDate = offer.inquiry is not null ? offer.inquiry.date|date('d.m.Y') : offer.offerDate|date('d.m.Y') %}
+    {% set datum = offer.order ? offer.order.createdAt|date('d.m') : offer.offerDate|date('d.m') %}
+    {% set difference = date('now'|date('Y-m-d H:i:s')).diff(date(offer.inquiry.date|date('Y-m-d H:i:s'))) %}
+    {% set leftDays = difference.days %}
+    {% set hasTermine = offer.bookings|length %}
+
+    {% set status = 0 %}
+    {{ save('status') }}
+    {{ save('icon') }}
+    {% include 'offer/_offer_block_status.html.twig' with {'status': offer.status } %}
+    {{ restore('status') }}
+    {{ restore('icon') }}
+    {% set called = false %}
+    {% set booking_k = '' %}
+    {% set booking_g = '' %}
+    {% set booking_s = '' %}
+    {% set wp_block = '' %}
+    {% if offer.wallboxProduct %}
+        {% set wp_block = '<span title="'~ offer.wallboxProduct.name ~'" class="sf_bing product_block">'~ offer.wallboxProduct.fullName ~' (Anz.:'~offer.amount~')</span>' %}
+    {% endif %}
+    {% set calledA = false %}
+    {% if offer.bookings|length %}
+        {% for booking in offer.bookings|sort((a,b) => a.beginAt <=> b.beginAt) %}
+            {% if booking.title == 'Anrufen' %}
+                {% set icon2 = '<span class="material-icons">phone</span>' %}
+            {% elseif booking.title == 'Besichtigung' %}
+                {% set icon2 = '<span style="font-size: small;" class="material-symbols-outlined">rebase_edit</span>' %}
+            {% elseif booking.title == 'Sonstiges' %}
+                {% set icon2 = '' %}
+            {% else %}
+                {% set icon2 = '<span style="font-size: small;" class="material-symbols-outlined">plumbing</span>' %}
+            {% endif %}
+            {% if booking.beginAt|date('ymd') == 'now'|date('ymd') %}
+                {% set calledA = true %}
+                {% set called = offer.option and offer.option.called %}
+                {% set booking_g = '<span title="'~('w.today'|trans)~'" style="padding-left:0" class="btn btn-info sf_bing today">'~icon2~''~booking.beginAt|date('H:i')~' Uhr</span>' %}
+            {% elseif booking.beginAt|date('ymd') == ('now'|date_modify('+1 day'))|date('ymd') %}
+                {% set called = offer.option and offer.option.called %}
+                {% set calledA = true %}
+                {% set booking_g = '<span title="'~('w.tomorrow'|trans)~'" class="material-icons sf_bing">watch_later</span>' %}
+            {% elseif booking.beginAt|date('ymd') <= 'now'|date('ymd') %}
+                {% set booking_k = '<span title="'~('book.toLate'|trans)~'! '~booking.beginAt|date('d.m.y')~'" class="material-icons sf_bing" style="color: '~sfColor~'">watch_later</span>' %}
+            {% elseif booking.beginAt|date('ymd') >= 'now'|date('ymd') %}
+                {% set calledA = true %}
+                {% set called = offer.option and offer.option.called %}
+            {% else %}
+                {% set booking_k = '<span title="'~('book.toLate'|trans)~' '~booking.beginAt|date('d.m.y')~'" class="material-icons sf_bing" style="color: '~sfColor~'">watch_later</span>' %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% if booking_g != '' or called %}
+        {# today #}
+        {% set booking_s = booking_g %}
+    {% else %}
+        {# to late #}
+        {% set booking_s = booking_k %}
+    {% endif %}
+    {% set color = sfColor %}
+    {% if calledA %}
+        {% set classNAme = 'box_name_color' %}
+    {% else %}
+        {% set classNAme = 'box_name_color_active' %}
+    {% endif %}
+    <div data-controller="update-offer" data-update-offer-offer-id-value="{{ offer.id }}" data-update-offer-update-url-value="{{ path('ajax_update_offer_status', {'id':offer.id}) }}"{#{{ stimulus_controller('update-offer', {'offerId':offer.id, 'updateUrl': path('ajax_update_offer_status', {'id':offer.id}) }) }}#}
+            data-update-offer-target="element" class="data_block">
+
+        {% set greenbg = 'background-color:#efefef;color:#000;' %}
+        {% set greybg = 'background-color:grey;' %}
+        {% set sendbg = 'background-color:#c5554d' %}
+        {% set yellowbg = 'background: repeating-linear-gradient( 135deg, #ffc500, #ffc500 10px, '~sfColorDark~' 10px, '~sfColor~' 20px );' %}
+
+        {% if status == 7 %}
+            {% set percent = 100 %}
+            {% set blocks = {} %}
+            {% set ps = 0 %}
+            {% set bg = '' %}
+            {% set lastDone = false %}
+
+            {% if offer.context.invoice_pay is defined %}
+            {% for k, c in offer.context.invoice_pay %}
+                {% if c.value != 0 %}
+                    {% set index = loop.index %}
+                    {% set ps = ps+c.value %}
+                    {% if index == 1 %}
+                        {% if ((offer.order.teilInvoice[0] is defined and offer.order.teilInvoice[0].sendDate is null) or offer.order.teilInvoice[0] is not defined) %}
+                            {% set bg = yellowbg %}
+                            {% set bgId = 'inWork' %}
+                            {% set lastDone = false %}
+                        {% else %}
+                            {% set bg = greenbg %}
+                            {% set bgId = 'done' %}
+                            {% set lastDone = true %}
+                        {% endif %}
+                        {% set blocks = blocks|merge([{'bgId':bgId,'bg':bg,'percent':c.value,'text':c.name,'payed':true,'send':offer.order.partInvoice.sendDate|date('d.m.y'),'date':offer.order.partInvoice.bezahlt|date('d.m')}]) %}
+                    {% elseif index == 2 %}
+                        {% if lastDone == false or (offer.order.teilInvoice[0] is defined and offer.order.teilInvoice[0].sendDate is null) %}
+                            {% set bg = greybg %}
+                            {% set bgId = 'wait' %}
+                            {% set lastDone = false %}
+                        {% elseif offer.order.teilInvoice[1] is defined and offer.order.teilInvoice[1].sendDate is not null %}
+                            {% set bg = greenbg %}
+                            {% set bgId = 'done' %}
+                            {% set lastDone = true %}
+                        {% elseif offer.order.teilInvoice[0] is defined and offer.order.teilInvoice[0].bezahlt is not null %}
+                            {% set bg = yellowbg %}
+                            {% set bgId = 'inWork' %}
+                            {% set lastDone = false %}
+                        {% else %}
+                            {% set bg = sendbg %}
+                            {% set bgId = 'waitPay' %}
+                            {% set lastDone = false %}
+                        {% endif %}
+                        {% set blocks = blocks|merge([{'bgId':bgId,'bg':bg,'percent':c.value,'text':c.name,'payed':true,'send':offer.order.partInvoice.sendDate|date('d.m.y'),'date':offer.order.partInvoice.bezahlt|date('d.m')}]) %}
+                    {% else %}
+                        {% if lastDone == false %}
+                            {% set bg = greybg %}
+                            {% set blocks = blocks|merge([{'bgId':'wait','bg':bg,'percent':c.value,'text':c.name,'payed':false,'send':null,'date':null}]) %}
+                        {% else %}
+                            {% set bg = yellowbg %}
+                            {% set blocks = blocks|merge([{'bgId':'inWork','bg':bg,'percent':c.value,'text':c.name,'payed':true,'send':null,'date':null}]) %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            <div style="border-radius: 6px 6px 0 0;">
+                {% set l = blocks|length %}
+                {%- for kb, b in blocks -%}
+                    {% set wd = b.percent*100/ps %}
+                    <div>
+                        <div data-id="{{ inviceId ?? 0 }}" title="{{ b.text }}"
+                             data-action="{{ path('ajax_update_tp', {'offer':offer.id,'type':'pay'}) }}"
+                             class="float-left {% if b.bgId == 'waitPay' and is_granted('ROLE_EMPLOYEE_EXTERN') %}set_payed {% endif %}teil-invoice text-center"
+                             style="{% if b.bgId == 'waitPay' %}cursor: pointer;{% endif %}color:#fff;width: {{ wd }}%;border-right:1px solid black;{{ b.bg }}">
+                            <div class=" m-0 p-0 w-100">{{ b.percent }}%</div>
+                        </div>
+                    </div>
+                    {% set op = b %}
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endif %}
+        <div data-list-target="item"
+             {% if offer.order %}data-order="{{ offer.order.id }}"{% endif %}
+             data-offer="{{ offer.id }}"
+             data-allow="{{ allow }}"
+             data-from="{{ status }}"
+             id="customer_j_{{ offer.id }}"
+             class="{% if status >= 4 %}offer_box {% else %}offer_box_pre {% endif %}customer_offer {% if calledA %}active_box active_but_icon {% endif %}{% if hasTermine %}terminati {% endif %}offers_numbers offer_number{{ offer.customer.customerNumber }} card-box card"
+             style="{% if status == 7 %}margin-top: 0;border-top: none;border-radius: 0 0 6px 6px;{% endif %}{% if offer.status == 'archive' -%}background-color:#8BC34A;{% endif -%}{% if called == false -%}
+{#                  {%- if status < 6 and offer.order is not null and offer.order.createdAt|date('ymd') <= 'now'|date_modify('-15 days')|date('ymd') -%}#}
+{#                         border:none;border-right: 3px solid red;#}
+{#                  {%- endif -%}#}
+{#             {%- else -%}#}
+{#                 {%- if status < 6 and offer.order is not null and offer.order.createdAt|date('ymd') <= 'now'|date_modify('-15 days')|date('ymd') -%}#}
+{#                         border:none;border-right: 3px solid red;border-left: 5px solid {{ color }};#}
+{#                 {%- else -%}#}
+{#                         border:none;border-left: 5px solid {{ color }};#}
+{#                 {%- endif -%}#}
+             {%- endif %}">
+            {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+            <div id="warner-{{ offer.id }}-delete" class="warner-{{ offer.id }} warner_delete warner {% if offer.deleteIt == false %}d-none{% endif %}" style="z-index: 99">
+                <img src="{{ asset('app/images/noOk.svg') }}">
+            </div>
+            <div id="warner-{{ offer.id }}-urgent" class="warner-{{ offer.id }} warner_urgent warner {% if offer.urgent == false or offer.deleteIt != false %}d-none{% endif %}">
+                <img style="width: 20px;left: -8px;top: 11px;" src="{{ asset('app/images/call.svg') }}">
+            </div>
+            {% endif %}
+            <h4 style="font-size: 1rem" {{ stimulus_controller('offer', {offerId: offer.id, offerNumber: offer.number}) }}>
+                {# Angebots SubCategory #}
+                <div class="w-100 offer_plus_box_block" {% if called %}style="color: {{ sfColorText }};"{% endif %}><span style="font-size: 14px;">{{ getOfferTitle(offer.id, true, true)|raw -}}</span>
+                    {% if offer.customer.companyName %}
+                        <br><span class="customer_user_box_address">{{ offer.stationAddress }} {{ offer.stationZip }}</span>
+                    {% endif %}
+                </div>
+                {# Angebots Nummer #}
+                <div class="offer_number_box w-25">
+                    <button data-offer="{{ offer.id }}" class="box-button text pointer_number" style="display:flex;" {{ stimulus_action('offer', 'viewBox') }}>
+                    {{ offer.number }}
+                    {# Stornierung #}
+                    {%- if offer.inquiry.stornoDate is not null -%}
+                        <small class="daa" title="{{ 'iq.stornoAt'|trans({'%date%': offer.inquiry.stornoDate|date('d.m.Y') }) }}" style="max-height: 12px;"><span class="material-symbols-outlined">unpublished</span></small>
+                    {%- elseif offer.inquiry.stornoDate is null and offer.status in ['call','call-plus','open','gesendet'] and offer.inquiry.leadId is not null and importDatum >= lateDatum -%}
+                        {%- if offer.inquiry.leadId is not null and importDatum >= lateDatum  and (7-leftDays) >= 0 -%}
+                            <span {#data-toggle="modal" data-target="#offerModal{{ offer.id }}"#}>
+                                <small class="daa">
+                                    {%- if 7-leftDays == 0 and 12-difference.h >= 0 %}
+                                        <span class="numberCircle"><span>{{ "%02d"|format(12-difference.h) }}</span></span>
+                                    {%- elseif 7-leftDays > 0 -%}
+                                        <span class="numberCircle2"><span>{{ 7-leftDays }}</span></span>
+                                    {%- endif %}
+                                </small>
+                            </span>
+                        {%- endif -%}
+                    {%- endif -%}
+                </button>
+                    {% if app.user.id != offer.user.id and (app.request.query.get('user', 'all') == 'all' or app.request.query.get('search', '') != '') %}
+                    <span{% if called %} style="color: {{ sfColorText }};"{% endif %}>&nbsp;{{ offer.user.username }}</span>
+                    {% endif %}
+                </div>
+                {% set foo = offer.number|split('.') %}
+                {% set cal = offer.customer.offers|length %}
+                <div class="active_link w-100 small text-right {{ classNAme }}">
+                    {# Profil Link #}
+                    {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+                    <a href="{{ path('customer_edit', {'id': offer.customer.id}) }}" class="w-100 {{ classNAme }}" style="font-weight: normal;font-size: 0.9rem">{{ offer.customer.fullNormalName }}</a>
+                    {% else %}
+                        <p class="w-100 {{ classNAme }}">{{ offer.customer.fullNormalName }}</p>
+                    {% endif %}
+                    {% if offer.customer.companyName %}
+                        <p class="w-100 clearfix m-0">{{ offer.customer.companyName }}</p>
+                    {% endif %}
+                    {# Anzahl Angebote Kreis #}
+                    {% if cal > 1 and is_granted('ROLE_EMPLOYEE_EXTERN')%}
+                        <a href="{{ path('offer_category_isearch') }}?search={{ foo[0] }}" class="red_dot offer_dot{% if called %} offer_dot_call{% endif %}" style=""><span style="color: #fff;">{{ cal }}</span></a>
+                    {% endif %}
+                </div>
+            </h4>
+
+            {{ booking_s|raw }}
+            {{ wp_block|raw }}
+            <div class="row d-none text booking_row_block" id="non-kj{{ offer.id }}">
+                <div class="col-md-12" style="padding: 0 4px;background-color: #fff;">
+                    <div class="small-9" style="color: {{ color }}">
+                        {% if status > 1 %}
+                            <div class="mb-2 header_text boxname text-center" style="{% if called %}color:#000;{% endif %}">{{ getOfferName(offer.id, false, true)|raw }}</div>
+                        {% elseif status == 1 %}
+                            <div class="header_text" style="padding-top: 6px;padding-bottom: 0">{{ 'iq.callCustomer'|trans }}!</div>
+                        {% else %}
+                            <div class="header_text" style="padding-top: 6px;padding-bottom: 0">{{ 'iq.inWork'|trans }}<br>{{ getOfferName(offer.id, false, true)|raw }}</div>
+                        {% endif %}
+                    </div>
+                    {% if offer.id %}
+                        <div id="froBi{{ offer.id }}" class="pin_links_box" style="border-top: 1px solid {{ color }};border-bottom: 1px solid {{ color }}">
+                            <div style="float: left; padding-top: 6px;">
+                                {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+                                <a class="pl-2"
+                                   title="E-Mail an den Kunden"
+                                   data-action="click->email#launchEmail"
+                                        type="button"
+                                   data-type="default"
+                                   data-email-src-param="{{ path('ajax_create_default_mail',{'id':offer.customer.id,'template':'default'}) }}"
+                                   data-email-url-param="{{ path('ajax_load_detail_mail',{'id':offer.customer.id,'template':'default'}) }}"
+                                   data-email-attachurl-param="{{ path('ajax_attachments_mail',{'id':offer.id,}) }}"
+                                   data-id="{{ offer.customer.id }}"
+                                   data-offer="{{ offer.id }}"
+                                   data-name="{{ offer.customer.fullNormalName }} ({{ offer.customer.email }})"
+                                   data-title="{{ 'message.new'|trans }}" style="cursor: pointer"><small>
+                                        <i class="material-symbols-outlined">email</i></small>
+                                </a>
+                                {% endif %}
+                                {% if status > 3 %}
+                                    <a title="Material" class="ml-0 pl-0" target="_self" href="{{ path('backend_material_index', {'offerNumberBasic':offer.number}) }}"><span class="material-symbols-outlined">production_quantity_limits</span></a>
+                                {% endif %}
+                                {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+                                    <a title="Kundenprofil Ansicht" class="ml-0 pl-0" target="_blank" href="{{ path('public_index', {'user':offer.customer.id}) }}"><span style="margin: -8px 0 0 0;" class="material-icons">emoji_people</span></a>
+
+                                    {% if offer.status != 'call' %}
+                                    <a title="{{ 'w.copy'|trans }}" href="javascript:" class="copyButton"><span class="material-symbols-outlined">content_copy</span></a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <div style="float: right; text-align: right;padding-right: 20px; padding-top: 6px;">
+                                {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+                                    {% if offer.option and offer.option.blendOut == true %}
+                                        <a data-id="{{ offer.id }}"
+                                           data-action="{{ path('ajax_update_tp', {'offer':offer.id, 'type':'view-status'}) }}" class="visible_open"
+                                           href="javascript:"><i class="material-symbols-outlined">visibility</i> </a>
+                                    {% else %}
+                                        <a data-id="{{ offer.id }}"
+                                           data-action="{{ path('ajax_update_tp', {'offer':offer.id, 'type':'view-status'}) }}" class="visible_close"
+                                           href="javascript:"><i class="material-symbols-outlined">visibility_off</i> </a>
+                                    {% endif %}
+                                {% endif %}
+                                    <a href="{{ path('offer_auftrags_index', {'id': offer.id, 'a':2}) }}"><span class="material-symbols-outlined">pending_actions</span></a>
+                                    {{ icon|raw }}
+                            </div>
+                        </div>
+                        <div id="froBi{{ offer.id }}open" class="pin_links_box collapseI d-none" style="border-bottom: 1px solid {{ color }}">
+                            <div style="text-align:center;padding-top: 6px;">
+                                {% if offer.status != 'call' %}
+                                    <a  class="btn btn-sm btn-light" title="{{ 'w.copy'|trans }}" href="{{ path('inquiry_copy', {'id': offer.inquiry.id, 'data':true}) }}">{{ 'o.copy.include'|trans }}</a>
+                                    <a class="btn btn-sm btn-light" title="{{ 'w.copy'|trans }}" href="{{ path('inquiry_copy', {'id': offer.inquiry.id, 'data':false}) }}">{{ 'o.copy.exclude'|trans }}</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% include 'offer/components/_email_phone_block.html.twig' %}
+                    <div class="block_box">
+                        <p class="text-left pl-1 box_boxHeader m-0">{{ 'w.project'|trans }}</p>
+                        <div class="row pl-1">
+                            <div class="col-4"><small>{{ 'w.editor'|trans }}:</small></div>
+                            <div class="col-8">
+                                <select{% if is_granted('ROLE_EMPLOYEE_EXTERN') == false %} disabled{% endif %} data-action="{{ path('ajax_update_offer_user', {'offer':offer.id,'user':'uuuu'}) }}"
+                                        data-id="{{ offer.id }}"
+                                        class="user_inquiry form-control block_box_input">
+                                    {% for user in users %}
+                                        {% if user.id != 1 %}
+                                            {% if is_granted('ROLE_MONTAGE') %}
+                                                <option{% if offer.user is not null and user.id == offer.user.id %} selected{% endif %} value="{{ user.id }}">{{ user.username|capitalize }}</option>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        {% if offer.subCategory %}
+                        {% for tc in offer.subCategory.teamCategories %}
+                            <div class="row pl-1">
+                                <div class="col-4"><small>{{ tc.name }}:</small></div>
+                                <div class="col-8">
+                                    <select{% if is_granted('ROLE_EMPLOYEE_EXTERN') == false %} disabled{% endif %} data-action="{{ path('ajax_update_offer_team', {'tc':tc.id,'offer':offer.id,'team':'uuuu'}) }}"
+                                            data-id="{{ offer.id }}"
+                                            class="user_inquiry form-control block_box_input">
+                                        <option {% if offer.projectTeams|length == 0 %}selected {% endif %} value="0"></option>
+                                        {% for team in teams %}
+                                            {% if team.category and team.category.id == tc.id %}
+                                                <option{% if offer.projectTeams|length > 0 and team in offer.projectTeams %} selected{% endif %}
+                                                        value="{{ team.id }}">{{ team.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        <div class="row pl-1">
+                            <div class="col-4"><small>{{ 'w.projectManager'|trans }}:</small></div>
+                            <div class="col-8">
+                                <select {% if is_granted('ROLE_EMPLOYEE_EXTERN') == false %} disabled{% endif %} data-action="{{ path('ajax_update_offer_monteur', {'offer':offer.id,'user':'uuuu'}) }}"
+                                        data-id="{{ offer.id }}"
+                                        class="user_inquiry form-control block_box_input">
+                                    <option {% if offer.monteur is null %}selected {% endif %} value="0"></option>
+                                    {% for user in getMontageUsers() %}
+                                            <option{% if offer.monteur is not null and user.id == offer.monteur.id %} selected{% endif %}
+                                                    value="{{ user.id }}">{{ user.username|capitalize }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <p class="text-left pl-1 box_boxFooter m-0">{{ 'o.lastChanges'|trans }}:
+                                <span class="work_on">{% if offer.statusDate %}{{ offer.statusDate|date('d.m') }}{% endif %}</span>
+                        </p>
+                    </div>
+                    {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+{#                    <div style="clear: left">#}
+{#                        <p class="m-0">#}
+{#                            {% if noCall is not defined %}#}
+{#                                <input {% if offer.option and offer.option.called %}checked {% endif %}#}
+{#                                 type="checkbox"#}
+{#                                 data-action="{{ path('ajax_update_tp', {'offer':offer.id,'called':'cccc','type':'call'}) }}"#}
+{#                                 data-id="{{ offer.id }}"#}
+{#                                 style="margin-top: 5px;"#}
+{#                                 class="user_called mr-2"/>{{ 'o.mark'|trans }}#}
+{#                            {% endif %}#}
+{#                        </p>#}
+{#                    </div>#}
+{#                    <div style="clear: left">#}
+{#                        <p class="m-0"><input aria-label="{{ 'o.taxFree'|trans }}" {% if offer.option and offer.option.solar %}checked {% endif %}#}
+{#                                  type="checkbox"#}
+{#                                  data-action="{{ path('ajax_update_tp', {'offer':offer.id,'solar':'cccc','type':'solar'}) }}"#}
+{#                                  data-id="{{ offer.id }}"#}
+{#                                  class="u_b_icon user_solar mr-2"/>{{ 'o.taxFree'|trans }}?#}
+{#                        </p>#}
+
+{#                    </div>#}
+                        <div class="pt-1 pb-1" style="border-top: 1px solid #028281;border-bottom: 1px solid #028281;">
+                    <div style="clear: left">
+                        <p class="m-0"><input aria-label="{{ 'o.deletePlease'|trans }}" {% if offer.deleteIt %}checked {% endif %}
+                                  type="checkbox"
+                                  data-action="{{ path('ajax_update_tp', {'offer':offer.id,'deleteIt':'cccc','type':'delete'}) }}"
+                                  data-id="{{ offer.id }}"
+                                  data-mclass="warner-{{ offer.id }}-delete"
+                                  class="u_b_icon user_delete"/> <span class="material-symbols-outlined">highlight_off</span> &nbsp;{{ 'o.deletePlease'|trans }}</p>
+
+                    </div>
+                    <div style="clear: left">
+                        <p class="m-0">
+                            <input {% if offer.urgent %}checked {% endif %}
+                                  type="checkbox"
+                                  data-action="{{ path('ajax_update_tp', {'offer':offer.id,'urgent':'cccc','type':'urgent'}) }}"
+                                  data-id="{{ offer.id }}"
+                                  data-mclass="warner-{{ offer.id }}-urgent"
+                                  class="u_b_icon user_urgent"/> <span class="material-symbols-outlined">warning_amber</span>&nbsp;{{ 'o.urgentCall'|trans }}</p>
+
+                    </div>
+                        </div>
+                    {% endif %}
+                    <div class="block_box">
+                        <div class="" data-controller="accordion">
+                            <h1>Notizen</h1>
+                            <div class="accordion">
+                                {% for note in offer.logs %}
+                                    <div class="accordion-item row">
+                                        <div class="col-3 p-0" style="background-color: #ffffcf;">
+                                            <div class="accordion-date">
+                                                {{ note.createdAt|date('d.m.Y H:i')|ago }}
+                                            </div>
+                                        </div>
+                                        <div class="col-9 p-0">
+                                            <div class="accordion-title" data-action="click->accordion#toggle">
+                                                {{ note.name }}
+                                            </div>
+                                        </div>
+                                        <div class="col-12 p-2 accordion-content">
+                                            <div class="accordion-body">
+                                                {{ note.note }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <p>Keine Notizen vorhanden.</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% include 'offer/_offer_next_status_button.html.twig' with {'offer': offer} %}
+            </div>
+            {% if offer.inquiry.stornoDate is null and offer.inquiry.leadId is not null and importDatum >= lateDatum %}
+                <div class="modal fade" id="offerModal{{ offer.id }}" tabindex="-1" role="dialog"
+                     aria-labelledby="offerModalCenterTitle{{ offer.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: #0f4953;color: #fff;">
+                                <h5 class="modal-title" id="offerModalTitle{{ offer.id }}">{{ 'o.stotnoDaaMessage'|trans({'%offerNumber%':offer.number}) }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% include 'offer/_offer_block_storno_modal.html.twig' with {'offer': offer} %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        {% set statusNumber = getStatusNumber(offer.status) %}
+        {% if statusNumber == 5 and offer.order is not null and offer.order.createdAt is not null %}
+            <div class="customer_bottom_block" style="background-color: #fff;">
+                <table class="table" style="font-size: 0.7rem">
+                    <tr>
+                        <th class="info_th" style="">Angebot gesendet</th>
+                        <th class="info_th">Vergangen</th>
+                        <th class="info_th"></th>
+                    </tr>
+                    <tr style="background-color: #fdfeec;">
+                        <td>{{ offer.order.createdAt|date('d.m.Y H:i') }}</td>
+                        <td>{{ offer.order.createdAt|ago }}</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        {% elseif statusNumber >= 7 and is_granted('ROLE_EMPLOYEE_EXTERN') %}
+            <div class="customer_bottom_block" style="background-color: #fff;">
+                <table class="table invoice_table" style="font-size: 0.7rem">
+                    <tr>
+                        <th class="info_th">Rechnung</th>
+                        <th class="info_th">Gesendet</th>
+                        <th class="info_th">Vergangen</th>
+                        <th class="info_th">Bezahlt</th>
+                        <th class="info_th"></th>
+                    </tr>
+                     {# 'bestaetigt' => 6, 'rechnungPartSend' => 7, #}
+                    {% set iti = {'part':'Abschlag', 'part-plus':'TeilR.', 'rest':'SchlussR.'} %}
+                    {% set invoiceType = 1 %}
+                    {% include 'offer/invoice_block_in_box.html.twig' with {'invoices':offer.order.invoices} %}
+                </table>
+            </div>
+        {% endif %}
+    </div>
+    {% endif %}

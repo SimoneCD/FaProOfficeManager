@@ -1,0 +1,15 @@
+{{ restore('price') }}
+{% for k, priceX in context['posPrices'] -%}
+    <tr>
+        <td><input type="text" id="invoice_pos{{ k }}Date" name="{{ key }}[context][posPrices][{{ k }}][number]" required="required" class="form-control form-control" value="{{ priceX['number'] }}"></td>
+        <td><input type="text" id="invoice_pos{{ k }}Date" name="{{ key }}[context][posPrices][{{ k }}][date]" required="required" class="form-control form-control" value="{{ priceX['date'] }}"></td>
+        <td><input type="text" id="invoice_pos{{ k }}Text" name="{{ key }}[context][posPrices][{{ k }}][text]" required="required" class="form-control form-control" value="{{ priceX['text'] }}"></td>
+        <td class="text-right">
+            <div class="input-group">
+                <div class="input-group "><input type="text" id="invoice_pos{{ k }}Price" name="{{ key }}[context][posPrices][{{ k }}][price]" required="required" class="posPrice form-control" data-pos="000" value="{{ priceX['price'] }}"><span class="input-group-text"> €</span></div>
+            </div>
+        </td>
+    </tr>
+    {% set price = price+priceX['price'] %}
+{% endfor %}
+{{ save('price') }}

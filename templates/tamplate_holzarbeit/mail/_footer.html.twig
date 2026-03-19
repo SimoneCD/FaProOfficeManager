@@ -1,0 +1,406 @@
+{# <div class="header" style="height:50px;width: 100%; background-color: #fff; margin: 0 auto;" align="center">
+    <div style="padding: 0;margin: 0;width: 100%;background-color: #fff;border-radius: 0; height: 100%"></div>
+</div> #}
+{# <div class="wave2"> #}
+{# #}{# <div style="padding: 0;margin: 0;width: 100%;background-color: #fff;border-radius: 100px 0 0 0; height: 100%"></div> #}
+{# </div> #}
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-3" role="presentation"
+       style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff;" width="100%">
+    <tbody>
+    <tr>
+        <td>
+            <table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack"
+                   role="presentation"
+                   style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff; color: #000000; width: 680px; margin: 0 auto;"
+                   width="680">
+                <tbody>
+                <tr>
+                    <td class="column column-1"
+                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;"
+                        width="55.333333333333336%">
+                        <table border="0" cellpadding="0" cellspacing="0" class="paragraph_block block-1"
+                               role="presentation"
+                               style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;"
+                               width="100%">
+                            <tr>
+                                <td class="pad" style="padding-left:10px;padding-right:10px;">
+                                    <div style="color:#353d46;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:16px;font-weight:700;line-height:200%;text-align:right;mso-line-height-alt:32px;">
+                                        <p style="margin: 0; word-break: break-word;">{% if offer is defined %}{{ offer.user.salutation|trans }} {{ offer.user.fullName }}{% else %}{{ app.user.salutation|trans }} {{ app.user.fullName }}{% endif %}</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <table border="0" cellpadding="10" cellspacing="0" class="button_block block-2"
+                               role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;"
+                               width="100%">
+                            <tr>
+                                <td class="pad">
+                                    <div align="right" class="alignment"><!--[if mso]>
+                                        <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml"
+                                                     xmlns:w="urn:schemas-microsoft-com:office:word"
+                                                     style="height:42px;width:172px;v-text-anchor:middle;"
+                                                     arcsize="10%" stroke="false"
+                                                     fillcolor="#ffce51">
+                                            <w:anchorlock/>
+                                            <v:textbox inset="0px,0px,0px,0px">
+                                                <center style="color:#000000; font-family:Arial, sans-serif; font-size:16px">
+                                        <![endif]-->
+                                        <div style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffce51;border-radius:4px;width:auto;border-top:0px solid transparent;border-right:0px solid transparent;border-bottom:0px solid transparent;border-left:0px solid transparent;padding-top:5px;padding-bottom:5px;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:16px;text-align:center;mso-border-alt:none;word-break:keep-all;">
+                                            <a target="_blank" title="Rückruf bitte"
+                                               href="{{ absolute_url(path('ajax_extern_request', {'id': customer.id})) }}"><span
+                                                        style="padding-left:20px;padding-right:20px;font-size:16px;display:inline-block;letter-spacing:normal;"><span
+                                                            style="margin: 0; word-break: break-word; line-height: 32px;color: #000;">Rückruf anfordern</span></span></a>
+                                        </div>
+                                        <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="column column-2"
+                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;"
+                        width="14.666666666666668%">
+                        <table border="0" cellpadding="0" cellspacing="0" class="image_block block-1"
+                               role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;"
+                               width="100%">
+                            <tr>
+                                <td class="pad" style="padding-left:15px;width:100%;padding-right:14px;">
+                                    <div align="right" class="alignment" style="line-height:10px">
+                                        <div style="max-width: 98.33333333333333px;"><img
+                                                    src="{% if offer is defined and offer.user is defined and offer.user.image %}{{ absolute_url('/'~appAssetPath~'user/'~offer.user.image) }}{% elseif app.user.image %}{{ absolute_url('/'~appAssetPath~'user/'~app.user.image) }}{% else %}{{ absolute_url('/'~appAssetPath~'user/default.png') }}{% endif %}"
+                                                    alt="{{ app.user.fullName }} Avatar"
+                                                    style="box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;display: block; height: auto; border: 0;border-radius: 100%; width: 100%;"
+                                                    title="{{ app.user.fullName }}"
+                                                    width="98.33333333333333"/>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-4" role="presentation"
+       style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff;" width="100%">
+    <tbody>
+    <tr>
+        <td>
+            <table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack"
+                   role="presentation"
+                   style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-radius: 0; color: #000000; width: 680px; margin: 0 auto;"
+                   width="680">
+                <tbody>
+                <tr>
+                    <td class="column column-1"
+                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;"
+                        width="100%">
+                        <div class="spacer_block block-1"
+                             style="height:40px;line-height:40px;font-size:1px;">&hairsp;
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-5" role="presentation"
+       style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff;" width="100%">
+    <tbody>
+    <tr>
+        <td>
+            <table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack"
+                   role="presentation"
+                   style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #e9f4ff; border-radius: 40px 40px 0 0; color: #000000; width: 680px; margin: 0 auto;"
+                   width="680">
+                <tbody>
+                <tr>
+                    <td class="column column-1"
+                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-top: 25px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;"
+                        width="25%">
+                        <table border="0" cellpadding="0" cellspacing="0" class="paragraph_block block-1"
+                               role="presentation"
+                               style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;"
+                               width="100%">
+                            <tbody>
+                            <tr>
+                                <td class="pad no-pad" style="padding-left:40px;padding-top:10px;">
+                                    <div class="footer-center"
+                                         style="color:#101112;direction:ltr;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                        <p style="margin: 0;color:#000000;">Webseite</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table border="0" cellpadding="0" cellspacing="0" class="menu_block block-2" role="presentation"
+                               style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+                            <tbody>
+                            <tr>
+                                <td class="pad no-pad"
+                                    style="color:#353d46;font-family:inherit;font-size:14px;letter-spacing:0px;padding-left:35px;padding-top:10px;text-align:left;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                           style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+                                        <tbody>
+                                        <tr>
+                                            <td class="alignment" style="text-align:left;font-size:0px;">
+                                                <div class="menu-links footer-center"><!--[if mso]>
+                                                    <table role="presentation" border="0" cellpadding="0"
+                                                           cellspacing="0" align="center" style="">
+                                                        <tr style="text-align:left;"><![endif]--><!--[if mso]>
+                                                    <td class="footer-center" style="padding-top:0px;padding-right:15px;padding-bottom:0px;padding-left:5px">
+                                                    <![endif]--><a href="https://www.zoe-solar.de/vorteile"
+                                                                   style="mso-hide:false;padding-top:0px;padding-bottom:0px;padding-left:5px;padding-right:15px;display:block;color:#190f37;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:14px;text-decoration:none;letter-spacing:normal;"
+                                                                   target="_blank">Vorteile</a><!--[if mso]></tr></td>
+                                                    <![endif]--><!--[if mso]></tr>
+                                                    <tr style="text-align:left;">
+                                                        <td class="footer-center" style="padding-top:0px;padding-right:15px;padding-bottom:0px;padding-left:5px">
+                                                    <![endif]--><a href="https://www.zoe-solar.de/service"
+                                                                   style="mso-hide:false;padding-top:0px;padding-bottom:0px;padding-left:5px;padding-right:15px;display:block;color:#190f37;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:14px;text-decoration:none;letter-spacing:normal;"
+                                                                   target="_blank">Service</a><!--[if mso]></tr></td>
+                                                    <![endif]--><!--[if mso]></tr>
+                                                    <tr style="text-align:left;">
+                                                        <td class="footer-center" style="padding-top:0px;padding-right:15px;padding-bottom:0px;padding-left:5px">
+                                                    <![endif]--><a href="https://www.zoe-solar.de/produkte"
+                                                                   style="mso-hide:false;padding-top:0px;padding-bottom:0px;padding-left:5px;padding-right:15px;display:block;color:#190f37;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:14px;text-decoration:none;letter-spacing:normal;"
+                                                                   target="_blank">Produkte</a><!--[if mso]></tr></td>
+                                                    <![endif]--><!--[if mso]></tr></table><![endif]--></div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td class="column column-2"
+                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 25px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;"
+                        width="25%">
+                        <table border="0" cellpadding="0" cellspacing="0" class="paragraph_block block-1"
+                               role="presentation"
+                               style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;"
+                               width="100%">
+                            <tbody>
+                            <tr>
+                                <td class="pad"
+                                    style="padding-left:5px;padding-right:10px;padding-top:10px;color:#000000;">
+                                    <div class="footer-center" style="color:#101112;direction:ltr;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                        <p style="margin: 0;color:#000000;">Vorteile</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table border="0" cellpadding="0" cellspacing="0" class="menu_block block-2" role="presentation"
+                               style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+                            <tbody>
+                            <tr>
+                                <td class="pad"
+                                    style="color:#353d46;font-family:inherit;font-size:14px;letter-spacing:0px;padding-top:10px;text-align:left;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                           style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+                                        <tbody>
+                                        <tr>
+                                            <td class="alignment" style="text-align:left;font-size:0px;color:#000000;">
+                                                <div class="menu-links footer-center"><!--[if mso]>
+                                                    <table role="presentation" border="0" cellpadding="0"
+                                                           cellspacing="0" align="center" style="">
+                                                        <tr style="text-align:left;"><![endif]--><!--[if mso]>
+                                                    <td class="footer-center" style="padding-top:0px;padding-right:15px;padding-bottom:0px;padding-left:5px">
+                                                    <![endif]--><a href="https://www.zoe-solar.de/empfehlungsbonus"
+                                                                   style="mso-hide:false;padding-top:0px;padding-bottom:0px;padding-left:5px;padding-right:15px;display:block;color:#190f37;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:14px;text-decoration:none;letter-spacing:normal;"
+                                                                   target="_blank">Empfehlungsbonus</a>
+                                                    <!--[if mso]></tr></td><![endif]--><!--[if mso]></tr>
+                                                    <tr style="text-align:left;">
+                                                        <td class="footer-center" style="padding-top:0px;padding-right:15px;padding-bottom:0px;padding-left:5px">
+                                                    <![endif]--><a href="https://www.zoe-solar.de/zuschuss"
+                                                                   style="mso-hide:false;padding-top:0px;padding-bottom:0px;padding-left:5px;padding-right:15px;display:block;color:#190f37;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:14px;text-decoration:none;letter-spacing:normal;"
+                                                                   target="_blank">Förderungen</a>
+                                                    <!--[if mso]></tr></td><![endif]--><!--[if mso]></tr>
+                                                    <tr style="text-align:left;">
+                                                        <td class="footer-center" style="padding-top:0px;padding-right:15px;padding-bottom:0px;padding-left:5px">
+                                                    <![endif]--><a href="https://www.zoe-solar.de/uber-uns"
+                                                                   style="mso-hide:false;padding-top:0px;padding-bottom:0px;padding-left:5px;padding-right:15px;display:block;color:#190f37;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:14px;text-decoration:none;letter-spacing:normal;"
+                                                                   target="_blank">Über ZOE Solar</a>
+                                                    <!--[if mso]></tr></td><![endif]--><!--[if mso]></tr></table>
+                                                    <![endif]--></div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td class="column column-3"
+                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 25px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;"
+                        width="25%">
+                        <table border="0" cellpadding="0" cellspacing="0" class="paragraph_block block-1"
+                               role="presentation"
+                               style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;"
+                               width="100%">
+                            <tbody>
+                            <tr>
+                                <td class="pad" style="padding-left:5px;padding-right:10px;padding-top:10px;">
+                                    <div class="footer-center" style="color:#101112;direction:ltr;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                        <p style="margin: 0;color:#000000;">Informationen</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table border="0" cellpadding="0" cellspacing="0" class="menu_block block-2" role="presentation"
+                               style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+                            <tbody>
+                            <tr>
+                                <td class="pad"
+                                    style="color:#353d46;font-family:inherit;font-size:14px;letter-spacing:0px;padding-top:10px;text-align:left;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation"
+                                           style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+                                        <tbody>
+                                        <tr>
+                                            <td class="alignment" style="text-align:left;font-size:0px;">
+                                                <div class="menu-links footer-center"><!--[if mso]>
+                                                    <table role="presentation" border="0" cellpadding="0"
+                                                           cellspacing="0" align="center" style="">
+                                                        <tr style="text-align:left;"><![endif]--><!--[if mso]>
+                                                    <td class="footer-center" style="padding-top:0px;padding-right:15px;padding-bottom:0px;padding-left:5px">
+                                                    <![endif]--><a href="https://www.zoe-solar.de/kontakt"
+                                                                   style="mso-hide:false;padding-top:0px;padding-bottom:0px;padding-left:5px;padding-right:15px;display:block;color:#190f37;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:14px;text-decoration:none;letter-spacing:normal;"
+                                                                   target="_blank">Kontakt</a><!--[if mso]></tr></td>
+                                                    <![endif]--><!--[if mso]></tr>
+                                                    <tr style="text-align:left;">
+                                                        <td class="footer-center" style="padding-top:0px;padding-right:15px;padding-bottom:0px;padding-left:5px">
+                                                    <![endif]--><a href="https://www.zoe-solar.de/Impressum"
+                                                                   style="mso-hide:false;padding-top:0px;padding-bottom:0px;padding-left:5px;padding-right:15px;display:block;color:#190f37;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:14px;text-decoration:none;letter-spacing:normal;"
+                                                                   target="_blank">Impressum</a><!--[if mso]></tr></td>
+                                                    <![endif]--><!--[if mso]></tr>
+                                                    <tr style="text-align:left;">
+                                                        <td class="footer-center" style="padding-top:0px;padding-right:15px;padding-bottom:0px;padding-left:5px">
+                                                    <![endif]--><a href="https://www.zoe-solar.de/Datenschutz"
+                                                                   style="mso-hide:false;padding-top:0px;padding-bottom:0px;padding-left:5px;padding-right:15px;display:block;color:#190f37;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:14px;text-decoration:none;letter-spacing:normal;"
+                                                                   target="_blank">Datenschutz</a>
+                                                    <!--[if mso]></tr></td><![endif]--><!--[if mso]></tr></table>
+                                                    <![endif]--></div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td class="column column-4"
+                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 25px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;"
+                        width="25%">
+                        <table border="0" cellpadding="0" cellspacing="0" class="paragraph_block block-1"
+                               role="presentation"
+                               style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;"
+                               width="100%">
+                            <tbody>
+                            <tr>
+                                <td class="pad" style="padding-left:5px;padding-right:10px;padding-top:10px;">
+                                    <div class="footer-center" style="color:#101112;direction:ltr;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
+                                        <p style="margin: 0;">Social Media</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table border="0" cellpadding="0" cellspacing="0" class="social_block block-2"
+                               role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+                            <tbody>
+                            <tr>
+                                <td class="pad"
+                                    style="padding-bottom:10px;padding-left:5px;padding-right:10px;padding-top:15px;text-align:left;">
+                                    <div align="left" class="alignment footer-center">
+                                        <table border="0" cellpadding="0" cellspacing="0" class="social-table"
+                                               role="presentation"
+                                               style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; display: inline-block;"
+                                               width="108px">
+                                            <tbody>
+                                            <tr>
+                                                <td class="footer-center" style="padding:0 4px 0 0;"><a href="https://www.twitter.com"
+                                                                                  target="_blank"><img alt="Twitter"
+                                                                                                       height="32"
+                                                                                                       src="{{ absolute_url(asset('app/images/x2.png')) }}"
+                                                                                                       style="display: block; height: auto; border: 0;"
+                                                                                                       title="twitter"
+                                                                                                       width="32"></a>
+                                                </td>
+                                                <td class="footer-center" style="padding:0 4px 0 0;"><a href="https://www.linkedin.com"
+                                                                                  target="_blank"><img alt="Linkedin"
+                                                                                                       height="32"
+                                                                                                       src="{{ absolute_url(asset('app/images/linkedin2x.png')) }}"
+                                                                                                       style="display: block; height: auto; border: 0;"
+                                                                                                       title="linkedin"
+                                                                                                       width="32"></a>
+                                                </td>
+                                                <td class="footer-center" style="padding:0 4px 0 0;"><a
+                                                            href="https://instagram.com/_zoe_solar" target="_blank"><img
+                                                                alt="Instagram" height="32"
+                                                                src="{{ absolute_url(asset('app/images/instagram2x.png')) }}"
+                                                                style="display: block; height: auto; border: 0;"
+                                                                title="Instagram" width="32"></a></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-6" role="presentation"
+       style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff;" width="100%">
+    <tbody>
+    <tr>
+        <td>
+            <table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack"
+                   role="presentation"
+                   style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #e9f4ff; border-radius: 0 0 40px 40px; color: #000000; width: 680px; margin: 0 auto;"
+                   width="680">
+                <tbody>
+                <tr>
+
+                    <td class="column column-1"
+                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;"
+                        width="50%">
+                        <table border="0" cellpadding="0" cellspacing="0" class="paragraph_block block-1"
+                               role="presentation"
+                               style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;"
+                               width="100%">
+                            <tbody>
+                            <tr>
+                                <td class="pad no-pad" style="padding-right:45px;padding-top:20px;">
+                                    <div class="footer-center" style="color:#000000;font-family:Poppins, Arial, Helvetica, sans-serif;font-size:10px;line-height:150%;text-align:right;mso-line-height-alt:15px;">
+                                        <p style="margin: 0; word-break: break-word;">Copyright © ZOE Solar</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>

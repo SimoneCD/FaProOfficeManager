@@ -1,0 +1,18 @@
+{% macro keyValueCollectionItem(subCategory, item) %}
+    {% if item.vars.data|length %}
+    <div id="kv-{{ item.vars.id }}" class="row p-0">
+        <div class="col-sm-5">
+            <input type="text" name="{{ item.vars.full_name }}[keyName]" class="form-control" value="{{ item.vars.data.keyName }}">
+        </div>
+        <div class="col-sm-5 pt-0 pb-0">
+            <input type="text" name="{{ item.vars.full_name }}[keyValue]" class="form-control" value="{{ item.vars.data.keyValue }}">
+        </div>
+        <div class="col-sm-1 pt-0 pb-0">
+            <input type="text" name="{{ item.vars.full_name }}[keySort]" class="form-control" value="{{ item.vars.data.keySort }}">
+        </div>
+        <div class="col-sm-1">
+            <button type="button" data-id="kv-{{ item.vars.id }}" data-url="{{ path('backend_subcategory_kv_delete', {'category' : subCategory.category.id,'id' : subCategory.id, 'keyValue' : item.vars.data.id}) }}" class="btn btn-default p-1 delete-key-value"><i class="material-icons">delete</i></button>
+        </div>
+    </div>
+    {% endif %}
+{% endmacro %}

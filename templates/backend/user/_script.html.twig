@@ -1,0 +1,26 @@
+<script>
+    $(document).ready(function () {
+        const image = document.getElementById('profile_preview');
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    console.log(e);
+                    $('#profile_preview').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        if ($('#user_own_image')) {
+            $(document).on('change', '#user_own_image', function () {
+                readURL(this);
+            });
+        }
+        if ($('#user_image')) {
+            $(document).on('change', '#user_image', function () {
+                readURL(this);
+            });
+        }
+    });
+</script>

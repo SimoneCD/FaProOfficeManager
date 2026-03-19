@@ -1,0 +1,8 @@
+<div class="form-group row">
+    <div class="col-12 text-center">
+        <form id="answer_delete_form" method="post" action="{{ path('backend_answers_delete', {'question': answer.question.id,'id': answer.id}) }}">
+            <button data-confirm="{{ 'f.confirm.deleteAnswer'|trans }}" class="confirm btn btn-danger" type="button">{{ 'osc.quest.a.delete'|trans }}</button>
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ answer.id) }}">
+        </form>
+    </div>
+</div>

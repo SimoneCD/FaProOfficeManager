@@ -1,0 +1,57 @@
+<div id="offer_order_documents" {{ stimulus_controller('upload', {'offerId':offer.id, 'question':0, 'docCount':offer.documents|length}) }}>
+    <div class="card">
+        <div class="card-body">
+            <h4 style="color: {{ sfColor }}">{{ 'm.documents'|trans }}
+                <button class="btn btn-light btn-sm p-1" type="button" {{ stimulus_action('upload','clickDocument','click') }}>
+                    <span title="{{ 'm.documentAdd'|trans }}" class="material-icons">add_circle_outline</span>
+                </button><br>
+                <span class="form-text">(.pdf)</span>
+            </h4>
+
+            {% set customer = offer.customer %}
+            <div class="row m-0 p-0">
+                <div class="col-md-6">
+                    <div>
+                        <input type="file" class="d-none"
+                               multiple
+                                name="documents[{{ offer.documents|length }}]"
+                                data-upload-target="fileclick"
+                               data-url="{{ path('ajax_upload_document', {'id':offer.id}) }}"
+                               accept=".pdf" {{ stimulus_action('upload','addDocumentPreview','change') }}>
+
+                        <div class="">
+                            <div {{ stimulus_target('upload', 'preview') }}></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6"></div>
+            </div>
+            <div class="row">
+            {% for doc in offer.documents %}
+                {% set i = loop.index-1 %}
+
+                <div class="col-3">
+                    <div class="doc-{{ doc.id }}" style="text-align:right;position: relative">
+                        <a style="padding:2px 4px;border-radius:4px;border:1px solid lightgrey;color: black" target="_blank"
+                           href="{{ absolute_url(asset(appAssetPath~'uploads/'~offer.id~'/'~doc.filename)) }}">
+                            <i class="material-icons">download</i>
+                        </a>
+
+                        <a style="padding:2px 4px;border-radius:4px;border:1px solid lightgrey;color: orangered" title="Doppelt klicken zum Löschen" type="button" data-document-loop-id="{{ i }}"
+                                data-upload-id-param="{{ doc.id }}"
+                                data-upload-url-param="{{ path('montage_document_remove', {'id': doc.id}) }}"
+                                data-action="dblclick->upload#removeDoc"
+                                class="p-1 btn btn-light btn-xs">x
+                        </a><br>
+                        {% if 'pdf' in doc.filename %}
+                            <object data="{{ asset(appAssetPath~'uploads/'~offer.id~'/'~doc.filename) }}" type="application/pdf" width="200px" height="100%">
+                                <p>Unable to display PDF file. <a href="{{ asset(appAssetPath~'uploads/'~offer.id~'/'~doc.filename) }}">Download</a> instead.</p>
+                            </object>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

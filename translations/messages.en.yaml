@@ -1,0 +1,710 @@
+Jan: Jan
+Feb: Feb
+Mar: Mar
+Apr: Apr
+May: May
+Jun: Jun
+Jul: Jul
+Aug: Aug
+Sep: Sep
+Oct: Okt
+Nov: Nov
+Dec: Dec
+january: 'Januar'
+february: 'Februar'
+march: 'März'
+april: 'April'
+may: 'Mai'
+juny: Juni
+july: Juli
+august: August
+september: September
+october: Oktober
+november: November
+december: Dezember
+week:
+  mo: Mo
+  di: Th
+  mi: We
+  do: Tu
+  fr: Fr
+  sa: Sa
+  so: Su
+
+salutations:
+  ms: 'Frau'
+  mr: 'Herr'
+  ma: 'Diverse'
+# altlast
+Frau: 'Ms.'
+Herr: 'Mr.'
+Diverse: ''
+ms: 'Ms.'
+mr: 'Mr.'
+ma: ''
+
+#classicStuff
+agb:
+  title: 'Offer information'
+  a:
+    name: 'Terms of Service'
+    text: 'Our terms and conditions can be found on our website %page%'
+  b:
+    name: 'Non-binding'
+    text: 'There are no liabilities until the offer has been mutually confirmed/the order has been placed.'
+  c:
+    name: 'Offer Validity'
+    text: 'After the customer has accepted the order, we may arrange an on-site appointment to check the correctness of the data given and the feasibility of the realization. Only a written confirmation of the construction project by ZOE is considered an official order confirmation.'
+  d:
+    name: 'Information on the conclusion of the contract'
+    text: 'The technical steps for the conclusion of the contract, the conclusion of the contract itself and the correction options are carried out in accordance with the regulations under § 2 "Offer and conclusion of contract".'
+openTimes: '(Mo. - Fr. 7:30 a.m. - 4:30 p.m., Sa. by appointment)'
+planAndPay: 'Payment Schedule and Billing'
+oClock: "%clock% o'clock"
+totalMinusRabat: 'Total minus discount'
+saveAndSend: 'Save and send'
+payBackTax: 'Zero tax (-VAT)'
+payToOrder: 'Receipt of payment counts as order confirmation'
+finalPayIfFinished: 'Final payment upon completion'
+noApointment: 'No date set'
+approveLeftAndRight: 'Approve data left and right!'
+aprovePfdSalutatioon: 'Approve salutation!'
+yourPrice: 'Your Price'
+addPartPlusInvoice: 'Add partial invoice'
+sendInfo: 'The offer will only be sent to the customer if the box is active!'
+zeroTaxHelp: 'Abzug der MwSt. von Abschlussrechnung (Nullsteuersatz)'
+conditions: '(Conditions listed below)'
+Kundenservice: 'Customer service'
+noRecordsFound: 'No entries found'
+pageSumTransfer: 'Transfer from page %page%'
+rights1: 'All rights reserved.'
+rights2: 'Printing, technical data duplication (also in extracts)<br>or changes require the written consent of the publisher.'
+
+lang:
+  de: German
+  gb: English
+  es: Spanish
+  tr: Turkish
+
+#status
+s:
+  call: 'Call'
+  storno: 'Canceled'
+  sendOffer: 'send Offer'
+  waitOffering: 'Waiting for confirmation'
+  sendOfferInWork: 'In Progress'
+  offering: 'Customer has confirmed'
+  sendPartInvoice: 'Send 1st invoice'
+  sendRestInvoice: 'Send final invoice'
+  partInvoicePayed: 'Invoice has been received'
+  waitPartInvoice: 'Waiting for 1st receipt of invoice'
+  done: 'Work completed'
+  waitRestInvoice: 'Waiting for the final invoice to arrive'
+  projectAppointment: 'Make a project appointment'
+  appointed: 'Installation date has been agreed'
+  projectInstallation: 'Project installation'
+  projectInstalled: 'installation completed'
+  finished: 'Completed (Paid)'
+  finishInvoicePayed: 'Final invoice received'
+  archived: 'Archived'
+
+impressum:
+  identity: 'Identity of the seller'
+
+replace:
+  edit: 'Edit %name%'
+  questionnaire: '%name% questionnaire'
+  question: 'Edit %name% question'
+
+#words
+w:
+  active: 'Active'
+  group: 'Gruop'
+  ceo: 'CEO'
+  abort: 'Cancel'
+  view: 'View'
+  colors:
+    white: 'White'
+    black: 'Black'
+    grey: 'Grey'
+    silver: 'Silver'
+    anthrazit: 'Anthracite'
+    collorfull: 'Collorfull'
+    color: 'Monochrome'
+  value: 'Value'
+  securityRole: 'Position in the company'
+  securityRoles:
+    ROLE_EMPLOYEE_ONE: 'Former employees'
+    ROLE_MONTAGE: 'Fitter (chat, assemblies, appointments)'
+    ROLE_EMPLOYEE_EXTERN: 'External employee (like customer service, but only sees own offers)'
+    ROLE_EMPLOYEE_SERVICE: 'Customer Service Representative'
+    ROLE_ADMIN: 'Chef (without user delete functions)'
+    ROLE_SUPER_ADMIN: 'Chef'
+  reset: 'Reset'
+  crop: 'Crop and save'
+  flip: 'Flip Vertical'
+  time: 'Time'
+  back: 'back'
+  done: 'Done at %date%'
+  discount: 'Discount'
+  zeroTax: 'Refund of VAT (zero tax rate)'
+  germany: 'Germany'
+  installations: 'Installations'
+  count: 'Amount'
+  from: 'From'
+  until: 'Until'
+  id: 'Id'
+  short:
+    pauschal: 'pschl.'
+    country: 'Germany'
+    mwst: 'VAT'
+    lvNumber: 'PO no.'
+    custumerNumber: 'Customer no.'
+  lv: 'PO designation'
+  buisiness: 'Business'
+  today: 'Today'
+  tomorrow: 'Tomorrow'
+  save: 'Save'
+  delete: 'Delete'
+  password: 'Password'
+  password_confirm: 'Password repetition'
+  notice: 'Notice'
+  address: 'Address'
+  zip: 'Postal code'
+  city: 'City'
+  country: 'Country'
+  generally: 'General'
+  name: 'Name'
+  surname: 'Surname'
+  username: 'Username'
+  email: 'E-mail'
+  phone: 'Phone'
+  overview: 'Overview'
+  productName: 'Product name'
+  productCategories: 'Product categories'
+  productCategory: 'Product category'
+  posShort: 'Pos.'
+  type: 'Producttype'
+  date: 'Date'
+  product: 'Product'
+  products: 'Products'
+  contactPerson: 'Contact Person'
+  inquiry: 'Customer request'
+  offer: 'Offer'
+  offers: 'Offers'
+  categories: 'Categories'
+  category: 'Category'
+  subCategories: 'Subcategories'
+  subCategory: 'Subcategory'
+  invoice: 'Invoice'
+  invoicePart: 'Partial invoice'
+  invoicePartPlus: 'Partial invoice'
+  invoiceRest: 'Final invoice'
+  customerNumber: 'Customer nummer'
+  offerNumber: 'Offer nummer'
+  invoiceNumber: 'Invoice number'
+  else: 'Other'
+  select: 'Select'
+  customer: 'Customer'
+  customers: 'Customers'
+  customerEdit: 'edit Customer'
+  customerService: 'Customer Service'
+  customerServiceMessage: 'Customer service message'
+  serviceLogin: 'Customer service login'
+  position: 'Position'
+  open: 'open'
+  price: 'Price'
+  betweenSum: 'Subtotal'
+  singlePrice: 'Unit price'
+  completePrice: 'Total price'
+  brutto: 'Gross'
+  bruttoprice: 'Gross price'
+  nettoprice: 'Net price'
+  nettoSum: 'Net total'
+  netto: 'Net'
+  tax: 'VAT'
+  procentTax: '%procent%%% VAT'
+  amount: 'Quantity'
+  description: 'Description'
+  search: 'search'
+  editor: 'Editor'
+  editorShort: 'Editor'
+  status: 'Status'
+  project: 'Project'
+  projectManager: 'Projectmanager'
+  projectData: 'Projectdata'
+  team: 'Team'
+  teams: 'Teams'
+  appointment: 'Appointment'
+  appointments: 'Appointments'
+  all: 'All'
+  call: 'Call'
+  visit: 'Inspection'
+  montage: 'Assembly'
+  installtion: 'Installation'
+  employee: 'Employee'
+  employees: 'Employees'
+  chat: 'Chat'
+  images: 'Images'
+  title: 'Title'
+  salutation: 'Salutation'
+  send: 'Send'
+  symbol: 'Symbol'
+  sort: 'Sorting'
+  questions: 'Questions'
+  question: 'Question'
+  urgentView: 'Instant view'
+  answer: 'Answer'
+  answers: 'Answers'
+  answerType: 'Answer type'
+  color: 'Color'
+  measure: 'Measure'
+  help: 'FAQ'
+
+#button
+b:
+  saveToOffer: 'Save and continue to the offer'
+  appointmentsToday: 'Appointments today'
+  appointmentsAll: 'All appointments'
+
+#user
+u:
+  editYours: 'Edit profile data'
+  edit: 'Edit employee data'
+
+#inquiry
+iq:
+  saveProcessing: 'Save to edit'
+  inWork: 'In processing'
+  new: 'New customer request'
+  edit: 'Edit customer request'
+  delete: 'Delete customer request'
+  confirmDelete: 'Really delete customer request?'
+  send: 'Send offer'
+  sendNumber: 'Offer %number% send'
+  info: 'Record inventory/customer request'
+  refererFrom: 'Where is the customer from?'
+  callCustomer: 'Customer has yet to call'
+  stornoAt: 'Canceled on %date%'
+  doneAt: 'Done on %date%'
+  notice: 'Information for the montage team'
+  customerSelect: 'Select existing customer'
+  import:
+    new:  '%count% new offers imported.'
+    title:
+      storno: 'Reklamation - number'
+    error:
+      incorectData: 'the contact details provided are incorrect.'
+      dontWant: 'the customer no longer wants a request.'
+      time: 'the purchased lead is not to be processed within the specified complaint period, as it cannot be reached despite repeated calls.'
+
+#emails
+e:
+  from: 'E-mails from %name%'
+
+#offer
+o:
+  delete: 'Delete offer'
+  mark: 'Mark'
+  datas: 'offer data'
+  pageNumber: 'Page %number%'
+  select: 'Select offer'
+  send: 'Send offer'
+  for: 'Offer for %name%'
+  from: 'Offers from %name%'
+  new: 'New offer'
+  moreOffersFrom: 'Offers from %name%'
+  taxFree: 'Tax exempt'
+  deletePlease: 'Offer should be deleted'
+  urgentCall: 'Please call back urgently'
+  lastChanges: 'Last Change'
+  stotnoDaaMessage: 'Cancel offer %number%'
+  yourOffer: 'Your Offer'
+  address: 'Construction project (street, house number) '
+  city: 'Construction project (zip code, city) '
+  image: 'Offer image'
+  imagePreview: 'Image preview'
+  name: 'Offer name'
+  questionnatre: 'Questionnaire/Offer Name'
+  questionnatreAdd: 'Add offer questionnaire'
+  categories: 'Offer categories'
+  category: 'Offer category'
+  subCategories: 'Offer subcategories'
+  subCategory: 'Offer subcategory'
+  product: 'Offer Product'
+  productAdd: 'Add product to the offer'
+  settings:
+    autoReplace: 'The following information is automatically replaced'
+    powerValuesTitle: 'List of services'
+    powerValuesText: 'List of services text'
+    bau: 'General building description'
+    partInvoice: 'Offer payment invoice Salutation'
+    invoice: 'Offer final invoice salutation'
+    offerSettingsLabel: 'Settings for %name% Offers'
+  productMultiplicator:
+    name: 'Product multiplier'
+    one: '1 time'
+    two: '2 times'
+    three: '3 times'
+    four: '4 times'
+    answer: 'times answer'
+    amount: 'Quotation item number'
+    installAmount: 'Install count'
+    length: 'Length specification(question must be defined!)'
+  confirm:
+    viewBack: 'The offer is displayed again in the overview! Is that desired?'
+    view: 'The offer can then only be seen by the customer or in the appointment calendar! Is that desired?'
+    delete: 'Really delete offer?'
+  error:
+    server: 'The product category could not be deleted. Please report to an administrator with the following message'
+    catDependencies: 'The following questionnaires could be affected, please check whether offer product categories need to be reset'
+    noAccessTo: 'No permission for %number%.'
+    checkProjectData: 'Please check project data.'
+    checkSalutation: 'Please check salutation.'
+    checkSendEmail: 'The offer was saved but could not be sent. Please check the email.'
+    checkEmailSalutation: 'Please check e-mail salutation'
+    send: 'Mail could not be sent.'
+    groupName: 'The group name must not be empty!'
+    noGroup: 'No assignment'
+  success:
+    saved: 'The offer has been saved for editing.'
+    created: 'The offer has been created.'
+    send: 'The offer has been sent.'
+    noSend: 'The offer was not sent.'
+    delete: 'The offer has been deleted'
+  headerLine:
+    left: 'Offer headline on the left'
+    right: 'Offer headline on the right'
+  productData:
+    from: 'Performance period from'
+    until: 'Period of performance up to'
+    name: 'Productdata name'
+    value: 'Productdata value'
+  #customer-block
+  b:
+    notice: 'Notes for the operator of the telephone inquiry'
+  #category
+  c:
+    change: 'Change offer category'
+  #category
+  sc:
+    change: 'Change offer subcategory'
+  #text
+  t:
+    powerValueFor: 'List of services for'
+    globalDescription: 'General requirements description'
+    email:
+      offer: 'Thank you for choosing an offer from %name%.<br>You will find your offer with the number %number% in the attachment.<br>We are available to answer any questions you may have during the opening times listed below.'
+      partInvoice: 'We thank you for your order regarding offer no. %number% and are pleased to be able to present you with the partial invoice.'
+      finalInvoice: 'we thank you for the friendly cooperation. <br>Enclosed is your final invoice with the number: %number%.'
+    offer:
+      offer: 'We are pleased to be able to present you with your offer regarding your %offerName% under the conditions listed below.'
+      partInvoice: 'We thank you for your order regarding offer no. %offerNumber% and are pleased to be able to present you with the partial invoice.'
+      finalInvoice: 'we thank you for the friendly cooperation. <br>Enclosed is your final invoice with the number: %offerNumber%.'
+
+#category
+oc:
+  edit: 'Edit category'
+  delete: 'Delete offer category'
+  new: 'Create new offer category'
+  questionAssinment: 'Areas to group the questions.'
+
+#subCategory
+osc:
+  delete: 'Delete offer questionnaire'
+  new: 'Create new offer questionnaire'
+  newIn: 'Create new offer questionnaire in %name%'
+  productCategoryAssign: 'Assign product category'
+  productCategoryAnswerAssign: 'Add products to this answer'
+  label:
+    needImage: 'This response requires a image from the customer'
+    needImageShort: 'Customer image'
+    allwaysUse: 'Always include selected products with the offer'
+  quest:
+    sort: 'Sort'
+    delete: 'Delete %name% questionnaire'
+    selectProductCategory: 'Category for product selection'
+    #questionnaire
+    q:
+      count: 'Multiplier'
+      delete: 'Delete this question?'
+      help:
+        sort: 'Used for sorting in the offer.'
+        aPlus: 'Requires answers to be created for this question.'
+        selectProduct: 'Requires selecting a product category (only displayed if selected)'
+      answerType: 'Answer type'
+      answerTypes:
+        help:
+          onePossible: '1 answer possible'
+          onePossiblePlus: '1 Antwort possible + textfield'
+          morePossible: 'multiple answers possible'
+          useOneTime: 'only to be used once'
+        radio:
+          name: 'Selection buttons'
+        checkbox:
+          name: 'Checkbox'
+        select:
+          name: 'Selection field'
+        productSelect:
+          name: 'Product selection'
+          help: 'Product category selection below'
+        mainProduct:
+          name: 'offer main product'
+          help: 'incl. amount'
+        text:
+          name: 'Text field'
+          area: 'Text'
+          help: 'Just for the protocol, information'
+        amount:
+          name: 'Amount'
+          help: 'use only 1 time'
+        installAmount:
+          name: 'Number of installations'
+        length:
+          name: 'Measure of length'
+        kw: 'Power'
+      name: 'Question'
+      edit: 'Edit question'
+      add: 'Add a new question'
+      success:
+        add: 'Added new question to %name%'
+      addIn: 'Add a new question to %name%'
+    a:
+      add: 'Add a new Answer'
+      delete: 'Delete answer'
+      edit: 'Edit answer'
+      showOnly: 'Mark questions that will appear with this answer.'
+      error:
+        format: 'Please upload the image in jpg or png format.'
+        size: 'The image should not exceed 1024k.'
+      dependencies: 'Display questions'
+      name: 'Answer'
+    edit: 'Edit questionnaire'
+    questionnaire: 'Offer questionnaire'
+    questionnaires: 'Offer questionnaires'
+    numberQuestions: 'Questions count'
+
+#montage
+m:
+  information: 'Installation information'
+  imageAdd: 'Add project image'
+  image: 'Project image'
+  images: 'Project images'
+  notice: 'Notes for the executive colleague'
+  toMassProtocoll: 'go to Measurement log'
+  massProtocoll: 'Measurement log'
+  protocoll: 'Protocol'
+  protocolls: 'Protocols'
+  customerProjectData: 'Customer project data'
+  customerProjectInfo: 'Project information'
+
+#customer
+c:
+  zipCity: 'Postcode/Town'
+  edit: 'Edit customer'
+  delete: 'Delete customer'
+  new: 'New customer'
+  exist: 'Exist customer'
+  companyName: 'Name of customer company'
+  yourCustomer: 'Your customers'
+  welcomeAll: 'Ladies and gentlemen'
+  welcomeMale: 'Dear Mr. %name%'
+  welcomeFemale: 'Dear Ms. %name%'
+  welcomeGender: 'Dear %name%,'
+
+#formular
+f:
+  a:
+    oneAnswer: 'One answer option'
+  button:
+    saveName: 'Save %name%'
+  label:
+    invoiceMailText: 'Final invoice email text, after the salutation'
+    partInvoiceMailText: 'Part invoice email Text, after the salutation'
+    offerMailText: 'Offer mail Text after the salutation'
+    invoiceText: 'Final invoice text, after the salutation'
+    partInvoiceText: 'Part invoice Text, after the salutation'
+    offerText: 'Offer Text after the salutation'
+    kwName: 'Power'
+    kwNameShort: 'Power title'
+    fullname: 'Full name'
+    general: 'General Information'
+    address: 'Address'
+    zip: 'Postal code'
+    existCustomer: 'Select existing customer'
+    searchCustomer: 'customer search'
+  error:
+    imageSize: 'The image should not exceed 1024k'
+    imageFormat: 'Please upload the picture in jpg or png format!'
+    checkData: 'Please check %miss%!'
+    orMissing: '%miss% or %missOr% must be specified!'
+  success:
+    invoiceSend: 'The invoice %invoiceNumber% has been sent'
+    invoiceSave: 'The invoice %invoiceNumber% has been saved'
+  confirm:
+    pInvolved: '%number% products are involved'
+    pscInvolved: '%number% product subcategories are involved'
+    pcDelete: 'Please confirm that you really want to delete the product category'
+    pscDelete: 'Please confirm that you really want to delete the product subcategory'
+    offerConfirmed: 'Please confirm that the offer has been confirmed'
+    partPaied: 'Please confirm that all advance invoices have been paid'
+    appointmentGiven: 'Please confirm that the appointment booking is complete'
+    workDone: 'Please confirm that the installation is completely finished'
+    payed: 'Please confirm that the final invoice has been paid'
+    storno: 'Please confirm that you want to cancel the offer'
+    deleteItem: 'Do you really want to delete this product?'
+    deleteAnswer: 'Do you really want to delete this answer?'
+    deleteQuestion: 'Do you really want to delete this question?'
+    deleteCustomer: 'Really delete customer (%name%)?'
+    deleteCategory: 'Really delete offer category?'
+    deleteQuestionnaire: 'Are you sure you want to delete the offer questionnaire?'
+
+#invoice
+i:
+  th:
+    nr: 'Inv.-No.'
+    datum: 'Inv.-Date'
+    name: 'Inv. reference'
+    paid: 'Paid'
+    sent: 'Sent'
+    complete: 'Order value gross'
+  confirm:
+    delete: 'Do you really want to delete this invoice?'
+  finalInvoice: 'Final invoice %number%'
+  partInvoice: 'Part invoice %number%'
+  data: 'Billing Details'
+  send: 'Send invoice to customer'
+  toPayName: 'Invoice amount'
+  toPayBruttoName: 'Gross invoice amount'
+  offerCostInclTax: 'Order value (incl. VAT)'
+  offerCostExclTax: 'Order value (excl. VAT)'
+  toPay: 'Please pay the stated invoice amount within 7 working days to the account stated below.'
+ip:
+  t:
+    a: 'Your interim invoice for the %number% offer.'
+    b: 'We thank you for your order regarding your offer %number% and are pleased to be able to present you with the partial invoice.'
+    lineOne: 'Issued invoice %number%.1 from %date% (net):'
+  error:
+    exist: 'An interim invoice that has not yet been sent already exists (%number%)'
+
+pdf:
+  greetings: 'Best Regards'
+
+#pageTitles
+title:
+  app:
+    customerServiceInformation: 'Customerservice Information'
+  login: 'Login'
+  offer:
+    pdf: 'Your offer %number%'
+    index: 'Offers - Overview'
+    archive: 'Completed offers - overview'
+
+inquiryNotice: 'Adopt additional information from DAA (customer) if available)'
+
+#product
+p:
+  all: 'Al products'
+  description: 'Product description'
+  new: 'Create new product'
+  edit: 'Edit product'
+  delete: 'Delete product'
+  deleteSuccess: 'The product has been deleted'
+  deleteError: 'The product could not be deleted'
+  symbolHelp: 'Symbols that can be displayed can be found here %link%'
+  assignment: 'Pruduct assignment'
+  partner: 'Partner product'
+  KfW: 'KfW promoted'
+  ibb: 'IBB promoted'
+  bmvi: 'BMVI promoted'
+  nettoPrice: 'Netto Price'
+  bruttoPrice: 'Brutto Price'
+  tax: 'Tax'
+  notice: 'Notice'
+  delivery: 'Delivery time (Days)'
+  subCategories: 'Product subcategories'
+  subCategory: 'Product subcategory'
+  images: 'Product images'
+  imagePreview: 'Product image preview'
+  image: 'Product image'
+  imgHelp:
+    trans: 'Transparent at the edges'
+  color: 'Product color'
+  number: 'Position number'
+  kw: 'Power designation#'
+  kwOptional: 'Product power'
+  priceInfo: 'Price information'
+  offer: 'Offer product (offer consists of products of this category)'
+  help:
+    itemDescription: 'Product property also in the title and the description (3.7 kWh, white ...)'
+    allwaisIn: 'Is always included as a product selection for offer questionnaires.'
+    mainProduct: 'Main product (highlighted in color in the offer)'
+    subCategoryChange: 'Changing the subcategory can be done at any time without any problem.'
+  manufacturer:
+    title: 'Manufacturer information'
+    name: 'Manufacturer'
+    garanty: 'Manufacturer guarantee'
+    info: 'Seller information'
+    deliveryTime: 'Delivery time'
+  subCat:
+    available: 'Always available'
+    fromProduktCatName: 'Product subcategories of %category%'
+  c:
+    deleteSuccess: 'The product category has been deleted'
+    delete: 'Delete product category'
+    add: 'Create a new product category'
+    count: 'Product count'
+    edit: 'Edit product category'
+  sc:
+    edit: 'Edit product subcategory'
+    in: 'Products in this subcategory'
+    new: 'Create a new product category'
+    delete: 'Delete product subcategory'
+
+book:
+  from: 'Appointments from %name%'
+  toLate: 'Missed appointment'
+  type:
+    call: 'Call'
+    visit: 'On-site Inspection'
+    work: 'On-site implementation'
+    other: 'Other'
+
+#questionnaire
+oq:
+  edit: 'Edit offer questionnaire'
+  viewSelectedQuestions: 'Show selected questions'
+oqa:
+  montageInfo: 'Will be noted in the protocol log.'
+  image: 'Answer image'
+  imagePreview: 'Answer image preview'
+
+chat:
+  send: 'Send message'
+  error:
+    oneWindow: 'Only one chat window is allowed.'
+
+#dashboard
+dash:
+  showMeName: 'Show me'
+  showMe:
+    firstPayed: 'Project deadline to be agreed'
+    partInvoiceToSend: 'Advance invoices that need to be sent'
+    invoiceToSend: 'Final invoices to be sent'
+    waitPartInvoice: 'Outstanding installment invoices'
+    waitInvoice: 'Outstanding final invoices'
+
+dataTable:
+  processing: 'Data is loading...'
+  search: 'Search in table'
+  viewStart: 'Show _MENU_ items'
+  viewStartEnd: 'Show _START_ to _END_ of _TOTAL_ entries'
+  viewNull: 'Showing 0 to 0 of 0 entries'
+  filter: '(Filter _MAX_ entries from all)'
+  noData: 'There is no data in the table'
+  start: 'Start'
+  back: 'back'
+  next: 'next'
+  toEnd: 'to the end'
+  sortUb: 'Check to sort the column in ascending order.'
+  sortDown: 'Check to sort the column in descending order.'

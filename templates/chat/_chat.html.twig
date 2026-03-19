@@ -1,0 +1,15 @@
+<div class='wrapper'>
+    <div class='steps' id='steps'></div>
+    <div id="chat_view"></div>
+    {{ form_start(form, {'attr':{'id':'chat_form'}}) }}
+    <div class="mut">
+        <div class="input-group">
+            <span style="display: none">{{ form_label(form.text) }}</span>
+            {{ form_widget(form.text) }}
+            <div class="input-group-append" id="loadedMessage">
+                <button type="submit" class="btn btn-danger btn-sm">{{ 'chat.send'|trans }}</button>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>

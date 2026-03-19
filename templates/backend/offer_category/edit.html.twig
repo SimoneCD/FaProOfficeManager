@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'o.categories'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% include 'backend/offer_category/_style.html.twig' %}
+{% endblock %}
+{% block main %}
+    {% include 'backend/components/_menu.html.twig' with {
+        'listLi': {'n':'o.categories'|trans,'k':true},
+        'categoryLi': {'n':category.name,'i':'edit'},
+        'categoryLi2': {'n':('oc.edit'|trans),'i':'edit'}
+    } %}
+{#    <h1>{{ 'oc.edit'|trans }}</h1>#}
+<div id="backend_form">
+    {{ include('backend/offer_category/_form.html.twig', {'button_label': 'w.save'|trans}) }}
+</div>
+{% endblock %}

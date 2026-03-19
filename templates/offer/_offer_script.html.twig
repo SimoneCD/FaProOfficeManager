@@ -1,0 +1,8 @@
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        $('.filter_today').on('click', function () {
+            $('#filter_today').val($(this).attr('data-value'));
+            $('#filter-form').submit();
+        });
+    });
+</script>

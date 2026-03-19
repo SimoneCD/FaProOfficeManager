@@ -1,0 +1,48 @@
+n-berlin:
+  url: 'email/netzanschluss/berlin.html.twig'
+  name: 'Anmeldung zum Netzanschluss Berlin'
+  message: 'im folgenden finden Sie das schrittweise Vorgehen für die Netzanmeldung:'
+n-brandenburg:
+  url: 'email/netzanschluss/brandenburg.html.twig'
+  name: 'Anmeldung zum Netzanschluss Brandenburg'
+  message: 'im folgenden finden Sie das schrittweise Vorgehen für die Netzanmeldung:'
+umzug:
+  url: 'email/umzug.html.twig'
+  name: 'Wir sind Umgezogen'
+  message: 'unsere Unternehmung befindet sich im Wachstum. Für unsere Zukunftsplanung, wurde daher der Name von S&F Elektro, zu ZOE - Zukunftsorientierte-Energie geändert.<br><br>Wir freuen uns, Sie als Kunden im neuen Unternehmen willkommen zu heißen.'
+new-year:
+  url: 'email/new_year.html.twig'
+  name: 'frohes und gesundes neues Jahr'
+  message: 'S&F Elektro ist als ZOE ins neue Jahr gestartet, mit dem Vorsatz, mit Ihnen zu wachsen.<br><br>Wir freuen uns, gemeinsam mit Ihnen und frischer Energie das Jahr 2023 begrüßen zu dürfen.'
+test:
+  url: 'email/invoice/invoice_.html.twig'
+  name: 'Rechnung test'
+  message: 'Text...'
+termin:
+  url: 'email/termin.html.twig'
+  name: '(ersetzen durch Installationstermin oder Besichtigungstermin ...)'
+  message: 'wir freuen uns Ihnen hiermit den folgenden Termin bestätigen zu dürfen.<br><br><strong style="font-size: larger">, um Uhr </strong>'
+reminder_1:
+  url: 'email/invoice/reminder.html.twig'
+  name: 'ZOE Solar Zahlungserinnerung – Ihre Rechnung Nr. ##invoice_number##'
+  message: 'wir möchten Sie höflich darauf hinweisen, dass die Zahlung unserer Rechnung mit der Nummer ##invoice_number## vom ##invoice_date## bislang noch nicht bei uns eingegangen ist. Eventuell hat sich hier ein kleines Missverständnis eingeschlichen oder der Vorgang ist in der Hektik des Alltags untergegangen.<br><br>Wir würden Sie bitten, den ausstehenden Betrag von ##betrag## € innerhalb der nächsten 14 Tage auf folgendes Konto zu überweisen:<br>##account##<br><br>Wir bedanken uns im Voraus und stehen bei Fragen oder Unklarheiten selbstverständlich zur Verfügung.<br>Sollten Sie die Zahlung bereits veranlasst haben, betrachten Sie dieses Schreiben bitte als gegenstandslos.'
+reminder_2:
+  url: 'email/invoice/reminder.html.twig'
+  name: 'ZOE Solar 2. Zahlungserinnerung – Rechnung Nr. ##invoice_number##'
+  message: 'wir hoffen, dieser Brief erreicht Sie in bester Verfassung. Leider müssen wir Sie erneut auf die ausstehende Rechnung Nr. ##invoice_number## vom ##invoice_date## aufmerksam machen.<br><br>Der Rechnungsbetrag von ##betrag## € ist noch nicht bei uns eingegangen. Bitte zahlen Sie den ausstehenden Betrag bis spätestens zum ##pay_date## auf unser Konto.<br>##account##<br><br>Sollten besondere Umstände die Zahlung verhindern, bitten wir um umgehende Kontaktaufnahme, um gemeinsam eine Lösung zu finden. Sollte die Zahlung bereits veranlasst sein, betrachten Sie dieses Schreiben bitte als gegenstandslos.'
+reminder_3:
+  url: 'email/invoice/reminder.html.twig'
+  name: 'ZOE Solar 3. und letzte Zahlungserinnerung zur Rechnungsnummer ##invoice_number##'
+  message: 'Sie haben leider auf unsere Zahlungserinnerungen vom ##rem_date1## und ##rem_date2## nicht reagiert. Wir bitten Sie dringlichst den seit dem ##seit## fälligen Betrag von ##betrag## € bis spätestens zum ##payDate## an uns zu überweisen.<br><strong style="font-weight: bold">Unsere Bankdaten:</strong>##account##<br><br>Dies ist die dritte und letzte Zahlungserinnerung, bevor wir das offene Konto an ein Inkassounternehmen übergeben müssen. Es liegt nicht in unserem Interesse, rechtliche Schritte einleiten zu müssen.'
+reminder_31:
+  url: 'email/invoice/reminder.html.twig'
+  name: 'ZOE Solar 3. und letzte Zahlungserinnerung zur Rechnungsnummer ##invoice_number##'
+  message: 'Sie haben leider auf unsere Zahlungserinnerung vom ##rem_date1## und unserer Mahnung vom ##rem_date2## nicht reagiert. Dies ist die dritte und letzte Mahnung, bevor wir das offene Konto an ein Inkassounternehmen übergeben müssen. Folgende Verzugszinsen sind dem Rechnungsbetrag hinzuzufügen:<br><br>Rechnungsbetrag: ##betrag## €<br>Verzugszinsen: ##betrag_zins## €<br><small>##vershow##</small><br>MwSt auf Verzugszinsen(4,75%): ##mwst## €<br><strong style="font-weight: bold">Brutto Rechnungsbetrag: ##gesamt## €</strong><br><br>Wir bitten Sie dringlichst den fälligen Betrag von ##gesamt## € bis spätestens zum ##payDate## an uns zu überweisen.<br><strong style="font-weight: bold">Unsere Bankdaten:</strong><br>##account##<br><br>Es liegt nicht in unserem Interesse, rechtliche Schritte einleiten zu müssen und somit Mehrkosten für Sie zu verursachen. Bitte zahlen Sie den Betrag umgehend.'
+codelink:
+  url: 'email/codelink.html.twig'
+  name: 'ZOE Kundenlogin'
+  message: 'Vielen Dank für Ihr Vertrauen in Zoe.<br><br>Um Ihnen einen schnellen und einfachen Überblick über den Status Ihrer Angebote und Rechnungen zu geben, bieten wir Ihnen bei ZOE ein Kundenkonto an.<br>Scannen oder klicken Sie bitte den unten stehenden QR-Code und folgen den Anweisungen auf der verlinkten Kundenseite.<br><br><a href="--loginLink--" title="ZOE Kundenlogin" target="_blank"><img alt="ZOE Kundenkonto" src="--loginCode--" /> </a><br>Bitte beachten Sie, dass dieser Link nur einmalig funktioniert und nach der Nutzung abläuft. Sie werden aufgefordert sein, ein Passwort für Ihren zukünftigen Login festzulegen.<br>Wenn Sie weitere Fragen haben oder Unterstützung benötigen, stehen wir Ihnen gerne zur Verfügung.'
+default:
+  url: 'email/mail.html.twig'
+  name: '(ersetzen durch Betreff)'
+  message: ''

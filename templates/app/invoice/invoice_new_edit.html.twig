@@ -1,0 +1,252 @@
+{% extends 'base.html.twig' %}
+{% set angebotName = '' %}
+{% set rechNr = offer is defined and offer.number ? offer.number~'.'~invoice.number : invoice.number %}
+
+{% block title %}Individuelle Rechnung{% endblock %}
+{% set text = 'o.t.email.partInvoice'|replace({'<br>',"\n"})|trans({'%offerNumber%':rechNr}) %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/jquery.datetimepicker.css') }}">
+    <style>
+        #cke_2_contents {
+            max-height: 96px;
+        }
+        .row {display: flex;flex-wrap: wrap;margin-right: -15px;margin-left: -15px;clear: left}
+    </style>
+    {% include appTemplate~'invoice/pdf/_style.html.twig' %}
+{% endblock %}
+{% block main %}
+    <div class="row" style="width: 1024px">
+        <div class="col-md-12">
+            {% if invoice.invoiceOrder.offer.category %}
+                <a href="{{ path('offer_category_index', {'id':invoice.invoiceOrder.offer.category.id}) }}"><i class="material-symbols-outlined">list</i></a>&nbsp;&nbsp;
+            {% endif %}
+            <a href="{{ path('customer_edit', {'id':invoice.customer.id}) }}"><i class="material-symbols-outlined">person</i></a>
+{#            {% if invoice.id and is_granted('ROLE_EMPLOYEE_SERVICE') %}#}
+{#                <a href="{{ path('invoice_individual_pdf', {'id': invoice.id}) }}" target="_blank"><i class="material-symbols-outlined">picture_as_pdf</i></a>&nbsp;&nbsp;#}
+{#            {% endif %}#}
+        </div>
+    </div>
+        <div id="section-to-print" class="row p-0" style="width: 1024px">
+            <div class="main-box p-0 m-0" style="width: -webkit-fill-available;">
+                {% include appTemplate~'invoice/pdf_individual/_header.html.twig' with {'aNumber': rechNr} %}
+                <div class="divi text-right" style="background-color: #004e4c;padding-right: 158px;">&nbsp;{{ sf.city }} | {% if invoice.sendDate %}{{ invoice.sendDate|date('d.m Y') }}{% else %}{{ 'now'|date('d.m Y') }}{% endif %}</div>
+                {{ form_start(form) }}
+                    {% include appTemplate~'invoice/_anrede_individual.html.twig' with {'customer': customer} %}
+                    <div class="divi text-left" style="font-size:18px;padding-left: 65px;">{{ 'w.project'|trans }}: {{ form_widget(form.ladestation, {'attr':{'class':'form-control','style':'font-size: 16px;width:400px;background-color:#fff'}}) }}</div>
+                    <div style="padding: 10px 48px;height: 140px;">
+                        <div class="row">
+                            <div class="col-md-3"><strong style="padding:10px;font-weight: 800">LV-Bezeichnung:</strong></div>
+                            <div class="col-md-9">{{ form_widget(form.lv, {'attr':{'class':'form-control','style':'font-size: 16px;'}}) }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"><strong style="padding:10px;font-weight: 800">Leistungsdatum:</strong></div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    {{ form_widget(form.leistungsdatum, {'attr':{'class':'form-control','style':'font-size: 16px;'}}) }}
+                                    <i class="material-symbols-outlined">event</i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"><strong style="padding:10px;font-weight: 800">Bauherr:</strong></div>
+                            <div class="col-md-9">{{ form_widget(form.bauherr, {'attr':{'class':'form-control','style':'font-size: 16px;'}}) }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"><strong style="padding:10px;font-weight: 800">Bauvorhaben:</strong></div>
+                            <div class="col-md-9">{{ form_widget(form.bauvorhaben, {'attr':{'class':'form-control','style':'font-size: 16px;'}}) }}</div>
+                        </div>
+                    <br>
+                    </div>
+                    <div style="padding: 30px 48px;">
+                        <table class="table">
+                            <tr>
+                                <th style="width: 50px">{{ 'w.posShort'|trans }}</th>
+                                <th style="width: 100px">{{ 'w.date'|trans }}</th>
+                                <th>{{ 'w.description'|trans }}</th>
+                                <th class="text-right" style="width: 100px">{{ 'w.price'|trans }}</th>
+                            </tr>
+                            <tr style="color:#000;background-color: #eaeaea;border-bottom: none;padding: 0">
+                                <td>001</td>
+                                <td>{{ form_widget(form.pos0Date) }}</td>
+                                <td>{{ form_widget(form.pos0Text) }}</td>
+                                <td class="text-right">
+                                    <div class="input-group">
+                                        {{ form_widget(form.pos0Price, {'attr':{'data-pos':'000','style':'color:#000'}}) }}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% set price = invoice.pos0Price %}
+                            <tr style="color: #000">
+                                <td>002</td>
+                                <td>{{ form_widget(form.pos1Date) }}</td>
+                                <td>{{ form_widget(form.pos1Text) }}</td>
+                                <td class="text-right">
+                                    <div class="input-group">
+                                        {{ form_widget(form.pos1Price, {'attr':{'data-pos':'001'}}) }}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% set price = price+invoice.pos1Price %}
+                            <tr style="color: #000">
+                                <td><strong>003</strong></td>
+                                <td>{{ form_widget(form.pos2Date) }}</td>
+                                <td>{{ form_widget(form.pos2Text) }}</td>
+                                <td class="text-right">
+                                    <div class="input-group">
+                                        {{ form_widget(form.pos2Price, {'attr':{'data-pos':'002'}}) }}
+                                    </div>
+                                </td>
+                            </tr>
+
+                            {% set price = price+invoice.pos2Price %}
+                            {% set price = price+invoice.pos3Price %}
+                            <tr style="border-top: 1px solid lightgrey">
+                                <td style="border: none"></td>
+                                <td style="border: none"></td>
+                                <td  style="border: none" class="text-right">{{ 'w.netto'|trans }}:</td>
+                                <td id="calc_netto" class="text-right">{{ price|number_format(2,',','.') }} €</td>
+                            </tr>
+                            {% if customer.id != 277 %}
+                                {% set tax = 19*price/100 %}
+                                <tr style="border-top: none">
+                                    <td style="border: none"></td>
+                                    <td style="border: none"></td>
+                                    <td  style="border: none" class="text-right">{{ 'w.procentTax'|trans({'%procent%':appTax}) }}</td>
+                                    <td id="calc_tax" class="text-right">{{  tax|number_format(2,',','.') }} €</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: none"></td>
+                                    <td style="border: none"></td>
+                                    <td  style="border: none" class="text-right"><strong>{{ 'w.brutto'|trans }}</strong></td>
+                                    <td class="text-right"><strong id="calc_brutto" >{{ (price+tax)|number_format(2,',','.') }} €</strong></td>
+                                </tr>
+                            {% else %}
+                                {% set tax = 0 %}
+                            {% endif %}
+                            <tr>
+                                <td colspan="3" style="font-weight: 800;" class="text-right"><strong>{{ 'i.toPayName'|trans }}</strong></td>
+                                <td class="text-right"><strong style="font-weight: 800" id="calc_brutto_all" >{{ (price+tax)|number_format(2,',','.') }} €</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="text-left" style="padding-left: 40px;">
+                        <p style="margin-bottom:2px;color: #0a7291; font-weight: 800">{{ form_widget(form.leistung) }}</p>
+                        <p style="color: #0a7291; font-weight: 800">{{ form_widget(form.zusatz) }}</p>
+                    </div>
+                    {% if invoice.id and is_granted('ROLE_EMPLOYEE_SERVICE') %}
+                    <div class="text-right" style="padding-right: 0;">
+                        {{ 'i.send'|trans }} <input id="soll_send" title="senden" type="checkbox" name="send" value="1"> <button id="id_senden" type="submit" class="btn btn-danger">{{ 'w.save'|trans }}</button>
+                    </div>
+                    <div class="text-left" style="padding-left: 40px;">
+                        <p>Email-Text</p>
+                        <textarea class="form-control" name="emailtext" style="background-color: #fff6af;height: 300px;">wir bedanken uns für die freundliche Zusammenarbeit.
+Im Anhang befindet sich unsere Rechnung mit der Nummer: {{ invoice.number }}.
+                        </textarea>
+                    </div>
+                    {{ form_widget(form._token) }}
+                {% endif %}
+                {{ form_end(form, {'render_rest':false}) }}
+                {% include appTemplate~'invoice/_page.html.twig' with {'page': 1} %}
+                {% include appTemplate~'invoice/pdf/_footer.html.twig' %}
+            </div>
+        </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/jquery.js') }}"></script>
+    <script src="{{ asset('assets/jquery.datetimepicker.full.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let vars = {
+                toolbarCanCollapse: true,
+                toolbarStartupExpanded: false,
+                scayt_autoStartup:true,
+                scayt_sLang:'de_DE',
+                modal: true,
+                autoOpen: false,
+                language: 'de',
+                uiColor: '#ffffff',
+                toolbarGroups: [
+                    { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+                    { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+                    { name: 'links', groups: [ 'links' ] },
+                    { name: 'insert', groups: [ 'insert' ] },
+                    { name: 'forms', groups: [ 'forms' ] },
+                    { name: 'tools', groups: [ 'tools' ] },
+                    { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+                    { name: 'others', groups: [ 'others' ] },
+                    '/',
+                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                    { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+                    { name: 'styles', groups: [ 'styles' ] },
+                    { name: 'colors', groups: [ 'colors' ] },
+                    { name: 'about', groups: [ 'about' ] }
+                ],
+                removeButtons: 'Subscript,Superscript,Copy,Image,Paste,PasteText,PasteFromWord,Cut,Maximize,About'
+            };
+            if ($('#invoice_part_mail_text')) {
+                CKEDITOR.replace('invoice_part_mail_text', vars);
+            }
+            if ($('#invoice_final_mail_text')) {
+                CKEDITOR.replace('invoice_final_mail_text', vars);
+            }
+            CKEDITOR.replace('invoice_text', vars);
+            jQuery.datetimepicker.setLocale('de');
+
+            jQuery('#invoice_leistungsdatum').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+            jQuery('#invoice_pos0Date').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+            jQuery('#invoice_pos1Date').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+            jQuery('#invoice_pos2Date').datetimepicker({timepicker:false,'scrollMonth':false, 'format': 'd.m.Y'});
+            $(document).on('change','#invoice_pos0Price, #invoice_pos1Price, #invoice_pos2Price, #invoice_pos3Price', function () {
+                let price = 0;
+                let price0 = parseFloat(($('.price0').val()).replace(',','.'));
+                let price1 = parseFloat(($('.price1').val()).replace(',','.'));
+                let price2 = parseFloat(($('.price2').val()).replace(',','.'));
+                let price3 = parseFloat(0);
+                if ($('.price3').length) {
+                    let price3 = parseFloat(($('.price3').val()).replace(',','.'));
+                }
+
+                    price = price0;
+                    if (price1 !== 0) {
+                        price = price+price1;
+                    }
+                    if (price2 !== 0) {
+                        price = price+price2;
+                    }
+                    if (price3 !== 0) {
+                        price = price+price3;
+                    }
+
+                let t = 19*price/100;
+                let netto = (new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(price))
+                let tax = (new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(t))
+                let brutto = (new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(t+price))
+
+                $('#calc_netto').html(netto.fixed(2));
+                $('#calc_tax').html(tax.fixed(2));
+                $('#calc_brutto').html(brutto.fixed(2));
+
+                    let v = 0;
+                    $('#calc_brutto_all').html((new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(t+price-v)));
+
+            })
+        });
+    function addCommas(nStr)
+    {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + (x[1]).substr(0,2) : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
+    }
+    </script>
+{% endblock %}
+

@@ -1,0 +1,106 @@
+{% if offer.subCategory and offer.subCategory.questionAreas|length %}
+    <div class="card">
+        <div class="card-body">
+            <h4 style="font-size: 16px !important;">Aufmass-Inhaltsverzeichnis
+                <a class="p-1" style="color: {{ sfColor }};text-align: right;cursor: pointer"
+                   href="{{ path('pdf_protocol', {'id':offer.id}) }}" target="_blank">
+                    <span class="material-icons">picture_as_pdf</span>
+                </a><br>
+                <p>{% if offer.wallboxProduct %}
+                        {% include 'offer/types/text/hauptproduct_view.html.twig' %}
+                    {% endif %}
+                </p>
+            </h4>
+            {% for area in offer.subCategory.questionAreas|sort((a,b) => a.sort <=> b.sort) %}
+                {% set headerView = [] %}
+                {% for question in area.questions|sort((a,b) => a.sort <=> b.sort) %}
+                    {% if question.protocol != 'q' %}
+                        {% set headerView = headerView|merge([area.id]) %}
+                    {% endif %}
+                {% endfor %}
+                {% if area.id in headerView %}
+                    <a href="#area_{{ area.id }}">{{ loop.index }}. {{ area.name }}</a><br>
+                {% endif %}
+            {% endfor %}
+            <hr>
+            <a href="#offer_order_documents">{{ offer.subCategory.questionAreas|length+1 }}. Dokumente</a><br>
+            <a href="#area_img">{{ offer.subCategory.questionAreas|length+2 }}. Weiterer Angebotsbilder</a><br>
+        </div>
+    </div>
+{% endif %}
+    <div class="card">
+        <div class="card-body">
+            {% if offer.subCategory.questionAreas|length %}
+                <div class="row w-100 p-0" style="border:none;position:relative;">
+                    {% set i = 1 %}
+                    {% if offer.inquiry.context|length == 0 %}
+                        <h4>
+                            <img style="width: 40px" src="{{ asset('app/images/Atention.png') }}">Kein Aufmaß vorhanden, bitte den Fragebogen ausfüllen.
+                            <a href="{{ path('offer_edit_plus', {'id':offer.id}) }}"><i class="material-icons" style="margin:-10px 6px auto 4px;">design_services</i></a>
+                        </h4>
+                    {% endif %}
+                    <div class="col-md-6 p-1 m-0">
+                        {% for area in offer.subCategory.questionAreas|sort((a,b) => a.sort <=> b.sort) %}
+                            {% set headerView = false %}
+                            {% for question in area.questions|sort((a,b) => a.sort <=> b.sort) %}
+                                {% if question.protocol != 'q' and (question.view == true or question.id in appAnswerChecked) %}
+                                    {% set headerView = true %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if headerView == true %}
+                                <table style="border: none">
+                                    <tr>
+                                        <td>
+                                            <h4 id="area_{{ area.id }}" class="mt-4 mb-0 pl-2" style="font-size:14px !important;">{{ area.name }}</h4>
+                                        </td>
+                                    </tr>
+                                </table>
+                                {% set imagesCount = 0 %}
+                                {% set viewedQuestions = [] %}
+                                {{ save('viewedQuestions') }}
+
+                                {% for question in area.questions|sort((a,b) => a.sort <=> b.sort) %}
+                                    {% if question.view == true or question.id in appAnswerChecked %}
+                                        {{ save('imagesCount') }}
+                                        {% include 'offer/montage/components/_aufmass_div.html.twig' with {'quetion':question} %}
+                                        {{ restore('imagesCount') }}
+                                    {% endif %}
+                                    {{ restore('appAnswerChecked') }}
+                                {% endfor %}
+
+                                {% if i == 2 %}
+                                    {% set i = 1 %}
+                                    </div>
+                                </div>
+                                <div class="row w-100 p-0" style="border:none;position:relative;">
+                                    <div class="{% if loop.index+1 == offer.subCategory.questionAreas|length %}col-md-12{% set i = 2 %}{% else %}col-md-6{% endif %} p-1 m-0">
+                                {% elseif i == 1 %}
+                                    {% set i = 2 %}
+                                    </div>
+                                    <div class="col-md-6 p-1 m-0">
+                                {% endif %}
+                            {% endif %}
+                         {% endfor %}
+                    </div>
+                </div>
+                <a style="position: fixed;top: 82%;right: 10px;z-index: 9999;" href="#pro_tops"><i style="font-size: 46px !important;" class="material-icons">arrow_circle_up</i></a>
+{#                <a style="position: fixed;top: 90%;right: 10px;" href="#pro_top"><i style="font-size: 46px !important;" class="material-icons">arrow_circle_up</i></a>#}
+            {% else %}
+                <h4 data-popover-url-value="{{ path('ajax_faq', {'id': 50}) }}" data-controller="popover">
+                    Die Fragen im Fragebogen müssen von der Administration gruppiert werden!
+                    <a class="faq-box" href="javascript:void(0)" data-action="mouseenter->popover#show">
+                        <span class="material-icons">info_outline</span>
+                    </a>
+                    {% if is_granted('ROLE_ADMIN') %}
+{#                    <a href="{{ path('ba', {'id':offer.id}) }}"><i class="material-icons" style="margin:-10px 6px auto 4px;">design_services</i></a>#}
+                    {% endif %}
+                </h4>
+{#                {% set viewedQuestions = [] %}#}
+{#                {{ save('viewedQuestions') }}#}
+{#                {% for question in offer.subCategory.offerQuestions|sort((a,b) => a.sort <=> b.sort) %}#}
+{#                    {% include 'offer/montage/components/_card.html.twig' with {'quetion':question} %}#}
+{#                {% endfor %}#}
+            {% endif %}
+        </div>
+    </div>

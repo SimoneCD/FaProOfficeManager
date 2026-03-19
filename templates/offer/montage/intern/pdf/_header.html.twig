@@ -1,0 +1,41 @@
+{% set isPdf = (pdf is defined and pdf) %}
+{% set context = offer.context %}
+{% set type = type is defined ? type : 'pv_first' %}
+{% set yes = offer.context is defined and offer.context.protocol is defined and offer.context.protocol[type] is defined %}
+{% set ocp = yes ? offer.context.protocol[type]  : null %}
+{% if count > 1 and isPdf == false %}
+<table class="mt5">
+    <tr>
+        <th><img style="width: 726px;" src="{{ asset('app/nh.png') }}"></th>
+    </tr>
+</table>
+{% else %}{% set count = 1 %}
+<table class="mt5{% if isPdf == false %} bcf{% endif %}">
+    <tr>
+        <th colspan="3" style="width: 33%"><h3>Auftraggeber <sup class="numberCircle">2</sup></h3></th>
+        <th colspan="3" style="width: 33%"><h3>Auftragnehmer <sup class="numberCircle">3</sup></h3></th>
+        <th class="brTd" colspan="3"><h3>Prüfer <sup class="numberCircle">4</sup></h3></th>
+    </tr>
+    <tr>
+        <td colspan="1" style="max-width: 52px;"><p>Name:</p><p>Straße/Nr.:</p><p>PLZ Ort:</p></td>
+        <td colspan="2">
+            <p><input class="check_i" type="text" name="{{ type }}[customer][name][{{ count }}]" value="{% if yes %}{{ ocp.customer.name[count] }}{% else %}{{ offer.customer.fullName|trim }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="{{ type }}[customer][streetnr][{{ count }}]" value="{% if yes %}{{ ocp.customer.streetnr[count] }}{% else %}{{ offer.customer.address }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="{{ type }}[customer][plzort][{{ count }}]" value="{% if yes %}{{ ocp.customer.plzort[count] }}{% else %}{{ offer.customer.zip }}{% endif %}"></p>
+        </td>
+        <td colspan="1" style="max-width: 52px;"><p>Name:</p><p>Straße/Nr.:</p><p>PLZ Ort:</p></td>
+        <td colspan="2">
+            <p><input class="check_i" type="text" name="{{ type }}[user][name][{{ count }}]" value="{% if yes %}{{ ocp.user.name[count] }}{% else %}{{ sf.name_complete }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="{{ type }}[user][streetnr][{{ count }}]" value="{% if yes %}{{ ocp.user.streetnr[count] }}{% else %}{{ sf.address }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="{{ type }}[user][plzort][{{ count }}]" value="{% if yes %}{{ ocp.user.plzort[count] }}{% else %}{{ sf.zip }}{% endif %}"></p>
+        </td>
+
+        <td colspan="1" style="max-width: 52px;"><p>Name:</p><p>Straße/Nr.:</p><p>PLZ Ort:</p></td>
+        <td class="brTd" colspan="2">
+            <p><input class="check_i" type="text" name="{{ type }}[pruefer][name][{{ count }}]" value="{% if yes %}{{ ocp.pruefer.name[count] }}{% else %}{{ app.user.fullName }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="{{ type }}[pruefer][nr][{{ count }}]" value="{% if yes %}{{ ocp.pruefer.nr[count] }}{% else %}{{ sf.address }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="{{ type }}[pruefer][phone][{{ count }}]" value="{% if yes %}{{ ocp.pruefer.phone[count] }}{% else %}{{ sf.zip }}{% endif %}"></p>
+        </td>
+    </tr>
+</table>
+{%- endif %}

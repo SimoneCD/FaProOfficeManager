@@ -1,0 +1,12 @@
+{% if is_granted('ROLE_ADMIN') %}
+    <div class="card p-4">
+        <div class="form-group row">
+            <div class="col-md-12 text-center">
+                <form id="product-delete-form" method="post" action="{{ path('backend_product_delete', {'category': 'x','subCategory': 'x','id': product.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('product-delete-' ~ product.id) }}">
+                    <button data-confirm="{{ 'f.confirm.deleteItem'|trans }}" class="confirm btn btn-danger" type="button">{{ 'p.delete'|trans }}?</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endif %}

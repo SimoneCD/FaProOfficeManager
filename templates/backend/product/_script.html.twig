@@ -1,0 +1,102 @@
+<script>
+    $(document).ready(function () {
+        const image = document.getElementById('product_preview');
+        {% if product is defined and product.id %}
+            const cropper = new Cropper(image, {
+                viewMode: 2,
+                dragMode: 'move',
+                autoCropArea: 1.0,
+                widt: 268,
+                height: 268,
+                // minContainerHeight: 310,
+                // minContainerWidth: 2000,
+                // minCropBoxWidth: 921.6,
+                // maxCropBoxWidth: 1024,
+                // minCropBoxHeight: 297,
+                // maxCropBoxHeight: 310,
+                aspectRatio: 1 / 1,
+                toggleDragModeOnDblclick: 0,
+                crop(event) {
+                    console.log(event)
+                    //   let content = $('label[for="offer_sub_category_offerImage"]');
+                    //   let elm = document.createElement('<p>');
+                    //   elm.innerText = event.detail.width;
+                    // content.appendChild(elm)
+                    console.log(event.detail.x);
+                    console.log(event.detail.y);
+                    console.log(event.detail.width);
+                    console.log(event.detail.height);
+                    console.log(event.detail.rotate);
+                    console.log(event.detail.scaleX);
+                    console.log(event.detail.scaleY);
+                },
+            });
+        {% endif %}
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    console.log(e);
+                    {% if product is defined and product.id %}
+                        cropper.replace(e.target.result);
+                        $('#product_preview').attr('src', e.target.result);
+                    {% else %}
+                        $('#product_preview_active').attr('src', e.target.result);
+                    {% endif %}
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        if ($('#product_productImage')) {
+            $(document).on('change', '#product_productImage', function () {
+                readURL(this);
+            });
+        }
+
+        {% if product is defined and product.id %}
+        $('#btnCrop').click(function() {
+            // Get a string base 64 data url
+            cropper.getCroppedCanvas().toBlob((blob) => {
+                const formData = new FormData();
+                formData.append('image', blob);
+                $.ajax('{{ path('backend_product_upload_image',{'category':'x','subCategory':'x','id':product.id}) }}', {
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success(xr) {
+                        console.log('error');
+                        window.location.href = window.location.href;
+                    },
+                    error(e) {
+                        console.log('error');
+                        console.log(e);
+                    },
+                });
+            });
+        });
+        $(document).on('click', '#deleteImage', function() {
+            // Get a string base 64 data url
+            $.ajax('{{ path('ajax_product_image_remove',{'id':product.id}) }}', {
+                method: 'POST',
+                data: {},
+                success(xr) {
+                    window.location.href = window.location.href;
+                },
+                error(e) {
+                    console.log('error');
+                    console.log(e);x
+                },
+            });
+        });
+        $('#btnRestore').click(function() {
+            cropper.reset();
+        });
+        $('#btnFlip').click(function() {
+            //cropper.scale(-1); // Flip both horizontal and vertical
+            cropper.scale(-1, 1); // Flip horizontal
+            //cropper.scale(1, -1); // Flip vertical
+        });
+        {% endif %}
+    });
+</script>

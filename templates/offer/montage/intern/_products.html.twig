@@ -1,0 +1,158 @@
+
+{% set productIdsDeliverd = null %}
+<div class="card mt-1">
+    <div class="card-header pb-0 mb-0">
+        <h4 class="pb-0 mb-0" style="font-size: 16px !important;">Produktübersicht {{ offer.number }}</h4>
+    </div>
+    <div class="card-body">
+        <div class="w-100">
+            {% if offer.offerItems|length %}
+                {% set po = offer.productOrders|length %}
+                {% if po %}
+                    {% set productIdsDeliverd = productIdsDeliverd|default([]) %}
+                    {% for ok, opo in offer.productOrders %}
+                        {% set productIdsDeliverd = productIdsDeliverd|merge([{'id': opo.product.id, 'deliverd': opo.deliverd}]) %}
+{#                        {% set productIds = productIds|merge([opo.product.id]) %}  #}{# Fügen Sie die Produkt-ID zum Array hinzu #}
+                    {% endfor %}
+                {% endif %}
+{#                {% for k, pos in offer.productOrders %}#}
+{#                {% endfor %}#}
+                <table {{ stimulus_controller('order-delivered')}} class="table table-striped m-0 pt-0" style="width: content-box">
+                    {% set loopIndex = [] %}
+                    {% set index = 0 %}
+                    {% for k, p in offer.offerItems %}
+                        {% set index = index+1 %}
+                        {% set product = p.item %}
+                        {% if product and product != 'deleted product' %}
+                            {% if product.workerProduct %}
+                                {% set index = index-1 %}
+                            {% endif %}
+                            {% if product.workerProduct == false %}
+                                {% set currentProductId = product.id %}  {# Annahme: 'product' ist das aktuelle Produkt-Objekt #}
+                                {% if productIdsDeliverd is iterable %}
+                                    {% set productDeliverdTrue = productIdsDeliverd|filter(v => v.id == currentProductId and v.flag == true)|first %}
+                                {% else %}
+                                    {% set productDeliverdTrue = null %}
+                                {% endif %}
+{#                                {% set productDeliverdTrue = productIdsWithFlag|filter(v => v.id == currentProductId and v.flag == true)|first %}#}
+                                <tr>
+                                    {% if index >= 2 %}
+                                        <th class="p-2" style="width: 20px" >{{ product.productNumber }}</th>
+                                        <th class="p-2" style="min-width: 200px">
+                                            <a title="{{ p.name }}" href="{{ path('backend_product_edit', {'subCategory': product.productSubCategory.id, 'category':product.productCategory.id, 'id':k}) }}">{{ p.name }}</a>
+                                            <p style="color: #575757">{{ p.description }}</p>
+                                        </th>
+                                    {% else %}
+                                        <th colspan="2"></th>
+                                    {% endif %}
+                                    {% if index == 1 %}
+                                        <th class="p-2 text-right">{{ 'w.amount'|trans }}</th>
+                                        <td class="p-2 text-center" title="Vor Ort / geliefert"><img src="{{ asset('app/images/ok.svg') }}"></td>
+                                    {% else %}
+                                        <td class="p-2 text-right">{{ p.amount }}</td>
+                                        <td class="p-2 text-center">
+                                            <div id="task-list">
+                                                {%- if productDeliverdTrue %}
+                                                    <img src="{{ asset('app/images/ok.svg') }}">
+                                                {% else %}
+                                                    <a href="javascript:void(0)" data-task-id="{{ p.id }}" data-offer-url="{#{{ path('ajax_product_deliver_save', {'id':k, 'order': delivers}) }}#}" data-offer-id="{{ offer.id }}" data-toggle="modal" data-target="#miniModal"><img src="{{ asset('app/images/noOk.svg') }}"></a>
+                                                {% endif -%}
+                                            </div>
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                                {% if offer.wallboxProduct and settingP is not defined %}
+                                {% set settingP = true %}
+                                    <tr>
+                                        <th class="p-2" style="width: 20px" >{{ offer.wallboxProduct.productNumber }}</th>
+                                        <th class="p-2" style="min-width: 200px">
+                                            <a title="{{ offer.wallboxProduct.name }}" href="{{ path('backend_product_edit', {'subCategory': offer.wallboxProduct.productSubCategory.id, 'category':offer.wallboxProduct.productCategory.id, 'id':offer.wallboxProduct.id}) }}">{{ offer.wallboxProduct.name }}</a>
+                                            <p style="color: #575757">{{ offer.wallboxProduct.description }}</p>
+                                        </th>
+                                        <td class="p-2 text-right">{{ offer.amount }}</td>
+                                        <td class="p-2 text-center">
+                                            {%- if productDeliverdTrue %}
+                                                <img src="{{ asset('app/images/ok.svg') }}">
+                                            {% else %}
+                                                <a href="javascript:void(0)" data-task-id="{{ p.id }}" data-offer-id="{{ offer.id }}" data-toggle="modal" data-target="#miniModal"><img src="{{ asset('app/images/noOk.svg') }}"></a>
+                                            {% endif -%}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </table>
+                <div data-controller="order-delivered" data-url="" data-id="{{ offer.id }}" class="modal fade mini-modal" id="miniModal" tabindex="-1" role="dialog"
+                     style="position:absolute;left:40%;top:40%;z-index: 99999999;">
+                    <div class="modal-dialog modal-dialog-centered mini-modal-dialog" role="document">
+                        <div class="modal-content mini-modal-content">
+                            <div class="modal-body" style="text-align: center;padding: 10px;">
+                                <input type="hidden" name="modalOffer" value="">
+                                <input type="hidden" name="modalDelivered" value="">
+                                <button {{ stimulus_action('order-delivered', 'delivered', 'change')}}
+                                        data-url=""
+                                        type="button" class="btn btn-white" style="background-color: gold;color: #000;padding: 4px 10px;"><i class="material-symbols-outlined">shopping_cart</i></button>
+                                <button type="button" class="btn btn-white" style="background-color: #4ad22b;color: #000;padding: 4px 10px;"><i class="material-symbols-outlined">local_shipping</i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="card mt-1">
+    <div class="card-header pb-0 mb-0">
+        <h4 class="pb-0 mb-0" style="font-size: 16px !important;">Leistungen {{ offer.number }}</h4>
+    </div>
+    <div class="card-body">
+        <div class="w-100">
+            {% if offer.offerItems|length %}
+                <table {{ stimulus_controller('order-delivered')}} class="table table-striped m-0 pt-0" style="width: auto">
+                    {% set loopIndex = [] %}
+                    {% set index = 0 %}
+                    {% for k, p in offer.offerItems %}
+                        {% set index = index+1 %}
+                        {% set product = p.item %}
+                        {% if product and product != 'deleted product' %}
+                            {% if product.workerProduct == false %}
+                                {% set index = index-1 %}
+                            {% endif %}
+                            {% if product.workerProduct %}
+                                <tr>
+                                    {% if index >= 2 %}
+                                        <th class="p-2" style="width: 20px" >{{ product.productNumber }}</th>
+                                        <th class="p-2" style="min-width: 200px">
+                                            <a title="{{ p.name }}" href="{{ path('backend_product_edit', {'subCategory': product.productSubCategory.id, 'category':product.productCategory.id, 'id':k}) }}">{{ p.name }}</a>
+                                            <p style="color: #575757">{{ p.description }}</p>
+                                        </th>
+                                    {% else %}
+                                        <th colspan="2"></th>
+                                    {% endif %}
+                                    {% if index == 1 %}
+                                        <th class="p-2 text-right">{{ 'w.amount'|trans }}</th>
+                                    {% else %}
+                                        <td class="p-2 text-right">{{ p.amount }}</td>
+                                    {% endif %}
+                                </tr>
+                                {% if offer.wallboxProduct and settingP is not defined %}
+                                {% set settingP = true %}
+                                    <tr>
+                                        <th class="p-2" style="width: 20px" >{{ offer.wallboxProduct.productNumber }}</th>
+                                        <th class="p-2" style="min-width: 200px">
+                                            <a title="{{ offer.wallboxProduct.name }}" href="{{ path('backend_product_edit', {'subCategory': offer.wallboxProduct.productSubCategory.id, 'category':offer.wallboxProduct.productCategory.id, 'id':offer.wallboxProduct.id}) }}">{{ offer.wallboxProduct.name }}</a>
+                                            <p style="color: #575757">{{ offer.wallboxProduct.description }}</p>
+                                        </th>
+                                        <td class="p-2 text-right">{{ offer.amount }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+    </div>
+</div>

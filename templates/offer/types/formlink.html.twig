@@ -1,0 +1,79 @@
+{% extends 'base.precommendation.html.twig' %}
+{% block title %}{{ 'o.new'|trans }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        input[type="text"], .form-select {
+            padding: 10px 0 10px 10px !important;
+            height: 52px !important;
+            margin-bottom: 6px;
+        }
+        button[type="submit"] {
+            background-color: initial;
+            border: 1px solid #ffce51;
+            color: initial;
+        }
+        .bttsbutton {
+            border: 1px solid #ffce51 !important;
+            background-color: #ffce51 !important;
+            color: #0a0a0a !important;
+            transition: border-color .3s, background-color .3s, transform .3s, color .3s;
+        }
+        .form-control:focus {
+            border-color: #fff !important;
+            box-shadow: none;
+        }
+        .form-control:disabled, .form-control[readonly] {
+            background-color: #7e2a7e;
+            color: #fff;
+            opacity: 1;
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+    </script>
+{% endblock %}
+{% set customerName = '' %}
+{# offer.customer.companyName ==''? (offer.customer.sex|trans)~' '~offer.customer.fullName : offer.customer.companyName %} #}
+{% set appAnswerChecked = [] %}
+{% block main %}
+    <div style="max-width: 310px">
+    {% if form is defined and (done is not defined or done == false) %}
+        {{ form_start(form) }}
+            {{ form_widget(form.fullname) }}
+            {{ form_widget(form.email) }}
+        <button class="bttsbutton left carousel-control carousel-control-next" type="submit" style="text-align: center;font-size: 0.9rem;font-weight: 400;width: 100%">Code anfordern
+        </button>
+        {{ form_end(form, {'render_rest':false}) }}
+    {% else %}
+        <div style="max-width: 300px">
+            <p style="text-align: left;margin-bottom: 2px">Ihr persönlicher Prämien-Code:</p>
+            <input id="myInput" type="text" style="max-width: 250px;text-align: center" disabled class="form-control" name="code" value="{{ link.link }}" />
+        </div>
+    {% endif %}
+    </div>
+{#    {{ form_widget(form._token) }}#}
+    {{ form_end(form, {'render_rest':false}) }}
+    {# <div class="row text-left text-left" style="background-color: #fff"> #}
+    {# <div class="col-md-3" style="text-align: left;background: url('{{ asset('app/img/1x1.png') }}')"> #}
+    {# <p class="p-3 d-none">Wir schätzen Ihr Interesse an Photovoltaikanlagen und sind bereit, Sie bei Ihrer #}
+    {# grünen Energiereise zu begleiten. #}
+    {# <br><br> #}
+    {# Unsere Experten stehen Ihnen zur Seite, um alle Ihre Fragen zu beantworten und Ihnen maßgeschneiderte #}
+    {# Lösungen anzubieten, die Ihren Bedürfnissen entsprechen. #}
+    {# </p> #}
+    {# </div> #}
+    {# <div class="col-md-9" style="text-align: left;padding: 60px !important;"> #}
+    {# <h3>Anleitung:</h3> #}
+    {# <ol> #}
+    {# <li>Beantworten Sie bitte folgende Fragen</li> #}
+    {# <li>Sie bekommen innerhalb 24 Std. Werktags einen kostenlosen Kostenvoranschlag von uns.</li> #}
+    {# {% if error == false %} #}
+    {# <li>Bei Auftragsabschluss, erwartet Sie und {{ link.fullname }} ein Bonus von {{ link.amount }} #}
+    {# &euro;</li>{% endif %} #}
+    {# </ol> #}
+    {# </div> #}
+    {# </div> #}
+{% endblock %}

@@ -1,0 +1,12 @@
+<ol>
+    <li>
+        <h4 style="margin-top: 0" class="u-custom-font u-font-oswald u-text u-text-default u-text-5">Angebot {{ offer.number }}{# <span class="material-icons">file_download</span>#}</h4>
+        {% for file in files %}
+            {% if loop.index == 1 %}
+                <object style="margin: 1rem auto 0" data="{{ file }}" type="application/pdf" width="100%" height="720px">
+                    <p>Bitte laden Sie das Angebot hier runter:<br> <a target="_blank" href="{{ file }}"> {{ file|replace({'/var/tmp/':''}) }}</a></p>
+                </object>
+            {% endif %}
+        {% endfor %}
+    </li>
+</ol>

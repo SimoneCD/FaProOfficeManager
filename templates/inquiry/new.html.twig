@@ -1,0 +1,153 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'iq.info'|trans }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        li {
+            border-radius: 3px;
+            border-color: #d3e7ea !important;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-12"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">{{ 'w.offer'|trans }}</h4>
+                    <p class="card-category">{{ 'iq.info'|trans }}</p>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form, {'attr':{'class':'form-horizontal'}}) }}
+{#                    <div class="form-group row">#}
+{#                        <div class="col-sm-12">#}
+{#                            <h3>{{ 'f.label.general'|trans }}</h3>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="form-group row">#}
+{#                        {{ form_label(form.refererFrom) }}#}
+{#                        <div class="col-md-9">#}
+{#                            {{ form_widget(form.refererFrom) }}#}
+{#                        </div>#}
+{#                    </div>#}
+                    <div class="form-group row">
+                        {{ form_label(form.notice) }}
+                        <div class="col-sm-9">
+                            {{ form_widget(form.notice) }}
+                        </div>
+                    </div>
+                    <div style="margin: 20px"><h3>{{ 'c.exist'|trans }}</h3></div>
+                    <div class="form-group row">
+                        <label class="ontrol-label col-sm-3">{{ 'f.label.existCustomer'|trans }}:</label>
+                        <div class="col-sm-9">
+                            <div data-controller="customer-autosearch" data-customer-autosearch-url-value="{{ path('customer_ajax_autosearch') }}">
+                                <input {{ stimulus_action('customer-autosearch', 'autosearch','keyup') }} autocomplete="off" value="" name="q" type="text" class="form-control" {{ stimulus_target('customer-autosearch', 'input') }} placeholder="{{ 'f.label.searchCustomer'|trans }} ..." autofocus/>
+                                <input type="hidden" name="inquiry[customer][id]" value="0" {{ stimulus_target('customer-autosearch', 'hidden') }} />
+                                <ul {{ stimulus_target('customer-autosearch', 'results') }} class="list-group"></ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="step" style="margin: 20px">
+                        <h3>{{ 'c.new'|trans }}</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.customer.sex) }}
+                                    {{ form_widget(form.customer.sex) }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.customer.companyName) }}
+                                    {{ form_widget(form.customer.companyName) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.customer.email) }}
+                                    {{ form_widget(form.customer.email) }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.customer.phone) }}
+                                    {{ form_widget(form.customer.phone) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.customer.title) }}
+                                    {{ form_widget(form.customer.title) }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.customer.name) }}
+                                    {{ form_widget(form.customer.name) }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.customer.surName) }}
+                                    {{ form_widget(form.customer.surName) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.customer.address) }}
+                                    {{ form_widget(form.customer.address) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.customer.zip) }}
+                                    {{ form_widget(form.customer.zip) }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.customer.city) }}
+                                    {{ form_widget(form.customer.city) }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.customer.country) }}
+                                    {{ form_widget(form.customer.country) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            {{ form_label(form.customer.link) }}
+                            <div class="col-sm-9">
+                                {{ form_widget(form.customer.link) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12 text-center">
+                            {% for category in getOfferCategories() %}
+                                <button type="submit" name="category" value="{{ category.id }}" class="btn btn-light pull-right"><span class="material-symbols-outlined" style="padding: 20px 4px;font-size: xx-large;">{{ category.icon }}</span> {{ category.name }}</button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {{ form_end(form, {'render_rest': false}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+<div class="answer_content_input ml-1">
+    <label class="my-0 p-2 form-check-label" for="ra-{{ answer.id }}">
+        <p class="m-0 p-0" style="float: left;width: max-content;">{{ answer.name }}</p>
+        {% if answer.image %}<img alt="" src="{{ asset('app/img/1x1.png') }}" style="height: 60px;float: left">{% endif %}
+        <span class="clearfix"></span>
+    </label>
+    {% if answer.image %}
+        <div class="m-0 p-0" style="position: absolute;top: 0;right: 0;">
+            <img alt="{{ answer.name }}" src="{{ asset(appAssetPath~'offers/answers/'~answer.image) }}"
+                 style="max-height: 60px;box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;">
+        </div>
+    {% endif %}
+</div>

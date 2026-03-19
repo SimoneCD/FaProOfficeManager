@@ -1,0 +1,16 @@
+{%- if context[key]['name'][i] is defined -%}
+<div class="row">
+    <div class="col-md-6">
+        <input class="form-control" name="invoice_option[context][{{ key }}][name][{{ i }}]" value="{{ context[key]['name'][i]|replace({
+            '##offerName##':name,
+            '##offerNumber##':number,
+        }) }}">
+    </div>
+    <div class="col-md-6">
+        <input class="form-control" name="invoice_option[context][{{ key }}][text][{{ i }}]" value="{{ context[key]['text'][i]|replace({
+            '##offerName##':name,
+            '##offerNumber##':number,
+        }) }}">
+    </div>
+</div>
+{%- endif %}

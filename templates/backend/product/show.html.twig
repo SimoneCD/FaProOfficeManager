@@ -1,0 +1,207 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product{% endblock %}
+
+{% block main %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">{{ product.name }}</h4>
+                <p class="category"></p>
+            </div>
+            <div class="card-body">
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>{{ 'w.id'|trans }}</th>
+                <td class="text-right">{{ product.id }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'w.name'|trans }}</th>
+                <td class="text-right">{{ product.name }}</td>
+            </tr>
+            {% if product.productSubCategory.mainProduct %}
+                <tr>
+                    <th>{{ product.valueName }}</th>
+                    <td class="text-right">{{ product.kw }}</td>
+                </tr>
+             {% else %}
+                <tr>
+                    <th></th>
+                    <td class="text-right">{{ product.kw }}</td>
+                </tr>
+            {% endif %}
+            <tr>
+                <th>Description</th>
+                <td class="text-right">{{ product.description }}</td>
+            </tr>
+            <tr>
+                <th>Kategorie</th>
+                <td class="text-right">{{ product.productCategory.name }} -> {{ product.productSubCategory.name }}</td>
+            </tr>
+            <tr>
+                <th>Bruttopreis</th>
+                <td class="text-right">{{ product.price|number_format(2,',','.') }} &euro;</td>
+            </tr>
+{#            <tr>#}
+{#                <th>Tax {{ product.tax }}% </th>#}
+{#                <td class="text-right">{{ ((product.tax*product.price/100))|number_format(2,',','.') }} &euro;</td>#}
+{#            </tr>#}
+{#            <tr>#}
+{#                <th>Brutto</th>#}
+{#                <td class="text-right">{{ ((appTax*product.price/100)+product.price)|number_format(2,',','.') }} &euro;</td>#}
+{#            </tr>#}
+        </tbody>
+    </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row d-none">
+    <div class="col-lg-12 col-md-12">
+        <div class="card">
+            <div class="card-header card-header-tabs card-header-success">
+                <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                        <span class="nav-tabs-title">Produkt Verwendung:</span>
+                        <ul class="nav nav-tabs" data-tabs="tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#calls" data-toggle="tab">
+                                    <i class="material-symbols-outlined">phone</i> Anrufe + Status
+                                    <div class="ripple-container"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#profile" data-toggle="tab">
+                                    <i class="material-symbols-outlined">local_offer</i> Angebote
+                                    <div class="ripple-container"></div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#messages" data-toggle="tab">
+                                    <i class="material-symbols-outlined">price_check</i> Kauf
+                                    <div class="ripple-container"></div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body d-none">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="calls">
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>TODO - Anruf-Log</td>
+                                <td class="td-actions text-right">
+                                    <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
+                                        <i class="material-symbols-outlined">view</i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="profile">
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>TODO - Angebote darstellen mit status</td>
+                                <td class="td-actions text-right">
+                                    <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
+                                        <i class="material-symbols-outlined">view</i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="messages">
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>TODO - Rechnungen darstellen mit status</td>
+                                <td class="td-actions text-right">
+                                    <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
+                                        <i class="material-symbols-outlined">view</i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="settings">
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" value="">
+                                            <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" value="" checked>
+                                            <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit
+                                </td>
+                                <td class="td-actions text-right">
+                                    <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
+                                        <i class="material-symbols-outlined">edit</i>
+                                    </button>
+                                    <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                                        <i class="material-symbols-outlined">close</i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" value="" checked>
+                                            <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>Sign contract for "What are conference organizers afraid of?"</td>
+                                <td class="td-actions text-right">
+                                    <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
+                                        <i class="material-symbols-outlined">edit</i>
+                                    </button>
+                                    <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                                        <i class="material-symbols-outlined">close</i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    {% if is_granted('ROLE_ADMIN') %}
+    {{ include('backend/product/_delete_form.html.twig') }}
+    {% endif %}
+{% endblock %}

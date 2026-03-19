@@ -1,0 +1,31 @@
+<div class="row headBoxSalutation page-wellcome" style="width:100%;padding:20px 0 0 50px !important;">
+    <div class="col-9 py-0 pl-0 pr-4 m-0" style="padding-right: 70px !important;">
+        <div class="contactPerson px-0 pt-4 pb-0 m-0">
+            {%- if offer.option.jsonOptions['anredeTitle'] is defined -%}
+                {{ offer.option.jsonOptions['anredeTitle'] }}
+            {%- else -%}
+                {% include appTemplate~'pdf/_salutation.html.twig' with {'customer': offer.customer} %}
+            {%- endif -%}
+        </div>
+        <p style="padding: 20px 50px 0 0;margin: 0;">
+            {% if offer.status in ['besichtigung','estimate'] %}
+                {%- if offer.option.context['estimateAnrede'] is defined -%}
+                    {{ offer.option.context['estimateAnrede']|raw }}
+                {%- elseif offer.subCategory.estimateText -%}
+                    {{ offer.subCategory.estimateText|replace({'##offerName##': getOfferName(offer.id)})|raw }}
+                {%- endif -%}
+            {% else %}
+                {%- if offer.option.context['anrede'] is defined -%}
+                    {{ offer.option.context['anrede']|raw }}
+                {%- elseif offer.subCategory.offerText -%}
+                    {{ offer.subCategory.offerText|replace({'##offerName##': getOfferName(offer.id)})|raw }}
+                {%- endif -%}
+            {%- endif -%}
+        </p>
+    </div>
+    <div class="col-3 p-0 my-0 mr-0" style="margin-left: -52px">
+        <div class="p-0 mx-0 mb-0">
+            {% include appTemplate~'pdf/_company_in_anrede.html.twig' %}
+        </div>
+    </div>
+</div>

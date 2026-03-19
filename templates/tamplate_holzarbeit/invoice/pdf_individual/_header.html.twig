@@ -1,0 +1,21 @@
+<div class="row headBox m-0" style="height: 114px;background: {{ sfColorDark }};color: #ffffff;overflow: hidden">
+    <div class="text-left padding-40 col-6" style="position:relative;padding: 0;overflow: visible">
+        <h3 style="margin-top:22px;color: #fff;font-size: 22px;">
+            Rechnung
+        </h3>
+        <p class="header_preview" style="padding: 10px 0 0;font-size: 16px;position: absolute;top: 60px;width: 400px; left: 0;">
+            <span>Rechnungsnummer: {{ invoice.number }}</span>
+        </p>
+    </div>
+    <div class="col-6" style="margin-left: 0;">
+        <img src="{{ getImgContent(asset(appAssetPath~'logo/logo_in.png')) }}" class="pdf_logo" alt="{{ sf.name }}"
+             style="height: 54px;max-width: 130px;padding: 0;position: absolute;right: 40px;top: 10px;"><br>
+        <p style="margin: 10px 0 0 0;overflow:visible;width:fit-content;position: absolute;right: 40px;top: 60px;">
+            {% if invoice.sendDate is not null %}
+                <small style="font-size: 16px;">Berlin&nbsp;|&nbsp;{{ invoice.sendDate|date('d.m Y') }}</small>
+            {% else %}
+                <small style="font-size: 16px;">Berlin&nbsp;|&nbsp;{{ 'now'|date('d.m Y') }}<br></small>
+            {% endif %}
+        </p>
+    </div>
+</div>

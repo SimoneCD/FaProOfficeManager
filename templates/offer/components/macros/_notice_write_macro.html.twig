@@ -1,0 +1,51 @@
+{% macro writeNoticeBlock(offer, appAssetPath, ActionLog,form2, small) %}
+    <div data-offer-Id="{{ offer.id }}" data-controller="note accordion">
+        <div class="card m-1">
+            <div class="card-body" style="text-align: right;padding: 0;">
+                <div class="custom-select-button"  data-note-target="modal">
+                    <div class="form-group text-center">
+                        {% for key, choice in ActionLog %}
+                            {% if choice.open %}
+                                {% if small %}
+                                <button style="padding: 1px 0;margin: 0 4px"
+                                        data-note-target="button2"
+                                        type="button"
+                                        title="{{ choice.label }}"
+                                        class="btn-white button-style {{ form2.type.vars.value == key ? 'active' : '' }}"
+                                        data-value="{{ key }}"
+                                        data-action="click->note#setActive"
+                                        data-icon="{{ choice.icon }}"
+                                        data-offer-id="{{ offer.id }}"
+                                >
+                                    <i class="material-icons" style="margin: 0 2px;">{{ choice.icon }}</i>
+                                </button>
+                            {% else %}
+                                <button style="padding: 2px 0;margin: 0 4px"
+                                        data-note-target="button2"
+                                        type="button"
+                                        class="btn-white button-style {{ form2.type.vars.value == key ? 'active' : '' }}"
+                                        data-value="{{ key }}"
+                                        data-action="click->note#setActive"
+                                        data-icon="{{ choice.icon }}"
+                                        data-offer-id="{{ offer.id }}"
+                                >
+                                    <i class="material-icons">{{ choice.icon }}</i>
+                                    <p style="font-size: 12px;margin: 0;width: 100px;">{{ choice.label }}</p>
+                                </button>
+                            {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        <input type="hidden" id="note_save_url_{{ offer.id }}" name="type" value="{{ '/'~appAssetPath~'user/' }}">
+                        <input type="hidden" id="note_type_{{ offer.id }}" name="type" value="info">
+                        {#            <input type="hidden" id="action_log_type_{{ offer.id }}" name="action_log[type]" value="{{ form2.type.vars.value }}">#}
+                        <textarea style="font-size: 10px;{% if small %}min-height: 60px !important;border-radius: 6px;{% else %}border-radius: 10px;{% endif %};padding: 10px;margin: 0 10px;width: -webkit-fill-available;"
+                                  data-url="{{ path('note_create_offer', {'offer':offer.id}) }}"  class="form-control"
+                                  data-note-target="content" name="noteContent" required></textarea>
+                    </div>
+                    <button type="button" style="margin: 0;{% if small %}padding: 2px;{% endif %}" class="btn btn-outline-primary" data-action="note#saveNote">Speichern</button>
+                </div>
+            </div>
+        </div>
+        <div class="" data-note-target="button2" ></div>
+    </div>
+{% endmacro %}

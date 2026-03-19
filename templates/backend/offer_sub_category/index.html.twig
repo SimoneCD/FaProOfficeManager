@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'osc.quest.questionnaires'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+<style>
+    .togglebutton label .toggle, .togglebutton label input[type=checkbox][disabled]+.toggle {
+        background-color: #e1e1e1;
+    }
+    .togglebutton label input[type=checkbox]:checked+.toggle {
+        background-color: rgb(74, 192, 71);
+    }
+</style>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function getChecked(id) {
+            var checked = $("input[@class=" + id ?? 'topFunnelUpdate' + "]:checked");
+            console.log(checked);
+        }
+        $(document).on('change', '.topFunnelUpdate', function () {
+            let $elemChecked = $(this).prop('checked');
+            if ($elemChecked) {
+                console.log('eeeeeeeeee')
+                $('.topFunnelUpdate:checked').prop('checked', false);
+                $(this).prop('checked', true);
+            } else {
+                console.log('aaaaaaaaaaaa')
+                $(this).prop('checked', false);
+            }
+            let data = $(this).val();
+            let that = this;
+            jQuery.ajax({
+                url: $(this).attr('data-url'),
+                data: {'topfunnel':data},
+                method: 'POST',
+                success: function(data) {
+                    console.log(data)
+                }
+            });
+        })
+        $('.bootstrap-switch').each(function(){
+            $this = $(this);
+            data_on_label = $this.data('on-label') || '';
+            data_off_label = $this.data('off-label') || '';
+
+            $this.bootstrapSwitch({
+                onText: data_on_label,
+                offText: data_off_label
+            });
+        });
+    </script>
+{% endblock %}
+{% block main %}
+    {% include 'backend/components/_menu.html.twig' with {
+        'listLi': {'n':'o.categories'|trans,'k':true},
+        'categoryLi': {'n':category.name,'i':category.icon}
+    } %}
+    <h1>{#{{ 'osc.quest.questionnaires'|trans }}#}
+        <a class="btn btn-light btn-sm" href="{{ path('backend_category_edit', {'id':category.id}) }}">
+            <span class="material-symbols-outlined">edit</span>
+            <span class="hidden-xs">{{ 'o.questionnatreCategoryEdit'|trans({'%name%':category.name}) }}</span>
+        </a>
+    </h1>
+
+    <table class="table">
+        <thead>
+            <tr style="background-color: {{ sfColor }};color: #fff">
+                <th class="w-5">{{ 'w.id'|trans }}</th>
+                <th class="w-auto">{{ 'w.name'|trans }}</th>
+                <th class="w-auto">{{ 'Typ'|trans }}</th>
+                {% if category.name == 'Funnel' %}<th class="w-auto">Default Funnel</th>{% endif %}
+                <th class="w-25">{{ 'p.subCategory'|trans }}</th>
+                <th class="w-15">{{ 'osc.quest.numberQuestions'|trans }}</th>
+                <th class="w-5"></th>
+            </tr>
+        </thead>
+        <tbody>
+
+        <form name="inquiry_options" method="post">
+            {% for subCategory in subCategories %}
+                <tr>
+                    <td>{{ subCategory.id }}</td>
+                    <td><a href="{{ path('backend_subcategory_questions', {'questionnaire':subCategory.id}) }}">{{ subCategory.name }}</a></td>
+                    <td>{{ subCategory.typeName }}</td>
+                    {% if category.name == 'Funnel' %}
+                        <td>
+                            <div class="togglebutton">
+                                <label>
+                                    <input {% if subCategory.topFunnel %}checked{% endif%} data-url="{{ path('app_recommendation_update', {'funnel': subCategory.id}) }}" class="topFunnelUpdate" type="checkbox" name="topFunnel[]" value="{{ subCategory.id }}">
+                                    <span class="toggle"></span>
+                                </label>
+                            </div>
+                        </td>
+                    {% endif %}
+                    <td>{{ subCategory.productSubCategory.name }}</td>
+                    <td>{{ subCategory.offerQuestions|length }}</td>
+                    <td class="text-right">
+                        <a href="{{ path('backend_subcategory_edit', {'category':subCategory.category.id,'id':subCategory.id}) }}"><span class="material-symbols-outlined">edit</span></a>
+                    </td>
+                </tr>
+            {% else %}
+                {% include 'backend/_no_entry.html.twig' with {'collSpan': 3} %}
+            {% endfor %}
+        </form>
+        </tbody>
+    </table>
+    <div  class="text-right">
+        <a class="btn btn-light btn-sm" href="{{ path('backend_subcategory_new', {'category':category.id}) }}">
+            <span class="material-symbols-outlined">add_circle_outline</span>
+            <span class="hidden-xs">{{ 'o.questionnatreAdd'|trans }}</span>
+        </a>
+    </div>
+{% endblock %}

@@ -1,0 +1,11 @@
+
+<div style="width: max-content;overflow-x: scroll;text-align: center">
+    <label for="lq-amount" class="funnel{{ question.funnelEnd ? 'End' : 'Start' }} form-label">
+        <div class="form-group text-center">
+{#            <h4 class="col-form-label">{{ question.name }}</h4>#}
+            <div class="m-0 p-0">
+                <input id="lq-amount" type="number" data-question="{{ question.id }}" name="offer['amount']" class="form-control answer_content">
+            </div>
+        </div>
+    </label>
+</div>

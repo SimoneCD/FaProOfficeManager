@@ -1,0 +1,153 @@
+<script>
+    $(document).ready(function () {
+        // const addFormToCollection = (e) => {
+        //     console.log('ss');
+        //     const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+        //
+        //     const item = document.createElement('div');
+        //     item.className = 'floaf-left'
+        //     item.innerHTML = collectionHolder
+        //         .dataset
+        //         .prototype
+        //         .replace(
+        //             /__name__/g,
+        //             collectionHolder.dataset.index
+        //         );
+        //     item.classList.add('float-left')
+        //     collectionHolder.appendChild(item);
+        //
+        //     collectionHolder.dataset.index++;
+        // };
+        // document.querySelectorAll('.add_item_link').forEach(btn => {
+        //     btn.addEventListener("click", addFormToCollection)
+        // });
+
+        $(document).on('submit', 'form[name="offer_sub_category"]', function () {
+            for ( var instance in CKEDITOR.instances ) { CKEDITOR.instances[instance].updateElement(); }
+        })
+        let vars = {
+            toolbarCanCollapse: true,
+            toolbarStartupExpanded: false,
+            scayt_autoStartup:true,
+            scayt_sLang:'de_DE',
+            modal: true,
+            autoOpen: false,
+            language: 'de',
+            uiColor: '#ffffff',
+            toolbarGroups: [
+                { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+                { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+                { name: 'links', groups: [ 'links' ] },
+                { name: 'insert', groups: [ 'insert' ] },
+                { name: 'forms', groups: [ 'forms' ] },
+                { name: 'tools', groups: [ 'tools' ] },
+                { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+                { name: 'others', groups: [ 'others' ] },
+                '/',
+                { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+                { name: 'styles', groups: [ 'styles' ] },
+                { name: 'colors', groups: [ 'colors' ] },
+                { name: 'about', groups: [ 'about' ] }
+            ],
+            removeButtons: 'Subscript,Superscript,Copy,Image,Paste,PasteText,PasteFromWord,Cut,Maximize,About'
+        };
+        CKEDITOR.replace((document.querySelector('#offer_sub_category_estimateMailText') || 'offer_sub_category_estimateMailText'), vars);
+        CKEDITOR.replace((document.querySelector('#offer_sub_category_offerText') || 'offer_sub_category_offerText'), vars);
+        CKEDITOR.replace((document.querySelector('#offer_sub_category_estimateText') || 'offer_sub_category_estimateText'), vars);
+        CKEDITOR.replace((document.querySelector('#offer_sub_category_mailText') || 'offer_sub_category_mailText'), vars);
+        CKEDITOR.replace((document.querySelector('#offer_sub_category_partMailText') || 'offer_sub_category_partMailText'), vars);
+        CKEDITOR.replace((document.querySelector('#offer_sub_category_partInvoiceText') || 'offer_sub_category_partInvoiceText'), vars);
+        CKEDITOR.replace((document.querySelector('#offer_sub_category_invoiceMailText') || 'offer_sub_category_invoiceMailText'), vars);
+        CKEDITOR.replace((document.querySelector('#offer_sub_category_invoiceText') || 'offer_sub_category_invoiceText'), vars);
+
+        const image = document.getElementById('preview_image');
+        {% if subCategory is defined and subCategory.id %}
+        const cropper = new Cropper(image, {
+            viewMode: 2,
+            dragMode: 'move',
+            autoCropArea: 1,
+            // minContainerHeight: 310,
+            // minContainerWidth: 2000,
+            // minCropBoxWidth: 921.6,
+            // maxCropBoxWidth: 1024,
+            // minCropBoxHeight: 297,
+            // maxCropBoxHeight: 310,
+            aspectRatio: 794 / 248,
+            toggleDragModeOnDblclick: 0,
+            crop(event) {
+                console.log(event)
+              //   let content = $('label[for="offer_sub_category_offerImage"]');
+              //   let elm = document.createElement('<p>');
+              //   elm.innerText = event.detail.width;
+              // content.appendChild(elm)
+                console.log(event.detail.x);
+                console.log(event.detail.y);
+                console.log(event.detail.width);
+                console.log(event.detail.height);
+                console.log(event.detail.rotate);
+                console.log(event.detail.scaleX);
+                console.log(event.detail.scaleY);
+            },
+        });
+        {% endif %}
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    {% if subCategory is defined and subCategory.id %}
+                        cropper.replace(e.target.result);
+                        $('#preview_image').attr('src', e.target.result);
+                    {% else %}
+                        $('#preview_image_active').attr('src', e.target.result);
+                    {% endif %}
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        if ($('#offer_sub_category_offerImage')) {
+            $(document).on('change', '#offer_sub_category_offerImage', function () {
+                readURL(this);
+            });
+        }
+
+        {% if subCategory is defined and subCategory.id %}
+            $('#btnCrop').click(function() {
+                {% if sub is defined and sub.id %}
+                // Get a string base 64 data url
+                cropper.getCroppedCanvas().toBlob((blob) => {
+                    const formData = new FormData();
+                    formData.append('image', blob);
+                    $.ajax('{{ path('backend_subcategory_upload_image',{'category':sub.category.id,'id':sub.id}) }}', {
+                        method: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success(xr) {
+                            window.location.href = window.location.href;
+                        },
+                        error(e) {
+                        },
+                    });
+                });
+                {% else %}
+                let im = cropper.getCroppedCanvas().toDataURL();
+                $('#offer_sub_category_offerImage').attr('src', im);
+                {% endif %}
+            });
+            $('#btnRestore').click(function() {
+                cropper.reset();
+            });
+            $('#btnFlip').click(function() {
+                //cropper.scale(-1); // Flip both horizontal and vertical
+                //cropper.scale(-1, 1); // Flip horizontal
+                cropper.scale(1, -1); // Flip vertical
+            });
+            $('#btnFlipH').click(function() {
+                //cropper.scale(-1); // Flip both horizontal and vertical
+                cropper.scale(-1, 1); // Flip horizontal
+                //cropper.scale(1, -1); // Flip vertical
+            });
+        {% endif %}
+    });
+</script>

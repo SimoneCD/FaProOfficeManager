@@ -1,0 +1,17 @@
+{{ restore('total') }}
+<tr>
+    <td class="text-right" style="width:70px;padding-right: 10px;">{#{{ hpi }}#}{% if offerItem.item %}{{ offerItem.item.productNumber }}{% endif %}</td>
+    <td class="pad-l" style="padding-left: 0;"><strong class="header_title_span">{% if offerItem.name %}{{ offerItem.name }}{% elseif offerItem.item %}{{ offerItem.item.name }}{% endif %}</strong><br>{{ offerItem.description }}</td>
+    <td class="text-right px-0">{{ offerItem.amount|number_format('2',',','.') }}</td>
+    <td class="text-left pl-3">{% if offerItem.einheit %}{{ offerItem.einheit|lower }}{% elseif offerItem.item %}{{ offerItem.item.einheit|lower }}{% endif %}</td>
+    <td class="text-right pl-0">
+        {% if offerItem.price == 0 or offerItem.item is null %}
+            <s>{{ (offerItem.item.price??0)|number_format('2',',','.') }}</s>
+        {% else %}
+            {{ offerItem.price|number_format('2',',','.') }}
+            {% set total = total+(offerItem.price*offerItem.amount) %}
+        {% endif %} &euro;
+    </td>
+    <td class="text-right" style="padding-left: 0;padding-right: 40px;">{{ (offerItem.price*offerItem.amount)|number_format('2',',','.') }} &euro;</td>
+</tr>
+{{ save('total') }}

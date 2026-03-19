@@ -1,0 +1,23 @@
+{% set angebotName = getOfferName(invoice.invoiceOrder.offer.id)|raw %}
+{% set angebotTitle = invoice.invoiceOrder.offer.subCategory.name|upper %}
+
+{% set offer= order.offer %}
+{% set angebotName = getOfferName(offer.id)|raw %}
+{% set angebotTitle = offer.subCategory.name|upper %}
+
+{#<h3 id="mail-pre-title" style="padding-top: 0; padding-bottom: 0; font-weight: 500; vertical-align: baseline; font-size: 1.2rem; line-height: 1.2; letter-spacing: 3px; color: {{ sfColor }}; margin: 0;" align="left">{{ angebotName }}</h3>#}
+{#<h1 id="mail-title" style="padding-top: 0; padding-bottom: 0; font-weight: 500; vertical-align: baseline; font-size: 1.9rem; line-height: 120%; color: #393939; margin: 0;" align="left">#}
+{#    {{ 'w.invoicePart'|trans }}: {{ invoice.number }}</h1>#}
+{% include appTemplate~'mail/_h2.html.twig' with {'customer': invoice.customer} %}
+<p id="mail-message" style="line-height: 24px; font-size: 16px; width: 100%; margin: 0;" align="left">
+    {%- if invoice.context.partMailText is defined -%}
+        {{ invoice.context.partMailText|raw }}
+    {%- else -%}
+        {{ offer.subCategory.partMailText|replace({
+            '##offerName##':angebotName,
+            '##offerNumber##':offer.getNumber,
+            '##angebotsName##':angebotName,
+            '##angebotsNummer##':offer.getNumber,
+        })|raw }}
+    {%- endif -%}
+</p>

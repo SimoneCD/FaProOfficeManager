@@ -1,0 +1,58 @@
+<style>
+    .user_icon {
+        width: 35px;
+        height: 35px;
+        border: 1px solid {{ sfColorDark }};
+        border-radius: 50%;
+        padding: 8px;
+        margin: 10px;
+    }
+    .em_icon {
+        border: 1px solid {{ sfColorDark }}; border-radius: 50%
+    }
+</style>
+{% for k,chat in customer.customerNotes %}
+{% if chat.type == 'sos' %}
+    <div class="row {% if chat.user %}container_admin right{% else %}left{% endif %}">
+        {% if chat.user %}
+            <div class="col-1 px-0" data-controller="popover">
+                <a href="javascript:void(0)" data-action="mouseenter->popover#show mouseleave->popover#hide">
+                    {% if chat.user.image %}
+                        <img style="max-width:35px;" src="{{ asset(appAssetPath~'user/'~chat.user.image) }}"
+                             alt="Avatar" class="avatar avaico em_icon">
+                    {% else %}
+                        <span style="max-width:35px;" class="material-icons em_icon">support_agent</span>
+                    {% endif %}
+                </a>
+                <template data-popover-target="content">
+                    <div data-popover-target="card"
+                         style="cursor:none;background-color:#fff !important;z-index: 3;border-radius: 10px;position: absolute;top: 20px;left: 20px;border: 1px solid #e7e7e7">
+                        <div style="padding: 10px;display: flex;">
+                            <div style="float: left;">
+                                {% if chat.user.image %}
+                                    <img src="{{ asset(appAssetPath~'user/'~chat.user.image) }}"
+                                         alt="{{ chat.user.fullName }}" class="avatar em_icon" style="max-width:50px;">
+                                {% else %}
+                                    <img src="{{ asset('hd/empty_profile_image.jpeg') }}" alt="{{ chat.user.fullName }}"
+                                         class="avatar em_icon" style="max-width:50px;">
+                                {% endif %}
+                            </div>
+                            <div style="float: left;">
+                                <h2 style="font-size:14px;margin:0 10px;color: {{ sfColor }}">{{ chat.user.positionName ?? 'Kundenservice' }}</h2>
+                                <p style="color:#313131;font-size: 12px;margin: 0 10px;font-weight: bold;">{{ chat.user.salutation|trans }} {{ chat.user.fullName }}</p>
+                                <p style="color:#313131;font-size: 12px;margin: 0 10px">{{ chat.user.phone }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        {% else %}
+            <div class="col-1 px-0"><span class="material-icons user_icon">person</span></div>
+        {% endif %}
+        <div class="col-11 effect1">
+            <h2 style="font-size: 12px">{% if chat.user %}Kundenservice - {% else %}{{ chat.customer.fullname }}{% endif %} - {{ chat.createdAt|date('d M') }} - {{ chat.createdAt|ago }}</h2>
+            <p>{{ chat.note|raw }}</p>
+        </div>
+    </div>
+{% endif %}
+{% endfor %}

@@ -1,0 +1,42 @@
+<div id="section-to-print p-0 m-0" style="font-size: 1.1rem">
+    <div class="main-box p-0 m-0">
+        {% include appTemplate~'invoice/pdf/_header.html.twig' %}
+        {% include appTemplate~'invoice/pdf/_head_line.html.twig' with {'type': type} %}
+        <div class="p-0 m-0" style="background-color:#fff;height: 874px;">
+            {% include appTemplate~'invoice/pdf/_anrede.html.twig' %}
+
+            {% set price = invoice.pos0Price??0 %}
+            {{ save('price') }}
+            {% include appTemplate~'invoice/pdf/_data.html.twig' with {
+                'tpl': '_',
+                'context': invoice.context,
+                'offer': invoice.invoiceOrder.offer
+            } %}
+            {% include appTemplate~'invoice/pdf/_content.html.twig' %}
+            {% if invoice.context|length and invoice.context['posPrices'] is defined and invoice.context['posPrices']|length > 0 %}
+            {% else %}
+                {% include appTemplate~'invoice/pdf/_mfg.html.twig' %}
+            {% endif %}
+
+        </div>
+        {% include appTemplate~'invoice/pdf/_page.html.twig' with {'page': '1'~((invoice.context|length and invoice.context['posPrices'] is defined and invoice.context['posPrices']|length > 0) ? '/2':'')} %}
+        {% include appTemplate~'offer_pdf/_footer.html.twig'  %}
+    </div>
+    {% if invoice.context|length and invoice.context['posPrices'] is defined and invoice.context['posPrices']|length > 0  %}
+        <div class="main-box p-0 m-0 displayBlend">
+            {% include appTemplate~'invoice/pdf/_header.html.twig' %}
+            {% include appTemplate~'invoice/pdf/_head_line.html.twig' with {'type': type} %}
+            <div class="p-0 m-0" style="background-color:#fff;height: 874px;">
+{#                {% include appTemplate~'invoice/pdf/_anrede.html.twig' %}#}
+                {% set price = invoice.pos0Price??0 %}
+
+                {% include appTemplate~'invoice/pdf/_content_pos.html.twig' %}
+                {% include appTemplate~'invoice/pdf/_mfg.html.twig' %}
+
+            </div>
+            {% include appTemplate~'invoice/pdf/_page.html.twig' with {'page': '2/2'} %}
+            {% include appTemplate~'offer_pdf/_footer.html.twig'  %}
+        </div>
+    {% endif %}
+
+</div>

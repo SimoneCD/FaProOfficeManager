@@ -1,0 +1,32 @@
+
+<header class="chatbox-popup__header">
+    <aside style="flex:10">
+        <h1 {{ stimulus_target('public-comunicate', 'name') }}></h1>
+    </aside>
+    <aside style="flex:2;text-align: right">
+{#        <button class="chatbox-maximize"><span class="material-icons">open_in_full</span></button>#}
+    </aside>
+</header>
+<main style="overflow: hidden;text-align: left">
+    <div class="row">
+        <div style="padding:10px 0 0 20px;height: 200px;max-height: 200px;background: #f1f1f1;position: relative;overflow: scroll" class="col-md-4 customer_pool" data-action="click->public-comunicate#loadChat" data-public-comunicate-target="data">
+            {% include 'public/admin/_new_customer_chats.html.twig' with {'chats': chats} %}
+        </div>
+        <div style="height:200px;max-height: 200px;position: relative;overflow: scroll;padding-top: 10px" class="col-md-8 customer_pool" data-public-comunicate-target="chat">
+        </div>
+    </div>
+</main>
+<footer class="chatbox-panel__footer">
+    <div>
+        {% if chats|length %}
+            <textarea style="font-size: initial;min-height: 80px !important;" data-public-comunicate-target="message" class="w-100 form-control" type="text" placeholder="Antwort hier eingeben" autofocus></textarea>
+        {% else %}
+            <p style="padding: 20px 0 0 20px;">Keine Kundenanfragen offen!</p>
+        {% endif %}
+    </div>
+    <div>
+        {% if chats|length %}
+            <button type="button" {{ stimulus_action('public-comunicate', 'addAnswer', 'click')}} data-public-comunicate-url-param="{{ path('ajax_chat_customer_add', {'id':chats[0].customer.id}) }}" class="btn btn-sm w-100"><span class="material-icons">send</span></button>
+        {% endif %}
+    </div>
+</footer>

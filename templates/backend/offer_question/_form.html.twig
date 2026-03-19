@@ -1,0 +1,84 @@
+{{ form_start(form) }}
+<div class="card">
+    <h2 class="p-2">Nur für Funnel</h2>
+    <div class="form-group row">
+        {{ form_label(form.funnelEnd) }}
+        <div class="col-6 offset-6">
+            {{ form_widget(form.funnelEnd) }}
+        </div>
+    </div>
+</div>
+<div class="form-group row">
+        {{ form_label(form.name) }}
+        <div class="col-6">
+            {{ form_widget(form.name) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        {{ form_label(form.title) }}
+        <div class="col-6">
+            {{ form_widget(form.title) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        <legend style="display: block" class="col-6 required col-form-label">{{ 'w.sort'|trans }}|{{ 'w.settings'|trans }}</legend>
+        <div class="col-1">
+            {{ form_widget(form.sort) }}
+        </div>
+        <div class="col-3">
+            {{ form_widget(form.protocol) }}
+        </div>
+        <div class="col-2">
+            {{ form_widget(form.view) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        <legend style="display: block" class="col-6 col-form-label"></legend>
+        <div class="col-6">
+            {{ form_row(form.needImage) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        {{ form_label(form.answerType) }}
+        <div class="col-6">
+            {{ form_widget(form.answerType) }}
+        </div>
+    </div>
+    <div class="form-group row answerSubCategory{% if form.answerType.vars.data != 'selectproduct' %} d-none{% endif %}">
+        {{ form_label(form.productSelectSubCategory) }}
+        <div class="col-sm-6">
+            {{ form_widget(form.productSelectSubCategory) }}
+        </div>
+    </div>
+    <div class="form-group row answerSubCategory{% if form.answerType.vars.data != 'selectproduct' %} d-none{% endif %}">
+        {{ form_label(form.productSelectSubCategoryAnz) }}
+        <div class="col-6">
+            {{ form_widget(form.productSelectSubCategoryAnz) }}
+        </div>
+    </div>
+
+<div class="form-group row">
+    <div class="col-sm-6 offset-sm-6 text-left">
+        <button class="btn btn-primary">{{ 'w.save'|trans }}</button>
+    </div>
+</div>
+{{ form_widget(form._token) }}
+{{ form_end(form, {'render_rest':false}) }}
+
+<div class="card p-4 faq">
+    <div class="row">
+        <div class="col-12">{{ 'w.help'|trans }}</div>
+    </div>
+    <div class="row">
+        <div class="col-3"><strong><span class="material-symbols-outlined">text_increase</span></strong></div>
+        <div class="col-9">{{ 'osc.quest.q.help.aPlus'|trans }}</div>
+    </div>
+    <div class="row">
+        <div class="col-3"><strong><span class="material-symbols-outlined">exposure_plus_1</span></strong></div>
+        <div class="col-9">{{ 'osc.quest.q.help.selectProduct'|trans }}</div>
+    </div>
+</div>
+
+{% if question is defined and question.id %}
+    {{ include('backend/offer_question/_delete_form.html.twig') }}
+{% endif %}

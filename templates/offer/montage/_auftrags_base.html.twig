@@ -1,0 +1,18 @@
+{% extends 'base_public.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/css/normalize.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('assets/css/foundation.css') }}"/>
+    <style>
+        input, .form-control {
+            background-color: {{ sfColorForm }};
+            padding-left: 10px;
+        }
+        #offer_order_notice {
+            min-height: 200px;
+            padding: 10px;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+{% endblock %}

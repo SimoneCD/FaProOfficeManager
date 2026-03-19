@@ -1,0 +1,130 @@
+{#{% from 'offer/_offer_block_macro_small.html.twig' import offerBlockSmall %}#}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card" data-controller="note" style="position:relative" data-offer-id="{{ offer.id }}">
+            <a data-note-target="button"
+               style="cursor:pointer;border-radius:50%;z-index: 9999;position: absolute;top: 0;right: 0;" type="button"
+               data-action="click->note#showModal">
+                <i style="background-color: #fff;font-size: 40px;border-radius: 50%;" class="material-symbols-outlined">add_circle</i>
+            </a>
+            {# NOTE NOTE TODO #}
+            <div class="accordion" data-accordion-target="accordionItem" style="max-width: fit-content;">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card m-1">
+            <div class="card-body p-0" data-controller="accordion">
+                <div class=""><a data-action="click->accordion#toggleAll"><i class="material-symbols-outlined">-></i></a></div>
+                {% set today = "now"|date("d.m.Y") %}
+                {% for note in notes %}
+                    {% set noteAnswerShow = note.type in ['info', 'phone','ordered','delivered','miss','done'] %}
+                    <div data-controller="note" class="card-body p-1">
+                        <div class="accordion-item">
+                            <div class="row">
+                                <div class="col-3 p-0" style="font-size: 12px;text-align: center;">
+                                    {% if note.user.image %}
+                                        <img class="circle" title="{{ note.user.fullName }}"
+                                             src="{{ '/'~appAssetPath~'user/'~note.user.image }}" alt="{{ note.user.fullName }} Avatar"
+                                             style="border-radius: 50%;">
+                                    {% else %}
+                                        {{ note.user.username }}
+                                    {% endif %}
+                                    {#                                <i {% if note.type in ['info'] %}style="color: {{ sfColor }}" {% endif %}class="material-icons">{{ ActionLog[note.type].icon }}</i> #}
+                                </div>
+                                <div class="col-{% if noteAnswerShow %}7{% else %}9{% endif %} p-0"
+                                     data-action="click->accordion#toggle">
+                                    <div class="accordion-title">
+                                        {{ note.note|nl2br }}
+                                    </div>
+                                </div>
+
+                                {% if noteAnswerShow %}
+                                    <div class="col-2 p-0 text-center">
+                                        <button data-note-target="button"
+                                                class="btn btn-white btn-sm p-0"
+                                                data-value=""
+                                                style="cursor:pointer;border-radius:5px;"
+                                                type="button"
+                                                data-action="click->note#showAnswer">
+                                            <i style="background-color: #fff;font-size: 20px;border-radius: 5px;color: {{ sfColor }}"
+                                               class="material-symbols-outlined">post_add</i>
+                                        </button>
+                                        <br>
+                                        {% if note.user.id == app.user.id or is_granted('ROLE_EMPLOYEE_SERVICE') %}
+                                            <button data-note-target="button"
+                                                    class="btn btn-white btn-sm p-0"
+                                                    data-url="{{ path('note_delete',{'note':note.id}) }}" data-id="{{ note.id }}"
+                                                    style="cursor:pointer;border-radius:5px;color: #f54848;"
+                                                    type="button"
+                                                    data-action="dblclick->note#deleteNoteItem">
+                                                <i style="background-color: #fff;font-size: 20px;border-radius: 5px;"
+                                                   class="material-symbols-outlined">delete_forever</i>
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12">
+                                        {% include 'offer/montage/components/_notice_answer.html.twig' %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 p-2 accordion-content is-hidden">
+                                <div class="accordion-body">
+                                    {{ note.createdAt|date('d.m.y H:i') }}
+                                </div>
+                            </div>
+                            <div class="col-9 p-2 accordion-content is-hidden">
+                                <div class="accordion-body">
+                                    {{ note.name|nl2br }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-0 p-0" data-note-target="answers" style="background-color: #fcfcfd">
+                            {% if note.answers|length %}
+                                {% for answer in note.answers %}
+                                    <div class="row" id="answerRow{{ answer.id }}">
+                                        <div class="col-3" style="font-size: 10px;text-align: center;">
+                                            {% if answer.user.image %}<img class="circle" title="{{ answer.user.fullName }}"
+                                                                           src="{{ '/'~appAssetPath~'user/'~answer.user.image }}"
+                                                                           alt="{{ answer.user.fullName }} Avatar"
+                                                                           style="width:26px;height:26px;border-radius: 50%;">
+                                            {% else %}
+                                                {{ answer.user.username }}
+                                            {% endif %}<br>
+                                            {{ answer.createdAt|date('d.m H:i') }}
+                                        </div>
+                                        <div class="col-7 text-left p-1">
+                                            <div class="accordion-title">
+                                                {{ answer.note }}
+                                            </div>
+                                        </div>
+                                        <div class="col-2 text-center">
+                                            {% if answer.user.id == app.user.id or is_granted('ROLE_EMPLOYEE_SERVICE') %}
+                                                <button class="btn btn-white btn-sm p-0" data-url="{{ path('note_delete',{'note':answer.id}) }}"
+                                                        data-id="{{ answer.id }}"
+                                                        data-action="dblclick->note#deleteAnswerItem"
+                                                        style="padding: 4px;color: #f54848;">
+                                                    <i class="material-symbols-outlined"
+                                                       style="background-color: #fff;font-size: 16px;border-radius: 5px;">delete_forever</i>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+<div class="col-md-6">
+{#    {{ offerBlockSmall(offer, users, teams, sfColor, sfColorDark, ActionLog, form2) }}#}
+</div>
+<div class="col-md-6">
+</div>
+</div>

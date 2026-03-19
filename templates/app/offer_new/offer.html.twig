@@ -1,0 +1,372 @@
+ {% extends 'base.html.twig' %}
+{% set angebotNr = offer.number %}
+{% set angebotName = getOfferName(offer.id)|raw %}
+{% set disabled = app.request.query.get('load') is null and offer.order is not null and offer.order.createdAt is not null ? true : false %}
+{% set catdisabled = app.request.query.get('load') is null and offer.subCategory is not null %}
+{% block title %}{{ 'w.offer'|trans }} {{ angebotNr }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-autocomplete/1.0.7/jquery.auto-complete.css">
+    <style>
+        body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, * {
+            font-size: 14px;
+        }
+        .section-to-print {overflow: visible}
+        .content form, .content table {
+            background: none;
+        }
+        .row {margin: 0 !important;}
+        .input {text-align: center;background-color: {{ sfColorForm }};color: #000 !important;}
+        .col-form-label {margin: 0;text-align: left;}
+        .offer_submits, .os_space {
+            padding: 20px;
+            color: {{ sfColorDark }};
+        }
+        .os_space {
+            padding: 4px;
+        }
+        .os_input {
+            text-align: center;
+            margin: 0 20px;
+            background-color: '{{ sfColorForm }}';
+            color: #000;
+        }
+        ul#ui-id-1 {
+            background-color: #fff;
+            font-size: small;
+            padding: 0;
+            width: 400px !important;
+        }
+        ul#ui-id-1 li {
+            list-style: none;
+            cursor: pointer;
+            padding-left: 10px;
+        }
+        .ui-menu-item-wrapper {
+            display: flex;
+        }
+        .ui-menu-item{
+            border-bottom: 1px dotted black;
+        }
+        .headBoxData {
+            height: auto !important;
+        }
+        .headBoxData div:first-child {
+            font-size: 12px !important;
+        }
+    </style>
+    <link  href="{{ asset('assets/dist/cropper.css') }}" rel="stylesheet">
+    {% include appTemplate~'offer_pdf/_styles.html.twig' %}
+    <style>
+        strong {font-weight: bold}
+        .page-wellcome {
+            height: auto !important;
+        }
+    </style>
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/dist/cropper.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            window.addEventListener("DOMContentLoaded", counter);
+
+            let vars = {
+                toolbarCanCollapse: true,
+                toolbarStartupExpanded: false,
+                scayt_autoStartup:true,
+                scayt_sLang:'de_DE',
+                modal: true,
+                autoOpen: false,
+                language: 'de',
+                uiColor: '#ffffff',
+                toolbarGroups: [
+                    { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+                    { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+                    { name: 'links', groups: [ 'links' ] },
+                    { name: 'insert', groups: [ 'insert' ] },
+                    { name: 'forms', groups: [ 'forms' ] },
+                    { name: 'tools', groups: [ 'tools' ] },
+                    { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+                    { name: 'others', groups: [ 'others' ] },
+                    '/',
+                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                    { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+                    { name: 'styles', groups: [ 'styles' ] },
+                    { name: 'colors', groups: [ 'colors' ] },
+                    { name: 'about', groups: [ 'about' ] }
+                ],
+                removeButtons: 'Subscript,Superscript,Copy,Image,Paste,PasteText,PasteFromWord,Cut,Maximize,About'
+            };
+            CKEDITOR.replace('inhaltAnrede', vars);
+            CKEDITOR.replace('offerEmailText', vars);
+            CKEDITOR.on('instanceReady', function(){
+                $.each( CKEDITOR.instances, function(instance) {
+                    CKEDITOR.instances[instance].on("change", function(e) {
+                        for ( instance in CKEDITOR.instances )
+                            CKEDITOR.instances[instance].updateElement();
+                    });
+                });
+            });
+            const image = document.getElementById('preview_image');
+            const cropper = new Cropper(image, {
+                viewMode: 2,
+                dragMode: 'move',
+                autoCropArea: 1,
+                aspectRatio: 794 / 248,
+                toggleDragModeOnDblclick: 0,
+            });
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        {% if offer.image is not null %}
+                            cropper.replace(e.target.result);
+                            $('#preview_image').attr('src', e.target.result);
+                        {% else %}
+                            $('#preview_image').attr('src', e.target.result);
+                        {% endif %}
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $(document).on('change', '#offer_image_offerImage', function () {
+                readURL(this);
+            });
+            $(document).on('change', '.changeOfferTax', function () {
+                let url = '{{ path('ajax_update_offer_tax',{'offer':offer.id,'tax':'ttt'}) }}';
+                url = url.replace('ttt', $(this).val())
+                $.ajax(url, {
+                    method: 'POST',
+                    data: {},
+                    success(xr) {
+                        window.location.reload();
+                    },
+                });
+            });
+            $('#btnCrop').click(function() {
+                // Get a string base 64 data url
+                cropper.getCroppedCanvas().toBlob((blob) => {
+                    const formData = new FormData();
+                    formData.append('offerImage', blob);
+                    $.ajax('{{ path('ajax_update_offer_image',{'offer':offer.id}) }}', {
+                        method: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success(xr) {
+                            window.location.reload();
+                        },
+                        error(e) {
+                        },
+                    });
+                });
+            });
+            $('#btnRestore').click(function() {
+                cropper.reset();
+            });
+            $('#btnFlip').click(function() {
+                //cropper.scale(-1); // Flip both horizontal and vertical
+                //cropper.scale(-1, 1); // Flip horizontal
+                cropper.scale(1, -1); // Flip vertical
+            });
+            $('#btnFlipH').click(function() {
+                //cropper.scale(-1); // Flip both horizontal and vertical
+                cropper.scale(-1, 1); // Flip horizontal
+                //cropper.scale(1, -1); // Flip vertical
+            });
+            $('#offer_image_delete').click(function() {
+                $.ajax('{{ path('ajax_delete_offer_image',{'offer':offer.id}) }}', {
+                    method: 'POST',
+                    data: {},
+                    success(xr) {
+                        window.location.reload();
+                    },
+                    error(e) {
+                    },
+                });
+            });
+
+            $('#offer_item_item').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '{{ path('ajax_wallbox_products') }}',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: request,
+                        success: function (data) {
+                            let items = JSON.parse(data);
+                            response($.map(items, function (item, key) {
+                                return {
+                                    label: item.label,
+                                    value: item.value
+                                };
+
+                            }));
+                        }
+                    });
+                },
+                minLength: 1
+            });
+
+            $(document).on('click', '.btn-danger', function (e) {
+                $(this).removeClass('btn-danger');
+                $(this).addClass('btn-light');
+            });
+
+            $(document).on('click', '.delete_orderItem', function (e) {
+                if (confirm('\n{{ 'o.confirm.deletProduct'|trans }}')) {
+                    e.preventDefault();
+                    let url = $(this).attr('data-action');
+                    let tr = $(this).attr('data-tr');
+                    $.ajax({
+                        'url': url,
+                        'data': {},
+                        'method': 'post',
+                        'success': function (ax) {
+                            $('#' + tr).css('display', 'none')
+                            window.location.reload();
+                            // if (ax === true) {
+                            //     window.location.reload();
+                            // }
+                        }
+                    })
+                }
+            });
+            function round(num) {
+                var m = Number((Math.abs(num) * 100).toPrecision(15));
+                return Math.round(m) / 100 * Math.sign(num);
+            }
+
+            function addCommas(nStr) {
+                nStr += '';
+                x = nStr.split('.');
+                x1 = x[0];
+                x2 = x.length > 1 ? '.' + (x[1]).substr(0, 2) : '';
+                var rgx = /(\d+)(\d{3})/;
+                while (rgx.test(x1)) {
+                    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                }
+                return x1 + x2;
+            }
+
+            window.addEventListener("DOMContentLoaded", counter);
+            function counter() {
+                let allow = 77;
+                var str = document.getElementById("inhalt").value;
+                if (str.length > allow) {
+                    document.getElementById("zeichen").innerText = (str.length-allow)+" Zeichen werden nicht dargestelt";
+                } else {
+                    document.getElementById("zeichen").innerText = "Weitere Zeichen erlaubt: " + (allow- str.length);
+                }
+            }
+            $(document).on('keyup', '#rabattos', delay(function (e) {
+                    e.preventDefault();
+                    let rabat = $(this).val();
+                    let url = $(this).attr('data-action');
+                    let price = $(this).attr('data-price');
+                    $.ajax({
+                        'url': url,
+                        'data': {'rabat': rabat},
+                        'method': 'post',
+                        'success': function (ax) {
+                            if (ax == true) {
+                                window.location.reload()
+                                // $('#rabattos_price').html(addCommas(parseFloat(price) - parseFloat(rabat)) + ' €');
+                            }
+                        }
+                    });
+                }, 1000));
+            $(document).on('submit', '.form_offer_update', function (e) {
+                e.preventDefault();
+                let id = ($(this).attr('data-id'));
+                $.ajax({
+                    'url': $(this).attr('action'),
+                    'data': {
+                        'offer_item': {
+                            'price': $('#offer_item_price' + id).val(),
+                            'amount': $('#offer_item_amount' + id).val(),
+                            'description': $('#offer_item_description' + id).val(),
+                            'name': $('#offer_item_name' + id).val(),
+                        }
+                    },
+                    'method': 'post',
+                    'success': function (ax) {
+                        if (ax === true) {
+                            window.location.reload();
+                        }
+                    }
+                })
+            });
+            $(document).on('submit', 'form#ajax_update_offer_info', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    'url': $(this).attr('action'),
+                    'data': {
+                        'notice': $('textarea[name="notice"]').val(),
+                    },
+                    'method': 'post',
+                    'success': function (ax) {
+                        if (ax === true) {
+                            window.location.reload();
+                        }
+                    }
+                })
+            });
+            $(document).on('submit', 'form.ajax_update_offer_context', function (e) {
+                $(this).closest('button').html('<span class="material-icons">done</span>');
+                e.preventDefault();
+                $.ajax({
+                    'url': $(this).attr('action'),
+                    'data': $(this).serialize(),
+                    'method': 'post',
+                    'success': function (ax) {
+                        if (ax === true) {
+                            window.location.reload();
+                        }
+                    }
+                })
+            });
+            $(document).on('submit', '#add_item_to_offer', function (e) {
+                e.preventDefault();
+                let product = $('#offer_item_item').val();
+                let url = $(this).attr('action').replace('pppp', product);
+                $.ajax({
+                    'url': url,
+                    'data': $(this).serialize(),
+                    'method': 'post',
+                    'success': function (ax) {
+                        if (ax === true) {
+                            window.location.reload();
+                        }
+                    }
+                })
+            });
+            $(document).on('change', '.percent_changer', function (e) {
+                e.preventDefault();
+                let form = $('#ajax_update_context');
+                $.ajax({
+                    'url': form.attr('action'),
+                    'data': form.serialize(),
+                    'method': 'post',
+                    'success': function (ax) {
+                        $('#payplan').html(ax);
+                    }
+                })
+            });
+        });
+    </script>
+{% endblock %}
+{% block main %}
+    {% if offer.order is not null %}
+        {% set dat = offer.order.createdAt %}
+    {% else %}
+        {% set dat = offer.offerDate %}
+    {% endif %}
+    {% set datum = (dat|date_modify('+1 month')|date('M'))|trans  %}
+    {% set datum = datum ~' '~ dat|date('Y')  %}
+    {% include 'app/components/_index_menu.html.twig' %}
+    {% include appTemplate~'/offer_new/_wrap_offer_preview.html.twig' %}
+{% endblock %}
+

@@ -1,0 +1,161 @@
+<style>
+    .content form, .content table {
+        background: transparent;
+    }
+    #map {
+        min-height: 410px;
+    }
+    html,
+    body {
+        position: relative;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    .d-none {display: none;}
+    a {color:{{ sfColorDark }};}
+    textarea {
+        width: 289px;
+        height: 74px;
+        max-height: 300px !important;
+        min-height: 60px !important;}
+    h5{color: {{ sfColorDark }}}
+
+    .radios input[type="radio"] {
+        -webkit-appearance: none;
+    }
+
+    .card p, .card input, .card textarea {
+        font-size: 12px !important;
+    }
+    .cd,.ccd{border-radius: 4px;}
+    .avatar{
+        height: 80px;
+        width: 80px;
+        border-radius: 50%;
+        border: 1px solid lightgrey;
+        box-shadow: rgba(14, 30, 37, 0.12) 0 2px 4px 0px, rgba(14, 30, 37, 0.32) 0 2px 16px 0;
+    }
+    h1, h2, h3, h4 {font-size: initial}
+    h2{margin-top:10px;font-weight: bold;text-align: center;font-size: revert;color: {{ sfColor }};}
+    h4{font-weight: bold}
+    .card{margin-top: 20px;}
+
+    .page {margin-bottom: 20px;position: relative}
+    small {font-size: 8px;}
+    .page_card ul {font-size: inherit;}
+    /** pdf */
+    .page * {font-size: 11px !important;}
+    .page input {border-top: none;border-left: none;border-right: none;border-bottom: 1px solid lightgrey}
+    .page input[type="text"] {width:100%;}
+    /*.page input[type="checkbox"] {width:10px;}*/
+    .page table {margin: 14px 0 0 0;width: 100%;border: 1px solid #525252}
+    .page table tr:last-child {padding: 0 0 10px 0;}
+    .page th {padding: 0;margin: 0}
+    .page td {padding: 0;margin: 0}
+    .page h2 {color: #000;font-size: 16px !important; text-align: left;font-weight: bold}
+    .page h2 {color: #000;font-size: 14px !important; text-align: left;font-weight: bold}
+    .page h3 {font-size: 12px !important;margin: 0;font-weight: bold !important;}
+    .page p {margin-bottom: 0;font-size: 12px !important;}
+    table.deckblatt {margin-top: 24px;}
+    table.deckblatt:first-child {margin-top: 80px;}
+    table.deckblatt td{padding: 6px;}
+    table.deckblatt2 td{padding: 0 2px 0 4px;}
+    table.deckblatt td p, table.deckblatt td input {font-size: 14px !important;}
+    table.deckblatt td h3 {font-size: 16px !important;}
+
+    sup {
+        position: relative;
+        top: -1em;
+    }
+    .numberCircle, .numberCircleHelp {    display: inline-block;
+        border-radius: 50%;
+        font-size: 8px !important;
+        width: auto;
+        padding: 6px 3px;
+        background: #fff;
+        border: 1px solid #000000;
+        color: {{ sfColorText }};
+    }
+    .numberCircleHelp {
+        padding: 2px 4px;
+        display: initial;
+    }
+    img.logo-zoe {
+        height: 72px;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }img.logo-e {
+             height: 70px;position: absolute;top: 0;right: -20px
+    }
+    img.compo,img.compo1 {
+        max-width: 300px;
+        max-height: 116px;
+    }
+    * {font-family: Arial, Helvetica, sans-serif}
+    .page {border: none}
+    /*.page{display:inline-block;overflow:visible;height:1124px;width:790px;margin:0;padding:10px 20px 10px 30px;page-break-inside:avoid;}*/
+    .main-box {
+        width: 21cm !important;
+        min-height: 29.7cm !important;
+        height: 29.72cm !important;
+        margin: 0 !important;
+    }
+    input[type="checkbox"] {
+        border:1px solid lightgrey !important;
+        border-left:none !important;
+
+    }
+    table.deckblatt td p, table.deckblatt td input {
+        font-size: 13px !important;
+    }
+    table {margin-top: 5px;}
+    td {vertical-align: top; padding: 0}
+    td > p > input[type="radio"]{vertical-align: middle; padding: 0}
+    table.deckblatt td h3 {
+        font-size: 15px !important;
+    }
+    {% if pdf is not defined or pdf == false %}
+        radio,checkbox,input, textarea, select{ color: {{ sfColorDark }};}
+    {% else %}
+        input, textarea, select{ color: darkgrey;}
+    {% endif %}
+
+    input[type="checkbox"], input[type="radio"] {
+        margin-right: 4px;
+    }
+
+    .inline-block{display: inherit}
+    .innerTable {margin:0 !important;padding:0;border: none !important}
+    .trbordered{border-top: 1px solid lightgrey}
+    .pt10 {padding-top: 10px;}
+    .pt5 {padding-top: 5px;}
+    .mt5 {margin-top: 5px !important;text-align: left;}
+    .mt5 td, .mt5 th {padding: 0 4px;text-align: left;vertical-align: top}
+    .innerTable td, .innerTable th {padding-left:0 !important}
+    h3 {margin-top: 4px !important;}
+    h2 {margin-top: 2px;}
+    .rcen {
+        width: 20px;
+        text-align: center !important;
+    }
+
+    /*linear-gradient(to top left,*/
+    /*rgba(0,0,0,0) 0%,*/
+    /*rgba(0,0,0,0) calc(50% - 0.8px),*/
+    /*rgba(0,0,0,1) 50%,*/
+    /*rgba(0,0,0,0) calc(50% + 0.8px),*/
+    /*rgba(0,0,0,0) 100%),*/
+    .crossed {
+        background-image:
+                linear-gradient(to top right,
+                transparent 0%,
+                transparent calc(50% - 1px),
+                #000 50%,
+                transparent calc(50% + 1px),
+                transparent 100%) ;
+        border: 0;
+        z-index: 9999;
+    }
+</style>

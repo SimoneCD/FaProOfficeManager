@@ -1,0 +1,41 @@
+<div class="row termin_block block_box" id="tb{{ booking.id }}" style="background-color: #fff5af">
+    <div class="col-10" style="padding: 0 4px">
+        {# todo #}
+
+{#        {% if booking.title == 'Aufgabe' %}#}
+{#            <small style="background-color: lightblue">{{ booking.title }} <br>#}
+{#                Zu erledigen bis: {{ booking.endAt|date('d.m.y') }}<br>#}
+{#                {{ booking.notice }}</small>#}
+{#        {% elseif booking.title in ['Montage/Installation', ] %}#}
+{#            {% if booking.beginAt|date('d.m') == booking.endAt|date('d.m') %}#}
+{#                <small>{{ booking.title }} <br>#}
+{#                    {{ booking.beginAt|date('d.m.y') }} {{ booking.beginAt|date('H:i') }} - {{ booking.endAt|date('H:i') }} Uhr<br>#}
+{#                {{ booking.notice }}</small>#}
+{#            {% else %}#}
+{#                <small>{{ booking.title }} <br>#}
+{#                    {{ booking.beginAt|date('d.m H:i') }} - {{ booking.endAt|date('d.m.y H:i') }} Uhr<br>#}
+{#                    {{ booking.notice }}</small>#}
+{#            {% endif %}#}
+{#        {% elseif booking.title == 'Besichtigung' %}#}
+{#            <small>{{ booking.title }}<br> {{ booking.beginAt|date('d.m.y H:i') }} Uhr<br>#}
+{#                {{ booking.notice }}</small>#}
+{#        {% else %}#}
+{#            <small>{{ booking.title }}<br>#}
+{#                {{ 'oClock'|trans({'%clock%':booking.beginAt|date('d.m.y H:i')}) }}<br>#}
+{#                {{ booking.notice }}</small>#}
+{#        {% endif %}#}
+    </div>
+    <div class="col-2">
+        {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+            <form id="deleteForm{{ booking.id }}" method="post"
+              data-action="{{ path('booking_delete_ajax', {'id': booking.id}) }}"
+              onsubmit="return confirm('\nTermin löschen?');" style="background: transparent">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ booking.id) }}">
+            <button data-offer="{{ booking.offer.id }}" data-id="{{ booking.id }}"
+                    class="btn btn-sm deleteAjaxTermin p-0" type="button"
+                    style="border: none;background: #fff;color: #d93d06;"><i class="material-symbols-outlined" style="">delete</i>
+            </button>
+            </form>
+        {% endif %}
+    </div>
+</div>

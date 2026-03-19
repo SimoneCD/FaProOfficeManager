@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'o.categories'|trans }}{% endblock %}
+
+{% block main %}
+    {% include 'backend/components/_menu.html.twig' with {
+        'listLi': {'n':'Kategorien'|trans},
+    } %}
+
+    <table class="table">
+        <thead>
+            <tr style="background-color: {{ sfColor }};color: #fff">
+                <th class="id">{{ 'w.symbol'|trans }}</th>
+                <th class="name">{{ 'w.name'|trans }}</th>
+                <th class="name">{{ 'osc.quest.questionnaires'|trans }}</th>
+                <th class="name">{{ 'p.assignment'|trans }}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for offer_category in categories %}
+            {% if offer_category.name != 'Funnel' %}
+                <tr>
+                    <td><i class="material-symbols-outlined">{{ offer_category.icon }}</i></td>
+                    <td><a href="{{ path('backend_subcategory_index', {'category':offer_category.id}) }}">{{ offer_category.name }}</a></td>
+                    <td>{{ offer_category.offerSubCategories|length }}</td>
+                    <td>{% if offer_category.productCategory %}{{ getProductCategory(offer_category.productCategory.id) }}{% endif %}</td>
+                    <td class="text-right">
+                        <a href="{{ path('backend_category_edit', {'id': offer_category.id}) }}"><i class="material-symbols-outlined">edit</i></a>
+                    </td>
+                </tr>
+            {% endif %}
+        {% else %}
+            {% include 'backend/_no_entry.html.twig' with {'collSpan': 4} %}
+        {% endfor %}
+        <tr>
+            <td colspan="5">{{ 'p.symbolHelp'|trans({'%link%':'<a href="https://fonts.google.com/icons?icon.set=Material+Icons" target="_blank">Google Icons</a>'})|raw}}  </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="text-right">
+        <a class="btn btn-light btn-sm" href="{{ path('backend_category_new') }}">Kategorie hinzufügen <span class="material-icons">add_circle_outline</span></a>
+    </div>{% include 'backend/components/_menu.html.twig' with {
+        'listLi': {'n':'Funnel'|trans},
+    } %}
+
+    <table class="table">
+        <thead>
+            <tr style="background-color: {{ sfColor }};color: #fff">
+                <th class="id">{{ 'w.symbol'|trans }}</th>
+                <th class="name">{{ 'w.name'|trans }}</th>
+                <th class="name">{{ 'osc.quest.questionnaires'|trans }}</th>
+                <th class="name">{{ 'p.assignment'|trans }}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for offer_category in categories %}
+
+            {% if offer_category.name == 'Funnel' %}
+                <tr>
+                    <td><i class="material-symbols-outlined">{{ offer_category.icon }}</i></td>
+                    <td><a href="{{ path('backend_subcategory_index', {'category':offer_category.id}) }}">{{ offer_category.name }}</a></td>
+                    <td>{{ offer_category.offerSubCategories|length }}</td>
+                    <td>{% if offer_category.productCategory %}{{ getProductCategory(offer_category.productCategory.id) }}{% endif %}</td>
+                    <td class="text-right">
+                        <a href="{{ path('backend_category_edit', {'id': offer_category.id}) }}"><i class="material-symbols-outlined">edit</i></a>
+                    </td>
+                </tr>
+            {% endif %}
+        {% else %}
+            {% include 'backend/_no_entry.html.twig' with {'collSpan': 4} %}
+        {% endfor %}
+        <tr>
+            <td colspan="5">{{ 'p.symbolHelp'|trans({'%link%':'<a href="https://fonts.google.com/icons?icon.set=Material+Icons" target="_blank">Google Icons</a>'})|raw}}  </td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}

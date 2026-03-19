@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Hersteller' |trans}} - {{ sf.name }}{% endblock %}
+
+{% block main %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">{{ 'Hersteller' |trans}} <a href="{{ path('app_product-manufactura_new') }}"><span style="color: {{ sfColorDark }}" class="material-symbols-outlined">add_circle</span></a></h4>
+            </div>
+            <div class="card-body table-responsive">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>{{ 'w.id'|trans }}</th>
+                <th>{{ 'Logo'|trans }}</th>
+                <th style="min-width: 130px">{{ 'w.name'|trans }}</th>
+                <th>{{ 'Händler Type'|trans }}</th>
+                <th>Benutzername</th>
+                <th>Passwort</th>
+                <th>Link</th>
+                <th>{{ 'w.phone'|trans }}</th>
+{#                <th>{{ 'partner.address'|trans }}</th>#}
+{#                <th>{{ 'w.phone'|trans }}</th>#}
+{#                <th>{{ 'w.email'|trans }}</th>#}
+{#                <th>{{ 'partner.link'|trans }}</th>#}
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pm in productManufacturas %}
+            <tr>
+                <td>{{ pm.id }}</td>
+                <td>{% if pm.logo %}<img style="max-height: 70px" src="{{ '/'~appAssetPath~('products/manufactura/'~pm.logo) }}" />{% endif %}</td>
+                <td>{{ pm.name }}</td>
+                <td>{{ pm.typeName|trans }}</td>
+                <td>{{ pm.userName }}</td>
+                <td>{{ pm.password }}</td>
+                <td>{% if pm.link %}<a href="{{ pm.link }}" target="_blank">{{ pm.link }}</a>{% endif %}</td>
+                <th>{{ pm.phone }}</th>
+                <td>
+                    <a href="{{ path('app_product-manufactura_edit', {'id': pm.id}) }}"><i class="material-symbols-outlined">edit</i></a>
+                </td>
+            </tr>
+        {% else %}
+            {% include 'backend/_no_entry.html.twig' with {'collSpan': 8} %}
+        {% endfor %}
+        </tbody>
+    </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

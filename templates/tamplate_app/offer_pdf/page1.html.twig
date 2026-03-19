@@ -1,0 +1,27 @@
+{% set datum = 'now'|date_modify('+1 month')|date('M Y') %}
+{% include appTemplate~'offer_pdf/_line-1.html.twig' %}
+<div style="height:534px !important;">
+{% include appTemplate~'offer_pdf/_anrede.html.twig' %}
+{% include appTemplate~'offer_pdf/_projekt_daten.html.twig' %}
+</div>
+{% include appTemplate~'offer_pdf/_line-konditionen.html.twig' %}
+{% if preview is defined %}
+    {% include appTemplate~'offer_pdf/_line-1-werbung.html.twig' with {
+        'img1': asset(offer.subCategory and offer.subCategory.image ? appAssetPath~'offers/'~offer.subCategory.image: 'app/1x1.png'),
+        'img2': asset(offer.wallboxProduct and offer.wallboxProduct.image ? appAssetPath~'products/'~offer.wallboxProduct.image: 'app/1x1.png')
+    } %}
+{% else %}
+    {% set imi = (offer.wallboxProduct is not null and offer.wallboxProduct.image ? getImgContent(asset(appAssetPath~'products/'~offer.wallboxProduct.image)): '') %}
+    {% include appTemplate~'offer_pdf/_line-1-werbung.html.twig' with {
+        'img1': getImgContent(asset(appAssetPath~'offers/'~offer.subCategory.image)),
+        'img2': imi
+    } %}
+{% endif %}
+
+
+{% include appTemplate~'offer_pdf/_line-frindly-greetings.html.twig' %}
+{% include appTemplate~'offer_pdf/_seite.html.twig' with {'page': 1} %}
+
+
+
+

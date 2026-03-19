@@ -1,0 +1,35 @@
+<div class="row headBoxInvoiceData m-0 pb-4 w-100" style="display: inline-grid;">
+    <h4 class="text_dark col-12 m-0 px-0 pb-1"><strong style="color: {{ sfColorDark }}">{{ 'i.data'|trans }}</strong>:</h4>
+    <div class="col-12 m-0 p-0">
+    {% if context['invoice'] is defined %}
+        {% for kn, con in context['invoice']['name'] %}
+            {% include appTemplate~'invoice/_key_value'~tpl~'row.html.twig' with {
+                'context' : context,
+                'key' : 'invoice',
+                'i' : kn,
+                'name': getOfferName(offer.id,false,true),
+                'number': offer.number
+            } %}
+        {% endfor %}
+    {% endif %}
+    </div>
+    <div class="row">
+        <p class="col-7 px-0 pb-0 pt-2 m-0">
+            <strong style="font-weight: bold; font-size: 13px;">{{ 'i.offerCostExclTax'|trans }}:</strong>
+        </p>
+        <div class="col-5 px-0 pb-0 pt-2 m-0" style="font-size: 13px;"><strong style="font-size: 13px;">{{ price|number_format(2,',','.')}} {{ appCurrency|raw }}</strong></div>
+    </div>
+    <div class="col-12 m-0 p-0">
+    {% if context['payed'] is defined %}
+        {% for kn, con in context['payed']['name'] %}
+            {% include appTemplate~'invoice/_key_value_row.html.twig' with {
+                'context' : invoice.context,
+                'key' : 'payed',
+                'i' : kn,
+                'name' : '',
+                'number' : ''
+            } %}
+        {% endfor %}
+    {% endif %}
+    </div>
+</div>

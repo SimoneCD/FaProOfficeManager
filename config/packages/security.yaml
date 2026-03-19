@@ -1,0 +1,191 @@
+security:
+  # a new authentication system is available since Symfony 5.1 to make
+  # Symfony security more extensible and easier to understand
+  # https://symfony.com/doc/current/security/experimental_authenticators.html
+  # enable_authenticator_manager: true
+  access_decision_manager:
+    strategy: unanimous
+    allow_if_all_abstain: false
+  password_hashers:
+    # Our user class and the algorithm we'll use to encode passwords
+    # 'auto' means to let Symfony choose the best possible password hasher (Argon2 or Bcrypt)
+    # https://symfony.com/doc/current/security.html#c-encoding-passwords
+    App\Entity\User: 'bcrypt'
+    # auto hasher with custom options for all PasswordAuthenticatedUserInterface instances
+    Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+      algorithm: 'bcrypt'
+      cost: 15
+  providers:
+    # https://symfony.com/doc/current/security/user_provider.html
+    # In this example, users are stored via Doctrine in the database
+    # To see the users at src/App/DataFixtures/ORM/LoadFixtures.php
+    # To load users from somewhere else: https://symfony.com/doc/current/security/user_provider.html#creating-a-custom-user-provider
+    database_users:
+      entity:
+        class: App\Entity\User
+        property: email
+    database_customer:
+      # id: App\Security\UserProvider
+      entity:
+        class: App\Entity\Customer
+        property: email
+    chain_provider:
+      chain:
+        providers: [ database_users, database_customer ]
+    by_id_provider:
+      entity:
+        class: App\Entity\User
+        property: id
+
+  # https://symfony.com/doc/current/security.html#a-authentication-firewalls
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|assets|img|js)/
+      security: false
+    main:
+      login_link:
+        check_route: login_check
+        lifetime: 72000
+        max_uses: 1
+        success_handler: App\Security\Authentication\AuthenticationSuccessHandler
+        signature_properties: [ 'id' ]
+      # this firewall applies to all URLs
+      pattern: ^/
+      # https://symfony.com/doc/current/security/impersonating_user.html
+      # use ?_switch_user=exit to exit
+      switch_user:
+        provider: by_id_provider
+      lazy: true
+      provider: chain_provider
+
+      # The user provider to use.
+
+      # activate different ways to authenticate
+      # https://symfony.com/doc/current/security.html#the-firewall
+
+      # This allows the user to login by submitting a username and password
+      # Reference: https://symfony.com/doc/current/security/form_login_setup.html
+
+      form_login:
+        # The route name that the login form submits to
+        check_path: security_login
+        # The name of the route where the login form lives
+        # When the user tries to access a protected page, they are redirected here
+        login_path: security_login
+        # Secure the login form against CSRF
+        # Reference: https://symfony.com/doc/current/security/csrf.html
+        enable_csrf: true
+        # The page users are redirect to when there is no previous page stored in the
+        # session (for example when the users access directly to the login page).
+        default_target_path: security_login
+
+      logout:
+        # The route name the user can go to in offer to logout
+        # path: security_logout
+        # The name of the route to redirect to after logging out
+        target: security_login
+
+      # login_throttling: true
+
+      # needed because in tests we redefine the 'main' firewall to use
+      # HTTP Basic instead of the login form, so this firewall has
+      # multiple authenticators
+      # See https://symfony.com/doc/current/security/experimental_authenticators.html#configuring-the-authentication-entry-point
+      entry_point: 'form_login'
+
+      remember_me:
+        secret: '%kernel.secret%' # required
+        lifetime: 12004800 # 1 week in seconds
+        # by default, the feature is enabled by checking a
+        # checkbox in the login form (see below), uncomment the
+        # following line to always enable it.
+        always_remember_me: true
+        signature_properties: [ password ]
+  # Easy way to control access for large sections of your site
+  # Note: Only the *first* access control that matches will be used
+  access_control:
+    # this is a catch-all for the admin area
+    # additional security lives in the controllers
+    # - { path: '^/extern-partner/booking/new', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: '^/img', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: '^/app', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: '^/assets', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: '^/hd', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: '^/lib', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: '^/svgs', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    # de subdomains
+    - { path: '^/mitarbeiter-chat', roles: ROLE_MONTAGE }
+    # - { path: '^/api/push/subscribe', roles: ROLE_MONTAGE }
+    - { path: '^/mitarbeiter-chat', roles: ROLE_MONTAGE }
+    - { path: '^/vor-ort', roles: ROLE_MONTAGE }
+    - { path: '^/admin/projekt-teams', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/admin/kunden', roles: ROLE_MONTAGE }
+    - { path: '^/admin/produkte', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/admin/produkt-kategorien', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/admin/produktkategorie', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/admin/produkt-kategorie', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/admin/kategorien', roles: ROLE_ADMIN }
+    - { path: '^/admin/chat-api', roles: ROLE_MONTAGE }
+    - { path: '^/admin/project-teams', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/admin/customers', roles: ROLE_MONTAGE }
+    - { path: '^/admin/mitarbeiter', roles: ROLE_MONTAGE }
+    - { path: '^/admin/employees', roles: ROLE_MONTAGE }
+    - { path: '^/admin/products', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/admin/product-categories', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/admin/product-category', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/admin/productcategory', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/admin/daa', roles: ROLE_EMPLOYEE_SERVICE }
+    - { path: '^/chat', roles: ROLE_MONTAGE }
+    - { path: '^/termine', roles: ROLE_MONTAGE }
+    - { path: '^/pdf', roles: ROLE_MONTAGE }
+    - { path: '^/kundenanfrage', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/angebote', roles: ROLE_MONTAGE }
+    - { path: '^/bestaetigte-angebote', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/rechnungen', roles: ROLE_EMPLOYEE_EXTERN }
+    # en subdomains
+    - { path: '^/employee-chat', roles: ROLE_MONTAGE }
+    - { path: '^/on-site', roles: ROLE_MONTAGE }
+    # all
+    - { path: '^/ajax', roles: [ROLE_MONTAGE] }
+    - { path: '^/ajax/ajax-invoice', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/ajax/ajax-mail', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/ajax/ajax-message', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/ajax/ajax-offer', roles: ROLE_MONTAGE }
+    - { path: '^/ajax/ajax-product', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/ajax/ajax-user', roles: ROLE_MONTAGE }
+    - { path: '^/admin', roles: ROLE_ADMIN }
+#    - { path: '^/bookings', roles: ROLE_CUSTOMER }
+    # - { path: '^/pdf', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/customer-request', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/offers', roles: ROLE_EMPLOYEE_EXTERN }
+    - { path: '^/confirmed-offers', roles: ROLE_EMPLOYEE_EXTERN }
+  role_hierarchy:
+    ROLE_EMPLOYEE_ONE: ROLE_USER
+    ROLE_CUSTOMER: ROLE_EMPLOYEE_ONE
+    ROLE_MONTAGE: ROLE_CUSTOMER
+    ROLE_EMPLOYEE_EXTERN: ROLE_MONTAGE
+    ROLE_EMPLOYEE_SERVICE: ROLE_EMPLOYEE_EXTERN
+    ROLE_ADMIN: ROLE_EMPLOYEE_SERVICE
+    ROLE_ALLOWED_TO_SWITCH: ROLE_ADMIN
+    # you can check impersonated login with is_Granted(ROLE_PREVIOUS_ADMIN) to know it everywhere
+    # exit with ?_switch_user=_exit
+    ROLE_SUPER_ADMIN: ROLE_ALLOWED_TO_SWITCH
+
+when@test:
+  # this configuration simplifies testing URLs protected by the security mechanism
+  # See https://symfony.com/doc/current/testing/http_authentication.html
+  security:
+    firewalls:
+      main:
+        http_basic: ~
+    password_hashers:
+      # By default, password hashers are resource intensive and take time. This is
+      # important to generate secure password hashes. In tests however, secure hashes
+      # are not important, waste resources and increase test times. The following
+      # reduces the work factor to the lowest possible values.
+      Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+        algorithm: auto
+        cost: 4 # Lowest possible value for bcrypt
+        time_cost: 3 # Lowest possible value for argon
+        memory_cost: 10 # Lowest possible value for argon
+

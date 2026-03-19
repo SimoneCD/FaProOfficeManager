@@ -1,0 +1,386 @@
+
+<style>
+      .short-text {max-width: 20px}
+    .wrl, .wrla {
+        position: relative;
+        border-right: 1px solid #050505;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 30px;
+        width: 30px;
+    }
+    .wrla {
+        border-right: 1px solid grey;
+    }
+    .brTd{border-right: 1px solid gray}
+    .btTd{border-top: 1px solid gray}
+    .topTd {padding: 0 !important;border-bottom: 1px solid gray;}
+    .wrl input[type="text"] {
+        transform: rotate(-90deg);
+        transform-origin: left 0;
+        position: absolute;
+        bottom: 0;
+        width: 60px;
+        /* margin: 0; */
+        /* padding: 0; */
+        margin-bottom: -14px;
+    }
+    .vertical-text {
+        transform: rotate(-90deg);
+        text-align: center;
+        font-weight: bold;
+    }
+</style>
+<table class="mt5 vert">
+    <tr>
+        <td><h3>Einspeise-Stromzähler Nr:</h3></td>
+        <td><p><input class="check_i" type="text" name="pv_first[anlage][6]" value="{% if yes and ocp.anlage[6] is defined %}{{ ocp.anlage[6] }}{% endif %}"></p></td>
+        <td><h3>Zählerstand bei Übergabe:</h3></td>
+        <td><p><input class="check_i" type="text" name="pv_first[anlage][7]" value="{% if yes and ocp.anlage[7] is defined %}{{ ocp.anlage[7] }}{% endif %}"></p></td>
+    </tr>
+</table>
+<table class="mt5 vert">
+    <tr>
+        <td class="brTd" colspan="2" style="max-width: 200px;">
+            <table class="innerTable" style="height: 70px;width: 200px">
+                <tr>
+                    <td style="position:relative;width: 200px;">
+                        <div class="crossed" style="width: 200px;height: 70px;">
+                            <p style="position: absolute;top:4px;right: 4px;">Ort/Anlagenteil <sup class="numberCircle">8</sup></p>
+                            <p style="position: absolute;bottom:2px;left: 4px;">Anzahl Betriebsmittel <input type="checkbox" name="pv_first[uep][c][1]" checked></p>
+                            <p style="position: absolute;bottom:16px;left: 4px;">Fehler-Code <input type="checkbox" name="pv_first[uep][c][1]"></p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td class="topTd">
+            <table class="innerTable" style="height: 70px;width: 100%">
+                <tr>
+                    {% if pdf is defined and pdf %}
+                        {% for a in 1..16 %}
+                            <td class="wrl tdm"><p class="vertical-text">{% if yes and ocp.ueg[a] is defined %}{{ ocp.ueg[a]|slice(0, 9) }}{% endif %}</p></td>
+                        {% endfor %}
+                    {% else %}
+                        {% for a in 1..16 %}
+                            <td class="wrl tdm"><input style="text-align: center" class="check_i" type="text" name="pv_first[ueg][{{ a }}]" value="{% if yes and ocp.ueg[a] is defined %}{{ ocp.ueg[a]|slice(0, 9) }}{% endif %}"></td>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr class="btTd">
+        <td class="brTd" rowspan="18" style="width: 30px;">
+            <div style="position: relative;display: inline">
+                <p class="vertical-text" style="position: absolute;margin-left: -62px;margin-top: 200px;">Elektroinstallationsgeräte</p>
+            </div>
+        </td>
+        <td class="brTd">
+            <p>Stromkreisverteiler</p>
+        </td>
+        <td class="topTd">
+            <table class="innerTable" style="width: 100%">
+                <tr>
+                    {% if pdf is defined and pdf %}
+                        {% for a in 1..16 %}
+                            <td class="wrla tdm"><p class="short-text">{% if yes and ocp.ueg.c[a] is defined and ocp.ueg.c[a] %}{{ ocp.ueg.c[a] }}{% else %}&nbsp;{% endif %}</p></td>
+                        {% endfor %}
+                    {% else %}
+                        {% for a in 1..16 %}
+                            <td class="wrla tdm"><input style="text-align: center" class="check_i" type="text" name="pv_first[ueg][c][{{ a }}]" value="{% if yes and ocp.ueg.c[a] is defined %}{{ ocp.ueg.c[a]|slice(0, 4) }}{% endif %}"></td>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr class="btTd">
+        <td class="brTd">
+            <p>Aus-/Wechselschalter</p>
+        </td>
+        <td class="topTd">
+            <table class="innerTable" style="width: 100%">
+                <tr>
+                    {% if pdf is defined and pdf %}
+                        {% for a in 1..16 %}
+                            <td class="wrla tdm"><p class="short-text">{% if yes and ocp.ueg.a[a] is defined and ocp.ueg.a[a] %}{{ ocp.ueg.a[a] }}{% else %}&nbsp;{% endif %}</p></td>
+                        {% endfor %}
+                    {% else %}
+                        {% for a in 1..16 %}
+                            <td class="wrla tdm"><input style="text-align: center" class="check_i" type="text" name="pv_first[ueg][a][{{ a }}]" value="{% if yes and ocp.ueg.a[a] is defined %}{{ ocp.ueg.a[a]|slice(0, 4) }}{% endif %}"></td>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr class="btTd">
+        <td class="brTd">
+            <p>Serienschalter</p>
+        </td>
+        <td class="topTd">
+            <table class="innerTable" style="width: 100%">
+                <tr>
+                    {% if pdf is defined and pdf %}
+                        {% for a in 1..16 %}
+                            <td class="wrla tdm"><p class="short-text">{% if yes and ocp.ueg.b[a] is defined and ocp.ueg.b[a] %}{{ ocp.ueg.b[a] }}{% else %}&nbsp;{% endif %}</p></td>
+                        {% endfor %}
+                    {% else %}
+                        {% for a in 1..16 %}
+                            <td class="wrla tdm"><input style="text-align: center" class="check_i" type="text" name="pv_first[ueg][b][{{ a }}]" value="{% if yes and ocp.ueg.b[a] is defined %}{{ ocp.ueg.b[a]|slice(0, 4) }}{% endif %}"></td>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr class="btTd">
+        <td class="brTd">
+            <p>TV-Anschlussdose</p>
+        </td>
+        <td class="topTd">
+            <table class="innerTable" style="width: 100%">
+                <tr>
+                    {% if pdf is defined and pdf %}
+                        {% for a in 1..16 %}
+                            <td class="wrla tdm"><p class="short-text">{% if yes and ocp.ueg.d[a] is defined and ocp.ueg.d[a] %}{{ ocp.ueg.d[a] }}{% else %}&nbsp;{% endif %}</p></td>
+                        {% endfor %}
+                    {% else %}
+                        {% for a in 1..16 %}
+                            <td class="wrla tdm"><input style="text-align: center" class="check_i" type="text" name="pv_first[ueg][d][{{ a }}]" value="{% if yes and ocp.ueg.d[a] is defined %}{{ ocp.ueg.d[a]|slice(0, 4) }}{% endif %}"></td>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr class="btTd">
+        <td class="brTd">
+            <p>Telefonanschlusseinheit</p>
+        </td>
+        <td class="topTd">
+            <table class="innerTable" style="width: 100%">
+                <tr>
+                    {% if pdf is defined and pdf %}
+                        {% for a in 1..16 %}
+                            <td class="wrla tdm"><p class="short-text">{% if yes and ocp.ueg.e[a] is defined and ocp.ueg.e[a] %}{{ ocp.ueg.e[a] }}{% else %}&nbsp;{% endif %}</p></td>
+                        {% endfor %}
+                    {% else %}
+                        {% for a in 1..16 %}
+                            <td class="wrla tdm"><input style="text-align: center" class="check_i" type="text" name="pv_first[ueg][e][{{ a }}]" value="{% if yes and ocp.ueg.e[a] is defined %}{{ ocp.ueg.e[a]|slice(0, 4) }}{% endif %}"></td>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr class="btTd">
+        <td class="brTd">
+            <p>Steckdose</p>
+        </td>
+        <td class="topTd">
+            <table class="innerTable" style="width: 100%">
+                <tr>
+                    {% if pdf is defined and pdf %}
+                        {% for a in 1..16 %}
+                            <td class="wrla tdm"><p class="short-text">{% if yes and ocp.ueg.f[a] is defined and ocp.ueg.f[a] %}{{ ocp.ueg.f[a] }}{% else %}&nbsp;{% endif %}</p></td>
+                        {% endfor %}
+                    {% else %}
+                        {% for a in 1..16 %}
+                            <td class="wrla tdm"><input style="text-align: center" class="check_i" type="text" name="pv_first[ueg][f][{{ a }}]" value="{% if yes and ocp.ueg.f[a] is defined %}{{ ocp.ueg.f[a]|slice(0, 4) }}{% endif %}"></td>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            </table>
+        </td>
+    </tr>
+    {% for aa in 1..12 %}
+        <tr class="btTd">
+            <td class="brTd tdm">
+                <p><input class="check_i" type="text" name="pv_first[ueg][gg{{ aa }}t]" value="{% if yes and ocp.ueg['gg'~aa~'t'] is defined %}{{ ocp.ueg['gg'~aa~'t'] }}{% endif %}"></p>
+            </td>
+            <td class="topTd">
+                <table class="innerTable" style="width: 100%">
+                    <tr>
+                        {% if pdf is defined and pdf %}
+                            {% for a in 1..16 %}
+                                <td class="wrla tdm"><p class="short-text">{% if yes and ocp.ueg['gg'~aa][a] is defined and ocp.ueg['gg'~aa][a] %}{{ ocp.ueg['gg'~aa][a] }}{% else %}&nbsp;{% endif %}</p></td>
+                            {% endfor %}
+                        {% else %}
+                            {% for a in 1..16 %}
+                                <td class="wrla tdm"><input style="text-align: center" class="check_i" type="text" name="pv_first[ueg][gg{{ aa }}][{{ a }}]" value="{% if yes and ocp.ueg['gg'~aa][a] is defined %}{{ ocp.ueg['gg'~aa][a]|slice(0, 4) }}{% endif %}"></td>
+                            {% endfor %}
+                        {% endif %}
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+<table class="mt5">
+    <tr>
+        <td colspan="2">
+            <h3 style="font-weight: normal"><strong>Systemdokumentation</strong> gemäß VDE 0126-23-2 (DIN EN IEC 62446-2 )</h3>
+        </td>
+        <td colspan="2"><h3>Zustand der Dokumentation</h3></td>
+    </tr>
+    <tr>
+
+        <td style="width: 10px">
+            <p><input class="check_i" type="checkbox" name="pv_first[doku][4]" {% if yes and ocp.doku[4] is defined and ocp.doku[4] %}checked{% endif %} value="1"></p>
+            <p><input class="check_i" type="checkbox" name="pv_first[doku][5]" {% if yes and ocp.doku[5] is defined and ocp.doku[5] %}checked{% endif %} value="1"></p>
+            <p><input class="check_i" type="checkbox" name="pv_first[doku][6]" {% if yes and ocp.doku[6] is defined and ocp.doku[6] %}checked{% endif %} value="1"></p>
+            <p><input class="check_i" type="checkbox" name="pv_first[doku][7]" {% if yes and ocp.doku[7] is defined and ocp.doku[7] %}checked{% endif %} value="1"></p>
+            <p><input class="check_i" type="checkbox" name="pv_first[doku][8]" {% if yes and ocp.doku[8] is defined and ocp.doku[8] %}checked{% endif %} value="1"></p>
+            <p><input class="check_i" type="checkbox" name="pv_first[doku][12]" {% if yes and ocp.doku[12] is defined and ocp.doku[12] %}checked{% endif %} value="1"></p>
+            {#            <p><input class="check_i" type="checkbox" name="pv_first[doku][15]" {% if yes and ocp.doku[15] is defined and ocp.doku[15] %}checked{% endif %} value="1"></p>#}
+        </td>
+        <td colspan="3" style="padding: 0">
+            <p>Allgemeines, Anleitungen und Anlagenbeschreibung</p>
+            <p>Systemdaten und Inbetriebnahmeprotokoll inkl. Angaben über Betreiber, Installateur und Prüfer</p>
+            <p>Stromlaufplan mit detallierten Angaben zu PV-Generatoren, Strängen, Überspannungsschutz und Erdung</p>
+            <p>Datenblätter und Konformitätserklärungen zu Module, Wechselrichter und ggf. Generatoranschlusskasten</p>
+            <p>Angaben über die mechanische Konstruktion, Datenblätter zum Dachaufbau bzgl. Brandschutz</p>
+            <p>Prüfergebnisse und Inbetriebnahmeangaben, Sicherheitsnachweise, Mess+Prüfprotokolle</p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p><input class="check_i" type="checkbox" name="pv_first[doku][9]" {% if yes and ocp.doku[9] is defined and ocp.doku[9] %}checked{% endif %} value="1"></p>
+            <p><input class="check_i" type="checkbox" name="pv_first[doku][10]" {% if yes and ocp.doku[10] is defined and ocp.doku[10] %}checked{% endif %} value="1"></p>
+            <p><input class="check_i" type="checkbox" name="pv_first[doku][11]" {% if yes and ocp.doku[11] is defined and ocp.doku[11] %}checked{% endif %} value="1"></p>
+            <p><input class="check_i" type="checkbox" name="pv_first[doku][13]" {% if yes and ocp.doku[13] is defined and ocp.doku[13] %}checked{% endif %} value="1"></p>
+            <p><input class="check_i" type="checkbox" name="pv_first[doku][14]" {% if yes and ocp.doku[14] is defined and ocp.doku[14] %}checked{% endif %} value="1"></p>
+        </td>
+        <td>
+            <p>Betriebs und Wartungsangaben</p>
+            <p>Sicherer Zugag zu den PV-Generatoren</p>
+            <p>Herstellerdokumentation bzgl. der Anschlageinrichtung</p>
+            <p>Dokumentation für die Feuerwehr</p>
+            <p>Notabschaltung</p>
+        </td>
+        <td style="width: 10px;">
+            <p><input class="check_i" type="radio" name="pv_first[doku][1]" {% if yes and ocp.doku[1] is defined and ocp.doku[1] == 1 %}checked{% endif %} value="1"></p>
+            <p><input class="check_i" type="radio" name="pv_first[doku][1]" {% if yes and ocp.doku[1] is defined and ocp.doku[1] == 2 %}checked{% endif %} value="2"></p>
+            <p><input class="check_i" type="checkbox" name="pv_first[doku][3]" {% if yes and ocp.doku[3] is defined and ocp.doku[3] %}checked{% endif %} value="1"></p>
+            <p><input class="check_i" type="checkbox" name="pv_first[doku1][3]" {% if yes and ocp.doku1[3] is defined and ocp.doku1[3] %}checked{% endif %} value="1"></p>
+            <p><input class="check_i" type="checkbox" name="pv_first[doku2][3]" {% if yes and ocp.doku2[3] is defined and ocp.doku2[3] %}checked{% endif %} value="1"></p>
+            {#            <p><input class="check_i" type="checkbox" name="pv_first[doku3][3]" {% if yes and ocp.doku3[3] is defined and ocp.doku3[3] %}checked{% endif %} value="1"></p>#}
+        </td>
+        <td>
+            <p>Vollständig</p>
+            <p>Unvollständig</p>
+            <p>In Bearbeitung</p>
+            <p><input class="check_i" type="text" name="pv_first[dokut1][3]" value="{% if yes and ocp.dokut1[3] is defined %}{{ ocp.dokut1[3]|slice(0, 9) }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="pv_first[dokut2][3]" value="{% if yes and ocp.dokut2[3] is defined %}{{ ocp.dokut2[3]|slice(0, 9) }}{% endif %}"></p>
+            {#            <p><input class="check_i" type="text" name="pv_first[dokut3][3]" value="{% if yes and ocp.dokut3[3] is defined %}{{ ocp.dokut3[3]|slice(0, 9) }}{% endif %}"></p>#}
+        </td>
+    </tr>
+</table>
+
+<table class="mt5">
+    <tr>
+        <td>
+            <table class="innerTable" style="height: 140px;">
+                <tr style="margin-top: 5px;">
+                    <td style="min-width: 170px"><p>Auftraggeber: <sup class="numberCircle">2</sup></p></td>
+                    <td>
+                        <p><input class="check_i" type="text" name="pv_first[uebpr][1]" value="{% if yes and ocp.uebpr[1] is defined %}{{ ocp.uebpr[1] }}{% endif %}"></p>
+                        <span style="color: darkgrey;text-align: center">Name</span>
+                    </td>
+                </tr>
+                <tr style="margin-top: 10px;">
+                    <td colspan="2">
+                        <p class="inline-block"><input class="check_i" type="checkbox" name="pv_first[uebpr][3]" {% if yes and ocp.uebpr[3] is defined and ocp.uebpr[3] %}checked{% endif %} value="1"></p>
+                        <p class="inline-block" style="font-size: 10px !important;">Gemäß Übergabebericht und Prüfprotokoll, vollständig übernommen.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p class="inline-block"><input class="check_i" type="checkbox" name="pv_first[uebpr][4]" {% if yes and ocp.uebpr[4] is defined and ocp.uebpr[4] %}checked{% endif %} value="1"></p>
+                        <p class="inline-block" style="font-size: 10px !important;">Dokumentation übergeben</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: bottom !important;min-width: 170px">
+                        <p style="width: 100%"><input style="width: 90%;" class="check_i" type="date" name="pv_first[besichtigung][bdate]" value="{% if yes and ocp.besichtigung.bdate is defined %}{{ ocp.besichtigung.bdate }}{% endif %}"></p>
+                        <p style="text-align: center;font-size: 10px !important;">Datum</p>
+                    </td>
+                    <td style="position: relative;text-align: center">
+                        <div id="signature3Text"></div>
+                        {% if pdf is defined %}
+                            <p style="border-bottom: 1px solid grey ">
+                                {% if yes and ocp.anlage.signaturText[3] is defined and ocp.anlage.signaturText[3] %}
+                                    <img src="{{ ocp.anlage.signaturText[3] }}">
+                                {% endif %}
+                            </p>
+                        {% else %}
+                            <p>
+                                <input id="signature3" class="check_i" type="hidden" name="pv_first[anlage][signaturText][3]" value="{% if yes and ocp.anlage.signaturText[3] is defined and ocp.anlage.signaturText[3] %}{{ ocp.anlage.signaturText[3] }}{% endif %}">
+                            </p>
+                        {% endif %}
+                        <p style="font-size: 10px !important;text-align: center">Unterschrift/Auftraggeber<sup class="numberCircle">2</sup></p>
+                        {% if pdf is not defined %}
+                            <button type="button" data-id="1"
+                                    class="backB p-0 signatur3_reset btn btn-danger btn-sm"><i class="material-icons">undo</i>
+                            </button>{% endif %}
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table class="innerTable">
+                <tr>
+                    <td style="min-width: 170px"><p>Prüfer:<sup class="numberCircle">4</sup></p></td>
+                    <td>
+                        <p><input class="check_i" type="text" name="pv_first[uebpr][2]" value="{% if yes and ocp.uebpr[2] is defined %}{{ ocp.uebpr[2] }}{% endif %}"></p>
+                        <span style="color: darkgrey;text-align: center">Name</span>
+                    </td>
+                </tr>
+                <tr style="margin-top: 10px;">
+                    <td colspan="2">
+                        <p class="inline-block"><input class="check_i" type="radio" name="pv_first[uebpr][5]" {% if yes and ocp.uebpr[5] is defined and ocp.uebpr[5] == 1 %}checked{% endif %} value="1"></p>
+                        <p class="inline-block" style="font-size: 10px !important;;">Die elektrische Anlage entspricht den anerkannten Regeln der Technik</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p class="inline-block"><input class="check_i" type="radio" name="pv_first[uebpr][5]" {% if yes and ocp.uebpr[5] is defined and ocp.uebpr[5] == 2 %}checked{% endif %} value="2"></p>
+                        <p class="inline-block" style="font-size: 10px !important;;">Die elektrische Anlage entspricht <strong>nicht</strong> den anerkannten Regeln der Technik</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: bottom !important;min-width: 170px">
+                        <p style="width: 100%"><input style="width: 100%;" class="check_i" type="date" name="pv_first[besichtigung][adate]" value="{% if yes and ocp.besichtigung.adate is defined %}{{ ocp.besichtigung.adate }}{% endif %}"></p>
+                        <p style="text-align: center;font-size: 10px !important;">Datum</p>
+                    </td>
+                    <td style="position: relative;text-align: center">
+                        <div id="signature2Text" style="min-width: 190px;"></div>
+                        {% if pdf is defined and pdf %}
+                            <p style="border-bottom: 1px solid grey">
+                                {% if yes and ocp.anlage.signaturText[2] is defined %}
+                                    <img src="{{ ocp.anlage.signaturText[2] }}">
+                                {% endif %}
+                            </p>
+                        {% else %}
+                            <p><input id="signature2" class="check_i" type="hidden" name="pv_first[anlage][signaturText][2]" value="{% if yes and ocp.anlage.signaturText[2] is defined %}{{ ocp.anlage.signaturText[2] }}{% endif %}"></p>
+                        {% endif %}
+                        {% if pdf is not defined %}
+                            <button type="button" data-id="1"
+                                    class="backB p-0 signatur2_reset btn btn-danger btn-sm"><i class="material-icons">undo</i>
+                            </button>
+                        {% endif %}
+                        {% if pdf is defined and pdf %}
+                            <img style="position: absolute;bottom: -14px;right: 0;" src="{{ absolute_url(asset(appAssetPath~'logo/stamp-logo.png')) }}">
+                        {% endif %}
+                        <p style="font-size: 10px !important;text-align: center">Unterschrift/Prüfer<sup class="numberCircle">4</sup></p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+{% include 'offer/montage/intern/checkpage/_copyrights.html.twig' %}

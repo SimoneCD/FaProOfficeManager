@@ -1,0 +1,48 @@
+{% extends 'base_public.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .card-stats .card-body {
+            text-align: left;
+            padding: 40px;
+            font-size: large;
+        }
+    </style>
+{% endblock %}
+
+{% block body_class %}bg-image{% endblock %}
+{% block main %}
+    {% if error is defined %}
+        <div class="alert alert-danger">
+            Ein Fehler ist Aufgetreten!
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-stats" style="background-color: #ffffff9e;">
+                <div class="card-header card-header-tabs card-header-info" style="background: linear-gradient(
+60deg
+ , #26c6da,#ce713fab);">
+                    <h3 class="card-title">Angebots-Link ungültig!</h3>
+                </div>
+                <div class="card-body">
+                    <h3>Link ungültig!</h3>
+                    <p>der Angebotslink ist nicht mehr gültig.</p>
+                    <p>Bitte rufen Sie uns an, das wir Ihnen ein neues Angebot zusenden können.</p>
+                    <p>Telefon: {{ sf.service_phone }}</p>
+                    <p>E-Mail: {{ sf.email }}</p>
+                    <br>
+                    <p>Mit freundlichen Grüßen,<br>Ihr S&F Elektro Team</p>
+                </div>
+                <div class="card-footer" style="margin: 0;">
+                    <p style="color: #155265;padding: 20px 40px;">Telefon: {{ sf.service_phone }}<br>Email: {{ sf.email }}</p> <img src="{{ asset(appAssetPath~'logo/logo_dark_in.png') }}">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}

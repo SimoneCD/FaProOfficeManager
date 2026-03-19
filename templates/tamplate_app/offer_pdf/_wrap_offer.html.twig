@@ -1,0 +1,177 @@
+<style>
+    .row {
+        #margin-left: 0 !important;
+        #margin-right: 0 !important;
+    }
+</style>
+<div class="wrapper-full-page">
+    <div class="section-to-print page">
+        <div class="main-box">
+            {% include appTemplate~'offer_pdf/_header.html.twig' %}
+            {% include appTemplate~'offer_pdf/page1.html.twig' %}
+            {% include appTemplate~'offer_pdf/_footer.html.twig' %}
+        </div>
+    </div>
+    {{ save('total') }}
+    {% set page = 2 %}
+    {% set height = 906 %}
+    {% set fullHeight = height %}
+    {% set lvHeight = 160 %}
+    {% set payHeight = (156+34) %} {# 204 #}
+    {% set uebertragHeight = 30 %}
+
+    {% set countAll = (offer.wallboxProduct ? 1:0) %}
+
+    {% set onePage = 6-countAll %}
+    {% set oneMassPage = 8-countAll %}
+    {% set fullPage = 10 %}
+    {% set endPage = 7 %}
+
+    {% set complete = items|length+countAll %}
+    {% set p = ( (complete-onePage-endPage) > complete ? ((complete-onePage-endPage)*-1 > 0 ? 1 : (complete-onePage-endPage)%fullPage|round) : 0 ) %}
+    {% set pagesCount = ((1 + ((complete-onePage)/12))|round)+2 %}
+    {{ save('countAll') }}
+    {% set blockView = countAll+endPage %}
+    {% set brakeDown = true %}
+    {% set hepi = 'no' %}
+    {% if complete <= onePage %}
+        {% set blockView = countAll+onePage %}
+        {% set brakeDown = false %}
+        {% set height = fullHeight-lvHeight-payHeight-uebertragHeight %}
+        {% set hepi = '0-ok' %}
+    {% endif %}
+    {% set datum = 'now'|date_modify('+1 month')|date('M Y') %}
+    {% set break = false %}
+    {% set doneItems = [] %}
+
+    {% for i in 0..pagesCount %}
+        {% if not break %}
+            <div class="section-to-print page">
+                <div class="main-box p-0 m-0">
+                    {% include appTemplate~'offer_pdf/_header.html.twig' %}
+                    {% include appTemplate~'offer_pdf/_line-lv.html.twig' %}
+                    {% if loop.index == 1 %}
+                        {% include appTemplate~'offer_pdf/_allgemeine_baubeschreibung.html.twig' %}
+                    {% endif %}
+                    {{ restore('total') }}
+                    {% if brakeDown and complete > countAll+endPage and loop.index > 1 %}
+                        {% if complete > countAll+fullPage %}
+                            {% set blockView = countAll+fullPage %}
+                            {% if loop.index > 1 %}
+                                {% set hepi = '1-ok' %}
+                                {% set height = fullHeight-uebertragHeight %}
+                            {% endif %}
+                        {% else %}
+                            {% set blockView = countAll+endPage %}
+                            {% if loop.index > 1 %}
+                                {% set height = fullHeight-uebertragHeight %}
+                                {% set hepi = '2-all-ok' %}
+                            {% endif %}
+                        {% endif %}
+                    {% elseif brakeDown and blockView > complete and blockView != countAll+onePage %}
+                        {% if loop.index == 1 and blockView > countAll+onePage%}
+                            {% set blockView = countAll+oneMassPage %}
+                            {% set height = fullHeight-payHeight-lvHeight-uebertragHeight %}
+                            {% set hepi = '3-ok' %}
+                        {% else %}
+                            {% set blockView = countAll+oneMassPage %}
+                            {% set height = fullHeight-lvHeight-uebertragHeight %}
+                            {% set hepi = '4-?' %}
+                        {% endif %}
+                    {% elseif brakeDown and complete == countAll+endPage %}
+                        {% if complete-(countAll+oneMassPage) == 0 %}
+                            {% set blockView = complete %}
+                            {% set height = (fullHeight-payHeight)-uebertragHeight %}
+                            {% set hepi = '5-xx' %}
+                        {% elseif complete-(countAll+oneMassPage) > 0 %}
+                            {% set blockView = complete-1 %}
+                            {% set height = fullHeight-uebertragHeight %}
+                            {% set hepi = '6-ok' %}
+                        {% else %}
+                            {% set blockView = complete-1 %}
+                            {% set height = fullHeight-uebertragHeight %}
+                            {% set hepi = '7-xx' %}
+                        {% endif %}
+                    {% elseif brakeDown and complete > countAll+endPage %}
+                        {% set blockView = countAll+endPage %}
+                        {% if loop.index > 1 %}
+                            {% if complete > countAll+fullPage %}
+                                {% set blockView = countAll+fullPage %}
+                                {% set height = fullHeight-uebertragHeight %}
+                                {% set hepi = '8-' %}
+                            {% else %}
+                                {% set hepi = '9-' %}
+                                {% set height = fullHeight-payHeight-uebertragHeight %}
+                            {% endif %}
+                        {% else %}
+                            {% set blockView = countAll+oneMassPage %}
+                            {% set height = fullHeight-lvHeight-uebertragHeight %}
+                            {% set hepi = '10+-ok' %}
+                        {% endif %}
+                   {% elseif brakeDown %}
+                        {% set blockView = countAll+endPage %}
+                        {% if complete-blockView <= blockView %}
+                            {% set height = fullHeight-payHeight-uebertragHeight %}
+                            {% set hepi = '11-ok' %}
+                        {% endif %}
+                    {% endif %}
+                    <div class="row hBox headBoxData page-price-bau p-0 m-0" style="height:{{ height }}px !important;">
+                        <div class="col-12 m-0 p-0">
+                            <table cellspacing="0" class="p-0 m-0 table product_list_table" style="border-bottom: none !important;">
+                                {% include appTemplate~'offer_pdf/components/_product_data_table_header.html.twig' with {'blockView': blockView} %}
+                                {% set style = 'color: '~sfColorDark~';background-color: #fff;' %}
+                                {% if loop.index == 1 %}
+                                    {% include appTemplate~'offer_pdf/components/_product_data_main_product.html.twig' %}
+                                {% else %}
+                                    {% include appTemplate~'offer_pdf/components/_product_data_next_line.html.twig' with {'total':total, 'page': page-1} %}
+                                {% endif %}
+                                {% for key, offerItem in items %}
+                                    {% if offerItem.id not in doneItems  %}
+                                        {% if offerItem.description|length > 55 %}
+                                            {% set lines =  (offerItem.description|length/55)|round(0, 'ceil') %}
+                                        {% else %}
+                                            {% set lines = 1 %}
+                                        {% endif %}
+                                        {% if lines > 7 %}
+                                            {% set blockView = blockView - 3 %}
+                                        {% elseif lines > 5 %}
+                                            {% set blockView = blockView - 2 %}
+                                        {% elseif lines > 3 %}
+                                            {% set blockView = blockView - 1 %}
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if offerItem.id not in doneItems and countAll < blockView %}
+                                        {% set countAll = countAll+1 %}
+                                        {% include appTemplate~'offer_pdf/components/_product_data_row.html.twig' with {'hpi': hepi, 'countAll': countAll, 'offerItem': offerItem} %}
+                                        {% set doneItems = doneItems|merge([offerItem.id]) %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if complete <= blockView %}
+                                    {% include appTemplate~'offer_pdf/components/_product_data_end.html.twig' %}
+                                    {% set break = true %}
+                                {% else %}
+                                    {% include appTemplate~'offer_pdf/components/_product_data_between.html.twig' %}
+                                {% endif %}
+                            </table>
+                        </div>
+                    </div>
+                    {% if break %}
+                        {% include appTemplate~'offer_pdf/_line-pay_plan.html.twig' %}
+                        {% include appTemplate~'offer_pdf/_zahlungsplan.html.twig' %}
+                    {% endif %}
+                    {% include appTemplate~'offer_pdf/_seite.html.twig' with {'page': page,'text':(break ? 'payToOrder'|trans : '')} %}
+                    {% include appTemplate~'offer_pdf/_footer.html.twig' %}
+                </div>
+            </div>
+            {% set page = page+1 %}
+        {% endif %}
+    {% endfor %}
+
+    <div class="section-to-print page">
+        <div class="main-box m-0 p-0">
+            {% include appTemplate~'offer_pdf/_header.html.twig' %}
+            {% include appTemplate~'offer_pdf/page_footer.html.twig' with {'page':page}  %}
+            {% include appTemplate~'offer_pdf/_footer.html.twig' %}
+        </div>
+    </div>
+</div>

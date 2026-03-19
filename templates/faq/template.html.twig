@@ -1,0 +1,16 @@
+<div data-popover-target="card">
+    <div class="card card-loaded" style="z-index:999;margin:0;width: 300px;position: absolute;top: 0;left: 46px">
+        <div class="card-body text-left" style="position: relative;cursor: auto;border: 1px solid #019997;border-radius: 14px;">
+            {{ (faq.id ? faq.title : '') }}
+            <div style="color:{{ sfColor }};position: absolute;right: 30px;top:4px;cursor: pointer;"
+                 data-faq-id-param="faq_editor_{{ faq.id ?? app.request.request.get('id') }}"
+                 data-faq-lang-param="{{ app.request.locale }}"
+                 data-faq-color-param="{{ sfColor}}"
+                 data-action="click->faq#editFaq"><i class="material-icons">edit</i></div>
+            <div style="position: absolute;right: 4px;color:lightgrey;top:4px;cursor: pointer;"
+                 data-action="click->faq#close"><i class="material-icons">disabled_by_default</i></div>
+            {% include 'faq/_'~template~'.html.twig' %}
+        </div>
+    </div>
+    {% include 'faq/_modal.html.twig' %}
+</div>

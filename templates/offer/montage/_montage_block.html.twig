@@ -1,0 +1,89 @@
+{% set class = '' %}
+{% set icon = '' %}
+{% if offer.inquiry is not null %}
+    {% set today = false %}
+    {% set tomorrow = false %}
+    {% set color = sfColor %}
+    {% if today == false %}
+        {% set className = 'box_name_color' %}
+    {% else %}
+        {% set className = 'box_name_color' %}
+    {% endif %}
+    <div class="data_block">
+        <div data-list-target="item"
+             {% if offer.order %}data-order="{{ offer.order.id }}"{% endif %}
+             data-offer="{{ offer.id }}"
+             id="customer_j_{{ offer.id }}"
+             class="offer_box customer_offer {% if today %}active_box active_but_icon {% endif %} offers_numbers offer_number{{ offer.customer.customerNumber }} card-box card {{ class }}"
+             style="border:none;border-left: 5px solid {% if today %}red{% else %}{{ color }}{% endif %};">
+             <h4 style="font-size: 1rem" {{ stimulus_controller('offer', {offerId: offer.id, offerNumber: offer.number}) }}>
+                {# Angebots SubCategory #}
+                <div class="w-100 offer_plus_box_block" style="font-size: 0.9rem;color: {{ sfColorText }} !important;">{{ getOfferTitle(offer.id, true, true)|raw -}}
+                    <br><span class="customer_user_box_address">{{ offer.stationAddress }}<br>{{ offer.stationZip }}</span>
+                </div>
+                {# Angebots Nummer #}
+                <div class="offer_number_box w-25">
+                    <button data-offer="{{ offer.id }}" class="box-button text pointer_number" style="display:flex;" {{ stimulus_action('offer', 'viewBox') }}>
+                        {{ offer.number }}
+                    </button>
+                    {% if app.user.id != offer.user.id and (app.request.query.get('user', 'all') == 'all' or app.request.query.get('search', '') != '') %}
+                    <span{% if today %} style="color: {{ sfColorText }};"{% endif %}>&nbsp;{{ offer.user.username }}</span>
+                    {% endif %}
+                </div>
+                {% set foo = offer.number|split('.') %}
+                {% set cal = offer.customer.offers|length %}
+                <div class="active_link w-100 small text-right {{ className }}">
+                    <p class="w-100 clearfix m-0" style="font-weight: bold;font-size: 0.9rem">{{ offer.customer.sex|trans }} {{ offer.customer.fullNormalName }}</p>
+                    {% if offer.customer.companyName %}
+                        <p class="w-100 clearfix m-0">{{ offer.customer.companyName }}</p>
+                    {% endif %}
+                </div>
+            </h4>
+            <div class="row d-none text booking_row_block" id="non-kj{{ offer.id }}">
+                <div class="col-md-12" style="padding: 0 4px;background-color: #fff;">
+                    <div class="" style="color: {{ color }}">
+                            <p class="header_title mb-0" style="font-weight: bold;color:#000;">{{ getOfferTitle(offer.id, false, true)|raw }}</p>
+                            <div class="mb-2 header_text boxname" style="color:#000;">{{ getOfferName(offer.id, false, true)|raw }}</div>
+                    </div>
+                    <hr>
+                    {% include 'offer/components/_email_phone_block.html.twig' with {'noCall':true} %}
+                    <hr>
+                    <div class="block_box">
+                        <div class="row">
+                            <div class="col-4"><small>{{ 'w.appointment'|trans }}:</small></div>
+                            <div class="col-8"><strong>{{ part['k']|raw }}</strong></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4"><small>{{ 'w.editor'|trans }}:</small></div>
+                            <div class="col-8">{{ offer.user.username }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4"><small>{{ 'w.projectManager'|trans }}:</small></div>
+                            <div class="col-8">{% if offer.monteur %}{{ offer.monteur.username }}{% endif %}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4"><small>{{ 'w.team'|trans }}:</small></div>
+                            <div class="col-8">
+                                {% if offer.projectTeams %}
+                                    {% for pt in offer.projectTeams %}
+                                        {{ pt.category.name }} {{ pt.name }}<br>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="block_box">
+                        <small>{{ 'o.lastChanges'|trans }}: <span class="work_on">{% if offer.statusDate %}{{ offer.statusDate|date('d.m') }}{% endif %}</span></small>
+                    </div>
+                </div>
+
+                <div class="col-md-12 text-center">
+                    <form action="{{ path('sf_montage_offer', {'id':offer.id}) }}">
+                    <button class="btn btn-primary btn-sm w-100" type="submit" style="color: #fff;">{{ 'm.toMassProtocoll'|trans }}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+ {% endif %}

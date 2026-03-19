@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ user.fullName }}{% endblock %}
+
+{% block main %}
+
+    <div class="row" style="max-width: 1024px">
+        <div class="col-md-12">
+            <a href="{{ path('backend_user_index') }}"><i class="material-symbols-outlined">list</i></a>&nbsp;&nbsp;
+            <a href="{{ path('backend_user_edit', {'id': user.id}) }}"><i class="material-symbols-outlined">edit</i></a>
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+{#                <a href="javascript:document.getElementById('del_user').click();" style="color:#c50d0d"><i class="material-symbols-outlined">delete</i></a>#}
+{#                <form style="display: none" method="post" action="{{ path('user_delete', {'id': user.id}) }}" onsubmit="return confirm('Mitarbeiter?');">#}
+{#                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">#}
+{#                    <button id="del_user" class="btn">Delete</button>#}
+{#                </form>#}
+            {% endif %}
+       </div>
+    </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">{{ user. }}</h4>
+            </div>
+            <div class="card-body">
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ user.id }}</td>
+            </tr>
+            <tr>
+                <th>FullName</th>
+                <td>{{ user.fullName }}</td>
+            </tr>
+            <tr>
+                <th>Username</th>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Roles</th>
+                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,173 @@
+<div id="section-to-print" style="padding:0;width: 1024px">
+    <div class="main-box p-0 m-0" style="padding:0;">
+        {% include appTemplate~'invoice/pdf_individual/_header.html.twig' with {'inviceNumber': rechNr} %}
+        {% include appTemplate~'invoice/pdf_individual/_head_line.html.twig' with {'type': type} %}
+        {% set price = invoice.pos0Price ?? 0 %}
+        {% set rprice = price %}
+        {% if invoice.sendDate and app.request.query.get('load') is null %}
+            {#  #}
+            {% include appTemplate~'invoice/pdf_individual/_anrede.html.twig' with {'customer':invoice.customer,'inviceNumber': invoice.number} %}
+
+            {% include appTemplate~'invoice/pdf_individual/_content.html.twig' %}
+
+            {% if invoice.context|length and invoice.context['posPrices'] is defined and invoice.context['posPrices']|length <= 3 %}
+                {% include appTemplate~'invoice/pdf_individual/_mfg.html.twig' %}
+            {% else %}
+                <br><br>
+            {% endif %}
+            {% include appTemplate~'invoice/pdf/_page.html.twig' with {'page': '1'~((invoice.context|length and invoice.context['posPrices'] is defined and invoice.context['posPrices']|length > 3) ? '/2':'')} %}
+            {% include appTemplate~'offer_pdf/_footer.html.twig' %}
+            {% if invoice.context|length and invoice.context['posPrices'] is defined and invoice.context['posPrices']|length > 3 %}
+                    </div>
+                </div>
+                <div id="section-to-print p-0 m-0" style="margin-top:12px;font-size: 1.1rem">
+                    <div class="main-box p-0 m-0">
+                        {% include appTemplate~'invoice/pdf_individual/_header.html.twig' %}
+                        {% include appTemplate~'invoice/pdf_individual/_head_line.html.twig' with {'type': type} %}
+                        <div class="p-0 m-0" style="background-color:#fff;height: 864px;">
+                            {% include appTemplate~'invoice/pdf_individual/_anrede_pos.html.twig' with {'customer': invoice.customer} %}
+                            {% set price = invoice.pos0Price??0 %}
+                            {% include appTemplate~'invoice/pdf_individual/_content_pos.html.twig' %}
+                            {% include appTemplate~'invoice/pdf_individual/_mfg.html.twig' %}
+                        </div>
+                        {% include appTemplate~'invoice/pdf/_page.html.twig' with {'page': '2/2'} %}
+                        {% include appTemplate~'offer_pdf/_footer.html.twig'  %}
+            {% endif %}
+        {% else %}
+            {{ form_start(form) }}
+            {% include appTemplate~'invoice/_anrede_individual.html.twig' with {'inviceNumber': invoice.number} %}
+
+            <div style="padding: 30px 48px;">
+                <table class="table table-borderless addPriceTable" style="margin-top:20px;border: none">
+                    <tr>
+                        <th style="width: 50px">{{ 'w.posShort'|trans }}</th>
+                        <th style="width: 100px">{{ 'w.date'|trans }}</th>
+                        <th>{{ 'w.description'|trans }}</th>
+                        <th class="text-right" style="width: 150px">{{ 'w.price'|trans }}</th>
+                    </tr>
+                    <tr>
+                        <td>001</td>
+                        <td>{{ form_widget(form.pos0Date) }}</td>
+                        <td>{{ form_widget(form.pos0Text) }}</td>
+                        <td class="text-right">
+                            <div class="input-group">
+                                {{ form_widget(form.pos0Price, {'attr':{'data-pos':'000'}}) }}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>002</td>
+                        <td>{{ form_widget(form.pos1Date) }}</td>
+                        <td>{{ form_widget(form.pos1Text) }}</td>
+                        <td class="text-right">
+                            <div class="input-group">
+                                {{ form_widget(form.pos1Price, {'attr':{'value': invoice.pos1Price, 'data-pos':'001'}}) }}
+                            </div>
+                        </td>
+                    </tr>
+                    {% set price = price+(invoice.pos1Price??0) %}
+                    <tr>
+                        <td>003</td>
+                        <td>{{ form_widget(form.pos2Date) }}</td>
+                        <td>{{ form_widget(form.pos2Text) }}</td>
+                        <td class="text-right">
+                            <div class="input-group">
+                                {{ form_widget(form.pos2Price, {'attr':{'data-pos':'002'}}) }}
+                            </div>
+                        </td>
+                    </tr>
+                    {% set price = price+(invoice.pos2Price??0) %}
+                    {{ save('price') }}
+                    {% if invoice.context and invoice.context['posPrices'] is defined %}
+                        {% include appTemplate~'invoice/_key_value_input_pos.html.twig' with {
+                            'context' : invoice.context,
+                            'key' : 'invoice_individual',
+                        } %}
+                    {% endif %}
+                    {{ restore('price') }}
+
+                    {# <tr> #}
+                    {# <td><strong>004</strong></td> #}
+                    {# <td>{{ form_widget(form.pos3Date) }}</td> #}
+                    {# <td>{{ form_widget(form.pos3Text) }}</td> #}
+                    {# <td class="text-right"> #}
+                    {# <div class="input-group"> #}
+                    {# {{ form_widget(form.pos3Price, {'attr':{'data-pos':'003'}}) }} #}
+                    {# </div> #}
+                    {# </td> #}
+                    {# </tr> #}
+                    <tr>
+                        <td colspan="4" class="text-right">
+                            <div class="input-group" style="text-align: right;display: block;">
+                                <button type="button" class="addPrice btn btn-light"><span
+                                            class="material-symbols-outlined">add</span></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr style="border-top: 1px solid lightgrey">
+                        <td style="border: none"></td>
+                        <td style="border: none"></td>
+                        <td style="border: none" class="text-right">{{ 'w.netto'|trans }}:</td>
+                        <td id="calc_netto" class="text-right">{{ price|number_format(2,',','.') }} €</td>
+                    </tr>
+                    {% set tax = 0 %}
+                    {{ save('tax') }}
+                    {% include 'app/components/_taxCalc.html.twig' with {'price':price, 'tax':tax} %}
+                    {{ restore('tax') }}
+                    <tr style="border-top: none">
+                        <td style="border: none"></td>
+                        <td style="border: none"></td>
+                        <td style="border: none" class="text-right">
+                            {# <input type="hidden" name="apptax" id="apptax" value="{{ tax }}"> #}
+                            <select class="changeTax" name="invoice_individual[context][solar]">
+                                <option{% if invoice.context['solar'] == appTax %} selected{% endif %}
+                                        value="{{ appTax }}">{{ 'w.procentTax'|trans({'%procent%':appTax}) }}</option>
+                                <option{% if invoice.context['solar'] == 7 %} selected{% endif %}
+                                        value="7">{{ 'w.procentTax'|trans({'%procent%':'7'}) }}</option>
+                                <option{% if invoice.context['solar'] == 0 %} selected{% endif %}
+                                        value="0">{{ 'w.procentTax'|trans({'%procent%':'0'}) }}</option>
+                            </select>{% if tax == 0 %}<sup>*</sup>{% endif %}</td>
+                        <td id="calc_tax" class="text-right">{{ tax|number_format(2,',','.') }} €</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-right"><strong>{{ 'i.toPayBruttoName'|trans }}</strong></td>
+                        <td class="text-right"><strong id="calc_brutto_all">{{ (price+tax)|number_format(2,',','.') }}
+                                €</strong></td>
+                    </tr>
+                    {% if tax == 0 %}
+                        <tr>
+                            <td colspan="4" class="text-left">{{ 'zeroTaxHelp'|trans }}</td>
+                        </tr>
+                    {% endif %}
+                </table>
+            </div>
+
+            {% include appTemplate~'invoice/pdf_individual/_mfg.html.twig' with {'preview':1} %}
+            <div class="text-left" style="padding-left: 40px;">
+                <p style="margin-bottom:2px;color: #0a7291; font-weight: 800">{{ form_widget(form.leistung) }}</p>
+            </div>
+            {% include appTemplate~'invoice/pdf/_page.html.twig' with {'page': 1} %}
+            {% include appTemplate~'offer_pdf/_footer.html.twig' %}
+            {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+                <div class="text-right" style="padding-right: 0;">
+                    <p class="p-3 text-center" style="font-weight: bold;color: {{ sfColorDark }}">{{ 'Rechnung'|trans }}
+                        :</p>
+                    <div class="danger pl-3"
+                         style="background-color: {{ sfColorForm }};color: #fff;border: 1px solid #fff;padding: 10px;">
+                    <textarea class="form-control" style="height: 160px;" id="invoice_mail_text"
+                              name="invoice_individual[context][mailText]">
+                     {%- if invoice.context is not null and invoice.context['mailText'] is defined -%}
+                         {{- invoice.context['mailText']|raw -}}
+                     {%- endif -%}
+                    </textarea>
+                    </div>
+                    {{ 'i.send'|trans }} <input id="soll_send" title="senden" type="checkbox" name="send" value="1">
+                    <button id="id_senden" type="submit" class="btn btn-danger">{{ 'w.save'|trans }}</button>
+                </div>
+                {{ form_widget(form._token) }}
+                {{ form_end(form, {'render_rest':false}) }}
+            {% endif %}
+        {% endif %}
+
+    </div>
+</div>

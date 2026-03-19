@@ -1,0 +1,44 @@
+<div class="form-group row">
+    {{- restore('appAnswerChecked') }}
+    <label class="col-md-{{ col1 }} col-form-label">{{ question.name }}</label>
+    {%- set help = '' %}
+    <div class="col-md-{{ col2 }} m-0 p-0">
+        <div class="row m-0 p-0">
+        {% set innis = [] %}
+        {% for answer in question.offerAnswers|sort((a, b) => a.sort <=> b.sort) %}
+            {% set selected = (context and context[aid] is defined and context[aid]['questions'][question.id]['answer'] is defined and context[aid]['questions'][question.id]['answer']['n'] is defined and context[aid]['questions'][question.id]['answer']['n']  == answer.id) ? true : false %}
+            {% if selected and answer.dependencies is not null %}
+                {% set appAnswerChecked = appAnswerChecked|merge(answer.dependencies) %}
+            {% endif %}
+            <div class="form-check{% if answer.image %} pl-0{% else %}-inline answer_content p-0{% endif %} m-0">
+                <input id="ra-{{ answer.id }}" {{ selected ? 'checked' : '' }} type="radio" data-class="s-{{ question.id }}"
+                       data-question="{{ question.id }}"
+                       data-help-dependencies="{% for answer in question.offerAnswers %}{%- if answer.helptext %}{{ answer.id }}{% if loop.index != question.offerAnswers|length %}-{% endif %}{% endif %}{% endfor %}"
+                       data-dependencies="{% for answer in question.offerAnswers %}{%- if answer.dependencies is not null %}{{ answer.dependencies|join('-') }}-{% endif %}{% endfor %}"
+                       class="{% if answer.image %}ml-0 {% endif %}condition-change-check form-check-radio pl-0" style="width: 1em;"
+                       name="offer_option[{{ question.id }}]" {% if answer.helptext %}data-help="{{ answer.id }}"{% endif %}{% if answer.dependencies|length %}
+                    data-questions="{{ answer.dependencies|join(':') }}"{% endif%}
+                       value="{{ answer.id }}" />
+                {% set innis = innis|merge([answer.id]) %}
+                {% include 'offer/types/forms/components/_answer_image.html.twig' %}
+                {% if answer.helptext %}
+                    {% set help = help~'<div id="help-'~answer.id~'" class="help-'~question.id~' answer-helper" style="display:none">'~answer.helptext~'</div>' %}
+                {% endif %}
+            </div>
+        {% endfor %}
+            <div class="answer_content form-check-inline pl-0">
+                {% set selected = context and context[aid] is defined and context[aid]['questions'][question.id]['answer']['np'] is defined and context[aid]['questions'][question.id]['answer']['np'] ? 'checked' : '' %}
+                {% set value = context and context[aid] is defined and context[aid]['questions'][question.id]['answer']['np'] is defined and context[aid]['questions'][question.id]['answer']['np']  ? context[aid]['questions'][question.id]['answer']['np'] : '' %}
+                <input id="ra-{{ question.offerAnswers|length }}" {{ selected }} type="radio" data-class="s-{{ question.id }}"
+                   data-question="{{ question.id }}"
+                   data-help-dependencies=""
+                   data-dependencies=""
+                   class="form-check-input" style="width: 1em;"
+                   name="offer_option[{{ question.id }}]"
+                   value="plus" /><input class="answer_content_input form-control inline_text_input" style="margin-left: 0;" type="text" name="offer_option_plus[{{ question.id }}]" value="{{ value }}">
+            </div>
+        </div>
+        <div class="app_helpers app_helpers-{{ question.id }} col-sm-12"></div>
+    </div>
+</div>
+{{ save('appAnswerChecked') }}

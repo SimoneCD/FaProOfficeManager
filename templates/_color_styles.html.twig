@@ -1,0 +1,86 @@
+<style>
+    body {
+        color: {{ sfColorText }};
+    }
+    .box_boxHeader, .box_boxFooter {
+        background-color: #fff;
+        color: {{ sfColor }};
+    }
+    .dot, .red_dot {
+        background-color: #000;
+        color: #fff;
+    }
+    .form-control, .search_input {
+        background-color: {{ sfColorForm }} !important;
+    }
+    textarea.form-control {
+        min-height: 60px;
+    }
+    .offer_box {background-color: #efefef;color: #383838;}
+    /*.offer_box_pre {color: #fff;background-color: {{ sfColorLight }};}*/
+
+    .offer_box_pre {
+        color: #383838;
+        background-color: #e4e9df;
+    }
+    .active_box {
+        border: none;
+        border-left: 5px solid {{ sfColor }};
+        height: auto!important;
+        background-color: #fff;
+    }
+    .btn.btn-default.focus, .btn.btn-default:focus, .btn.btn-default:hover, .btn.focus, .btn:focus, .btn:hover {
+        background-color: {{ sfColorDark }};
+        border-color: {{ sfColor }};
+        color: #fff;
+    }
+    .chat_dot {background-color: {{ sfColor }};}
+    a, h2 .a {color: {{ sfColorDark }};}
+    .text_dark, a:hover, .form-check, label, legend {color: {{ sfColorDark }};}
+    .a_active {font-weight: bold;color: {{ sfColor }} !important;}
+    .box_name_color, .box_name_color a, .btn, .btn-light {color: {{ sfColorDark }};}
+    .box_name_color a:hover,.btn-light:hover {background-color:#fff;color: {{ sfColor }};}
+    .box_name_color_active {color: #000;}
+    .box_name_color_active a {padding-top: 0}
+    .offer_box_pre .box_name_color_active {color: {{ sfColorDark }};}
+    .offer_box_pre .offer_plus_box_block span:first-child {color: {{ sfColorDark }};}
+    .btn.btn-primary{background-color: {{ sfColorDark }};border-color: {{ sfColorDark }};color: #fff;box-shadow: none;}
+    .btn.btn-primary:hover{background-color: {{ sfColorDark }};border-color: {{ sfColor }};color: #fff;}
+    .btn.btn-default {background-color: {{ sfColor }};border-color: {{ sfColorDark }};color: #fff;box-shadow: none;}
+    .btn.btn-default:hover {background-color: {{ sfColorDark }};border-color: {{ sfColor }};color: #fff;}
+
+    .content {
+        background: {{ sfBG }};
+    }
+    #timetable, #timetable form {
+        background: {{ sfBG }};
+        border: none;
+    }
+    .nav-nab {
+        padding: 0 0 0 50px !important;
+        background-color: {{ sfBG }};
+    }
+    .navigator {
+        background-color: #fff !important;
+    }
+    .search_icon, .search_icon i  {
+        background-color: {{ sfColor }} !important;
+        color: #fff !important;
+    }
+    .customer_user_box_address {
+        color: #000 !important;
+        font-size: 0.8rem;
+    }
+    .active_box .customer_user_box_address {
+        color: #000 !important;
+        font-size: 0.8rem;
+    }
+    .offer_block_user_button {
+        background-color: #3d3d3d !important;
+        color: #fff !important;
+    }
+    a.admin_plus {
+        background-color: {{ sfColor }};
+        border: 2px solid {{ sfColorDark }};
+    }
+</style>

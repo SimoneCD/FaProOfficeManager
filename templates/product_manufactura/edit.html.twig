@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Hersteller bearbeiten' |trans}} - {{ sf.name }}{% endblock %}
+
+{% block main %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">{{ 'Hersteller bearbeiten' |trans}}</h4>
+            </div>
+            <div class="card-body table-responsive">
+                {{ include('product_manufactura/_form.html.twig', {'button_label': 'Update'}) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 text-center">
+        {{ include('product_manufactura/_delete_form.html.twig') }}
+    </div>
+</div>
+{% endblock %}

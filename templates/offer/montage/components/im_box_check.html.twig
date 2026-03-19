@@ -1,0 +1,11 @@
+<div class="gal-{{ img.id }}">
+    <img class="compo" src="{{ asset(appAssetPath~'uploads/'~offer.id~'/'~img.filename) }}" alt="{{ img.filename }}">
+    <div style="position: absolute;bottom: 0;right: 0" class="desc-{{ img.id }}">
+        <button title="Doppelklicken zum Löschen" type="button"
+                data-loop-id="{{ imagesCount }}"
+                data-image-id="{{ img.id }}"
+                data-url="{{ path('montage_image_remove', {'id': img.id}) }}"
+                data-action="dblclick->upload#remove"
+                class="p-1 btn btn-danger btn-xs"> x </button>
+    </div>
+</div>

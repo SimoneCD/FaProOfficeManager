@@ -1,0 +1,13 @@
+# see https://symfony.com/doc/current/reference/configuration/framework.html
+framework:
+  default_locale: '%locale%'
+  http_client:
+    scoped_clients:
+      daa_api:
+        base_uri: 'https://www.daa.net/api/v2/leads/bought/'
+        # HTTP Basic authentication
+        auth_basic: ''
+  translator:
+    default_path: '%kernel.project_dir%/translations/'
+    fallbacks:
+      - 'en'

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'oc.new'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% include 'backend/offer_category/_style.html.twig' %}
+    <style>
+        .cropper-container {width: auto !important;}
+        img {display: block;max-width: 100%;}
+    </style>
+{% endblock %}
+{% block main %}
+    {% include 'backend/components/_menu.html.twig' with {
+        'listLi': {'n':'o.categories'|trans,'k':true},
+        'categoryLi': {'n':('oc.new'|trans),'i':'add_circle_outline'}
+    } %}
+<div id="backend_form">
+    {{ include('backend/offer_category/_form.html.twig') }}
+</div>
+{% endblock %}

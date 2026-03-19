@@ -1,0 +1,23 @@
+<div class="row headBox headBoxSalutation page-wellcome m-0 " style="display:block;padding-top:30px !important;height: auto !important;padding-right: 0 !important;height: auto !important;">
+    <div class="col-8 py-0 m-0 pr-4 pl-0">
+        <div class="contactPerson px-0 pt-0 pb-0 m-0" style="display: inline-block">
+            <h5><strong>{% if customer.companyName == '' %}{{ customer.sex|trans }} {% endif %} {{ customer.fullName }},</strong></h5>
+            <p style="margin-bottom: 8px;">{{ customer.address }}</p>
+            <p style="margin-bottom: 8px;">{{ customer.zip }} {{ customer.city }}</p>
+            <p style="margin-bottom: 8px;"><img style="width: 14px;" src="{{ absolute_url(asset('svgs/black/email.png')) }}"> {{ customer.email }}</p>
+{#            <p style="margin-bottom: 8px;"><img style="width: 14px;" src="{{ asset('svgs/black/phone.png') }}"> {{ customer.phone }}</p>#}
+            <br>
+            <p class="mb-2">
+                <strong>{% include appTemplate~'pdf/_salutation.html.twig' with {'customer': customer} %}</strong>
+            </p>
+            {{ invoice.text|raw }}
+        </div>
+    </div>
+
+
+    <div class="col-4 p-0 m-0" style="padding-left: 12px !important;">
+        <div class="contactPerson contactPerson2 p-0 m-0">
+            {% include appTemplate~'pdf/individual/_company_in_anrede.html.twig' %}
+        </div>
+    </div>
+</div>

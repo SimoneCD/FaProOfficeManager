@@ -1,0 +1,39 @@
+<div class="row headBox m-0" style="background: {{ sfColorDark }};color: #ffffff;overflow: hidden">
+    <div class="text-left pl-0 pr-0 pt-1 pb-0 m-0 col-3" style="position:relative;overflow: visible">
+        <h3 class="header_title_small">
+            <strong style="color: #fff;font-size: 20px;">{% if type in ['part'] %}{{ 'w.invoicePart'|trans }}{% elseif type in ['part-plus'] %}Teilrechnung{% else %}{{ 'w.invoiceRest'|trans }}{% endif %}</strong>
+        </h3>
+        <p class="header_preview" style="position: absolute;top: 60px;width: 400px; left: 0;">
+            <span>{{ 'w.short.invoiceNr'|trans }}: {% if type == 'part' %}{{ offer.number }}.1{% else %}{{ invoice.number }}{% endif %}</span>
+        </p>
+    </div>
+    <div class="text-center px-0 pb-0 m-0 col-6" style="padding-top: 0;">
+        <p class="header_title pt-1 px-2 pb-0">
+            <strong style="color: #fff;font-size: 16px;">
+            {%- if offer.option.context['header']['title'] is defined -%}
+                {{ offer.option.context['header']['title'] }}
+            {%- else -%}
+                {{ offer.subCategory.name }}
+            {%- endif %}
+            </strong>
+        </p>
+        <div class="header_text px-0 m-0" style="font-size:16px;font-weight:normal;padding-top: 6px;color: #fff;">
+            {%- if offer.option.context['header']['text'] is defined -%}
+                {{ offer.option.context['header']['text']|raw }}
+            {%- else -%}
+                {{ getOfferName(offer.id, false, true)|raw }}
+            {%- endif %}
+        </div>
+    </div>
+    <div class="text-left col-3 px-0 header-logo" style="margin-left: -12px;">
+        {% include appTemplate~'_pdf_logo.html.twig' with {'logo': getImgContent(asset(appAssetPath~'logo/logo_in.png'))} %}
+
+        <p class="m-0 pt-1 pl-0">
+            {% if invoice.sendDate is not null %}
+                <span>{{ sf.city }} | {{ invoice.sendDate|date('d.m Y') }}</span>
+            {% else %}
+                <span>{{ sf.city }} | {{ 'now'|date('d.m Y') }}<br></span>
+            {% endif %}
+        </p>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+framework:
+  messenger:
+    default_bus: event.bus
+    buses:
+      message.bus.default: ~
+      event.bus:
+        default_middleware: allow_no_handlers
+
+    failure_transport: failed
+
+    transports:
+      # https://symfony.com/doc/current/messenger.html#transport-configuration
+      async: '%env(MESSENGER_TRANSPORT_DSN)%'
+      failed: 'doctrine://default?queue_name=failed'
+      # sync: 'sync://'
+
+    routing:
+      App\Message\ChatMessage: async            #App\Message\Event\SendActiveOfferMessage: async
+      #App\Message\Event\TaskMessage: async
+      #App\Message\Event\TaskCreateEvent: async
+      # Route your messages to the transports
+      # 'App\Message\YourMessage': async
+
+# when@test:
+#    framework:
+#        messenger:
+#            transports:
+#                # replace with your transport name here (e.g., my_transport: 'in-memory://')
+#                # For more Messenger testing tools, see https://github.com/zenstruck/messenger-test
+#                async: 'in-memory://'

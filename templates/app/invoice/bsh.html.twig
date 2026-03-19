@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rechnungs - Übersicht{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .text-center{width: 30px;}
+        .icon_head {
+            padding: 2px 10px;
+            border: 1px solid white;
+        }
+        .icon_head2 {
+            padding: 2px 10px;
+            border: 1px solid #20b6c9;
+        }
+        .filter_view{cursor: pointer;
+            color: rgb(14 98 114);
+            background-color: #b5e5eb}
+    </style>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            $('.infoni').on('click', function () {
+                let id = $(this).attr('data-id');
+                $('#'+id).toggle();
+            });
+            $('.infoniAll').on('click', function () {
+                let id = $(this).attr('data-id');
+                $('.infonis').toggle();
+            });
+
+            $(document).on('click', '.filter_view', function (e){
+                $('.filter_view').css('color','rgb(14 98 114)');
+                $('.filter_view').css('background-color','#b5e5eb');
+                let all = $(this).attr('data-all');
+                $(this).css('color','#62ff45');
+                $(this).css('background-color','rgb(11 91 106)');
+                if (all === 'all') {
+                    $('.offers_views').show();
+                    $('.infonis').hide();
+                } else {
+                    $('.offers_views').hide();
+                    $('.'+all+'_view').show();
+                    $('.infonis').hide();
+                }
+
+            });
+            {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}
+            $(document).on('change', '.user_inquiry', function (e){
+                let url = $(this).attr('data-action');
+                url = url.replace('uuuu',$(this).val())
+                $.ajax({
+                    'url': url,
+                    'data': {},
+                    'method':'post',
+                    'success': function (ax) {
+                        if (ax === true) {
+                            //window.location.reload();
+                        }
+                    }
+                });
+            });
+            {% endif %}
+        });
+    </script>
+{% endblock %}
+{% block main %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary" style="background-color: #d6040d;">
+                <h4 class="card-title"><strong>BSH Rechnungs-Übersicht</strong> <a href="{{ path('invoice_user_new', {'customer':277}) }}" class="btn btn-xs btn-primary" style="background-color: #dfff00bf;color:black">Neue BSH Partner Rechnung</a></h4>
+            </div>
+            <div class="card-body table-responsive">
+                {% include 'tamplate_0/invoice/_invoices_individual_table.html.twig' with {'invoices': invoices} %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

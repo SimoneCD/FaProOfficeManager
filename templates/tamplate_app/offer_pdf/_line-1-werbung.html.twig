@@ -1,0 +1,10 @@
+<div class="row page-image hBox
+{%- if offer.wallboxProduct is not null and offer.wallboxProduct.image %} headBox51{% else %} headBox5{% endif %}"
+     style="border-bottom:1px solid {{ sfColorDark }};padding-right: 10px !important;{%- if offer.image or (offer.subCategory is not null and offer.subCategory.image) %}background-image:url({% if offer.image %}{{ absolute_url(asset(appAssetPath~'offers/'~offer.id~'/image/'~offer.image)) }}{% else %}{{ img1 }}{% endif %}?{{ 'now'|date('u') }}){% endif %}">
+    <div class="col-8 headbox_div"></div>
+    <div style="overflow: visible;" class="col-4 p-0 text-right{% if offer.wallboxProduct is not null and offer.wallboxProduct.productSubCategory.mainProduct and offer.wallboxProduct.image %} page-image-box{% endif %}">
+        {% if offer.wallboxProduct is not null and offer.wallboxProduct.image %}
+            <img class="page-image-cover" alt="{{ offer.wallboxProduct.name }}" src="{{ img2 }}?{{ 'now'|date('u') }}">
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,27 @@
+twig:
+  cache: '%kernel.cache_dir%/twig'
+  default_path: '%kernel.project_dir%/templates'
+  globals:
+    vapid_public_key: '%vapid_public_key%'
+    appProtocols: ['e-check']
+    appCurrency: '%appCurrency%'
+    sfBG: '#f2f7fb'
+    sfColorForm: '#f8f9fa'
+    sfColorText: '#454545'
+
+    sfColorLight: '#009997'
+    sfColor: '#028281'
+    sfColorDark: '#014662'
+
+    total: 0
+    sf: '%sf%'
+    ownerName: 'IDS'
+    ownerLink: 'https://dinstleistung-software.de'
+    appTax: 19
+    appTemplate: '%template_dir%/'
+    appAssetPath: '%app_asset_path%/'
+  form_themes:
+    - 'bootstrap_5_layout.html.twig'
+when@test:
+  twig:
+    strict_variables: true

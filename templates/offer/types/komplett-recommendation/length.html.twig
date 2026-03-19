@@ -1,0 +1,12 @@
+
+    <label style="float: left" for="{{ question.name }}" class="funnel{{ question.funnelEnd ? 'End' : 'Start' }} my-0 form-check-label">
+
+    {% set value = (context and context[aid] is defined and context[aid]['questions'][question.id]['answer'] is defined) ? context[aid]['questions'][question.id]['answer'] : '' %}
+    <div class="m-0 p-0">
+        <input type="text" value="{{ value }}" title="{{ question.name }}"
+                data-class="s-{{ question.id }}"
+                data-question="{{ question.id }}"
+                name="offer_option[{{ question.id }}]"
+                class="form-control condition-change-check">
+    </div>
+    </label>

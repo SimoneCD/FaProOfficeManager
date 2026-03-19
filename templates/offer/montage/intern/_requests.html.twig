@@ -1,0 +1,34 @@
+<div class="card">
+    <div class="card-body">
+        <h3>Bitte lade folgende Anträge ausgefüllt im PDF format hoch:</h3>
+        {% for k, request in offer.subCategory.requests %}
+            <div class="row" {{ stimulus_controller('upload') }}>
+                <div class="col-md-6">
+                    <h3>{{ request.originalName }} <a href="{{ asset(appAssetPath~'requests/'~request.offerSubCategory.id~'/'~request.filename) }}"><span class="material-icons">download</span>(Originaldatei)</a></h3>
+                </div>
+                <div class="col-md-4">
+                    <input type="file" class="d-none"
+                           name="requests[{{ offer.context is defined and offer.context.requests is defined and offer.context.requests|length ? offer.context.requests|length : '0' }}]"
+                           data-upload-target="fileclick"
+                           data-url="{{ path('ajax_upload_request_document', {'id':offer.id, 'type':'request','typeId':request.typeId}) }}"
+                           accept=".pdf" {{ stimulus_action('upload','addRequestDocumentPreview','change') }}>
+                    <div class="">
+                        <div {{ stimulus_target('upload', 'preview') }}>
+                            {% if offer.context is defined and offer.context.request is defined and offer.context.request[k] is defined %}
+                                    <object data="{{ asset(appAssetPath~'requests/'~request.offerSubCategory.id~'/'~offer.context.request[k].name) }}" type="application/pdf" width="200px" height="100%">
+                                        <p>Unable to display PDF file. <a href="{{ asset(appAssetPath~'requests/'~request.offerSubCategory.id~'/'~offer.context.request[k].name) }}">Download</a> instead.</p>
+                                    </object>
+                           {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <a style="float: right" {{ stimulus_action('upload', 'clickDocument') }} href="javascript:"><span class="material-icons">upload</span></a>
+                    {% if offer.context is defined and offer.context.request is defined and offer.context.request[k] is defined %}
+                        <a style="float: right" target="_blank" href="{{ asset(appAssetPath~'requests/'~request.offerSubCategory.id~'/'~offer.context.request[k].name) }}"><span class="material-icons">download</span></a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

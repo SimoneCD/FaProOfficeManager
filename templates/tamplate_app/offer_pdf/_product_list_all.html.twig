@@ -1,0 +1,17 @@
+<div class="row hBox headBox3 page-price-bau p-0" style="height: auto;">
+    <div class="padding-box col-12" style="padding-left:0;padding-top:0;padding-right: 0">
+        <table class="table product_list_table" style="padding-right: 10px;border-bottom: none !important;">
+            {% set total = 0 %}{{ save('total') }}
+            {{ save('total') }}
+            {% set countAll = offer.wallboxProduct ? 1 : 0 %}{{ save('countAll') }}
+            {% include appTemplate~'offer_pdf/components/_product_data_table_header.html.twig' %}
+            {% include appTemplate~'offer_pdf/components/_product_data_main_product.html.twig' %}
+            {% for key, offerItem in items %}
+                {% set style = 'background-color: #fff;color: '~sfColorDark~';' %}
+                {% set mainProduct = offerItem.item and offerItem.item.productSubCategory ? offerItem.item.productSubCategory.mainProduct : false %}
+                {% include appTemplate~'offer_pdf/components/_product_data_row.html.twig' with {'hpi':loop.index+countAll, 'countAll':loop.index+countAll} %}
+            {% endfor %}
+            {% include appTemplate~'offer_pdf/components/_product_data_end.html.twig' %}
+        </table>
+    </div>
+</div>

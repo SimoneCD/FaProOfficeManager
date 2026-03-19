@@ -1,0 +1,278 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'o.new'|trans }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .datablocks {
+            width: 100%;
+            /*box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;*/
+        }
+        .answer_content_input {width: auto !important;}
+        .content form, .content table {
+            background-color: transparent;
+        }
+        .form-check-inline {
+            padding-left: 0 !important;
+        }
+        /*.datablocks div.questionQ {*/
+        /*    border-block: inherit;*/
+        /*    !* border: 1px solid grey; *!*/
+        /*    border-radius: 10px;*/
+        /*    box-shadow: rgb(194 194 194) 0 1px 4px;*/
+        /*    padding: 10px;*/
+        /*    margin: 10px 0;*/
+        /*}*/
+        .llBl {
+            border-block: inherit;
+            /* border: 1px solid grey; */
+            border-radius: 10px;
+            box-shadow: rgb(194 194 194) 0 1px 4px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .box_name_color, .box_name_color a, .btn, .btn-light {
+            color: {{ sfColorText }};
+            font-weight: 600;
+        }
+        .form-group {margin: 0;}
+        h5 {color: {{ sfColor }};font-weight: bold;margin-top: 30px;padding-left: 15px;}
+        input[type='checkbox'] {display: block !important;float: left;}
+        .form-control {background-color: {{ sfColorForm }}}
+        label {font-size: 1rem;display: block;}
+        .col-form-label{font-size: 0.9rem !important;}
+        .answer_content {vertical-align: top;display: inline-flex;position: relative;}
+        .answer_content_input {vertical-align: top;display: inline-flex;position: relative;margin-left: 20px;width: 88%;}
+        .answer_content_image_input {vertical-align: top;display: inline-flex;position: relative;margin-left: 20px;width: 88%;}
+    </style>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            $(document).on('click', '.checkbox_type', function () {
+                let typeBox = $('#checkbox_type');
+                let typeBoxs = $('.checkbox_type');
+                let dataId = $(this).attr('data-id');
+                $('#subCategoryHidden').val(dataId);
+                let dataValue = $(this).attr('data-value');
+                typeBox.val(dataValue);
+                typeBoxs.removeClass('btn-primary');
+                typeBoxs.addClass('btn-light');
+                $(this).addClass('btn-primary');
+                let url = '{{ path('ajax_offer_update_subCategory', {'id': offer.id, 'subCategory': '1111'}) }}';
+                url = url.replace('1111',dataId)
+                $.ajax({
+                    'url': url,
+                    'data': {},
+                    'method': 'post',
+                    success: function (rx) {
+                        window.location.reload();
+                    }
+                });
+            });
+
+            function changer(that, event) {
+                console.log(event)
+                let question =  that.getAttribute("data-question") ?? false;
+                let dependencies = that.getAttribute("data-dependencies") ?? false;
+                let helpDependencies = that.getAttribute("data-help-dependencies") ?? false;
+
+                let selectedIndex = that;
+                let help = selectedIndex.getAttribute("data-help") ?? false;
+                let questions = selectedIndex.getAttribute("data-questions") ?? false;
+
+                if (help === false) {
+                    $(that).closest('.answer-helper').text('')
+                }
+                selectedIndex.value
+                if (dependencies) {
+                    let depend = dependencies.split('-');
+                    for (let i=0;i< depend.length;i++) {
+                        console.log(depend[i]);
+                        if (depend[i] !== '') {
+                            let dependend = $('#question-'+depend[i]);
+                            // console.log('d --- #question-'+depend[i])
+                                dependend.css('display', 'none');
+                            let input = $('input[name="offer_option['+question+']"]');
+                            if (input === undefined) {
+                                input = $('select[name="offer_option['+question+']"] :checked');
+                            }
+                            if (input.val() !== selectedIndex.value) {
+                                $("#question-" + depend[i] + " :input").each(function (e, t) {
+                                    t.checked = false;
+                                    t.selected = false;
+                                    if ($(t).attr('type') === 'text') {
+                                        $(t).val('');
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+                if (questions) {
+                    let qss = questions.split(':');
+                    for (let i=0;i < qss.length;i++) {
+                        $('#question-'+qss[i]).css('display', 'block')
+                    }
+                }
+                if (helpDependencies) {
+                    let arr2 = helpDependencies.split('-');
+                    for (let i=0;i< arr2.length;i++) {
+                        $('#help-'+arr2[i]).css('display','none')
+                    }
+                }
+
+                let helpTextDiv = $('.help-'+question);
+                let helpDiv = $('#help-'+help);
+                if (helpDiv && help) {
+                    helpDiv.css('display','block');
+                }
+            }
+
+            $(document).on('click', '.condition-change-check', function (event) {
+                console.log('change0');
+                changer(this, event);
+            })/*.trigger('change');*/
+        })
+    </script>
+{#    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>#}
+{#    <script>#}
+{#        var myCarousel = document.querySelector('#myCarousel')#}
+{#        var carousel = new bootstrap.Carousel(myCarousel)#}
+{#    </script>#}
+{% endblock %}
+{% set customerName = offer.customer.companyName ==''? (offer.customer.sex|trans)~' '~offer.customer.fullName : offer.customer.companyName %}
+{% set appAnswerChecked = [] %}
+{% block main %}
+    {{ save('appAnswerChecked') }}
+    <div class="row">
+        {% include 'backend/components/_back_button.html.twig' %}
+        <div class="col-md-12">
+            {{ form_start(form) }}
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h5 class="card-title" style="color: {{ sfColorDark }}">{{ customerName }} </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row form-group m-0">
+                                <label class="col-sm-2 m-0 p-0"><strong>{{ 'o.category'|trans }}:</strong></label>
+                                <div class="input-group col-sm-10 m-0 p-0">
+                                    {% for cat in categories %}
+                                    <button style="margin-right:4px;padding: 4px 10px;height: 30px;"  type="submit" name="change_category" value="{{ cat.id }}" class="btn btn-{% if category and category.id == cat.id %}primary{% else%}default{% endif%} pull-right"><i style="margin:0;" class="material-symbols-outlined">{{ cat.icon }}</i>{{ cat.name }}</button>
+                                    {% endfor %}
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <div class="form-group d-none">
+                                <label class="">{{ 'w.customer'|trans }}</label>
+                                <div class="input-group">
+                                    {{ form_widget(form.customer) }}
+                                    <a href="{{ path('customer_edit', {'id': offer.customer.id}) }}" target="_blank"><i class="material-symbols-outlined">edit</i></a>
+                                </div>
+                            </div>
+                            <div class="row form-group m-0">
+                                <label class="col-sm-2 m-0 p-0"><strong>{{ 'o.questionnatre'|trans }}:</strong></label>
+                                <div class="input-group col-sm-10 m-0 p-0">
+                                    <input type="hidden" name="category" required value="{% if category and category.id is not null %}{{ category.id }}{% endif %}">
+                                    <input type="hidden" id="subCategoryHidden" name="subCategory" required value="{{ offer.subCategory ? offer.subCategory.id : '' }}">
+                                {% set questCount = 0 %}
+                                {{ save('questCount') }}
+                                {% if category is not null %}
+                                {% for data in category.offerSubCategories %}
+                                    <button style="margin-right:4px;margin-bottom:4px !important;padding: 4px;height: 30px;" data-value="datablock-{{ data.id }}" type="button" data-id="{{ data.id }}" class="py-2 px-4 my-0 checkbox_type btn btn-{% if offer.subCategory is not null and offer.subCategory.id == data.id %}primary{% else %}default{% endif %}">
+                                        <span style="margin:0;font-size: 12px">{{ data.name }}</span>
+                                    </button>
+                                    {#{% if is_granted('ROLE_ADMIN') %}
+                                        <a href="{{ path('backend_subcategory_quetions', {'id':data.id}) }}" target="_blank"><span class="material-symbols-outlined">quiz</span></a>
+                                    {% endif %}#}
+                                {% endfor %}
+                                {% endif %}
+                                {{ restore('questCount') }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if offer.subCategory is not null %}
+{#                    <h1 class="mt-3" style="color: {{ sfColor }}">{{ 'osc.quest.questionnaire'|trans }}</h1>#}
+                    {% set col1 = 8 %}
+                    {% set col2 = 4 %}
+                    {% if category is not null %}
+                        {% set context = offer.inquiry.context %}
+                        {% for subCategory in category.offerSubCategories %}
+                            {% set dataClass = '' %}
+                            {% if offer.subCategory and offer.subCategory.id == subCategory.id %}
+                            <div class="datablocks" style="display: inline-block" id="datablock-{{ subCategory.id }}">
+                                {% set questCount = 0  %}
+                                {% if subCategory.questionAreas|length %}
+                                    {% for ai, area in subCategory.questionAreas|sort((a, b) => a.sort <=> b.sort) %}
+                                        {% set qcount = 0 %}
+                                        {% for qi, question in area.questions %}
+                                            {% if question.protocol == 'p' %}
+                                                {% set qcount = qcount+1 %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if qcount < area.questions|length %}
+                                            <div class="llBl">
+                                                <h5>{{ area.name }}</h5>
+                                                {% for qi, question in area.questions|sort((a, b) => a.sort <=> b.sort) %}
+                                                    {% set questCount = (questCount+1) %}
+                                                    {% if question.protocol != 'p' %}
+                                                    <div class="{{ dataClass }}">
+                                                        <div id="question-{{ question.id }}"
+                                                             class="questionQ{% if question.view == false and question.id not in appAnswerChecked %} question-helper"
+                                                             style="display: none{% endif %}">
+                                                            {% include 'offer/types/forms/'~question.answerType~'.html.twig' with {'aid': question.questionArea ?question.questionArea.id: 0, 'context': context, 'col1':col1, 'col2':col2}  %}
+                                                            {{ restore('appAnswerChecked') }}
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}
+                                                    {% set dataClass = dataClass ? dataClass~' s-'~question.id : 's-'~question.id %}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    {% for qi, question in subCategory.offerQuestions|sort((a, b) => a.sort <=> b.sort) %}
+                                        {% if question.questionArea is null %}
+                                            {% set questCount = (questCount+1) %}
+                                            <div class="{{ dataClass }}">
+                                                <div id="question-{{ question.id }}" class="questionQ{% if question.view == false and question.id not in appAnswerChecked %} question-helper" style="display: none{% endif %}">
+                                                    {% include 'offer/types/forms/'~question.answerType~'.html.twig' with {'aid': question.questionArea ?question.questionArea.id: 0, 'context': context, 'col1':col1, 'col2':col2}  %}
+                                                    {{ restore('appAnswerChecked') }}
+                                                </div>
+                                            </div>
+                                            {% set dataClass = dataClass ? dataClass~' s-'~question.id : 's-'~question.id %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                                <div class="row">
+                                    <div class="col-sm-{{ col1 }} text-right"><button name="save" value="2" type="submit" name="save" class="btn btn-primary btn-lg">{{ 'iq.saveProcessing'|trans }}</button></div>
+                                    <div class="col-sm-{{ col2 }}">
+                                        {% if offer.order is null %}
+                                            <button type="submit" name="save" value="1" class="btn btn-primary btn-lg">Zum Kostenvoranschlag</button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+            {% endif %}
+            {{ form_widget(form._token) }}
+            {{ form_end(form, {'render_rest':false}) }}
+            <div class="card">
+                <div class="card-body p-5">
+                    <div class="text-center">
+                        <form method="post" action="{{ path('offer_delete_offer',{'offer':offer.id}) }}">
+                            <button data-confirm="{{ 'iq.confirmDelete'|trans }}" type="button" class="px-5 confirm btn btn-danger">{{ 'iq.delete'|trans }}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

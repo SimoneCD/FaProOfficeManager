@@ -1,0 +1,49 @@
+<div id="offer_order_documents" {{ stimulus_controller('upload', {'offerId':offer.id, 'question':0, 'type': 'antrag', 'docCount':offer.documents|length}) }}>
+    <div class="card">
+        <div class="card-body">
+            <h4 style="color: {{ sfColor }}">{{ 'm.documents'|trans }}
+                <button class="btn btn-light btn-sm p-1" type="button" {{ stimulus_action('upload','clickDocument','click') }}>
+                    <span title="{{ 'm.documentAdd'|trans }}" class="material-icons">add_circle_outline</span>
+                </button><br>
+                <span class="form-text">(.doc,.pdf,.xls,.txt)</span>
+            </h4>
+
+            {% set customer = offer.customer %}
+            <div class="row m-0 p-0">
+                <div class="col-md-6">
+                    <div>
+                        <input type="file" class="d-none"
+                                name="documents[{{ offer.documents|length }}]"
+                                data-upload-target="fileclick"
+                               data-url="{{ path('ajax_upload_document', {'id':offer.id}) }}"
+                               accept=".doc,.pdf,.xls,.txt,.csv" {{ stimulus_action('upload','addDocumentPreview','change') }}>
+
+                        <div class="">
+                            <div {{ stimulus_target('upload', 'preview') }}></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6"></div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+            {% for doc in offer.documents %}
+                {% set i = loop.index-1 %}
+                    <div class="doc-{{ doc.id }}" style="position: relative">
+                        <a target="_blank"
+                           href="{{ absolute_url(asset(appAssetPath~'uploads/'~offer.id~'/'~doc.filename)) }}">
+                            {{ doc.filename }}
+                        </a>
+                        <button style="color: orangered" title="" type="button" data-document-loop-id="{{ i }}"
+                                data-upload-id-param="{{ doc.id }}"
+                                data-upload-url-param="{{ path('montage_document_remove', {'id': doc.id}) }}"
+                                data-action="dblclick->upload#removeDoc"
+                                class="p-1 btn btn-light btn-xs">x
+                        </button>
+                    </div>
+            {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

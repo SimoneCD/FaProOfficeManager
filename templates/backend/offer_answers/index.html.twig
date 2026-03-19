@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'w.answers'|trans }}{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).on('change', '.answer_sort', function () {
+            let url = $(this).attr('data-action');
+            if (isNaN($(this).val())) {
+                return
+            }
+            $.ajax(url, {
+                method: 'post',
+                data: $(this).val(),
+                processData: false,
+                contentType: false,
+                success(xr) {
+                    window.location.href = window.location.href;
+                },
+                error(e) {
+                },
+            });
+        });
+    </script>
+{% endblock %}
+{% block main %}
+    {% include 'backend/components/_menu.html.twig' with {
+        'listLi': {'n':'o.categories'|trans,'k':true},
+        'categoryLi': {'n':subCategory.category.name,'k':subCategory.category.id,'i':subCategory.category.icon},
+        'subCategoryLi': {'n':('replace.questionnaire'|trans({'%name%':subCategory.name})),'ki':subCategory.category.id,'k':subCategory.id,'i':'document_scanner'},
+        'questionLi': {'n':question.name,'i':'psychology_alt'}
+    } %}
+    <h1>
+        {#{{ 'w.answers'|trans }}#}
+
+        <a class="btn btn-light btn-sm" href="{{ path('backend_question_edit', {'questionnaire':question.subCategory.id, 'id':question.id}) }}">
+            <span class="material-icons">edit</span><span class="hidden-xs"> {{ 'osc.quest.q.edit'|trans }}</span>
+        </a>
+    </h1>
+
+    <table class="table">
+        <thead>
+            <tr style="background-color: {{ sfColor }};color: #fff">
+                <th style="width: 50px;"></th>
+                <th style="width: 50px;">{{ 'w.short.sort'|trans }}</th>
+                <th>{{ 'w.answer'|trans }}</th>
+                <th><span title="{{ 'm.information'|trans }}" class="material-icons">feed</span></th>
+                <th class="text-center">Funnel-Exit</th>
+                <th class="text-center">{{ 'osc.quest.a.dependencies'|trans }}</th>
+                <th><i title="{{ 'w.products'|trans }}" class="material-symbols-outlined">qr_code_2</i></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for answer in answers|sort((a, b) => a.sort <=> b.sort) %}
+            <tr style="font-size: 14px">
+                <td><img style="height: 50px;" src="{% if answer.image %}{{ asset(appAssetPath~'offers/answers/'~answer.image) }}{% else %}{{ asset('app/img/1x1.png') }}{% endif %}"></td>
+                <td>
+                    <input data-action="{{ path('backend_answers_ajax_sort', {'question':answer.question.id, 'id':answer.id}) }}" class="form-control answer_sort" type="text" name="sort" value="{{ answer.sort ?? 0 }}">
+                </td>
+                <td>
+{#                    {% if test_var is of_type('object') %}#}
+{#                        true#}
+{#                    {% else %}#}
+                        {{ answer.name }}
+{#                    {% endif %}#}
+                </td>
+                <td class="text-center">{{ answer.helptext }}</td>
+                <td class="text-center">
+                    {%- if answer.funnelEnd or question.funnelEnd %}
+                        <img src="{{ asset('app/images/ok.svg') }}">
+                    {%- else -%}
+                        <img src="{{ asset('app/images/eq.svg') }}">
+                    {% endif -%}
+                </td>
+                <td class="text-center">
+                    {% if answer.dependencies|length %}
+                        <img src="{{ asset('app/images/ok.svg') }}"> ({{ answer.dependencies|length }})
+                    {% else %}
+                        <img src="{{ asset('app/images/eq.svg') }}">
+                    {% endif %}
+                </td>
+                <td>
+                    {% for ap in answer.products %}
+                        <p class="p-0 m-0"><strong style="font-weight: bold">{{ ap.name }}</strong> ({{ ap.id }} | {{ ap.productNumber }}) {{ ap.price|number_format('2', ',', '.') }} {{ appCurrency|raw }}</p>
+                    {% else %}<img src="{{ asset('app/images/eq.svg') }}">{% endfor %}
+                </td>
+                <td>
+                    <a href="{{ path('backend_answers_edit', {'question': answer.question.id, 'id': answer.id}) }}"><span class="material-symbols-outlined">edit</span></a>
+                </td>
+            </tr>
+        {% else %}
+            {% include 'backend/_no_entry.html.twig' with {'collSpan': 4} %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <div style="text-align: right">
+        <a class="btn btn-light btn-sm" href="{{ path('backend_answers_new', {'question':question.id}) }}">
+            <span class="material-icons">add_comment</span><span class="hidden-xs"> {{ 'osc.quest.a.add'|trans }}</span>
+        </a>
+    </div>
+{% endblock %}

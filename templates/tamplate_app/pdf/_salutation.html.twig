@@ -1,0 +1,21 @@
+{% if customer.companyName is defined %}
+    {% if customer.companyName and customer.surName == '' -%}
+        {{ 'c.welcomeAll'|trans }}
+    {%- else -%}
+        {%- if customer.sex == 'mr' -%}
+            {{ 'c.welcomeMale'|trans({'%name%':customer.normalName}) }}
+        {%- elseif customer.sex == 'ms' -%}
+            {{ 'c.welcomeFemale'|trans({'%name%':customer.normalName}) }}
+        {%- else -%}
+            {{ 'c.welcomeGender'|trans({'%name%':customer.normalName}) }}
+        {%- endif -%}
+    {%- endif %}
+{%- elseif customer.salutation is defined %}
+    {%- if customer.salutation == 'mr' -%}
+        {{ 'c.welcomeMale'|trans({'%name%':customer.fullName}) }}
+    {%- elseif customer.salutation == 'ms' -%}
+        {{ 'c.welcomeFemale'|trans({'%name%':customer.fullName}) }}
+    {%- else -%}
+        {{ 'c.welcomeGender'|trans({'%name%':customer.fullName}) }}
+    {%- endif -%}
+{%- endif %}

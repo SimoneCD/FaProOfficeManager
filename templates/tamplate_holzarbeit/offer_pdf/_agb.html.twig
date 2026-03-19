@@ -1,0 +1,38 @@
+<div class="row hBox headBoxBlank page-agb">
+    <div class="text-left col-12 p-0 m-0">
+        <ol class="px-3">
+            <li><h6 style="margin-top:30px;margin-bottom: 0"><strong class="header_title_span">{{ 'agb.a.name'|trans }}</strong></h6>
+                <p>{{ 'agb.a.text'|trans({'%page%':'<strong>'~sf.agb~'</strong>'})|raw }}</p>
+            </li>
+            <li><h6 style="margin-top:30px;margin-bottom: 0"><strong class="header_title_span">{{ 'agb.b.name'|trans }}</strong></h6>
+                <p>{{ 'agb.b.text'|trans }}</p>
+            </li>
+            <li><h6 style="margin-top:30px;margin-bottom: 0"><strong class="header_title_span">{{ 'agb.c.name'|trans }}</strong></h6>
+                <p>{{ 'agb.c.text'|trans }}</p>
+            </li>
+            <li><h6 style="margin-top:30px;margin-bottom: 0"><strong class="header_title_span">{{ 'impressum.identity' |trans}}</strong></h6>
+                <p>{{ sf.name_complete }}
+                    <br>
+                    {{ 'w.ceo'|trans }}: {{ sf.owner }}<br><br>
+                    {{ sf.address }}, {{ sf.zip }}<br>
+                    {{ sf.country }}
+                    <br><br>
+                    {% set phone = getImgContent(asset('svgs/black/phone.png')) %}
+                    {% set email = getImgContent(asset('svgs/black/email.png')) %}
+                    {% set global = getImgContent(asset('svgs/black/public.png')) %}
+                    <img style="width: 14px;" src="{{ phone }}">: {{ sf.phone }}<br>
+                    <img style="width: 14px;" src="{{ email }}">: {{ sf.montage_email }}
+                    <br><br>
+                    <img style="width: 14px;" src="{{ global }}">: {{ sf.www }}<br>
+                    <img style="width: 14px;" src="{{ global }}">: {{ sf.www2 }}
+
+                    <h5 class="mb-0">{{ 'w.customerService'|trans }}:</h5><br>
+                    <img style="width: 14px;" src="{{ phone }}">: {{ offer.user.phone }}<br>
+                    <img style="width: 14px;" src="{{ email }}">: {{ sf.email }}
+            </li>
+            <li><h6 style="margin-top:30px;margin-bottom: 0"><strong class="header_title_span">{{ 'agb.d.name'|trans }}</strong></h6>
+                <p>{{ 'agb.d.text'|trans }}</p>
+            </li>
+        </ol>
+    </div>
+</div>

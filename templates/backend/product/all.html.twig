@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'w.products'|trans }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .dataTables_length label, .dataTables_filter label {
+            display: flex;
+        }
+        .snapchat {
+            background-color: #dde6e6;
+        }
+        .snapchat img {
+            max-height: 100px;
+            max-width: 100px;
+            z-index: 9;
+        }
+        .tableFixHead          { overflow: auto; height: 100px; }
+        .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
+
+        /* Just common table stuff. Really. */
+        table  { border-collapse: collapse; width: 100%; }
+    </style>
+{% endblock %}
+{% block main %}
+
+    <div class="row" id="subs">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">{{ 'p.all'|trans }}</h4>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="tableFixHead table table_data2 table-fixed" style="overflow: visible">
+                        <thead>
+                            <tr style="background-color: #e8e8e8">
+                                <th class="id" style="cursor:pointer;min-width: 80px"><small class="form-text">{{ 'w.posShort'|trans }}</small></th>
+                                <th style="cursor:pointer;width:60px;"><small class="form-text">{{ 'w.images'|trans }}</small></th>
+                                <th class="name" style="cursor:pointer;min-width: 300px"><small class="form-text">{{ 'w.name'|trans }}</small></th>
+                                <th style="cursor:pointer;"><small class="form-text">{{ 'w.color'|trans }}</small></th>
+                                <th style="cursor:pointer;"><small class="form-text">{{ 'w.measure'|trans }}</small></th>
+                                <th style="cursor:pointer;" class="id"><small class="form-text">{{ 'f.label.kwName'|trans }}</small></th>
+                                <th style="cursor:pointer;"><small class="form-text">{{ 'f.label.kwNameShort'|trans }}</small></th>
+                                {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}<th class="text-right" style="cursor:pointer;min-width: 100px;"><small class="form-text">{{ 'VK-Preis'|trans }}</small></th>{% endif %}
+                                <th class="text-right" style="cursor:pointer;background-color:#c7dfe1; min-width: 100px;"><small class="form-text">{{ 'EK-Price'|trans }}</small></th>
+{#                                <th style="background-color:#c7dfe1; min-width: 100px;"><small class="form-text">{{ 'm.products.toOrder'|trans }}</small></th>#}
+                                <th style="cursor:pointer;min-width: 200px;"><small class="form-text">Shop-Link (incl. http/https)</small></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for product in products %}
+                            <tr>
+                                <td data-order="{{ product.productNumber|replace({'.':''}) }}">
+                                    <form id="form_product_num_{{ product.id }}" class="inlineForm" data-url="{{ path('ajax_product_update_number', {'id':product.id}) }}">
+                                        <input title="productNumber" data-id="form_product_num_{{ product.id }}" name="productNumber" data-field="productNumber" class="inlineFormInput form-control" type="text" value="{{ product.productNumber }}">
+                                    </form>
+                                </td>
+                                <td>{% if product.image %}<div class="snapchat"><img title="{{ product.description }}" alt="{{ product.description }}" src="{{ asset(appAssetPath~'products/'~product.image) }}" style="max-height: 60px;max-width: 60px;" /></div>{% else %}<div class="snapchat" ><img title="{{ product.description }}" alt="{{ product.description }}" style="max-height: 60px;max-width: 60px;" src="{{ asset('app/images/not_available.png') }}" /></div>{% endif %}</td>
+                                <td>
+                                    <form id="form_product_name_{{ product.id }}" class="inlineForm" data-url="{{ path('ajax_product_update_name', {'id':product.id}) }}">
+                                        <input type="text" value="{{ product.name }}" data-id="form_product_name_{{ product.id }}" name="name" data-field="name" class="inlineFormInput form-control" />
+                                    </form>
+                                </td>
+                                <td><div class="app_color_dot" style="background-color: {{ product.color ?? '#fff' }};"></div></td>
+                                <td data-order="{{ product.einheit }}">
+                                    <form id="form_product_einh_{{ product.id }}" class="inlineForm" data-url="{{ path('ajax_product_update_einheit', {'id':product.id}) }}">
+                                        <input type="text" value="{{ product.einheit }}" data-id="form_product_einh_{{ product.id }}" name="productEinheit" data-field="einheit" class="inlineFormInput form-control" />
+                                    </form>
+                                </td>
+                                <td>
+                                    <form id="form_product_kw_{{ product.id }}" class="inlineForm" data-url="{{ path('ajax_product_update_kw', {'id':product.id}) }}">
+                                        <input type="text" value="{{ product.kw }}" data-id="form_product_kw_{{ product.id }}" name="kw" data-field="kw" class="inlineFormInput form-control" />
+                                    </form>
+                                </td>
+                                <td style="min-width: 60px" data-order="{{ product.valueName }}">
+                                    <form id="form_product_val_{{ product.id }}" class="inlineForm" data-url="{{ path('ajax_product_update_value_name', {'id':product.id}) }}">
+                                        <input type="text" value="{{ product.valueName }}" data-id="form_product_val_{{ product.id }}" name="productValueName" data-field="valueName" class="inlineFormInput form-control" />
+                                    </form>
+                                </td>
+                                {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}
+                                <td class="text-right" {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}style="background-color:#d5ead5;"{% endif %}>
+                                    <form method="post" id="form_product_price_{{ product.id }}" class="inlineForm" data-url="{{ path('ajax_product_update_ekprice', {'id':product.id}) }}">
+                                        <input type="text" value="{{ product.price ? product.price|number_format('2', ',', '') : '0,00' }}" data-id="form_product_price_{{ product.id }}" name="price" data-field="price" class="text-right inlineFormInput form-control" />
+                                    </form>
+                                </td>
+                                {% endif %}
+                                    <td style="background-color:#d7e6e8;">
+                                        <form method="post" id="form_product_ekPrice_{{ product.id }}" class="inlineForm" data-url="{{ path('ajax_product_update_ekprice', {'id':product.id}) }}">
+                                            <input type="text" value="{{ product.ekPrice ? product.ekPrice|number_format('2', ',', '') : '0,00' }}" data-id="form_product_ekPrice_{{ product.id }}" name="productEkPrice" data-field="ekPrice" class="text-right inlineFormInput form-control" />
+                                        </form>
+                                    </td>
+{#                                <td style="background-color:#d7e6e8;">#}
+{#                                    <form id="form_product_inStock_{{ product.id }}" class="inlineForm" data-url="{{ path('ajax_product_update_instock', {'id':product.id}) }}">#}
+{#                                        <input type="text" value="{{ product.inStock ?? 0 }}" data-id="form_product_inStock_{{ product.id }}" name="inStock" data-field="inStock" class="inlineFormInput form-control" />#}
+{#                                    </form>#}
+{#                                </td>#}
+
+                                    <td>
+                                        <form style="background-color: transparent" id="form_product_shopLink_{{ product.id }}" class="inlineForm" data-url="{{ path('ajax_product_update_shoplink', {'id':product.id}) }}">
+                                            <input type="text" value="{{ product.shopLink ?? '' }}" data-id="form_product_shopLink_{{ product.id }}" name="shopLink" data-field="shopLink" class="inlineFormInput form-control" />
+                                            {% if product.shopLink %}<a href="{{ product.shopLink }}" target="_blank" class="btn btn-sm">{{ 'www'|trans }}</a>{% endif %}
+                                        </form>
+                                    </td>
+
+                                <td>{% include '/backend/product/components/product_action.html.twig' %}</td>
+                            </tr>
+                        {% else %}
+                            {% include 'backend/_no_entry.html.twig' with {'collSpan': is_granted('ROLE_EMPLOYEE_SERVICE') ? 12 : 11} %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

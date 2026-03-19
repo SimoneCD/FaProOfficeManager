@@ -1,0 +1,327 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'w.appointments'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('lib/main.css') }}" rel='stylesheet' />
+    <style>
+        #calendar {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .get_call {
+            color: #000;
+            /*//border: 1px solid orange;*/
+        }
+        .get_view {
+            color: #1d8a1c;
+            /*border: 1px solid #2495b0;*/
+        }
+        .get_install {
+            color: #0262a6;
+            /*border: 1px solid #1f98db;*/
+        }
+        .get_else {
+            color: #cc2a2a;
+            /*border: 1px solid #cc2a2a;*/
+        }
+        .get_hollyday {
+            background-color: #f5e241;
+            /*border: 1px solid #cc2a2a;*/
+        }
+        .get_appointment {
+            color: #c93ad3;
+            /*border: 1px solid #cc2a2a;*/
+        }
+        .get_task {
+            color: #f68d4b;
+            /*border: 1px solid #cc2a2a;*/
+        }
+        .popper,
+        .tooltip {
+            position: absolute;
+            z-index: 9999;
+            background: #FFC107;
+            color: black;
+            width: 150px;
+            border-radius: 3px;
+            box-shadow: 0 0 2px rgba(0,0,0,0.5);
+            padding: 10px;
+            text-align: center;
+        }
+        .style5 .tooltip {
+            background: #1E252B;
+            color: #FFFFFF;
+            max-width: 200px;
+            width: auto;
+            font-size: .8rem;
+            padding: .5em 1em;
+        }
+        .popper .popper__arrow,
+        .tooltip .tooltip-arrow {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            position: absolute;
+            margin: 5px;
+        }
+
+        .tooltip .tooltip-arrow,
+        .popper .popper__arrow {
+            border-color: #FFC107;
+        }
+        .style5 .tooltip .tooltip-arrow {
+            border-color: #1E252B;
+        }
+        .popper[x-placement^="top"],
+        .tooltip[x-placement^="top"] {
+            margin-bottom: 5px;
+        }
+        .popper[x-placement^="top"] .popper__arrow,
+        .tooltip[x-placement^="top"] .tooltip-arrow {
+            border-width: 5px 5px 0 5px;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+            bottom: -5px;
+            left: calc(50% - 5px);
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        .popper[x-placement^="bottom"],
+        .tooltip[x-placement^="bottom"] {
+            margin-top: 5px;
+        }
+        .tooltip[x-placement^="bottom"] .tooltip-arrow,
+        .popper[x-placement^="bottom"] .popper__arrow {
+            border-width: 0 5px 5px 5px;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            border-top-color: transparent;
+            top: -5px;
+            left: calc(50% - 5px);
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        .tooltip[x-placement^="right"],
+        .popper[x-placement^="right"] {
+            margin-left: 5px;
+        }
+        .popper[x-placement^="right"] .popper__arrow,
+        .tooltip[x-placement^="right"] .tooltip-arrow {
+            border-width: 5px 5px 5px 0;
+            border-left-color: transparent;
+            border-top-color: transparent;
+            border-bottom-color: transparent;
+            left: -5px;
+            top: calc(50% - 5px);
+            margin-left: 0;
+            margin-right: 0;
+        }
+        .popper[x-placement^="left"],
+        .tooltip[x-placement^="left"] {
+            margin-right: 5px;
+        }
+
+        .fc-bg-event {
+            background-color: #004761;
+            color: #fff;
+        }
+        .popper[x-placement^="left"] .popper__arrow,
+        .tooltip[x-placement^="left"] .tooltip-arrow {
+            border-width: 5px 0 5px 5px;
+            border-top-color: transparent;
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+            right: -5px;
+            top: calc(50% - 5px);
+            margin-left: 0;
+            margin-right: 0;
+        }
+        @media screen and (max-width: 415px) {
+            .fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
+                padding: 4px;
+                margin: 14px;
+                font-size: 0.9rem;
+                background-color: #f8f9fa;
+                border: {{ sfColorDark }};
+                color: #000;
+            }
+            .fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
+                padding: 4px;
+                margin: 14px;
+                font-size: 0.9rem;
+                background-color: #fff;
+                border: {{ sfColor }};
+                color: {{ sfColorText }};
+            }
+            .fc-direction-ltr .fc-toolbar > * > :not(:first-child) {
+                padding: 4px;
+                margin: 14px;
+                font-size: 0.9rem;
+                background-color: #f8f9fa;
+                border: {{ sfColor }};
+                color: {{ sfColorText }};
+            }
+            .fc .fc-toolbar-title {
+                font-size: 1rem;
+                margin: 0;
+            }
+            .fc .fc-toolbar {
+                display: block;
+            }
+            .fc-listMonth-button {
+                background-color: {{ sfColor }} !important;
+                color: #fff !important;
+            }
+        }
+        .fc .fc-button-primary, .fc-v-event {
+             color: #fff;
+             background-color: {{ sfColor }};
+             border-color: {{ sfColorDark }};
+        }
+        .fc .fc-button-primary:hover, .fc .fc-button-primary:not(:disabled):active, .fc .fc-button-primary:not(:disabled).fc-button-active {
+            color: #fff;
+            background-color: {{ sfColorDark }};
+            border-color: {{ sfColor }};
+        }
+        .fc .fc-button-primary:disabled {
+            color: #fff;
+            background-color: {{ sfColorLight }};
+            border-color: {{ sfColorLight }};
+        }
+        h2 {
+            color: {{ sfColorDark }};
+            font-size: 1.05rem;
+            font-weight: 600;
+            font-style: normal;
+        }
+    </style>
+    <style>
+        .autocomplete-suggestions {
+            position: absolute;
+            z-index: 1000;
+            background: white;
+            border: 1px solid #ddd;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .autocomplete-suggestion {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .autocomplete-suggestion:hover {
+            background: #f0f0f0;
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('lib/main.js') }}"></script>
+    <script src="{{ asset('lib/locales-all.js') }}"></script>
+    <script src="{{ asset('app/js/popper.js') }}"></script>
+    <script src="{{ asset('app/js/tooltip.js') }}"></script>
+{#    <script>#}
+{#        document.addEventListener('DOMContentLoaded', function () {#}
+{#            const titleSelect = document.getElementById('titleSelect');#}
+{#            const taskChanger = document.querySelector('.taskchanger');#}
+{#            const starttime = document.querySelector('.starttime');#}
+
+{#            // Funktion zum Anzeigen/Verbergen#}
+{#            function toggleTaskChanger() {#}
+{#                if (titleSelect.value === 'Aufgabe') {#}
+{#                    taskChanger.style.display = 'block';#}
+{#                    starttime.style.display = 'none';#}
+{#                } else {#}
+{#                    taskChanger.style.display = 'none';#}
+{#                    starttime.style.display = 'block';#}
+{#                }#}
+{#            }#}
+
+{#            // Initial prüfen#}
+{#            toggleTaskChanger();#}
+
+{#            // Bei Änderung prüfen#}
+{#            titleSelect.addEventListener('change', toggleTaskChanger);#}
+
+{#            const beginAt = document.getElementById('begin_at');#}
+{#            const endAt = document.getElementById('end_at');#}
+
+{#            // Funktion zum Aktualisieren von end_at#}
+{#            function updateEndAt() {#}
+{#                const beginDate = new Date(beginAt.value);#}
+{#                if (!isNaN(beginDate)) {#}
+{#                    beginDate.setHours(beginDate.getHours() + 1);#}
+{#                    endAt.value = beginDate.toISOString().slice(0, 16);#}
+{#                }#}
+{#            }#}
+
+{#            // Beim Laden prüfen#}
+{#            if (beginAt.value) {#}
+{#                updateEndAt();#}
+{#            }#}
+
+{#            // Bei Änderung aktualisieren#}
+{#            beginAt.addEventListener('change', updateEndAt);#}
+{#        });#}
+{#    </script>#}
+    <script>
+    </script>
+{% endblock %}
+{% block main %}
+    {% for message in app.flashes('notification') %}
+        <div class="alert alert-info alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">
+                        {{ 'w.appointments'|trans }}
+{#                        <a style="color: #0a0a0a" href="{{ path('booking_index') }}"><i class="material-icons">apps</i></a>#}
+{#                        <a style="color: #0a0a0a" href="{{ path('booking_index', {'call':true}) }}"><i class="material-icons">phone</i></a>#}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {#                        <div style="" id='calendar'></div>#}
+                            {# templates/calendar/index.html.twig #}
+                            {#                        <div id="calendar"></div>#}
+                            <div
+                                    id="calendar"
+                                    data-locale="de"
+                                    data-controller="calendar"
+                                    data-calendar-locale="{{ app.request.locale ?? 'de' }}"
+                                    data-calendar-events-url="{% if app.request.query.get('call') %}{{ path('booking_ajax', {'call': true}) }}{% else %}{{ path('booking_ajax') }}{% endif %}"
+                                    {#                                data-calendar-marker-main="{{ asset('images/Marker/main.png') }}"#}
+                                    {#                                data-calendar-marker-near="{{ asset('images/Marker/near.png') }}"#}
+                                    data-calendar-event-modal-target="calendar">
+                            </div>
+                            <p style="font-size: 12px;">
+                                <span class="get_view">{{ 'w.visit'|trans }}</span>&nbsp;
+                                <span class="get_install">{{ 'w.montage'|trans }}/{{ 'w.installtion'|trans }}</span>&nbsp;
+                                <span class="get_else">{{ 'book.type.other'|trans }}</span>&nbsp;
+                                <span class="get_appointment">Terminvorschlag</span>&nbsp;
+                                <span class="get_task">Aufgabe</span>&nbsp;
+                                <span class="get_call">Anrufe</span>&nbsp;
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="mapu" class="w-100" style="min-height: 600px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

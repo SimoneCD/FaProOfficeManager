@@ -1,0 +1,24 @@
+<div class="doc-md-{{ doc.id }}">
+    <a target="_blank" href="{{ absolute_url(asset(appAssetPath~'uploads/'~offer.id~'/'~doc.filename)) }}">{{ doc.filename }}</a>
+    <span class="desc-{{ doc.id }}">
+        <a href="javascript:"
+           style="padding:2px 4px;border-radius:4px;border:1px solid lightgrey;color: orangered" title="Doppelklicken zum Löschen" type="button"
+       data-loop-id="{{ docsCount }}"
+       data-doument-id="{{ doc.id }}"
+       data-url="{{ path('montage_document_remove', {'id': doc.id}) }}"
+       data-action="dblclick->upload#removeDoc">x</a><span>
+    <br>
+        {% if 'pdf' in doc.filename %}
+            <object data="{{ asset(appAssetPath~'uploads/'~offer.id~'/'~doc.filename) }}" type="application/pdf" width="200px" height="100%">
+                <p>Unable to display PDF file. <a href="{{ asset(appAssetPath~'uploads/'~offer.id~'/'~doc.filename) }}">Download</a> instead.</p>
+            </object>
+        {% endif %}
+
+{#    <div class="desc-{{ doc.id }}">#}
+{#        <a href="javascript:" style="color: orangered" title="Doppelklicken zum Löschen" type="button"#}
+{#                data-loop-id="{{ docsCount }}"#}
+{#                data-doument-id="{{ doc.id }}"#}
+{#                data-url="{{ path('montage_document_remove', {'id': doc.id}) }}"#}
+{#                data-action="dblclick->upload#removeDoc">x</a>#}
+{#    </div>#}
+</span>

@@ -1,0 +1,64 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+  locale: "de"
+  # This parameter defines the codes of the locales (languages) enabled in the application
+  app_holidays: 'BW'
+  app_locales: de|en
+  customer_start: 1000
+  app.notifications.email_sender: kunenservice-bw@zukunftsorientierte-energie.de
+  app_db: "%env(string:DATABASE_URL)%"
+  app_email: "kundenservice@zukunftsorientierte-energie.de"
+  app_email_name: "ZOE-Kundenservice"
+  app_password: '%env(APP_PASSWORD)%'
+  app_dirs: "%kernel.project_dir%/public/hd/bw"
+  app_product_upload_dir: "%kernel.project_dir%/public/hd/bw/products"
+  app_offer_dir: "%kernel.project_dir%/public/hd/bw/offers"
+  app_protocol_upload_dir: "%kernel.project_dir%/public/hd/bw/offers"
+  app_doc_directory: "%kernel.project_dir%/public/hd/bw/uploads"
+  app_template_directory: "hd/bw"
+  # dump the Service Container into a Single File
+  app_asset_path: "hd/bw"
+  appCurrency: "€"
+  subdomain: "bw"
+  template_dir: "tamplate_bw"
+  sf:
+    title: "Ihr Fachbetrieb f&#252;r Ladestation, PV-Anlagen und Installation"
+    name: "ZOE"
+    name_complete: "ZOE i.G."
+    montage_phone: "+49 176 22 54 30 47" # Markus
+    montage_email: "info@zoe-solar.de"
+    service_phone: "+49 176 22 54 30 47" # Micha
+    phone: "+49 176 46 74 48 35" # Jeremy
+    pv_phone: "+49 176 22 54 30 47" # Jeremy
+    address: "Kurfürstenstraße 124"
+    zip: "10785 Berlin"
+    city: "Berlin"
+    country: "Deutschland"
+    email: "kundenservice@zukunftsorientierte-energie.de"
+    url: "https://kundenservice.zukunftsorientierte-energie.de"
+    www: "https://zoe-solar.de"
+    www2: "https://zukunftsorientierte-energie.de"
+    owner: "Inh. Hr. Jeremy Schulze"
+    agb: "https://zoe-solar.de/agb"
+
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    bind:
+      $emailSender: "%app.notifications.email_sender%"
+      string $hdDir: "%app_dirs%"
+      string $subdomain: "%subdomain%"
+      string $appEmail: "kundenservice@zukunftsorientierte-energie.de"
+      string $appEmailName: "ZOE-Kundenservice"
+      string $appPassword: '%env(APP_PASSWORD)%'
+      string $appPdfPath: "%app_base_uri%"
+      string $appPdfLocalPath: "%app_kernel_dir%"
+      string $protocolDirectory: "%app_doc_upload_directory%"
+      string $templateDirectory: "%app_template_directory%"
+      string $offersDirectory: "%app_offer_dir%"
+      string $docDirectory: "%app_doc_directory%"
+      string $productsDirectory: "%app_product_upload_dir%"

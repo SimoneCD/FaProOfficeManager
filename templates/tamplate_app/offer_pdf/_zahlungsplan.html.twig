@@ -1,0 +1,59 @@
+{{ restore('total') }}
+<div class="row hBox headBoxBlank page-pay-plan m-0">
+        <div class="col-12 m-0 p-0" style="padding: 0 36px;">
+            <div class="text-left m-0 p-0" style="width: 68%;float: left">&nbsp;</div>
+            <div class="text-right m-0 p-0" style="width: 16%;float: left">
+                <strong>{{ 'w.netto'|trans }}</strong>
+            </div>
+            <div class="text-right m-0 p-0" style="width: 16%;float: left">
+                <strong>{{ 'w.brutto'|trans }}</strong>
+            </div>
+        </div>
+        {% set restPercent = 100 %}
+        {% if offer.context['invoice_pay'] is defined %}
+            {% for k, percent in offer.context['invoice_pay'] %}
+                {% set p = percent['value']|length ?  percent['value']|number_format : 0 %}
+                {% set restPercent = restPercent-p %}
+                {% set summeNetto = (total*p/100) %}
+                {% if offer.tax == 0 %}
+                    {% set summeSteuern = 0 %}
+                    {% set summeBrutto = summeNetto %}
+                {% else %}
+                    {% set summeSteuern = (summeNetto*offer.tax/100)%}
+                    {% set summeBrutto = summeSteuern+summeNetto %}
+                {% endif %}
+                {% if percent['value'] > 0 %}
+                    <div class="row m-0 p-0 w-100">
+                        <div class="text-left px-0" style="padding-right: 0;width: 68%;float: left">
+                            {{ p }}% {{ percent['name'] }}
+                        </div>
+                        <div class="text-right px-0" style="padding-left: 0;width: 16%;float: left">
+                            {{ summeNetto|number_format('2',',','.') }} €
+                        </div>
+                        <div class="text-right px-0" style="width: 16%;float: left">
+                            {{ summeBrutto|number_format('2',',','.') }} €
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% set summeNetto = (total*restPercent/100) %}
+{% if offer.tax == 0 %}
+{% set summeSteuern = 0 %}
+{% set summeBrutto = summeNetto %}
+{% else %}
+            {% set summeSteuern = (summeNetto*offer.tax/100)%}
+            {% set summeBrutto = summeSteuern+summeNetto %}
+        {% endif %}
+        <div class="row m-0 p-0 w-100">
+            <div class="text-left px-0" style="width: 68%;float: left">
+                {{ restPercent }}% {{ 'finalPayIfFinished'|trans }}.
+            </div>
+            <div class="text-right px-0" style="width: 16%;float: left">
+                {{ summeNetto|number_format('2',',','.') }} €
+            </div>
+            <div class="text-right px-0" style="width: 16%;float: left">
+                {{ summeBrutto|number_format('2',',','.') }} €
+            </div>
+        </div>
+    </div>

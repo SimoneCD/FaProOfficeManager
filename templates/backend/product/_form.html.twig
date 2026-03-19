@@ -1,0 +1,301 @@
+
+{{ form_start(form) }}
+<section id="step">
+    <br>
+    <div class="form-group row">
+        <div class="col-md-3">
+            {{ form_label(form.productNumber) }}
+            {{ form_widget(form.productNumber) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_label(form.productSubCategory) }}
+            {{ form_widget(form.productSubCategory) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_label(form.color) }}
+            <div class="input-group">
+                {{ form_widget(form.color) }}
+                <i class="material-symbols-outlined">palette</i>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            {{ form_label(form.workerProduct) }}
+            {{ form_widget(form.workerProduct) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_label(form.valueName) }}
+            {{ form_widget(form.valueName) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_label(form.kw) }}
+            {{ form_widget(form.kw) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_label(form.einheit) }}
+            {{ form_widget(form.einheit) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            {{ form_label(form.description) }}
+        </div>
+        <div class="col-md-9">
+            {{ form_widget(form.description) }}
+        </div>
+    </div>
+
+    {% if product is defined and product.id %}
+    <div class="form-group row leistung_row">
+        <label class="col-12 col-md-3 col-form-label" for="product_productImage" style="cursor: pointer">
+            <span>{{ 'p.image'|trans }}</span>
+            <span class="material-icons">backup</span>
+        </label>
+        <div class="col-12 col-md-9">
+            {{ form_widget(form.productImage) }}
+            {% if product is defined and product.image != '' %}
+                <img style="width: 300px;height: 300px;" id="product_preview{% if product.id is null %}_active{% endif %}" src="{{ asset(appAssetPath~'products/'~product.image) }}" alt="{{ 'p.imagePreview'|trans }} - {{ product.name }}" />
+            {% else %}
+                <img style="width: 300px;height: 300px;" id="product_preview{% if product.id is null %}_active{% endif %}" src="{{ asset('app/images/not_available.png') }}" alt="{{ 'p.imagePreview'|trans }}" />
+            {% endif %}
+            <br>
+            <button class="btn btn-danger btn-sm" type="button" id="deleteImage">{{ 'w.delete'|trans }}</button>
+            <button class="btn btn-default btn-sm" type="button" id="btnRestore">{{ 'w.reset'|trans }}</button>
+            <button class="btn btn-default btn-sm" type="button" id="btnFlip">{{ 'w.flip'|trans }}</button>
+            <button class="btn btn-primary btn-sm" type="button" id="btnCrop"><span title="{{ 'w.crop'|trans }}" class="material-icons">crop_free</span></button>
+        </div>
+{#        {% include 'backend/components/_crop_buttons.html.twig' %}#}
+    </div>
+    {% endif %}
+    <hr>
+    <div class="row">
+        <div class="col-md-12">
+            <strong style="font-size: x-large">{{ 'p.manufacturer.title'|trans }}</strong>
+        </div>
+    </div>
+    <br>
+    <div class="form-group row">
+        {{ 'w.certificats'|trans }}
+        <div class="col-12">
+           {# {{ form_widget(form.certificats) }}#}
+            <div id="offer_order_documents" {{ stimulus_controller('upload', {'offerId':null, 'question':null, 'docCount':product.certificats|length}) }}>
+                <div class="card">
+                    <div class="card-body">
+                        <h4 style="color: {{ sfColor }}">{{ 'm.documents'|trans }}
+                            <button class="btn btn-default btn-sm p-1" type="button" {{ stimulus_action('upload','clickDocument','click') }}>
+                                <span title="{{ 'm.documentAdd'|trans }}" class="material-icons">add_circle_outline</span>
+                            </button><br>
+                            <span class="form-text">(.doc,.pdf,.xls,.txt)</span>
+                        </h4>
+                        <div class="m-0 p-0">
+                            {% if product is defined and product.id %}
+                            <input type="file" class="d-none"
+                                   name="documents[{{ product.certificats|length }}]"
+                                   data-upload-target="fileclick"
+                                   data-url="{{ path('ajax_upload_product_document', {'id':product.id}) }}"
+                                   accept=".doc,.pdf,.xls,.txt,.csv" {{ stimulus_action('upload','addDocumentPreview','change') }}>
+                            {% endif %}
+                            <div class="">
+                                <div {{ stimulus_target('upload', 'preview') }}></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                {% for doc in product.certificats %}
+                                    {% set i = loop.index-1 %}
+                                    <div class="doc-{{ doc.id }}" style="position: relative">
+                                        <a target="_blank"
+                                           href="{{ absolute_url(asset(appAssetPath~'uploads/docs/'~doc.filename)) }}">
+                                            {{ doc.originalName }}
+                                        </a>
+                                        <button style="color: orangered" title="" type="button" data-document-loop-id="{{ i }}"
+                                                data-upload-id-param="{{ doc.id }}"
+                                                data-upload-url-param="{{ path('ajax_product_document_remove', {'id': doc.id}) }}"
+                                                data-action="dblclick->upload#removeDoc"
+                                                class="p-1 btn btn-light btn-xs">x
+                                        </button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            {{ form_label(form.ean) }}
+        </div>
+        <div class="col-md-9">
+            {{ form_widget(form.ean) }}
+        </div>
+    </div>
+    {% if product.ean %}
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label">{{ 'w.ean'|trans }}</label>
+            <div class="col-md-9">
+                {{ barcode(product.ean, 1, 100, 'green') }}
+{#                <img src="{{ barcodes }}">#}
+{#                {{ barcodes|raw }}#}
+            </div>
+        </div>
+    {% else %}
+{#        <section id="container">#}
+{#    <div class="controls">#}
+{#    <div class="form-group row">#}
+{#        <label class="col-6 col-md-3 col-form-label">#}
+{#            <fieldset class="input-group">#}
+{#                <button type="button" class="stop btn btn-sm w-100">Stop</button>#}
+{#            </fieldset>#}
+{#            <span>Barcode-Type</span>#}
+{#            <select name="decoder_readers" class="form-control">#}
+{#                <option value="code_128">Code 128</option>#}
+{#                <option value="code_39" selected="selected">Code 39</option>#}
+{#                <option value="code_39_vin">Code 39 VIN</option>#}
+{#                <option value="ean">EAN</option>#}
+{#                <option value="ean_extended">EAN-extended</option>#}
+{#                <option value="ean_8">EAN-8</option>#}
+{#                <option value="upc">UPC</option>#}
+{#                <option value="upc_e">UPC-E</option>#}
+{#                <option value="codabar">Codabar</option>#}
+{#                <option value="i2of5">Interleaved 2 of 5</option>#}
+{#                <option value="2of5">Standard 2 of 5</option>#}
+{#                <option value="code_93">Code 93</option>#}
+{#            </select>#}
+{#            <select class="d-none" name="input-stream_constraints">#}
+{#                <option value="320x240">320px</option>#}
+{#                <option selected="selected" value="640x480">640px</option>#}
+{#                <option value="800x600">800px</option>#}
+{#                <option value="1280x720">1280px</option>#}
+{#                <option value="1600x960">1600px</option>#}
+{#                <option value="1920x1080">1920px</option>#}
+{#            </select>#}
+{#            <select class="d-none" name="locator_patch-size">#}
+{#                <option value="x-small">x-small</option>#}
+{#                <option value="small">small</option>#}
+{#                <option selected="selected" value="medium">medium</option>#}
+{#                <option value="large">large</option>#}
+{#                <option value="x-large">x-large</option>#}
+{#            </select>#}
+{#            <input class="d-none" type="checkbox" checked="checked" name="locator_half-sample" />#}
+{#            <select class="d-none" name="numOfWorkers">#}
+{#                <option selected="selected" value="0">0</option>#}
+{#                <option value="1">1</option>#}
+{#                <option value="2">2</option>#}
+{#                <option value="4">4</option>#}
+{#                <option value="8">8</option>#}
+{#            </select>#}
+{#            <select class="d-none" name="input-stream_constraints" id="deviceSelection"></select>#}
+{#            <label class="d-none" style="display: none">#}
+{#                <span>Zoom</span>#}
+{#                <select name="settings_zoom"></select>#}
+{#            </label>#}
+{#            <label class="d-none" style="display: none">#}
+{#                <span>Torch</span>#}
+{#                <input type="checkbox" name="settings_torch" />#}
+{#            </label>#}
+{#        </label>#}
+{#        <div class="col-6 col-md-9">#}
+{#            <div id="interactive" class="viewport"></div>#}
+{#            <div id="result_strip">#}
+{#                <ul class="thumbnails"></ul>#}
+{#                <ul class="collector"></ul>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#    </div>#}
+{#</section>#}
+    {% endif %}
+    <div class="form-group row">
+        <div class="col-md-3">
+            {{ form_label(form.manufacturerName) }}
+            {{ form_widget(form.manufacturerName) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_label(form.stock) }}
+            {{ form_widget(form.stock) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_label(form.inStock) }}
+            {{ form_widget(form.inStock) }}
+        </div>
+        <div class="col-md-3">
+            <div class="form-group row p-0">
+                <div class="col-md-6">
+                    {{ form_label(form.deliveryTime) }}
+                    {{ form_widget(form.deliveryTime) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_label(form.manufacturerWarranty) }}
+                    {{ form_widget(form.manufacturerWarranty) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-6">
+            {{ form_label(form.manufacturerInfo) }}
+            {{ form_widget(form.manufacturerInfo) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_label(form.salesInfo) }}
+            {{ form_widget(form.salesInfo) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        {{ form_label(form.shopLink) }}
+        <div class="col-12 col-md-9">
+            {{ form_widget(form.shopLink) }}
+        </div>
+    </div>
+    <div class="form-group row">
+
+        <div class="col-6 col-md-3">
+        </div>
+    </div>
+    <div class="form-group row">
+        {{ form_label(form.products) }}
+        <div class="col-12 col-md-9">
+            {{ form_widget(form.products) }}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-12">
+            <strong style="font-size: x-large">{{ 'p.priceInfo'|trans }}</strong>
+        </div>
+    </div>
+    <br>
+    <div class="form-group row">
+        {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+            {{ form_label(form.price) }}
+            <div class="col-6 col-md-3">
+                {{ form_widget(form.price) }}
+            </div>
+        {% else %}
+            <div class="col-6 col-md-3 d-none">
+                {{ form_widget(form.price) }}
+            </div>
+        {% endif %}
+        {{ form_label(form.ekPrice) }}
+        <div class="col-6 col-md-3">
+            {{ form_widget(form.ekPrice) }}
+        </div>
+    </div>
+    <hr>
+    <div class="form-group row">
+        <div class="col-md-8 offset-md-4 text-left">
+            <button type="submit" class="btn btn-primary">{{ 'f.button.saveName'|trans({'%name%':'w.product'|trans}) }}</button>
+        </div>
+    </div>
+</section>
+    <div class="clearfix"></div>
+{{ form_end(form, {'render_rest' : false}) }}
+
+

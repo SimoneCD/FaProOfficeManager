@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit OfferSubCategory{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link  href="{{ asset('assets/dist/cropper.css') }}" rel="stylesheet">
+    {% include 'backend/_form_style.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/dist/cropper.js') }}"></script>
+    {% include 'backend/offer_sub_category/_script.html.twig' with {'sub':subCategory} %}
+    {% include 'backend/offer_question/_script.html.twig' %}
+    <script>
+        $(document).on('click', '.toggle_settings', function () {
+            let allg = $('#q_settings');
+            if (allg.css('display') === 'none') {
+                $(this).html('<span class="material-symbols-outlined" style="font-size: x-large;">keyboard_arrow_up</span>')
+                allg.css('display', 'block');
+            } else {
+                $(this).html('<span class="material-symbols-outlined" style="font-size: x-large;">keyboard_arrow_down</span>')
+                allg.css('display', 'none');
+            }
+        })
+        $(document).on('click', '.toggle_allgemein', function () {
+            let allg = $('#allgemein');
+            if (allg.css('display') === 'none') {
+                $(this).html('<span class="material-symbols-outlined" style="font-size: x-large;">keyboard_arrow_up</span>')
+                allg.css('display', 'block');
+            } else {
+                $(this).html('<span class="material-symbols-outlined" style="font-size: x-large;">keyboard_arrow_down</span>')
+                allg.css('display', 'none');
+            }
+        })
+        $(document).on('click', '.toggle_text', function () {
+            let allg = $('#emailText');
+            if (allg.css('display') === 'none') {
+                $(this).html('<span class="material-symbols-outlined" style="font-size: x-large;">keyboard_arrow_up</span>')
+                allg.css('display', 'block');
+            } else {
+                $(this).html('<span class="material-symbols-outlined" style="font-size: x-large;">keyboard_arrow_down</span>')
+                allg.css('display', 'none');
+            }
+        })
+        $(document).on('click', '.toggle_content_products', function () {
+            let sel = $('#multiselect');
+            if (sel.css('height') === '150px') {
+                $(this).html('<span class="material-symbols-outlined" style="font-size: x-large;">zoom_in_map</span>')
+                sel.css('height', '550px');
+                $('#multiselect_to').css('height', '550px');
+            } else {
+                $(this).html('<span class="material-symbols-outlined" style="font-size: x-large;">zoom_out_map</span>')
+                sel.css('height', '150px');
+                $('#multiselect_to').css('height', '150px');
+            }
+        })
+    </script>
+{% endblock %}
+{% block main %}
+    {% include 'backend/components/_menu.html.twig' with {
+        'listLi': {'n':'o.categories'|trans,'k':true},
+        'categoryLi': {'n':category.name,'i':category.icon,'k':category.id},
+        'subCategoryLi': {'n':('replace.questionnaire'|trans({'%name%':subCategory.name})),'k':subCategory.id,'ki':subCategory.category.id,'i':'document_scanner'},
+        'subCategoryLi2': {'n':('replace.edit'|trans({'%name%':('replace.questionnaire'|trans({'%name%':subCategory.name}))})),'i':'edit'}
+    } %}
+    {#<h1>{{ 'osc.quest.edit'|trans }}</h1>#}
+    <div id="backend_form">
+        {% include 'backend/offer_sub_category/_form.html.twig' with {'subCategory':subCategory} %}
+    </div>
+{% endblock %}

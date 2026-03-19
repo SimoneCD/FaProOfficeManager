@@ -1,0 +1,11 @@
+<div class="form-group row">
+    <label for="{{ question.name }}" class="col-sm-{{ col1 }} col-form-label">{{ question.name }}</label>
+    {% set value = (context and context[aid] is defined and context[aid]['questions'][question.id]['answer'] is defined) ? context[aid]['questions'][question.id]['answer'] : '' %}
+    <div class="col-sm-{{ col2 }}  m-0 p-0">
+        <input type="text" value="{{ value }}" title="{{ question.name }}"
+                data-class="s-{{ question.id }}"
+                data-question="{{ question.id }}"
+                name="offer_option[{{ question.id }}]"
+                class="form-control condition-change-check">
+    </div>
+</div>

@@ -1,0 +1,15 @@
+<p style="margin-bottom: 0"><strong>Ihre Termine</strong></p>
+<table style="font-size: 0.75rem;width: 100%;">
+    <tr>
+        <th>{{ 'book.info'|trans }}</th>
+        <th style="text-align: right">Zeitraum</th>
+    </tr>
+    {% for booking in offer.bookings %}
+        {% if booking.title != 'Anrufen' %}
+            <tr>
+                <td>{{ booking.title }}</td>
+                <td style="text-align: right">{{ booking.beginAt|date('d.m H:i') }} - {{ booking.endAt|date('d.m H:i') }}</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+</table>

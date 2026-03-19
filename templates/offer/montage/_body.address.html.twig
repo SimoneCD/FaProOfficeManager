@@ -1,0 +1,56 @@
+
+    <div class="toggle-content">
+        <div class="row">
+            <div class="text-left col-4"><strong>{{ 'w.name'|trans }}</strong></div>
+            <div class="text-left col-8">
+                {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}
+                    <a href="{{ path('customer_edit', {'id': offer.customer.id}) }}"><i class="material-symbols-outlined">people</i>{% if offer.customer.companyName == '' %}{{ offer.customer.sex|trans }} {% endif %} {{ offer.customer.fullName }}</a>
+                {% else %}
+                    {% if offer.customer.companyName == '' %}{{ offer.customer.sex|trans }} {% endif %} {{ offer.customer.fullName }}
+                {% endif %}
+            </div>
+        </div>
+        {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}
+            <div class="row">
+                <div class="text-left col-4"><strong>{{ 'w.address'|trans }}</strong></div>
+                <div class="text-left col-8">{{ offer.customer.address }}</div>
+            </div>
+            <div class="row">
+                <div class="text-left col-4"><strong>{{ 'c.zipCity'|trans }}</strong></div>
+                <div class="text-left col-8">{{ offer.customer.zip }} {{ offer.customer.city }}</div>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="text-left col-4"><strong>{{ 'w.email'|trans }}</strong></div>
+            <div class="text-left col-8">{{ offer.customer.email }}</div>
+        </div>
+        <div class="row">
+            <div class="text-left col-4"><strong>{{ 'w.phone'|trans }}</strong></div>
+            <div class="text-left col-8">{{ offer.customer.phone }}</div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="text-left col-sm-12 col-md-4 head-title-small">{{ 'm.montage.time'|trans }}</div>
+            <div class="text-left col-sm-6 col-md-4">{{ 'w.from'|trans }} {{ form_widget(form.serviceDateFrom) }}</div>
+            <div class="text-left col-sm-6 col-md-4">{{ 'w.until'|trans }} {{ form_widget(form.serviceDateTo) }}</div>
+        </div>
+    </div>
+        <div class="row">
+            <div class="text-left col-8 offset-4 head-title-small">{{ 'w.montageOrt'|trans }}</div>
+        </div>
+        <div class="row">
+            <div class="text-left col-4">
+                <strong>{{ 'f.label.address'|trans }}</strong>
+            </div>
+            <div class="text-left pt-2 col-8">
+                {{ form_widget(form.stationAddress) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="text-left col-4">
+                <strong>{{ 'f.label.zip'|trans }}</strong>
+            </div>
+            <div class="text-left col-8 pt-2">
+                {{ form_widget(form.stationZip) }}
+            </div>
+        </div>

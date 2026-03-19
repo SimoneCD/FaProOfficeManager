@@ -1,0 +1,48 @@
+{{ restore('imagesCount') }}
+<div class="col-2" class="offer_order_images" {{ stimulus_controller('upload', {'offerId':offer.id, 'question':question.id, 'imgCount':(question.images|length+1)}) }}>
+
+
+
+    <div class="row m-0 p-0">
+        <div class="impreview_{{question.id }} col-md-12">
+            {% for img in question.images %}
+                {% set i = loop.index-1 %}
+                <div class="gallery gal-{{ img.id }}" style="position: relative">
+                    <a target="_blank"
+                       href="{{ absolute_url(asset(appAssetPath~'uploads/'~offer.id~'/'~img.filename)) }}">
+                        <img src="{{ asset(appAssetPath~'uploads/'~offer.id~'/'~img.filename) }}" alt="Mountains"
+                             width="600" height="400">
+                    </a>
+                    <div class="desc-{{ img.id }}">
+                        {{ loop.index~'. '~('m.image'|trans) }}&nbsp;
+                        <button title="Doppelklicken zum Löschen" type="button"
+                                data-loop-id="{{ i }}"
+                                data-image-id="{{ img.id }}"
+                                data-url="{{ path('montage_image_remove', {'id': img.id}) }}"
+                                data-action="dblclick->upload#remove"
+                                class="p-1 btn btn-danger btn-xs">x</button>
+                        <input class="d-none" type="file" id="offer_question_{{ question.id }}_images_{{ imagesCount }}_file"
+                               name="images[{{ question.id }}][file][{{ imagesCount }}]"/>
+                    </div>
+                </div>
+                {% set imagesCount = imagesCount+1 %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row m-0 p-0">
+        <div class="col-md-12">
+            <div class="">
+                <input type="hidden" name="offer_order[images][{{ imagesCount }}][question]" value="{{ question.id }}">
+                <input type="file" class="d-none" name="offer_order[images][{{ imagesCount }}][file]"
+                       data-upload-target="fileclick"
+                       accept="image/*" {{ stimulus_action('upload','addImagePreview','change') }}>
+            </div>
+            <div class="">
+                {% set imagesCount = imagesCount+1 %}
+                <div class="" {{ stimulus_target('upload', 'preview') }}></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ save('imagesCount') }}

@@ -1,0 +1,74 @@
+{% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+    {% set stornobutton = '<button name="status"
+                            title="'~('s.storno'|trans)~'"
+                            data-status-param="storno"
+                            style="box-shadow: 1px 1px lightgrey;font-size:small;font-weight:bold;padding: 2px 10px;background-color: #fff;"
+                            class="w-100 p-2 btn btn-primary bmd-btn-fab-sm"
+                            type="button" '~stimulus_action('update-offer', 'updateStatus', 'click')~'>
+                        <span style="color: #d93d06" class="material-icons">report</span>
+                    </button>' %}
+    <div class="w-100" style="margin-top: 10px;text-align: right;">
+        {% if offer.status == 'estimate' %}
+                {{ stornobutton|raw }}
+                <button name="status"
+                        data-status-param="besichtigung"
+                        class="w-100 p-2 btn btn-default bmd-btn-fab-sm"
+                        type="button" {{ stimulus_action('update-offer', 'updateStatus', 'click') }}>
+                        Besichtigung vereinbart
+                </button>
+                <button name="status"
+                        data-status-param="open"
+                        class="w-100 p-2 btn btn-light bmd-btn-fab-sm"
+                        type="button" {{ stimulus_action('update-offer', 'updateStatus', 'click') }}>
+                        Überspringen und zum Angebot senden
+                </button>
+        {% elseif offer.status == 'besichtigung' %}
+                {{ stornobutton|raw }}
+                <button name="status"
+                        data-status-param="open"
+                        class="w-100 p-2 btn btn-default bmd-btn-fab-sm"
+                        type="button" {{ stimulus_action('update-offer', 'updateStatus', 'click') }}>
+                        zum Angebot bearbeiten
+                </button>
+        {% elseif  offer.status == 'rechnungEingang' and is_granted('ROLE_ADMIN') %}
+                <button name="status"
+                        data-status-param="archive"
+                        class="w-100 p-2 btn btn-primary bmd-btn-fab-sm"
+                        type="button" {{ stimulus_action('update-offer', 'updateStatus', 'click') }}>
+                        Archivieren
+                </button>
+        {% elseif offer.status == 'open' or offer.status == 'bestaetigt' or offer.status == 'call' or offer.status == 'call-plus' %}
+            {{ stornobutton|raw }}
+        {% elseif offer.status == 'gesendet' %}
+            {{ stornobutton|raw }}
+            <button name="status"
+                    data-status-param="bestaetigt"
+                    class="w-100 p-2 btn btn-default bmd-btn-fab-sm"
+                    type="button" {{ stimulus_action('update-offer', 'updateStatus', 'click') }}>
+                    {{ 's.offering'|trans }}
+            </button>
+        {% elseif offer.status == 'rechnungPartSend' %}
+            {{ stornobutton|raw }}
+            <button name="status"
+                    data-status-param="rechnungPartEingang"
+                    class="w-100 p-2 btn btn-default bmd-btn-fab-sm"
+                    type="button" {{ stimulus_action('update-offer', 'updateStatus', 'click') }}>{{ 's.partInvoicePayed'|trans }}</button>
+        {% elseif offer.status == 'rechnungPartEingang' %}
+            {{ stornobutton|raw }}
+            <button name="status"
+                    data-status-param="work"
+                    class="w-100 p-2 btn btn-default bmd-btn-fab-sm"
+                    type="button" {{ stimulus_action('update-offer', 'updateStatus', 'click') }}>Anträge wurden gestellt{#{{  's.appointed'|trans}}#}</button>
+        {% elseif offer.status == 'work' %}
+            <button name="status"
+                    data-status-param="done"
+                    class="w-100 p-2 btn btn-default bmd-btn-fab-sm"
+                    type="button" {{ stimulus_action('update-offer', 'updateStatus', 'click') }}>{{ 's.projectInstalled'|trans }}</button>
+        {% elseif offer.status == 'rechnungEingangSend' and is_granted('ROLE_EMPLOYEE_SERVICE') %}
+            <button name="status"
+                    data-status-param="rechnungEingang"
+                    class="w-100 p-2 btn btn-default bmd-btn-fab-sm"
+                    type="button" {{ stimulus_action('update-offer', 'updateStatus', 'click') }}>{{ 's.finishInvoicePayed'|trans }}</button>
+        {% endif %}
+    </div>
+{% endif %}

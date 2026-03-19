@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'w.customers'|trans }}{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).on('change', '.ccheck', function (e){
+            let url = $(this).attr('data-url');
+            let data;
+            if (this.checked) {
+                data = '1'
+            } else {
+                data = '0'
+            }
+            $.ajax({
+                'url': url,
+                'data': {'checked':data},
+                'method':'post',
+                'success': function (ax) {
+                    if (ax === true) {
+                        //window.location.reload();
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+
+{% endblock %}
+{% block main %}
+<style>
+    .offer_plus_box_block{
+        padding: 4px;
+        text-align: right;
+        font-weight: 600;
+        color: #444444;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">Kontaktanfragen - www.zoe-solar.de</h4>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table table_data w-100">
+                    <thead>
+                    <tr style="color: {{ sfColor }};">
+                        <th style="cursor: pointer">Datum</th>
+                        <th style="cursor: pointer">{{ 'w.salutation'|trans }}</th>
+                        <th style="cursor: pointer">{{ 'w.name'|trans }}</th>
+                        <th style="cursor: pointer">{{ 'w.surname'|trans }}</th>
+                        <th style="cursor: pointer">{{ 'w.phone'|trans }}</th>
+                        <th style="cursor: pointer">{{ 'w.email'|trans }}</th>
+                        <th style="cursor: pointer">{{ 'Nachricht'|trans }}</th>
+                        <th style="cursor: pointer" class="text-right">Bearbeitet</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for customer in customers %}
+                        <tr>
+                            <td>{{ customer.createdAt|date('d.m.Y H:i') }}</td>
+                            <td>{{ customer.sex|trans }}</td>
+                            <td>{{ customer.name }}</td>
+                            <td>{{ customer.surname }}</td>
+                            <td>{{ customer.phone }}</td>
+                            <td>{{ customer.email }}</td>
+                            <td>{{ customer.text|nl2br }}</td>
+                            <td style="text-align: center">
+                                <input class="ccheck" data-url="{{ path('ajax_contact_update', {'id': customer.id}) }}" {% if customer.done %}checked{% endif %} type="checkbox" name="done" value="1" />
+{#                                <a href="{{ path('customer_edit', {'id': customer.id}) }}"><i class="material-symbols-outlined">badge</i></a>#}
+                                <form style="float: right" method="post" action="{{ path('customer_contact_delete', {'id': customer.id}) }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ customer.id) }}">
+                                    <a style="cursor:pointer;color:red;padding: 3px" data-confirm="Kontaktanfrage Löschen" class="confirm"><span class="material-symbols-outlined">
+delete_forever
+</span></a>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

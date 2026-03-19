@@ -1,0 +1,21 @@
+{% if offer.wallboxProduct %}
+    {{ restore('total') }}
+    {{ restore('countAll') }}
+    <tr style="color: #fff;background-color:{{ sfColor }};">
+        <td class="text-right" style="width:20px;padding-right: 10px;"><span style="color: #fff">{{ offer.wallboxProduct.productNumber }}</span></td>
+        <td class="pad-l pl-0"><strong style="color: #fff">{{ offer.wallboxProduct.name }}</strong><br>{{ offer.wallboxProduct.description }}</td>
+        <td class="text-right pl-0">{{ offer.amount|number_format('2',',','.') }}</td>
+        <td class="text-left  pl-3">{{ offer.wallboxProduct.einheit|lower }}</td>
+        <td class="text-right pl-0">{{ offer.wallboxPrice ? offer.wallboxPrice|number_format('2',',','.') : offer.wallboxProduct.price|number_format('2',',','.') }} &euro;</td>
+        <td class="text-right pl-0" style="padding-right: 40px;">{{ ((offer.wallboxPrice ? offer.wallboxPrice : offer.wallboxProduct.price)*offer.amount)|number_format('2',',','.') }} &euro;</td>
+    </tr>
+
+    {% if offer.wallboxPrice %}
+        {% set total = total+(offer.wallboxPrice*offer.amount) %}
+    {% else %}
+        {% set total = total+(offer.wallboxProduct.price*offer.amount) %}
+    {% endif %}
+    {% set countAll = countAll+1 %}
+    {{ save('total') }}
+    {{ save('countAll') }}
+{% endif %}

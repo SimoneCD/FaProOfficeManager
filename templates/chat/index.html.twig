@@ -1,0 +1,189 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'w.chat'|trans }}{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        if (window.Worker) {
+            let lastId;
+            const wi = new Worker("{{ asset('assets/js/chat_worker2.js') }}?i1");
+            function sendId() {
+                if (lastId < 0) {
+                    lastId = 0;
+                }
+                wi.postMessage([lastId, '{{ (app.request.locale == app.request.defaultLocale ? '' : '/'~app.request.locale) }}']);
+            }
+            function createStep(chat) {
+                return (
+                    '<div class="step">' +
+                    '<div class="number">' +
+                    ' <img src="'+(chat.avatar)+'" alt="Avatar" style="border-radius: 50%;">' +
+                    '</div>' +
+                    '<div class="info">' +
+                    '<p class="title">' + (chat.date) + '</p>'+
+                    '<p class="text">' + (chat.content.replace({"\n": "", "\r": "", "\t": ""})) + '</p>' +
+                    '</div>' +
+                    '</div>'
+                );
+            }
+            function startWorker(id) {
+                lastId = id;
+                // const myWorker = new Worker("worker.js");
+                wi.postMessage([lastId, '{{ (app.request.locale == app.request.defaultLocale ? '' : '/'~app.request.locale) }}']);
+                wi.onmessage = function(event) {
+                    if (event.data === '' || typeof event.data === 'number') {
+                        setTimeout("sendId()", 5000);
+                    } else if (typeof event.data === 'string') {
+                        let obj = JSON.parse(event.data);
+                        let dat = obj.map(function (chat) {
+                            if (chat.chatId > lastId) {
+                                lastId = chat.chatId;
+                            }
+                           return createStep(chat);
+                        }).join("");
+
+                        $('#steps').html(dat);
+                        // const music = new Audio('../bell.wav');
+                        // music.play();
+                        // music.loop = false;
+                        // music.playbackRate = 1;
+                        // music.pause();
+                        document.getElementById('steps').scrollTop = 5000;
+                        setTimeout("sendId()", 5000);
+
+                    }
+                };
+
+            }
+            let state = parseInt(localStorage.getItem('open')??0);
+            console.log(state);
+            $(document).ready(function () {
+                $(document).find('#chat_form').on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        'url': '{{ path('app_chat_create') }}',
+                        'data': $('#chat_form').serialize(),
+                        'method': 'post',
+                        'success': function (ax) {
+                            startWorker(lastId);
+                            $('#chat_text').val('');
+                        }
+                    });
+                });
+            });
+            // window.addEventListener('unload', function () {
+                // localStorage.setItem('open', state);
+            // });
+            function unloadState() {
+                console.log('unload state '+ state)
+                if(!state || state <= 0) {
+                    state = 0;
+                } else {
+                    state -=1;
+                }
+                localStorage.setItem('open', state);
+                wi.terminate();
+                if (wii !== undefined) {
+                    wii.terminate();
+                }
+            }
+            function loadState() {
+                state +=1;
+                localStorage.setItem('open', state);
+                if(state === 1) {
+                    console.log('perfect')
+                    startWorker({{ lastId }});
+                } else {
+                    document.getElementById('steps').innerHTML = '{{ 'chat.error.oneWindow'|trans }}'
+                }
+            }
+        }
+    </script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .notification {position: relative;}
+        .sidebar .logo .simple-text {overflow: inherit;}
+        *, *:before, *:after {box-sizing: border-box;}
+        body {background-color: #f3f3f3;}  .wrapper {
+            min-height: 100vh;
+            display: contents;
+            justify-content: left;
+            align-items: baseline;
+            margin-left: 130px;
+            width: max-content;
+        }
+        .steps {height: 600px; margin: 0 20px 50px 0;overflow: scroll}
+        .step {display: flex;position: relative;}
+        .step:after {
+            content: "";
+            position: absolute;
+            left: 15px;
+            top: 32px;
+            height: 0;
+            width: 2px;
+            background-color: #aeced3;
+        }
+        .step .info {margin: 8px 0 20px;}
+        .step .title {
+            font-size: 12px;
+            font-weight: 400;
+            margin: 0 0 8px;
+            color: #979797;
+        }
+        .step .text {color: #000; padding-bottom: 0;margin: 0;}
+        .step:not(:last-child):after {height: 75%;}
+        .number {
+            width: 32px;
+            height: 32px;
+            background-color: transparent;
+            border-radius: 50%;
+            border: 2px solid #007EA7;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            margin-right: 14px;
+        }
+        .number.completed {background-color: #007EA7;}
+        .number svg {
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+        }
+        .number svg path {fill: white;}
+        .mut {
+            width: auto;
+            background-color: #fff;
+            /* position: fixed; bottom: 100px; */
+            margin-left: 0;
+            padding: 0;
+        }
+        textarea {width: 250px !important;}
+        @media screen and (min-width: 500px) and (max-width: 700px) {
+            textarea {width: 500px !important;}
+        }
+        @media screen and (min-width: 701px) and (max-width: 990px) {
+            textarea {width: 600px !important;}
+        }
+        @media screen and (max-width: 991px) {
+            .wrapper {margin-left: 30px;}
+        }
+        @media screen and (min-width: 992px) {
+            textarea {width: 700px !important;}
+        }
+        .card .card-header {
+            z-index: inherit;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    {% include 'chat/_chat.html.twig' %}
+{% endblock %}
+{% block footer %}{% endblock %}

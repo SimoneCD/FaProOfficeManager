@@ -1,0 +1,11 @@
+<div class="row headBoxMfg m-0 pt-1" style="padding:10px 50px 0 !important;overflow: visible;">
+    <div class="w-100 m-0 p-0">
+        <p class="m-0 p-0">{{ 'i.toPay'|trans }}<br>
+        {{ 'pdf.greetings'|trans }},</p>
+        <p style="margin:0;padding-top: 20px;"><span style="font-weight:bold;color: {{ sfColorDark }}">{{ invoice.invoiceOrder.offer.user.getShortSalutation|trans }} {{ invoice.invoiceOrder.offer.user.fullName }}</span>
+            <br>{{ invoice.invoiceOrder.offer.user.positionName }}</p>
+        {% if invoice.leistung and preview is not defined %}
+            <p class="m-0 px-0 pt-3" style="font-size: 1rem">{{ invoice.leistung }}&nbsp;</p>
+        {% endif %}
+    </div>
+</div>

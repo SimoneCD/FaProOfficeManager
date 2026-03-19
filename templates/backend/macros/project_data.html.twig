@@ -1,0 +1,10 @@
+{% macro keyValueCollectionItem(subCategory, item) %}
+    <div id="kv-{{ item.vars.id }}" class="row p-0" id="{{ item.vars.id }}">
+        <div class="col-md-5">
+            {{ item.vars.data.keyName }}
+        </div>
+        <div class="col-md-7 pt-0 pb-0">
+            {{ item.vars.data.keyValue }}
+        </div>
+    </div>
+{% endmacro %}

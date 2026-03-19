@@ -1,0 +1,113 @@
+{% for invoice in invoices %}
+    {% if invoice.sendDate != null %}
+        {% set difference = date('now').diff(date(invoice.sendDate)) %}
+        {% set leftDays = difference.days %}
+        <tr>
+            <td>{{ iti[invoice.type] }}{% if invoice.type == 'part-plus' %} {{ invoiceType }}{% set invoiceType = invoiceType+1 %}{% endif%}</td>
+            <td>{{ invoice.sendDate|date('d.m.Y') }}</td>
+            <td>{% if invoice.bezahlt == NULL %}{{ invoice.sendDate|ago }}{% endif %}</td>
+            <td style="text-align: center">
+                {% if invoice.bezahlt != NULL -%}
+                    <img src="{{ asset('app/images/ok.svg') }}">
+                {% else %}
+                    <input data-action="{{ path('ajax_update_offer_invoice', {'invoice':invoice.id}) }}" data-css="{{ invoice.id }}" class="set_payed icon_save" type="checkbox" data-id="{{ invoice.id }}" name="payed">
+                    <img class="icon_save_{{ invoice.id }}" style="display: none" src="{{ asset('app/images/ok.svg') }}">
+                {% endif %}
+            </td>
+            <td></td>
+        </tr>
+        {% if leftDays > 7 and invoice.bezahlt == NULL -%}
+            {% set reminderSend = {} -%}
+            {% set index = 0 %}
+            {% set sendIndex = '' %}
+            {% set leftDays2 = 0 %}
+            {% for r in invoice.reminder %}
+                {% set index = loop.index %}
+                {% set sendIndex = r.sendDate %}
+                <tr style="background-color: #fff6d6" class="mahnung_{{ invoice.id }}">
+                    <td>{{ loop.index }}. Mahnung</td>
+                    <td>{{ r.sendDate|date('d.m.Y') }}</td>
+                    <td>{{ r.sendDate|ago }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% else %}
+                <tr style="background-color: mistyrose" class="mahnung_{{ invoice.id }}">
+                    <td>1. Mahnung</td>
+                    <td></td>
+                    <td></td>
+                    <td><a class="pl-2"
+                           title="1. Mahnung an den Kunden"
+                           data-action="click->email#launchReminder"
+                           type="button"
+                           data-type="1"
+                           data-email-src-param="{{ path('ajax_create_default_mail',{'id':offer.customer.id,'template':'reminder_1'}) }}"
+                           data-email-url-param="{{ path('ajax_load_detail_mail',{'id':offer.customer.id,'template':'reminder_1','invoice':invoice.id}) }}"
+                           data-email-attachurl-param="{{ path('ajax_attachments_mail',{'id':offer.id,}) }}"
+                           data-id="{{ offer.customer.id }}"
+                           data-offer="{{ offer.id }}"
+                           data-invoice="{{ invoice.id }}"
+                           data-name="{{ offer.customer.fullNormalName }} ({{ offer.customer.email }})"
+                           data-title="{{ 'message.new'|trans }}" style="cursor: pointer"><small><span class="send_reminder_icon material-symbols-outlined">attach_email</span></small>
+                        </a></td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+            {% if index == 1 and sendIndex != '' %}
+                {% set difference2 = date('now').diff(date(sendIndex)) %}
+                {% set leftDays2 = difference2.days %}
+            {% endif %}
+            {% if index == 1 and leftDays2 and leftDays2 > 7 %}
+                <tr style="background-color: mistyrose" class="mahnung_{{ invoice.id }}">
+                    <td>2. Mahnung</td>
+                    <td></td>
+                    <td></td>
+                    <td><a class="pl-2"
+                           title="3. Mahnung an den Kunden"
+                           data-action="click->email#launchReminder"
+                           type="button"
+                           data-type="2"
+                           data-email-src-param="{{ path('ajax_create_default_mail',{'id':offer.customer.id,'template':'reminder_2'}) }}"
+                           data-email-url-param="{{ path('ajax_load_detail_mail',{'id':offer.customer.id,'template':'reminder_2','invoice':invoice.id}) }}"
+                           data-email-attachurl-param="{{ path('ajax_attachments_mail',{'id':offer.id,}) }}"
+                           data-id="{{ offer.customer.id }}"
+                           data-offer="{{ offer.id }}"
+                           data-invoice="{{ invoice.id }}"
+                           data-name="{{ offer.customer.fullNormalName }} ({{ offer.customer.email }})"
+                           data-title="{{ 'message.new'|trans }}" style="cursor: pointer"><small>
+                                <span class="send_reminder_icon material-symbols-outlined">schedule_send</span></small>
+                        </a></td>
+                    <td></td>
+                </tr>
+            {% endif %}
+            {% if index == 2 and sendIndex != '' %}
+                {% set difference2 = date('now').diff(date(sendIndex)) %}
+                {% set leftDays2 = difference2.days %}
+            {% endif %}
+            {% if index == 2 and leftDays2 and leftDays2 > 7 %}
+                <tr style="background-color: mistyrose" class="mahnung_{{ invoice.id }}">
+                    <td>3. Mahnung</td>
+                    <td></td>
+                    <td></td>
+                    <td><a class="pl-2"
+                           title="3. Mahnung an den Kunden"
+                           data-action="click->email#launchReminder"
+                           type="button"
+                           data-type="3"
+                           data-email-src-param="{{ path('ajax_create_default_mail',{'id':offer.customer.id,'template':'reminder_3'}) }}"
+                           data-email-url-param="{{ path('ajax_load_detail_mail',{'id':offer.customer.id,'template':'reminder_3'}) }}"
+                           data-email-attachurl-param="{{ path('ajax_attachments_mail',{'id':offer.id,}) }}"
+                           data-id="{{ offer.customer.id }}"
+                           data-offer="{{ offer.id }}"
+                           data-invoice="{{ invoice.id }}"
+                           data-name="{{ offer.customer.fullNormalName }} ({{ offer.customer.email }})"
+                           data-title="{{ 'message.new'|trans }}" style="cursor: pointer"><small>
+                                <span class="send_reminder_icon material-symbols-outlined">schedule_send</span></small>
+                        </a>
+                    </td>
+                    <td></td>
+                </tr>
+            {% endif %}
+        {%- endif -%}
+    {% endif %}
+{% endfor %}

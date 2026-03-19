@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'w.products'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .togglebutton label .toggle, .togglebutton label input[type=checkbox][disabled]+.toggle {
+            background-color: #efefef;
+        }
+        .togglebutton label input[type=checkbox]:checked+.toggle {background-color: #4ac047;}
+    </style>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).on('change', '.funnelUpdate', function () {
+            let $elemChecked = $(this).prop('checked');
+            let data = 0
+            if ($elemChecked) {
+                $(this).prop('checked', true);
+                data = 1;
+            } else {
+                $(this).prop('checked', false);
+            }
+            let that = this;
+            jQuery.ajax({
+                url: $(this).attr('data-url'),
+                data: {'funnel':data},
+                method: 'POST',
+                success: function(data) {
+                    console.log(data)
+                }
+            });
+        })
+    </script>
+{% endblock %}
+{% block main %}
+    {% for cat in subCategories %}
+    <div class="row" id="sub-{{ cat.id }}">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">{{ cat.name }} <a href="{{ path('backend_product_new', {'category':'x', 'subCategory':cat.id}) }}"><span style="position:relative;vertical-align:middle;color:{{ sfColorDark }}" class="material-symbols-outlined">add_circle</span></a></h4>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table table_data" style="overflow: visible">
+                        <thead>
+                        <tr>
+                            <th class="id">{{ 'w.posShort'|trans }}</th>
+                            <th style="width:60px;">{{ 'w.images'|trans }}</th>
+                            <th class="name" style="min-width: 300px">{{ 'w.name'|trans }}</th>
+                            <th class="name">{{ 'Funnel Produkt'|trans }}</th>
+                            <th>{{ 'w.color'|trans }}</th>
+                            <th class="id">{{ 'f.label.kwName'|trans }}</th>
+                            <th>{{ 'f.label.kwNameShort'|trans }}</th>
+                            <th>{{ 'w.measure'|trans }}</th>
+                            <th>{{ 'w.description'|trans }}</th>
+{#                            <th style="width: 150px;">{{ 'EK-Preis'|trans }}</th>#}
+{#                            <th style="width: 150px;" class="text-right">{{ 'VK-Preis'|trans }}</th>#}
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for product in cat.products %}
+                            <tr>
+                                <td data-order="{{ product.productNumber|replace({'.':''}) }}">
+                                    <form id="form_product_num_{{ product.id }}" class="inlineForm" data-url="{{ path('ajax_product_update_number', {'id':product.id}) }}">
+                                        <input title="productNumber" data-id="form_product_num_{{ product.id }}" name="productNumber" data-field="productNumber" class="inlineFormInput form-control" type="text" value="{{ product.productNumber }}">
+                                    </form>
+                                </td>
+                                <td style="width: 100px;">{% if product.image %}<div class="snapchat" ><img alt="{{ product.name }}" src="{{ asset(appAssetPath~'products/'~product.image) }}" style="max-height: 60px;max-width: 60px;" /></div>{% else %}<div class="snapchat" ><img alt="{{ product.name }}" style="max-height: 60px;max-width: 60px;" src="{{ asset('app/images/not_available.png') }}" /></div>{% endif %}</td>
+                                <td>
+                                    <form id="form_product_name_{{ product.id }}" class="inlineForm" data-url="{{ path('ajax_product_update_name', {'id':product.id}) }}">
+                                        <input title="name" data-id="form_product_name_{{ product.id }}" name="name" data-field="name" class="inlineFormInput form-control" type="text" value="{{ product.name }}">
+                                    </form>
+                                </td>
+                                <td>
+                                    <div class="togglebutton">
+                                        <label>
+                                            <input {% if product.funnel %}checked{% endif%} data-url="{{ path('app_product_funnel_update', {'id': product.id}) }}" class="funnelUpdate" type="checkbox" name="funnel[]" value="1">
+                                            <span class="toggle"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td><div class="app_color_dot" style="background-color: {{ product.color ?? '#fff' }};"></div></td>
+                                <td>
+                                    <form id="form_product_kw_{{ product.id }}" class="inlineForm" data-url="{{ path('ajax_product_update_kw', {'id':product.id}) }}">
+                                        <input title="kw" data-id="form_product_kw_{{ product.id }}" name="kw" data-field="kw" class="inlineFormInput form-control" type="text" value="{{ product.kw }}">
+                                    </form>
+                                </td>
+                                <td data-order="{{ product.valueName }}">
+                                    <form id="form_product_val_{{ product.id }}" class="inlineForm" data-url="{{ path('ajax_product_update_value_name', {'id':product.id}) }}">
+                                        <input type="text" value="{{ product.valueName }}" data-id="form_product_val_{{ product.id }}" name="productValueName" data-field="valueName" class="inlineFormInput form-control" />
+                                    </form>
+                                </td>
+                                <td data-order="{{ product.einheit }}">
+                                    <form id="form_product_einh_{{ product.id }}" class="inlineForm" data-url="{{ path('ajax_product_update_einheit', {'id':product.id}) }}">
+                                        <input type="text" value="{{ product.einheit }}" data-id="form_product_einh_{{ product.id }}" name="productEinheit" data-field="einheit" class="inlineFormInput form-control" />
+                                    </form>
+                                </td>
+                                <td>{{ product.description }}</td>
+{#                                <td class="text-right">{{ product.ekPrice|number_format(2,',','.') }}&euro;</td>#}
+{#                                <td class="text-right">{{ product.price|number_format(2,',','.') }}&euro;</td>#}
+                                <td class="text-right" style="width: 100px">
+                                    {% include '/backend/product/components/product_action.html.twig' %}
+                                </td>
+                            </tr>
+                        {% else %}
+                            {% include 'backend/_no_entry.html.twig' with {'collSpan': 10} %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

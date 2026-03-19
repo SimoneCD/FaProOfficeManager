@@ -1,0 +1,39 @@
+<div class="table-responsive">
+{#    <p>Kunde: {% if customer.companyName %}{{ customer.companyName }}{% else %}{{ customer.fullNormalName }}{% endif %}</p>#}
+    <table class="table">
+    <thead>
+    <tr>
+        <th style="width: 70px"><strong>Auftrag</strong></th>
+        <th style="width: 70px"><strong>Datum</strong></th>
+        <th style="width: 120px"><strong>Uhrzeit</strong></th>
+        <th><strong>Thema</strong></th>
+        <th><strong>Information</strong></th>
+        <th><strong></strong></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% set so = 1 %}
+    {% for booking in bookings %}
+            <tr id="deleteTr{{ booking.id }}" class="offers_views{% if booking.offer.note %} note_view{% endif %} {{ booking.offer.status }}_view{% if booking.offer.status == 'rechnungPartSend' %} rechnungPartEingang_view{% endif %}">
+                <td style="border-bottom: none">{{ booking.offer.number }}</td>
+                <td style="border-bottom: none">{{ booking.beginAt|date('d.m.Y') }}</td>
+                <td style="border-bottom: none">{{ booking.beginAt|date('H:i') }} - {{ booking.endAt|date('H:i') }}</td>
+                <td style="border-bottom: none">{{ booking.title }}</td>
+                <td>{{ booking.notice }}</td>
+                <td class="text-right">
+                {% if is_granted('POST_EDIT', booking.offer) %}
+                    <form id="deleteForm{{ booking.id }}" method="post" data-action="{{ path('booking_delete_ajax', {'id': booking.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ booking.id) }}">
+                        <button type="button" class="deleteAjaxTermin" data-id="{{ booking.id }}" style="border: none;background-color: #fff"><i class="material-symbols-outlined" style="background-color: #fff;color: orangered;">delete</i></button>
+                    </form>
+                {% endif %}
+                </td>
+            </tr>
+    {% else %}
+        <tr>
+            <td colspan="6">Keine Einträge</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>

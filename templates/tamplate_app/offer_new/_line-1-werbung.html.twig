@@ -1,0 +1,31 @@
+<div class="row page-image hBox
+{%- if offer.wallboxProduct is not null and offer.wallboxProduct.image %} headBox51{% else %} headBox5{% endif %}"
+     style="border-bottom:1px solid {{ sfColorDark }};padding-right: 10px !important;{%- if offer.image or (offer.subCategory is not null and offer.subCategory.image) %}background-image:url({% if offer.image %}{{ asset(appAssetPath~'offers/'~offer.id~'/image/'~offer.image) }}{% else %}{{ img1 }}{% endif %}?{{ 'now'|date('u') }}){% endif %}">
+    <div class="col-8 headbox_div"></div>
+    <div style="overflow: visible;" class="col-4 p-0 text-right{% if offer.wallboxProduct is not null and offer.wallboxProduct.productSubCategory.mainProduct and offer.wallboxProduct.image %} page-image-box{% endif %}">
+        {% if offer.wallboxProduct is not null and offer.wallboxProduct.image %}
+            <img class="page-image-cover" alt="{{ offer.wallboxProduct.name }}" src="{{ img2 }}?{{ 'now'|date('u') }}">
+        {% endif %}
+    </div>
+</div>
+{{ form_start(imageForm, {'attr':{'class':'ajax_update_offer_image'},'id':'ajax_update_offer_image','action': path('ajax_update_offer_image',{'offer':offer.id}) }) }}
+<div class="form-group row">
+    <label class="col-12 col-form-label" for="offer_image_offerImage" style="cursor: pointer">
+        <span>Individuelles Angebotsbild hochladen</span>
+        <span class="material-icons">backup</span>
+    </label>
+    <div class="col-12 previewer p-0">
+        {{ form_widget(imageForm.offerImage, {'id': 'offer_image_offerImage'}) }}
+        {% if offer.image and offer.image != '' %}
+            <img style="max-width: 794px;" id="preview_image"
+                 src="{{ asset(appAssetPath~'offers/'~offer.id~'/image/'~offer.image) }}?{{ 'now'|date('u') }}"
+                 alt="{{ 'o.imagePreview'|trans }}"/>
+        {% else %}
+            <img style="max-width: 794px;" id="preview_image"
+                 src="{{ asset('app/img/1x1.png') }}?{{ 'now'|date('u') }}" alt="{{ 'o.imagePreview'|trans }}"/>
+        {% endif %}
+    </div>
+    {% include 'backend/components/_crop_buttons.html.twig' with {'delbutton':true,'full': true} %}
+    {{ form_end(imageForm, {'render_rest':false}) }}
+</div>
+</form>

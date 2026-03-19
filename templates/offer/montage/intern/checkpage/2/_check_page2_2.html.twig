@@ -1,0 +1,170 @@
+<table>
+    <tr><td colspan="5"><h3>Prüfung</h3></td></tr>
+    <tr>
+        <td colspan="5"><h3>Besichtigte Stromkreise (bei großen Anlagen und getrennten Besichtigungen pro Besichtigung ein Blatt ausfüllen):</h3></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>iO</td>
+        <td>niO</td>
+        <td>oP</td>
+        <td rowspan="6" style="position:relative;width: 300px">
+            <input type="file" class="d-none" name="file_check"
+                   data-url="{{ path('ajax_upload_image', {'id':offer.id, 'name':"offer_check.energy_2"}) }}"
+                   data-upload-target="fileclick"
+                   accept="image/*" {{ stimulus_action('upload','addImagePreview','change') }}>
+            <div data-upload-target="preview" style="max-width:300px;max-height:150px;overflow:hidden;position: absolute;top: 0;right: 20px;">
+                {% if offer.images|length %}
+                    {% set imagesCount = 0 %}
+                    {% for img in offer.images %}
+                        {% if 'offer-check-energy-2' in img.filename %}
+                            <div class="gal-{{ img.id }}">
+                            <img class="compo" src="{{ absolute_url(asset(appAssetPath~'uploads/'~offer.id~'/'~img.filename)) }}"
+                                 alt="{{ img.filename }}">
+                            {% if pdf is not defined %}
+                                <div class="desc-{{ img.id }}">
+                                    <button style="position: absolute;bottom: 0;right: 0;" title="Doppelklicken zum Löschen" type="button"
+                                            data-loop-id="{{ imagesCount }}"
+                                            data-image-id="{{ img.id }}"
+                                            data-url="{{ path('montage_image_remove', {'id': img.id}) }}"
+                                            data-action="dblclick->upload#remove"
+                                            class="p-1 btn btn-danger btn-xs">x</button>
+                                </div>
+                            {% else %}
+                                <img src="{{ absolute_url(asset(appAssetPath~'uploads/'~offer.id~'/'~img.filename)) }}"
+                                     alt="{{ img.filename }}" >
+                            {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </td>
+    </tr>
+    <tr style="padding: 2px;">
+        <td style="padding: 0">
+            <p>Gesamte Photovoltaikanlage{% if pdf is not defined %}
+                <span type="button" {{ stimulus_action('upload','clickImage','click') }}>
+                    <span class="material-icons">add_a_photo</span> {# <span title="{{ 'm.imageAdd'|trans }}" class="material-icons">add_circle_outline</span> #}
+                </span>{% endif %}
+            </p>
+        </td>
+        <td style="width: 20px"><input class="check_i" type="checkbox" name="offer_check[energy][1]" {% if yes and ocp.energy[1] %}checked{% endif %} value="1"></td>
+        <td style="width: 20px"><input class="check_i" type="checkbox" name="offer_check[energy][11]" {% if yes and ocp.energy[11] %}checked{% endif %} value="1"></td>
+        <td style="width: 20px"><input class="check_i" type="checkbox" name="offer_check[energy][111]" {% if yes and ocp.energy[111] %}checked{% endif %} value="1"></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td colspan="4"><p>Folgende Stromkreise: </p></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td><p><input class="check_i" type="text" name="offer_check[energy][21]" value="{% if yes %}{{ ocp.energy[21] }}{% else %}{% endif %}"></p></td>
+        <td style="width: 20px"><input class="check_i" type="checkbox" name="offer_check[energy][2]" {% if yes and ocp.energy[2] %}checked{% endif %} value="1"></td>
+        <td style="width: 20px"><input class="check_i" type="checkbox" name="offer_check[energy][22]" {% if yes and ocp.energy[22] %}checked{% endif %} value="1"></td>
+        <td style="width: 20px"><input class="check_i" type="checkbox" name="offer_check[energy][222]" {% if yes and ocp.energy[222] %}checked{% endif %} value="1"></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td><p><input class="check_i" type="text" name="offer_check[energy][31]" value="{% if yes %}{{ ocp.energy[31] }}{% else %}{% endif %}"></p></td>
+        <td style="width: 20px"><input class="check_i" type="checkbox" name="offer_check[energy][3]" {% if yes and ocp.energy[3] %}checked{% endif %} value="1"></td>
+        <td style="width: 20px"><input class="check_i" type="checkbox" name="offer_check[energy][33]" {% if yes and ocp.energy[33] %}checked{% endif %} value="1"></td>
+        <td style="width: 20px"><input class="check_i" type="checkbox" name="offer_check[energy][333]" {% if yes and ocp.energy[333] %}checked{% endif %} value="1"></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td><p><input class="check_i" type="text" name="offer_check[energy][41]" value="{% if yes %}{{ ocp.energy[41] }}{% else %}{% endif %}"></p></td>
+        <td style="width: 20px"><input class="check_i" type="checkbox" name="offer_check[energy][4]" {% if yes and ocp.energy[4] %}checked{% endif %} value="1"></td>
+        <td style="width: 20px"><input class="check_i" type="checkbox" name="offer_check[energy][44]" {% if yes and ocp.energy[44] %}checked{% endif %} value="1"></td>
+        <td style="width: 20px"><input class="check_i" type="checkbox" name="offer_check[energy][444]" {% if yes and ocp.energy[444] %}checked{% endif %} value="1"></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="padding: 0" colspan="5"><p> <input class="check_i" type="checkbox" name="offer_check[energy][3]" {% if yes and ocp.energy[3] %}checked{% endif %} value="1"> &nbsp;Die Photovoltaikanlage wurde nach den Anforderungen in DIN VDE 0100-600 (IEC 60364-6) besichtigt</p></td>
+    </tr>
+</table>
+<table>
+    <tr><td colspan="8"><h3>Konstruktion und Installation des PV-Generators</h3></td></tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[construction][1]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>Das Gleichstromsystem wurde im Allgemeinen nach den Anforderungen in DIN VDE 0100 (IEC 60364) und im Besonderen nach DIN VDE 0100-712 (IEC 60364-7-712) konstruiert, ausgewählt und errichtet.</p></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[construction][2]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>Die Gleichstromkomponenten sind für den Gleichstrombetrieb bemessen.</p></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[construction][3]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>Die Gleichstromkomponenten sind für den höchstmöglichen Strom und die höchstmögliche Spannung bemessen.</p></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[construction][4]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>Schutz ist durch Anwendung der Klasse II oder einer gleichwertigen Isolation auf der Gleichstromseite gegeben.</p></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[construction][5]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>PV-Strangkabel, PV-Generatorkabel und PV-Gleichstromhauptkabel wurden so ausgewählt und errichtet, dass das Risiko von Erdschlüssen und Kurzschlüssen auf ein Minimum verringert ist (DIN VDE 0100-712 Abs. 522.8.1).</p></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[construction][6]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>Das Verdrahtungssystem wurde so ausgewählt und errichtet, dass es den erwarteten äußeren Einflüssen wie Wind, Eisbildung, Temperatur und Sonnenstrahlung standhält (DIN VDE 0100-712 Abs. 522.8.3).</p></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[construction][7]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>Wechselstrom- und Gleichstromkabel sind physikalisch getrennt.</p></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[construction][8]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>Systeme ohne Strang-Überstrom-Schutzeinrichtung: Strangkabel sind so ausgelegt, dass sie den höchsten zusammengefassten Fehlerstrom von Parallelsträngen aufnehmen können (DIN VDE 0100-712 Abs. 433).</p></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[construction][9]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>Systeme mit Strang-Überstrom-Schutzeinrichtung: Überstrom-Schutzeinrichtungen sind korrekt nach den örtlichen Regeln oder nach den Anweisungen des PV-Modul-Herstellers festgelegt (DIN VDE 0100-712 Abs. 433.2).</p></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[construction][10]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>Es sind Gleichstrom-Lasttrennschalter auf der Gleichstromseite des Wechselrichters eingebaut (DIN VDE 0100-712 Abs. 536.2.2).</p></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[construction][11]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>Sind Sperrdioden eingebaut, ist zu prüfen, ob deren Rückspannung mindestens 2 x Uo stc des PV-Strangs, in dem sie eingebaut sind, beträgt. (DIN VDE 0100-712 Abs. 512.1.1).</p></td>
+    </tr>
+</table>
+<table>
+    <tr><td colspan="8"><h3>PV-System/ Schutz gegen Überspannung/ elektrischen Schlag</h3></td></tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[system][1]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>Der Wechselrichter hat eine einfache Trennung zwischen der Wechselstromseite und der Gleichstromseite.</p></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[system][2]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>Alternativ: Eine Fehlerstrom-Schutzeinrichtung ist im Kreis installiert und entspricht einer FI-Schutzeinrichtung des Types B (DIN VDE 0100-712 Abs. 413.1.1.1.2).</p></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[system][3]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>Die Fläche aller Verdrahtungsschleifen wurde so klein wie möglich gehalten (DIN VDE 0100-712 Abs. 54).</p></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[system][4]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>Der Rahmen des PV-Generators hat eine Potentialausgleichsverbindung entsprechend örtlicher Regeln</p></td>
+    </tr>
+    <tr style="padding: 2px;border-bottom: 1px solid #dbdbdb">
+        <td style="width: 60px"><input class="check_i" type="checkbox" name="offer_check[system][5]" value="1"></td>
+        <td style="padding: 0" colspan="7"><p>Wenn Potentialausgleichsleiter installiert sind, laufen diese parallel und in möglichst engem Kontakt zu den PV-Gleichstromkabeln..</p></td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td colspan="2"><p style="padding-top: 26px">Prüfdatum:</p></td>
+        <td colspan="2">
+            <p style="padding-top: 26px"><input class="check_i" type="date" name="offer_check[signDate][2]" value="{% if yes %}{{ ocp.signDate[2] }}{% else %}{{ 'now'|date('d.m.Y') }}{% endif %}"></p>
+        </td>
+        <td><p style="padding-top: 26px">Unterschrift/Prüfer:</p></td>
+        <td style="padding-top: 0;position: relative" colspan="3">
+            <div id="signatureText" style="margin-top:-20px;min-width: 200px;min-height: 60px;"></div>
+            {% if yes and ocp.sign[2] %}
+                todo unterschrift darstellen, wenn gespeichert
+{#                <img src="">#}
+            {% else %}
+                <p><input id="signature" class="check_i" type="hidden" name="offer_check[sign][2]" value=""></p>
+            {% endif %}
+            <div><img style="position: absolute;bottom: 5px;right: 20px;" src="{{ absolute_url(asset(appAssetPath~'logo/stamp-logo.png')) }}"> </div>
+            <button type="button" data-id="1" style="position: absolute;height: -webkit-fill-available;top: 0;right: 0" class="p-0 signatur_reset btn btn-danger btn-sm"><i class="material-icons">undo</i></button>
+        </td>
+    </tr>
+</table>

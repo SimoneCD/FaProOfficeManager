@@ -1,0 +1,64 @@
+<div class="row hBox headBoxSalutation page-wellcome" style="height: auto; padding-right: 0 !important;">
+    <div class="col-8 m-0 py-0 pl-0 pr-5" style="padding-right: 50px !important;">
+        <form id="ajax_update_offer_context_salutation" class="ajax_update_offer_context" action="{{ path('ajax_update_offer_option_context',{'id':offer.id}) }}">
+        <p class="m-0 px-0 pb-0 pt-3">
+            <input class="form-control p-2" name="offer_option[context][anredeTitle]"
+                value="{% if offer.option.context['anredeTitle'] is defined -%}
+                    {{ offer.option.context['anredeTitle'] }}
+                {%- else -%}
+                    {% include appTemplate~'pdf/_salutation.html.twig' with {'customer': offer.customer} %}
+                {%- endif -%}">
+        </p>
+        <br>
+        {% set offerName = getOfferName(offer.id) %}
+        <div class="p-0 m-0">
+            <textarea id="inhaltAnrede" oninput="counterAnrede()" style="min-height: 230px;font-weight: normal;" class="form-control p-2" name="offer_option[context][{%- if offer.status == 'estimate' or offer.status == 'besichtigung' -%}estimateA{%- else -%}a{%- endif -%}nrede]">
+                {%- if offer.status == 'estimate' or offer.status == 'besichtigung' -%}
+                    {%- if offer.option.context['estimateAnrede'] is defined -%}
+                        {{ offer.option.context['estimateAnrede'] }}
+                    {%- else -%}
+                        {{ offer.subCategory.estimateText|replace({
+                            '##offerName##':offerName,
+                            '##angebotsName##':offerName,
+                            '##offerNumber##':offer.number,
+                            '##angebotsNummer##':offer.number,
+                        }) }}
+                    {%- endif -%}
+                {%- else -%}
+                    {%- if offer.option.context['anrede'] is defined -%}
+                        {{ offer.option.context['anrede'] }}
+                    {%- else -%}
+                        {{ offer.subCategory.offerText|replace({
+                            '##offerName##':offerName,
+                            '##angebotsName##':offerName,
+                            '##offerNumber##':offer.number,
+                            '##angebotsNummer##':offer.number,
+                        }) }}
+                    {%- endif -%}
+                {%- endif -%}
+            </textarea>
+            <p class="m-0 p-0 small" id="zeilen">7 Zeilen erlaubt</p>
+            <button type="submit" class="btn btn-danger p-1" style="position: absolute;bottom: -6px;right: 60px;">
+                {%- if offer.status == 'estimate' or offer.status == 'besichtigung' -%}
+                    {%- if offer.option.jsonOptions['estimateAnrede'] is defined -%}
+                        <i class="material-icons p-1">send</i>
+                    {% else %}
+                      {{ 'aprovePfdSalutation'|trans }}
+                    {% endif %}
+                {% else %}
+                    {%- if offer.option.jsonOptions['anrede'] is defined -%}
+                        <i class="material-icons p-1">send</i>
+                    {% else %}
+                        {{ 'aprovePfdSalutation'|trans }}
+                    {% endif %}
+                {% endif %}
+            </button>
+        </div>
+        </form>
+    </div>
+    <div class="col-4 m-0 pl-4 pr-0 py-0" style="overflow: visible;">
+        <div class="contactPerson mt-3">
+            {% include appTemplate~'pdf/_company_in_anrede.html.twig' %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="text-left col-12" style="">
+    <div class="row">
+        <div class="text-left col-4">
+            <strong>{{ 'w.offer'|trans }}</strong></div>
+        <div class="text-left col-8">{{ offer.subCategory ? offer.subCategory.name : '' }}</div>
+    </div>
+    <div class="row">
+        <div class="text-left col-4">
+            <strong>{{ 'p.kw' |trans}}</strong></div>
+        <div class="text-left col-8">{{ offer.kw }}
+            {{ offer.wallboxProduct ? offer.wallboxProduct.valueName : '' }}</div>
+    </div>
+    <div class="row">
+        <div class="text-left col-4">
+            <strong>{{ 'w.count'|trans }}</strong></div>
+        <div class="text-left col-8">{{ offer.amount }}</div>
+    </div>
+    <div class="row">
+        <div class="text-left col-4">
+            <strong>{{ 'w.installations'|trans }}</strong></div>
+        <div class="text-left col-8">{{ offer.installAmount ?? offer.amount }}</div>
+    </div>
+</div>

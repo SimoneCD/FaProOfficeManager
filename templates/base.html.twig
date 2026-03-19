@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale ?? 'de' }}">
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% set is_customer = is_granted('ROLE_CUSTOMER') %}
+{% set is_montage = is_granted('ROLE_MONTAGE') %}
+{% set is_admin = is_granted('ROLE_ADMIN') %}
+{% set is_service = is_granted('ROLE_EMPLOYEE_SERVICE') %}
+{% set is_extern = is_granted('ROLE_EMPLOYEE_EXTERN') %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ sf.name }}{% endblock %}</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon/favicon-16x16.png') }}">
+    <link rel="mask-icon" href="{{ asset('favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="vapid-public-key" content="{{ vapid_public_key }}">
+    <link rel="stylesheet" href="{{ asset('app/bootstrap-4.0.0/dist/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('app/chat.css') }}?p=01">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    {% block stylesheets %}
+        <!--     Fonts and icons     -->
+        <link rel="stylesheet" href="{{ asset('assets/css/m-i.css') }}"/>
+        {{ encore_entry_link_tags('app') }}
+{#        <link rel="stylesheet" href="{{ asset('assets/jquery.datetimepicker.css') }}">#}
+
+        <style>
+            .sticky-button {
+                position: sticky;
+                position: -webkit-sticky;
+                position: -moz-sticky;
+                position: -ms-sticky;
+                position: -o-sticky;
+                top: 10px;
+                right: 10px;
+            }
+            .att {
+                color: #ffed00;
+                background-color: rgb(15, 110, 255);
+                border-color: rgb(61 155 184);
+            }
+            .faq-content{position: relative;width: auto;}
+            {% if is_extern == true and ('backend' in currentRoute or 'app_project' in currentRoute or 'links' in currentRoute or 'product-manufactura' in currentRoute or 'app_partner' in currentRoute) %}
+            .app_li {display: none}
+            {% else %}
+            .back_li {display: none}
+            {% endif %}
+            li.active a.back_link, li.active a.back_link i {background-color: {{ sfColor }}!important;}
+            .sidebar .nav li.active>a, .sidebar .nav li.active>a i {
+                background-color:{{ sfColor }};
+                color: #fff!important;
+            }
+            .card .card-header-primary .card-icon, .card .card-header-primary .card-text, .card .card-header-primary:not(.card-header-icon):not(.card-header-text) {
+                box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px {{ sfColorDark }};
+            }
+            .card [class*=card-header-]:not(.card-header-icon):not(.card-header-text):not(.card-header-image) {
+                background: #fff !important;
+                border-radius: 10px !important;
+                /* box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;*/
+                box-shadow: rgba(50, 50, 93, 0.25) 0 13px 27px -5px, rgba(0, 0, 0, 0.3) 0 8px 16px -8px;
+                margin: 0;
+                margin-top: -20px;
+                width: max-content;
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+            }
+            h4.card-title {
+                color: {{ sfColorDark }} !important;
+                margin-bottom: 0 !important;
+                font-weight: normal !important;
+            }
+            .top-hr{
+                background-color: {{ sfColorDark }} !important;
+                padding: 0 !important;
+                margin-bottom: 10px !important;
+            }
+            .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+                padding: 4px 8px;
+                vertical-align: top;
+            }
+            form h3{font-weight: 400 !important;}
+            .form-control{padding-left: 6px;}
+            .app-help {font-size: 12px;color: grey}
+            .w-5 {width: 50px;}
+            .w-10 {width: 100px;}
+            .w-15 {width: 150px;}
+            .w-20 {width: 200px;}
+            .w-auto {width: auto;}
+            /*.sidebar .logo img {min-height: 70px;max-height: 100px;}*/
+            .sidebar .logo:after {background-color: transparent;padding-top:0;height: auto;overflow: visible;z-index: 2;}
+            .card-header {padding: 10px !important;}
+            .card-header h4 {font-weight: bold}
+            .col-form-label, .col-form-label p, .form-check-label {
+                font-size: 14px;
+            }
+            body {
+                font-size: 14px;font-family: Mont, Arial, normal, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" ;
+            }
+            h2 {font-style: normal}
+            button {font-weight: normal !important;}
+            .section-to-print {min-width: 992px}
+            table, #backend_form,.llBl {background-color: #fff !important;}
+            textarea {
+                max-height: 600px !important;
+                min-height: 150px !important;
+                resize: both;
+            }
+            .timeline::after {left: 70px;}
+            .container {
+                width: 100%;
+                padding-left: 100px;
+                padding-right: 0;
+            }
+            .container.right {left: 0;}
+            .container.left::after,
+            .container.right::after {left: 62px;}
+            .container.left::before,
+            .container.right::before {
+                left: 70px;
+                border-color: transparent #006E51 transparent transparent;
+            }
+            .container_admin.left::before,
+            .container_admin.right::before {
+                background: #FF9800;
+                border-color: transparent #FF9800 transparent transparent !important;
+            }
+            .container.left .date,
+            .container.right .date {
+                right: auto;
+                left: 0;
+            }
+            .container.left .material-icons,
+            .container.right .material-icons {
+                right: auto;
+                left: 86px;
+            }
+            nav {z-index: 99}
+
+            .container.left .content,
+            .container.right .content {
+                padding: 10px 20px 20px 36px
+                /*border-radius: 500px 0 0 500px;*/
+            }
+            button.active-chat {
+                background-color: {{ sfColorDark }};
+                color: #fff;
+            }
+            .container .material-icons, .container img.avaico {
+                position: relative;
+                display: inline-block;
+                width: 40px;
+                height: 40px;
+                padding: 9px 0;
+                top: calc(50% - 20px);
+                background: #fff;
+                border: 2px solid {{ sfColor }};
+                border-radius: 40px;
+                text-align: center;
+                font-size: 18px;
+                color: {{ sfColor }};
+                z-index: 1;
+            }
+
+            .container.left .material-icons {
+                right: 56px;
+            }
+            .container.left img.avaico {
+                left: 86px;
+                height: auto;
+                padding: 0;
+            }
+            .data_block .card {
+                border-radius: 6px 6px 0 0;
+                margin: 0;
+            }
+            .customer_bottom_block {
+                background-color: #fff;
+                padding: 0 10px;
+            }
+            .customer_block h5 {
+                padding-left: 10px;
+            }
+            .send_reminder_icon {
+                border-radius: 50%;
+                background-color: #f16565;
+                color: #fff;
+                margin: 0;
+                padding: 4px;
+                box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px, rgba(0, 0, 0, 0.24) 0 1px 2px;
+            }
+            .customer_block {
+                margin: 10px 0;
+                border-radius: 0 0 6px 6px;
+                display: inline-table !important;
+                box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px, rgba(0, 0, 0, 0.24) 0 1px 2px;
+                background: #fff;
+            }
+            .box_textarea {
+                font-size: 0.8rem;
+            }
+            .modal-dialog {
+                max-width: 70%;
+            }
+            @media only screen and (max-width: 400px) {
+                .modal-dialog {
+                    max-width: 100% !important; /* Override andere Styles */
+                    width: 100%; /* Explizite Breite */
+                    margin: 3px; /* Entfernt evtl. Standard-Margins */
+                }
+            }
+            @media only screen and (max-width: 767px) { /* Typischer Mobile Breakpoint */
+                .modal-dialog {
+                    max-width: 100% !important;
+                    width: 100%;
+                    margin: 3px;
+                }
+            }
+
+            /*@media only screen and (max-width: 576px) and (-webkit-min-device-pixel-ratio: 2) {*/
+            /*    .modal-dialog {*/
+            /*        position: fixed;*/
+            /*        top: 0;*/
+            /*        left: 0;*/
+            /*        width: 100%;*/
+            /*        height: 100%;*/
+            /*        margin: 0;*/
+            /*    }*/
+            /*}*/
+            .nav li {
+                padding: 1px 0;
+            }
+            .info_th {height:10px !important;text-align:left !important;min-width: auto !important;padding: 2px 0 0 6px !important;}
+            .nav li a {
+                /*box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;*/
+                /*box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;*/
+                border-radius: 6px !important;
+                margin: 3px 1px;
+                border-left: 1px solid #eeeeee;
+                border-top: 1px solid #eeeeee;
+                border-bottom: 1px solid #d3d3d3;
+                border-right: 1px solid #d3d3d3;
+            }
+            .sendDate {
+                position: absolute;
+                top: auto;
+                bottom: 6px;
+                font-size: 12px !important;
+                left: 21px;
+                z-index: 9;
+                background: #a5a5a5;
+                color: #fff;
+                padding: 0 6px;
+                border-radius: 10px;
+                border: 1px solid #ddd;
+            }
+            .top-hr {
+                display: none;
+
+            }
+            .sf_li {
+                border-bottom: none;
+                background-color: #fff;
+            }
+            .sidebar .nav li a a {
+                margin: 0 10%;
+            }
+            .offer_plus_box_block span:first-child {
+                color: {{ sfColorDark }};
+            }
+            .nav-nab {
+                padding: 2px !important;
+                background-color: #fff !important;
+                text-align: center;
+            }
+            .sidebar .nav li hr {
+                background-color: #ffffff;
+                margin: 0;
+                padding: 3px;border: none;
+            }
+            .sidebar .nav li.active>a, .sidebar .nav li.active>a i {
+                background-color: {{ sfColorDark }} !important;
+                color: #fff!important;
+            }
+            .sidebar .nav li.active ul li.active>.hiss {
+                display: block;
+            }
+            .sidebar .nav li.active ul li.active>a, .sidebar .nav li.active ul li.active >a i {
+                background-color: #fff !important;
+                color: {{ sfColor }} !important;
+            }
+            .sidebar .nav .app_li i {
+                color: {{ sfColorDark }};
+            }
+            .sidebar .nav .back_li i {
+                color: {{ sfColor }};
+            }
+            button.search_icon {
+                height: 29px !important;
+                margin-left: -10px;
+                font-size: 22px !important;
+                width: 20px !important;
+                min-width: 29px !important;
+            }
+            .btn-default {
+                background-color: {{ sfColor }}!important;
+                border-color: {{ sfColorDark }}!important;
+            }
+            .btn-default:hover {
+                background-color: {{ sfColorDark }}!important;
+            }
+            /*.fixed-plugin .dropdown .dropdown-menu {*/
+            /*    left: -93px !important;*/
+            /*}*/
+            .modal-backdrop.show {
+                z-index: 999 !important;
+            }
+            .modal {
+                z-index: 99999 !important;
+            }
+            .modal-header {
+                background: {{ sfColor }};
+                color: #fff;
+                border-bottom: 1px solid #fff;
+            }
+            .modal-footer {
+                background-color: #fff;
+                border-top: 1px solid #cccccc;
+            }
+            .modal-title {
+                font-size: 14px;
+                vertical-align: center;
+                align-content: space-around;
+            }
+            .modal.show .modal-dialog {
+                border: 2px solid #f8f9fa;
+                border-radius: 8px 8px 4px 4px;
+            }
+            .modal-dialog-centered {
+                min-height: auto !important;
+            }
+            .modal-content {
+                background-color: #e9ecef;
+                border-radius: 20px;
+            }
+            .form-control, .search_input, #ifrm {
+                background-color: #f8f9fa !important;
+                border-radius: 5px;
+                border-top: 1px solid lightgray;
+                border-right: 1px solid lightgray;
+                border-bottom: 1px solid #e1e1e1;
+                border-left: 1px solid #e1e1e1;
+            }
+            #ifrm {
+                margin: 10px;
+                width: -webkit-fill-available;
+            }
+            .modal .btn {
+                margin: 0;
+                padding: .46875rem 1rem;
+            }
+            .modal label {
+                margin-bottom: 0;
+                margin-top: 10px;
+            }
+            .btn-close {
+                background-color: {{ sfColorDark }};
+                color: #fff;
+                font-weight: bold !important;
+            }
+</style>
+        {% include '_color_styles.html.twig' %}
+    {% endblock %}
+
+{#    <link rel="stylesheet" href="{{ asset('app/ckeditor/contents.css') }}" media="all">#}
+{#    <script src="{{ asset('app/ckeditor/initCkeditor.js') }}?i=e"></script>#}
+</head>
+<body class="{% block body_class %}{% endblock %}" {% block body_loads %}{% if currentRoute in ['app_chat'] %} onunload="unloadState()" onload="loadState()"{% endif %}{% endblock %}>
+
+{% block body %}
+    <div class="wrapper"
+         data-controller="{% block body_faq %}faq{% endblock %}"
+    >
+        {% if is_customer or is_montage %}
+            <div class="sidebar">
+                {% set cat = cat is defined ? cat : (app.request.get('category') ?? (category ?? null)) %}
+                {% set subCat = app.request.get('subCategory') %}
+                <div class="logo py-0">
+                    {% if is_montage %}
+                    <a href="{{ path('dashboard_index') }}" class="notification simple-text logo-normal">
+                        <img style="max-width: 200px;margin-top: 10px;" alt="{{ sf.name }}" src="{{ asset(appAssetPath~'logo/logo_dark_in.png') }}?i">
+                    </a>
+                    {% else %}
+                        <img style="max-width: 200px;margin-top: 10px;max-height: 40px !important;" alt="{{ sf.name }}" src="{{ asset(appAssetPath~'logo/logo_dark_in.png') }}?i">
+                    {% endif %}
+                </div>
+                <div class="sidebar-wrapper pt-30px" style="z-index: 1">
+                    <ul class="nav ml-0">
+                        {% if is_extern %}
+                            <li class="app_li text-left pl-0 py-2 pb-0" style="background-color: {{ sfColorDark }};"><strong style="color: #fff">
+                                <a class="backend nav-link" href="javascript:" style="border:none;color: #fff">
+                                    <i class="material-icons" style="color: #fff">admin_panel_settings</i>
+                                </a>{{ 'w.customerService'|trans }}
+                                </strong>
+                            </li>
+                            <li class="app_li"><hr class="top-hr"></li>
+                            <li class="app_li nav-item{% if currentRoute in ['inquiry_new', 'offer_edit'] %} active{% endif %}">
+                                <a class="nav-link" href="{{ path('inquiry_new') }}">
+                                    <i class="material-symbols-outlined">support_agent</i>
+                                    <p>{{ 'o.new'|trans }}<img style="float: right;margin:4px 10px; width: 20px;" src="{{ asset('app/images/Plus.png') }}"></p>
+                                </a>
+                            </li>
+                            <li class="app_li"><hr class="horizontal light"></li>
+                        {% endif %}
+                        {% if is_montage %}
+                            <li class="app_li sf_li nav-item{% if currentRoute in ['offer_category_all'] or cat %} active{% endif %}">
+                                <a class="nav-link"
+                                   href="{{ path('offer_category_all', {'user':app.request.query.get('user')??'', 'filter':app.request.query.get('filter') ?? '', 'today':app.request.query.get('today') ?? '0'}) }}"
+                                   style="background-color: {{ sfColorForm }}">
+                                    <i class="material-symbols-outlined">book</i>
+                                    <p>{{ 'w.offers'|trans }}</p>
+                                </a>
+                                {% if (currentRoute in ['offer_category_all'] or cat) and is_extern %}
+                                <ul style="list-style: none;padding-left: 0">
+                                    {% for c in getOfferCategories() %}
+                                        <li class="nav-item nav-nab
+                                        {%- if (currentRoute in ['offer_category_index'] and cat and cat.id == c.id) or
+                                            (currentRoute in ['offer_category_isearch']) or
+                                            (offer is defined and offer is not null and offer.category is not null and offer.category.id == c.id) %} active{% endif -%}"
+                                            style="text-align:center;padding: 0 20px !important;">
+                                            <a class="nav-link"
+                                               href="{{ path('offer_category_index', {'id':c.id, 'user':app.request.query.get('user')??'', 'filter':app.request.query.get('filter') ?? '', 'today':app.request.query.get('today') ?? '0'}) }}"
+                                              style="border: none;text-align: center">
+                                                <p style="text-align: initial;"><i {% if offer is defined and offer is not null and offer.category is not null and offer.category.id == c.id %}{% else %}style="display: none" {% endif %}class="material-symbols-outlined">{{ c.icon }}</i>{{ c.name }}</p>
+                                            </a>
+        {#                                    {% if (currentRoute in ['offer_category_index'] and cat and cat.id == c.id) or (currentRoute in ['offer_subcategory_index']  and subCategory is defined and subCategory.category.id == c.id) %}#}
+        {#                                        <ul style="list-style: none;padding-left: 0">#}
+        {#                                            {% for osc in c.offerSubCategories %}#}
+        {#                                                <li class="nav-item nav-nab" style="text-align:center;padding: 0 !important;">#}
+        {#                                                    <a style="margin: 0 10%" class="nav-link#}
+        {#                                                       {%- if currentRoute in ['offer_subcategory_index'] and subCategory is defined and subCategory.id == osc.id %} a_active{% endif%}" href="{{ path('offer_subcategory_index', {'id':osc.id, 'user':app.request.query.get('user')??'', 'filter':app.request.query.get('filter') ?? '', 'today':app.request.query.get('today') ?? '0'}) }}">{{ osc.name }}</a>#}
+        {#                                                </li>#}
+        {#                                            {% endfor %}#}
+        {#                                        </ul>#}
+        {#                                    {% endif %}#}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                        {% if is_extern %}
+                            <li class="app_li sf_li nav-item{% if currentRoute in ['offer_category_all'] or cat %} active{% endif %}">
+                                <a style="background: goldenrod !important;" class="nav-link" target="_blank" href="https://www.hdi.de/service/hdi-services/schaden-melden/schadenmeldung-betriebshaftpflicht/">
+                                    <i class="material-symbols-outlined">priority_high</i>
+                                    <p style="color: #fff;">{{ 'Schadensmeldung'|trans }} <strong style="font-weight: bold">(>250&euro;)</strong></p>
+                                </a>
+                            </li>
+{#                            <li class="app_li {% if is_admin %}sf_li {% endif %}nav-item{% if currentRoute in ['customer_invoice_reminder'] %} active{% endif %}">#}
+{#                                <a class="nav-link" href="{{ path('customer_contact_index') }}">#}
+{#                                    <i class="material-symbols-outlined">credit_score</i>#}
+{#                                    <p>{{ 'Mahnungen'|trans }}</p>#}
+{#                                </a>#}
+{#                            </li>#}
+                            <li class="app_li {% if is_admin %}sf_li {% endif %}nav-item{% if currentRoute in ['customer_contact_index'] %} active{% endif %}">
+                                <a class="nav-link" href="{{ path('customer_contact_index') }}">
+                                    <i class="material-symbols-outlined">phone_missed</i>
+                                    <p>ZOE&nbsp;Solar&nbsp;{{ 'Kontaktanfragen'|trans }}</p>
+                                </a>
+                            </li>
+                            <li class="app_li "><hr class="horizontal light"></li>
+                        {% endif %}
+                        {% if is_montage %}
+                            <li class="app_li {% if is_service %}sf_li {% endif %}nav-item{% if currentRoute in ['sf_montage','offer_auftrags_index','sf_montage_offer'] %} active{% endif %}">
+                                <a class="nav-link" href="{{ path('sf_montage') }}">
+                                    <i class="material-symbols-outlined">tools_wrench</i>
+                                    <p>{{ 'm.protocolls'|trans }}</p>
+                                </a>
+                            </li>
+                            <li class="app_li nav-item{% if currentRoute in ['booking_index','booking_new','booking_edit','booking_show'] %} active{% endif %}">
+                                <a class="nav-link" href="{{ path('booking_index') }}">
+                                    <i class="material-symbols-outlined">free_cancellation</i>
+                                    <p>{{ 'w.appointments'|trans }}</p>
+                                </a>
+                            </li>
+                            <li class="app_li nav-item{% if currentRoute in ['app_grok'] %} active{% endif %}">
+                                <a style="padding-right:8px;padding-left: 10px;" class="nav-link" href="{{ path('dashboard_index') }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
+                                        <g fill="none" fill-rule="evenodd">
+                                            <path d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z" />
+                                            <path fill="currentColor" d="M19.753 4.659a1 1 0 0 0-1.506-1.317l-5.11 5.84L8.8 3.4A1 1 0 0 0 8 3H4a1 1 0 0 0-.8 1.6l6.437 8.582l-5.39 6.16a1 1 0 0 0 1.506 1.317l5.11-5.841L15.2 20.6a1 1 0 0 0 .8.4h4a1 1 0 0 0 .8-1.6l-6.437-8.582l5.39-6.16ZM16.5 19L6 5h1.5L18 19z" />
+                                        </g>
+                                    </svg>
+                                    <span style="font-size: 14px;padding-left: 10px;">Frage Grok</span>
+                                </a>
+                            </li>
+                            {% if is_extern == false %}
+                            <li class="app_li nav-item{% if currentRoute in ['backend_material_index'] %} active{% endif %}">
+                                <a class="nav-link" href="{{ path('backend_material_index') }}">
+                                    <i class="material-symbols-outlined">local_grocery_store</i>
+                                    <p>{{ 'material.order'|trans }}</p>
+                                </a>
+                            </li>
+                            {% endif %}
+                        {% endif %}
+                        {% if is_service %}
+                            <li class="app_li "><hr class="horizontal light"></li>
+                            <li class="app_li {% if is_admin %}sf_li {% endif %}nav-item{% if currentRoute in ['customer_index','customer_new','customer_edit'] %} active{% endif %}">
+                                <a class="nav-link" href="{{ path('customer_index') }}">
+                                    <i class="material-symbols-outlined">settings_accessibility</i>
+                                    <p>{{ 'w.customers'|trans }}</p>
+                                </a>
+                            </li>
+                            <li class="app_li"><hr class="horizontal light"></li>
+                        {% endif %}
+                        {% if is_extern %}
+                            <li class="back_li text-left pl-0 py-2 pb-0" style="background-color: #f44336;">
+                                <strong style="color: #c6c6c6">
+                                    <a class="frontend nav-link p-0" href="javascript:" style="border: none;">
+                                        <i class="material-symbols-outlined"  style="color: #fff">admin_panel_settings</i>
+                                    </a> Administration</strong>
+                            </li>
+                            {% if is_admin %}
+                                <li class="back_li"><hr class="top-hr"></li>
+                                <li class="back_li nav-item{% if 'backend_category' in currentRoute or 'backend_answer' in currentRoute  or 'backend_question' in currentRoute or 'backend_sub_category' in currentRoute  %} back_a active{% endif %}">
+                                    <a class="back_link nav-link" href="{{ path('backend_category_index') }}">
+                                        <i class="material-symbols-outlined">quiz</i>
+                                        <p>{{ 'w.offers'|trans }} & {{ 'w.categories'|trans }}</p>
+                                    </a>
+                                </li>
+                                <li class="back_li "><hr class="top-hr"></li>
+                                <li class="back_li"><hr class="horizontal light"></li>
+                                <li class="back_li "><hr class="top-hr"></li>
+                            {% endif %}
+                            {% if is_service %}
+                                <li class="back_li sf_li nav-item{% if currentRoute in ['app_project_team_index','app_project_team_new','app_project_team_edit','app_project_team_show'] %} active{% endif %}">
+                                    <a class="back_link nav-link" href="{{ path('app_project_team_index') }}">
+                                        <i class="material-symbols-outlined">groups_2</i>
+                                        <p>{{ 'w.teams'|trans }}</p>
+                                    </a>
+                                </li>
+                                <li class="back_li "><hr class="top-hr"></li>
+                                <li class="back_li"><hr class="horizontal light"></li>
+                                <li class="back_li "><hr class="top-hr"></li>
+                                <li class="back_li sf_li nav-item{% if currentRoute in ['app_partner_index','app_partner_new','app_partner_edit','app_partner_show'] %} active{% endif %}">
+                                    <a class="back_link nav-link" href="{{ path('app_partner_index') }}">
+                                        <i class="material-symbols-outlined">handshake</i>
+                                        <p>{{ 'w.partner'|trans }}</p>
+                                    </a>
+                                </li>
+                                <li class="back_li sf_li nav-item{% if currentRoute in ['app_product-manufactura_index','app_product-manufactura_new','app_product-manufactura_edit','app_product-manufactura_show'] %} active{% endif %}">
+                                    <a class="back_link nav-link" href="{{ path('app_product-manufactura_index') }}">
+                                        <i class="material-symbols-outlined">handshake</i>
+                                        <p>{{ 'Hersteller'|trans }}</p>
+                                    </a>
+                                </li>
+                                <li class="back_li "><hr class="top-hr"></li>
+                                <li class="back_li"><hr class="horizontal light"></li>
+                                <li class="back_li "><hr class="top-hr"></li>
+                                <li class="back_li sf_li nav-item{% if currentRoute in ['app_link_index','app_link_new','app_link_edit','app_link_show'] %} active{% endif %}">
+                                    <a class="back_link nav-link" href="{{ path('app_link_index') }}">
+                                        <i class="material-symbols-outlined">offline_share</i>
+                                        <p>{{ 'w.links'|trans }}</p>
+                                    </a>
+                                </li>
+                                <li class="back_li "><hr class="top-hr"></li>
+                                <li class="back_li"><hr class="horizontal light"></li>
+                                <li class="back_li "><hr class="top-hr"></li>
+                            {% endif %}
+
+                            <li class="back_li"><hr class="horizontal light"></li>
+                            <li class="back_li {% if is_admin %}sf_li {% endif %}nav-item{% if currentRoute in ['backend_material_prices'] %} active{% endif %}">
+                                <a class="nav-link" href="{{ path('backend_material_prices') }}">
+                                    <i class="material-icons">point_of_sale</i>
+                                    <p>{{ 'material.prices'|trans }}</p>
+                                </a>
+                            </li>
+                            <li class="back_li {% if is_admin %}sf_li {% endif %}nav-item{% if currentRoute in ['backend_material_index'] %} active{% endif %}">
+                                <a class="nav-link" href="{{ path('backend_material_index') }}">
+                                    <i class="material-symbols-outlined">local_grocery_store</i>
+                                    <p>{{ 'material.order'|trans }}</p>
+                                </a>
+                            </li>
+                            <li class="back_li "><hr class="top-hr"></li>
+                            <li class="back_li"><hr class="horizontal light"></li>
+                            <li class="back_li "><hr class="top-hr"></li>
+                            <li class="back_li nav-item
+                            {%- if 'backend_product_category' in currentRoute or
+                                'backend_product_subcategory' in currentRoute %} back_a active{% endif -%}
+                            ">
+                                <a class="back_link nav-link" href="{{ path('backend_product_category_index') }}">
+                                    <i class="material-symbols-outlined">build_circle</i>
+                                    <p>{{ 'w.productCategories'|trans }}</p>
+                                </a>
+                            </li>
+
+                            <li class="back_li nav-item {%- if currentRoute in ['backend_product_all'] %} active{% endif%}">
+                                <a class="back_link nav-link"
+                                   href="{{ path('backend_product_all',{'category':'x', 'subCategory':'x'}) }}">
+                                    <i class="material-symbols-outlined">qr_code_2</i>
+                                    <p>{{ 'p.all'|trans }}</p>
+                                </a>
+                            </li>
+                            {% for p in getProductCategories() %}
+                                <li style="background-color: {{ sfColorForm }}" class="back_li sf_li nav-item
+                                    {%- if (currentRoute in ['backend_product_index'] and cat is defined and  cat.id == p.id) or
+                                    (product is defined and product.productCategory.id == p.id)
+                                %} active back_a{% endif %}">
+                                    <a class="back_link nav-link" href="{{ path('backend_product_index', {'category':p.id, 'subCategory':'x'}) }}">
+                                        <i class="material-symbols-outlined">qr_code</i>
+                                        <p>{{ p.name }}</p>
+                                    </a>
+                                    {% if (currentRoute in ['backend_product_index'] and cat and cat.id == p.id) or (product is defined and product.productCategory.id == p.id) %}
+                                        <ul style="list-style: none;padding-left: 0">
+                                            {% for psc in p.productSubCategories %}
+                                                <li class="nav-item nav-nab">
+                                                    <a class="nav-link
+                                                    {%- if (currentRoute in ['offer_subcategory_index'] and subCategory is defined and  subCategory.category.id == c.id) or
+                                                        (product is defined and product.productSubCategory.id == psc.id) %} a_active{% endif%}"
+                                                       href="{% if currentRoute != 'backend_product_index' %}{{ path('backend_product_index',{'category':p.id, 'subCategory':'x'}) }}{% endif %}#sub-{{ psc.id }}">{% if psc.mainProduct %}
+                                                        <strong>{% endif %}{{ psc.name }}{% if psc.mainProduct %}</strong>{% endif %}
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                            <li class="back_li"><hr class="horizontal light"></li>
+                        {% if is_admin %}
+                            <li class="back_li"><hr class="top-hr"></li>
+                            <li class="back_li nav-item{% if 'backend_user' in currentRoute %} active back_a{% endif %}">
+                                <a class="back_link nav-link" href="{{ path('backend_user_index') }}">
+                                    <i class="material-symbols-outlined">badge</i>
+                                    <p>{{ 'w.employee'|trans }}</p>
+                                </a>
+                            </li>
+                            <li class="back_li"><hr class="horizontal light"></li>
+                            <li class="back_li"><hr class="horizontal light"></li>
+                            <li class="back_li nav-item{% if 'backend_crawl' in currentRoute %} active back_a{% endif %}">
+                                <a class="back_link nav-link" href="{{ path('backend_crawl_oeffentliche',{'crawl':'q','town':'t'}) }}">
+                                    <i class="material-symbols-outlined">download</i>
+                                    <p>CSV Suche</p>
+                                </a>
+                            </li>
+                            <li class="back_li">
+                                <hr class="horizontal light">
+                            </li>
+                        {% endif %}
+{#                        {% if is_service %}#}
+{#                            <li class="back_li nav-item{% if currentRoute in ['inquiry_import'] %} active back_a{% endif %}">#}
+{#                                <a class="back_link nav-link" href="{{ path('inquiry_import') }}">#}
+{#                                    <i class="material-symbols-outlined">upload</i>#}
+{#                                    <p>DAA Import</p>#}
+{#                                </a>#}
+{#                            </li>#}
+{#                            {% endif %}#}
+{#                            <li class="app_li">#}
+{#                                <hr class="horizontal light">#}
+{#                            </li>#}
+                        {% endif %}
+                        {% if is_montage %}
+{#                        <li class="back_li"><hr class="top-hr"></li>#}
+{#                            <li class="app_li back_li nav-item{% if currentRoute in ['ajax_timesheet_index'] %} active back_a{% endif %}" style="display: block !important;">#}
+{#                                <a class="frontend nav-link" href="{{ path('ajax_timesheet_index') }}">#}
+{#                                    <i class="material-symbols-outlined">update</i>#}
+{#                                    <p>Zeiterfassung</p>#}
+{#                                </a>#}
+{#                            </li>#}
+{#                            <li class="back_li"><hr class="top-hr"></li>#}
+                        <li class="app_li back_li nav-item{% if currentRoute in ['app_chat'] %} active back_a{% endif %}" style="display: block !important;">
+                            <a class="frontend nav-link" href="{{ path('app_chat') }}">
+                                <i class="material-symbols-outlined">mark_unread_chat_alt</i>
+                                <p>{{ 'w.chat'|trans }} <span class="chat_dot{% if currentRoute in ['app_chat'] %} chat_dot_active{% endif %}" id="unreadChats" style="padding-top: 6px;padding-bottom: 6px;background-color: {% if app.user.unreadChats > 0 %}orangered{% else %}transparent{% endif %};">{% if app.user.unreadChats > 0 %}{{ app.user.unreadChats }}{% endif %}</span></p>
+                            </a>
+                        </li>
+                        <li class="app_li back_li" style="display: block !important;"><hr class="horizontal light"></li>
+                        <li class="app_li"><br></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+        <div class="main-panel">
+            {#{% include 'notifications/call.html.twig' %}#}
+            {% if is_montage %}
+                {% include '_nav.html.twig' %}
+            {% endif %}
+            <div class="content" style="z-index: 8">
+                <div class="container-fluid" style="overflow: auto">
+                    {% if app.request.hasPreviousSession %}
+                        <div class="messages">
+                            {% for type, messages in app.flashes %}
+                                {% for message in messages %}
+                                    {# Bootstrap alert, see http://getbootstrap.com/components/#alerts #}
+                                    <div class="alert alert-dismissible alert-{{ type }}" role="alert" style="text-align: center;">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        {{ message|raw }}
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% block main %}{% endblock %}
+                </div>
+            </div>
+
+            <div style="margin-top: 50px;" id="token_div"></div>
+            <div id="permission_div"></div>
+            <div id="messages"></div>
+            {% block footer %}
+{#                <footer class="footer">#}
+{#                    <div class=" row container-fluid">#}
+{#                        <nav class="col-md-6">#}
+{#                            <ul>#}
+{#                                <li><a href="{{ sf.www2 }}" target="_blank">{{ sf.owner }}</a></li>#}
+{#                                <li><small>{{ sf.address }}, {{ sf.zip }}</small></li>#}
+{#                            </ul>#}
+{#                        </nav>#}
+{#                        <div class="copyright col-md-6">#}
+{#                            &copy; 2022-{{ 'now'|date('Y') }}, by <a href="{{ ownerLink }}" target="_blank">{{ ownerName }}</a>.#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </footer>#}
+            {% endblock %}
+        </div>
+    </div>
+    {% if hasCustomerChats() != 0 %}
+{#        <a class="sticky-button"><span class="material-symbols-outlined">account_tree</span></a>#}
+        <div class="chatbox" data-controller="public-comunicate">
+            <button type="button" class="chatbox-open" {{ stimulus_action('public-comunicate', 'loadCustomer', 'click') }}
+                    data-public-comunicate-url-param="{{ path('ajax_chat_customer_load') }}"
+                    data-public-comunicate-name-param="" style="padding: 0">
+                <span class="material-icons" style="font-size: 28px;padding: 8px 0 0 0;" aria-hidden="true">feedback</span>
+            </button>
+            <button type="button" class="chatbox-close">
+                <span class="material-icons" style="font-size: 28px;padding: 8px 0 0 0;" aria-hidden="true">clear</span>
+            </button>
+            <section class="chatbox-popup" data-public-comunicate-target="popup"></section>
+            <section class="chatbox-panel" data-public-comunicate-target="panel"></section>
+        </div>
+    {% endif %}
+{% if users is defined %}
+    <div class="modal fade" id="universalModal" tabindex="-1" role="dialog" aria-labelledby="universalModalTitle"
+         aria-hidden="true" data-controller="custom-autocomplete booking-update"
+         data-custom-autocomplete-url-value="{{ path('customer_ajax_jsonsearch') }}">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 460px;">
+            <div class="modal-content">
+                <div class="modal-header" id="modalHeader" style="background-color: {{ sfColor|default('#007bff') }}; color: #fff;">
+                    <h5 class="modal-title" id="universalModalTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <form id="universalModalForm" autocomplete="off">
+                        <div class="row">
+                            <div class="col-12" id="titleField">
+                                <label class="form-label">Titel<sup>*</sup></label>
+                                <select class="form-control" id="titleSelect" name="title">
+                                    {% for typeTitle, k in constant('App\\Entity\\Booking::BOOKING_TYPES') %}
+                                        <option value="{{ typeTitle }}">{{ typeTitle }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-6" id="autojson">
+                                <label class="form-label">Kunde<sup>*</sup></label>
+                                <input type="text" class="form-control" id="customerName" name="customer" data-action="custom-autocomplete#search" autocomplete="off">
+                                <input type="hidden" id="customerId" name="customerId">
+                            </div>
+                            <div class="col-6" id="taskUserField">
+                                <label class="form-label">Für welchen Kolegen?<sup>*</sup></label>
+                                <select id="userTask" name="user" class="form-control user_select">
+                                    {% for user in users %}
+                                        <option value="{{ user.id }}">{{ user.fullName }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" id="dateTimeField">
+                            <div class="col-6" id="beginAtField">
+                                <label class="form-label">Beginnt um?<sup>*</sup></label>
+                                <input type="datetime-local" class="form-control" id="begin_at" name="begin_at" required>
+                            </div>
+                            <div class="col-6" id="endAtField">
+                                <label class="form-label">Endet um?<sup>*</sup></label>
+                                <input type="datetime-local" class="form-control" id="end_at" name="end_at" required>
+                            </div>
+                        </div>
+                        <div class="row" id="dateTimeText">
+                            <div class="col-12" id="endAtTextField">
+                                <label class="form-label">Aufgabe abschließen bis: <span id="endAtText"></span></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12" id="noticeField">
+                                <label class="form-label">Notiz</label>
+                                <textarea class="form-control" id="notice" name="notice" rows="3"></textarea>
+                            </div>
+                            <input type="hidden" id="bookingId" name="id">
+                            <input type="hidden" id="modalDate" name="date">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" id="modalFooter" style="background-color: #fff;"></div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+   <script src="{{ asset('assets/js/jquery3.6.0.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    {#    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>#}
+    <script src="{{ asset('app/bootstrap-4.0.0/dist/js/bootstrap.min.js') }}"></script>
+    {% if tuieditor is not defined %}
+    <script src="{{ asset('app/ckeditor/ckeditor.js') }}"></script>
+    {% endif %}
+    {# <script src="{{ asset('js/core/popper.min.js')}}"></script> #}
+    {# <script src="{{ asset('js/coreFStunde/bootstrap-material-design.min.js')}}"></script> #}
+    {{ encore_entry_script_tags('app') }}
+    {#    {{ encore_entry_script_tags('messaging_init_in_sw') }}#}
+    {#    {{ encore_entry_script_tags('messaging_receive_in_sw') }}#}
+    <script src="{{ asset('assets/js/material-dashboard.js') }}?v=21"></script>
+{#    <script src="{{ asset('assets/jquery.datetimepicker.full.js') }}"></script>#}
+    <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
+    <script src="{{ asset('assets/js/plugins/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/app.js') }}?i=4"></script>
+    <script src="{{ asset('js/app.js') }}?i=4"></script>
+    <script src="{{ asset('js/sw.js') }}?i=4"></script>
+    <script>
+        $(function () {
+            if($('[data-toggle="tooltip"]').length) {
+                $('[data-toggle="tooltip"]').tooltip()
+                $('.invoice_table_toggle').on('click', function () {
+                    $('.invoice_table').toggle();
+                });
+            }
+        })
+
+        if ($('.booking_event').length > 0) {
+            function handleBookingEventClick(event) {
+                console.log(event);
+                console.log($(this));
+                // const name = event.currentTarget.dataset.name;
+                // const number = event.currentTarget.dataset.number;
+                // const actionUrl = event.currentTarget.dataset.action;
+                //
+                // fetch(actionUrl, { method: 'GET' })
+                //     .then(response => response.text())
+                //     .then(data => {
+                //         this.configureModal('create', {
+                //             title: `<strong>Termin für ${name} anlegen</strong>`,
+                //             content: data,
+                //             footer: `Angebotsnummer: ${number}`
+                //         });
+                //         this.modal.show();
+                //     })
+                //     .catch(error => console.error('Fehler beim Laden des Termin-Modals:', error));
+            }
+            document.querySelectorAll('.booking_event').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                handleBookingEventClick(e);
+            });
+        });
+        }
+        function toggleDiv(id, toggleBack) {
+            document.getElementById(id).style.display = "block";
+            document.getElementById(toggleBack).style.display = "none";
+        }
+        jQuery(document).ready(function () {
+            if ($) {
+                $(() => {
+                    if ($('.chatbox-open').length > 0) {
+                        $(document).on('click', '.chatbox-open', function () {
+                            $('.chatbox-popup, .chatbox-close').fadeIn()
+                        });
+                        $(document).on('click', '.chatbox-close', function () {
+                            $('.chatbox-popup, .chatbox-close').fadeOut();
+                        });
+                        $(document).on('click', '.chatbox-maximize', function () {
+                            $('.chatbox-popup, .chatbox-open, .chatbox-close').fadeOut();
+                            $('.chatbox-panel').fadeIn();
+                            $('.chatbox-panel').css({display: "flex"});
+                        });
+                        $(document).on('click', '.chatbox-minimize', function () {
+                            $('.chatbox-panel').fadeOut();
+                            $('.chatbox-popup, .chatbox-open, .chatbox-close').fadeIn();
+                        });
+                        $(document).on('click', '.chatbox-panel-close', function () {
+                            $('.chatbox-panel').fadeOut();
+                            $('.chatbox-open').fadeIn();
+                        });
+                    }
+                });
+            }
+            jQuery(document).on('dblclick', '.confirm', function (e) {
+                let trans = $(this).attr('data-confirm')
+                if (confirm(trans)) {
+                    $(this).closest('form').submit();
+                }
+            });
+
+            jQuery(document).on('click', '.backend', function (e) {
+                jQuery('.app_li').hide();
+                jQuery('.back_li').show();
+            });
+            jQuery(document).on('click', '.frontend', function (e) {
+                jQuery('.back_li').hide();
+                jQuery('.app_li').show();
+            });
+
+            let jeOptions = {
+                'i18n': {
+                    'de': {
+                        'months': [
+                            '{{ 'january'|trans }}', '{{ 'february'|trans }}', '{{ 'march'|trans }}', '{{ 'april'|trans }}',
+                            '{{ 'may'|trans }}', '{{ 'juny'|trans }}', '{{ 'july'|trans }}', '{{ 'august'|trans }}',
+                            '{{ 'september'|trans }}', '{{ 'october'|trans }}', '{{ 'november'|trans }}', '{{ 'december'|trans }}',
+                        ],
+                        'dayOfWeek': [
+                            '{{ 'week.mo'|trans }}', '{{ 'week.di'|trans }}', '{{ 'week.mi'|trans }}', '{{ 'week.do'|trans }}', '{{ 'week.fr'|trans }}', '{{ 'week.sa'|trans }}', '{{ 'week.so'|trans }}'
+                        ]
+                    }
+                },
+                'step': 15,
+                'timepicker': true,
+                'format': 'd.m.Y H:i',
+            }
+            {% if is_montage %}
+            $(document).on('click', '.ajax_update_offer_note', function (e) {
+                let id = $(this).attr('data-id');
+                let $area = $('#ajax_update_offer_note' + id);
+                if ($area) {
+                    $area.addClass("focused");
+                    e.preventDefault();
+                    $.ajax({
+                        'url': $area.attr('data-action'),
+                        'data': {
+                            'note': $area.val(),
+                        },
+                        'method': 'post',
+                        'success': function (ax) {
+                            $area.addClass("focused2");
+                            $area.removeClass("focused");
+                            setTimeout(function () {
+                                $area.removeClass("focused2");
+                            }, 900)
+                        }
+                    });
+                }
+            });
+            jQuery(document).on('click', '.ajax_update_offer_notice', function (e) {
+                let id = jQuery(this).attr('data-id');
+                let $area = jQuery('#ajax_update_offer_notice' + id);
+                $area.addClass("focused");
+                e.preventDefault();
+                jQuery.ajax({
+                    'url': $area.attr('data-action'),
+                    'data': {
+                        'notice': $area.val(),
+                    },
+                    'method': 'post',
+                    'success': function (ax) {
+                        $area.addClass("focused2");
+                        $area.removeClass("focused");
+                        setTimeout(function () {
+                            $area.removeClass("focused2");
+                        }, 900)
+                    }
+                });
+            });
+
+            {#function addTime(startdate, type) {#}
+            {#    moment.locale('{{ app.request.locale }}');#}
+            {#    let new_date;#}
+            {#    console.log(startdate)#}
+            {#    console.log(type)#}
+            {#    if (type === 'Anrufen'){#}
+            {#        new_date = moment(startdate, "DD.MM.YYYY HH:mm").add(0.25, 'hour');#}
+            {#    } else {#}
+            {#        new_date = moment(startdate, "DD.MM.YYYY HH:mm").add(4, 'hour');#}
+            {#    }#}
+            {#    console.log(new_date)#}
+            {#    return new_date.format('DD.MM.YYYY HH:mm');#}
+            {#}#}
+            {#jQuery(document).on('change', ('#booking_beginAt'), function () {#}
+            {#    let newTime = addTime(this.value, $('#booking_title').val());#}
+            {#    $('#booking_endAt').val(newTime);#}
+            {#});#}
+            {#jQuery(document).on('click', '.booking_event', function () {#}
+            {#    let name = jQuery(this).attr('data-name');#}
+            {#    let number = jQuery(this).attr('data-number');#}
+            {#    jQuery.ajax({#}
+            {#        'url': jQuery(this).attr('data-action') + '',#}
+            {#        'data': {},#}
+            {#        'method': 'get',#}
+            {#        'success': function (ax) {#}
+            {#            jQuery('#terminModalTitle').html('<strong>Termin für ' + name + ' anlegen</strong>')#}
+            {#            jQuery('#terminModalContent').html(ax)#}
+            {#            jQuery('#terminModalFooter').text('Angebotsnummer: ' + number);#}
+            {#            jQuery.datetimepicker.setLocale('de');#}
+            {#            {% set jetzt = 'now'|date_modify('+1 day') %}#}
+            {#            jQuery('#booking_beginAt').datetimepicker(jeOptions);#}
+            {#            jQuery('#booking_endAt').datetimepicker(jeOptions);#}
+            {#        }#}
+            {#    });#}
+            {#});#}
+            // jQuery(document).on('.montage_notice_block
+            // jQuery('.js-datepicker').datepicker({
+            //     format: 'dd.mm.yyyy'
+            // });
+            {% if is_service %}
+            jQuery(document).on('click', '.delete_invoice', function (e) {
+                e.preventDefault();
+                if (confirm('\n{{ 'i.confirm.delete'|trans }}')) {
+                    jQuery.ajax({
+                        'url': jQuery(this).attr('href'),
+                        'data': {},
+                        'method': 'post',
+                        success: function (xr) {
+                            window.location.reload();
+                        }
+                    })
+                }
+            });
+            {% endif %}
+            jQuery(document).on('click', '.visible_close', function () {
+                let offerId = jQuery(this).attr('data-id');
+                if (confirm('{{ 'o.confirm.view'|trans }}'))
+                    jQuery.ajax({
+                        'url': jQuery(this).attr('data-action'),
+                        'data': {'status': 1},
+                        'method': 'post',
+                        success: function (xr) {
+                            jQuery('#customer_j_' + offerId).hide();
+                        }
+                    })
+            });
+            jQuery(document).on('click', '.visible_open', function () {
+                let offerId = jQuery(this).attr('data-id');
+                if (confirm('{{ 'o.confirm.viewBack'|trans }}'))
+                    jQuery.ajax({
+                        'url': jQuery(this).attr('data-action'),
+                        'data': {'status': 0},
+                        'method': 'post',
+                        success: function (xr) {
+                            jQuery('#customer_j_' + offerId).show();
+                        }
+                    })
+            });
+            // jQuery(document).on('click', '.visible_open', function () {
+            //     jQuery.ajax({
+            //         'url': jQuery(this).attr('data-action'),
+            //         'data': {'status': 0},
+            //         'method': 'post',
+            //         success: function (xr) {
+            //             window.location.reload();
+            //         }
+            //     })
+            // });
+            jQuery(document).on('change', '#soll_send', function () {
+                if (jQuery(this).prop('checked') === true) {
+                    jQuery('#id_senden').text('{{ 'saveAndSend'|trans }}');
+                    jQuery('#sendMailallready').hide();
+                } else {
+                    jQuery('#id_senden').text('{{ 'w.save'|trans }}');
+                    jQuery('#sendMailallready').show();
+                }
+            });
+            {% if is_admin %}
+            function changeQuestionRow(e, g, hideChecked) {
+                if (hideChecked === false) {
+                    let k = e.attr('data-key');
+                    if (e.attr('data-null') === 'true') {
+                        e.attr('name', 'offer_sub_category_group[questionAreas]['+k+'][questions][]');
+                        // e.attr('name', 'group_questionAreas['+k+'][]');
+                    } else {
+                        e.attr('name', 'offer_sub_category_group[questionAreas]['+k+'][questions][]');
+                    }
+                } else {
+                    e.attr('name', 'offer_sub_category_group[questionAreas]['+g+'][questions][]');
+                }
+            }
+            jQuery(document).on('change', '.addArea', function () {
+                jQuery('#areabutton').prop('disabled', false);
+                let group = jQuery(this).attr('data-group');
+                jQuery('.question_check').each(function () {
+                    jQuery(this).attr('checked', false)
+                    changeQuestionRow(jQuery(this), 0, false);
+                });
+                jQuery('.group_question_'+group+' .question_check').each(function () {
+                    jQuery(this).attr('checked', true)
+                    changeQuestionRow(jQuery(this), group, true);
+                });
+            });
+            jQuery(document).on('change', '.question_check', function () {
+                console.log('S - ',jQuery(this),jQuery(this).prop('checked'));
+                let area = jQuery('.addArea:checked');
+                let group = area.attr('data-group');
+                if (jQuery(this).prop('checked')) {
+                    jQuery(this).attr('checked', true)
+                    changeQuestionRow(jQuery(this), area.val(), true);
+                } else {
+                    jQuery(this).attr('checked', false)
+                    changeQuestionRow(jQuery(this), 0, false);
+                }
+            });
+            {% endif %}
+            function send(url, data, method, type, name) {
+                let reqA = jQuery.ajax({
+                        url: url,
+                        async: false,
+                        method: method
+                    }
+                );
+                reqA.done(function (json) {
+                    switch (name) {
+                        case 'product':
+                            jQuery('.pro_view').hide();
+                            jQuery('.pro_view').removeClass('bg_red');
+                            jQuery('td.product_' + json.id).addClass('bg_red');
+                            jQuery('.product_' + json.id).show();
+                            jQuery('.product_' + json.id + '_total').show();
+                            jQuery('.product_' + json.id + '_total').removeClass('bg_red');
+                            if (json.kw !== '' && json.kw !== '0') {
+                                jQuery('#offer_kw').val(json.kw);
+                            }
+
+                            if (json.color && json.color !== null) {
+                                jQuery('#offer_color').val(json.color);
+                            } else {
+                                jQuery('#offer_color').val('#ffffff');
+                            }
+                            break;
+                    }
+
+                });
+            }
+
+            jQuery(document).on('blur', 'input.inlineFormInput', function () {
+                let inputVal = jQuery(this).val();
+                let that = this;
+                if (inputVal.trim() !== '' && inputVal.length > 0) {
+                    let id = jQuery(this).attr('data-id');
+                    let form = jQuery('#'+id);
+                    let url = form.attr('data-url');
+                    console.log(url);
+                    jQuery.ajax({
+                        url: url,
+                        data: form.serialize(),
+                        method: 'post',
+                        success: function (rs) {
+                            if (rs.success === true) {
+                                console.log(that.parentNode('td'))
+                            }
+                        }
+                    });
+                }
+            });
+            jQuery(document).on('change', '#offer_wallboxProduct', function () {
+                let dataId = jQuery(this).val();
+                if (dataId !== '') {
+                    let url = '{{ path('ajax_product', {'id': 'III'}) }}';
+                    url = url.replace('III', dataId);
+                    send(url, {}, 'POST', 'json', 'product');
+                }
+            });
+            if ($('.table_data').length) {
+                $('.table_data').DataTable({
+                    paging: false,
+                    language: {
+                        decimal: ",",
+                        processing: "{{ 'dataTable.processing'|trans }}",
+                        search: "{{ 'dataTable.search'|trans }}",
+                        lengthMenu: "{{ 'dataTable.viewStart'|trans }}",
+                        info: "{{ 'dataTable.viewStartEnd'|trans }}",
+                        infoEmpty: "{{ 'dataTable.viewNull'|trans }}",
+                        infoFiltered: "{{ 'dataTable.filter'|trans }}",
+                        infoPostFix: "",
+                        loadingRecords: "{{ 'dataTable.processing'|trans }}",
+                        zeroRecords: "{{ 'dataTable.noData'|trans }}",
+                        emptyTable: "{{ 'dataTable.noData'|trans }}",
+                        paginate: {
+                            first: "{{ 'dataTable.start'|trans }}",
+                            previous: "{{ 'dataTable.back'|trans }}",
+                            next: "{{ 'dataTable.next'|trans }}",
+                            last: "{{ 'dataTable.toEnd'|trans }}"
+                        },
+                        aria: {
+                            sortAscending: ": {{ 'dataTable.sortUb'|trans }}",
+                            sortDescending: ": {{ 'dataTable.sortDown'|trans }}"
+                        }
+                    }
+                });
+            }
+            if (jQuery('.table_data2').length) {
+                jQuery('.table_data2').DataTable({
+                    paging: true,
+                    language: {
+                        decimal: ",",
+                        processing: "{{ 'dataTable.processing'|trans }}",
+                        search: "{{ 'dataTable.search'|trans }}",
+                        lengthMenu: "{{ 'dataTable.viewStart'|trans }}",
+                        info: "{{ 'dataTable.viewStartEnd'|trans }}",
+                        infoEmpty: "{{ 'dataTable.viewNull'|trans }}",
+                        infoFiltered: "{{ 'dataTable.filter'|trans }}",
+                        infoPostFix: "",
+                        loadingRecords: "{{ 'dataTable.processing'|trans }}",
+                        zeroRecords: "{{ 'dataTable.noData'|trans }}",
+                        emptyTable: "{{ 'dataTable.noData'|trans }}",
+                        paginate: {
+                            first: "{{ 'dataTable.start'|trans }}",
+                            previous: "{{ 'dataTable.back'|trans }}",
+                            next: "{{ 'dataTable.next'|trans }}",
+                            last: "{{ 'dataTable.toEnd'|trans }}"
+                        },
+                        aria: {
+                            sortAscending: ": {{ 'dataTable.sortUb'|trans }}",
+                            sortDescending: ": {{ 'dataTable.sortDown'|trans }}"
+                        }
+                    }
+                });
+            }
+            {% endif %}
+        });
+    </script>
+
+    {#    {%- set scriptFiles = encore_entry_js_files('firebase-messaging-sw') -%}#}
+    {#    {%- set url = absolute_url(asset('firebase-messaging-sw.js'))~'' -%}#}
+    {#    #}{#scriptFiles[scriptFiles|length-1]#}
+    {#    {% if url %}#}
+    {#    {% endif %}#}
+{% endblock %}
+</body>
+</html>

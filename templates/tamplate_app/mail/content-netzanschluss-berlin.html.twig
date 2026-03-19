@@ -1,0 +1,24 @@
+
+{#<h3 id="mail-pre-title" style="padding-top: 0; padding-bottom: 0; font-weight: 500; vertical-align: baseline; font-size: 1.2rem; line-height: 1.2; letter-spacing: 3px; color: {{ sfColor }}; margin: 0;" align="left">Netzanschluss Berlin</h3>#}
+{#<h1 id="mail-title" style="padding-top: 0; padding-bottom: 0; font-weight: 500; vertical-align: baseline; font-size: 1.9rem; line-height: 120%; color: #393939; margin: 0;" align="left">{{ email.title }}</h1>#}
+{% include appTemplate~'mail/_h2.html.twig' with {'customer': customer} %}
+<p id="mail-message" style="line-height: 24px; font-size: 16px; width: 100%; margin: 0;" align="left">
+    {{ email.message|raw }}
+</p>
+<div style="line-height: 24px; font-size: 16px; width: 100%; margin: 0;" align="left">
+    <ol style="padding-left:10px;list-style: decimal">
+        <li style="padding-top: 12px;">Folgen Sie den Link zum Netzanschluss-Portal .<br>
+            <a style="color: #fff;" href="https://www.stromnetz.berlin/globalassets/dokumente/formulare/anmeldung-netzanschluss.pdf">
+                Netzanschluss-Portal
+            </a>
+        </li>
+        <li style="padding-top: 12px;">Erstellen Sie einen neuen Auftrag.</li>
+        <li style="padding-top: 12px;">Anmeldung zum Netzanschluss - Anschluss weiterer Anlagen / Leistungserhöhung (Bezugsanlage).</li>
+        <li style="padding-top: 12px;">Eingabe des Anschlussortes (Adresse, wo die Ladeeinrichtung installiert wird).</li>
+        <li style="padding-top: 12px;">Eingabe Anschlussnehmer und Kontaktdaten.</li>
+        <li style="padding-top: 12px;">Eingabe der Gesamtleistung nach der Montage der Anlage.</li>
+        <li style="padding-top: 12px;">Unter zustimmungspflichtigen Geräten „Anlage“ auswählen und deren Leistung eintragen.</li>
+        <li style="padding-top: 12px;">Anmeldung absenden.</li>
+        <li style="padding-top: 12px;">Anschließend erhalten Sie eine Bestätigung zur Installation oder - falls notwendig - ein Angebot zur Leistungserhöhung an Ihrem Hausanschluss. .</li>
+    </ol>
+</div>

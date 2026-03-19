@@ -1,0 +1,9 @@
+input, select, .form-control {
+    background-color: #fff6af;
+    padding-left: 10px;
+}
+#offer_order_notice {
+    /*background-color: rosybrown;*/
+    min-height: 120px;
+    padding: 10px;
+}

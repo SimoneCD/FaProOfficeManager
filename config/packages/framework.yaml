@@ -1,0 +1,48 @@
+# see https://symfony.com/doc/current/reference/configuration/framework.html
+framework:
+#  notifier:
+#    push_transports:
+#      firebase: '%env(FIREBASE_CREDENTIALS)%'
+#    channel_policy:
+#      high: [ 'push' ]
+#
+#  push_transports:
+#    firebase:
+#      api_key: '%env(FIREBASE_API_KEY)%'
+#      auth_domain: '%env(FIREBASE_AUTH_DOMAIN)%'
+#      project_id: '%env(FIREBASE_PROJECT_ID)%'
+#      storage_bucket: '%env(FIREBASE_STORAGE_BUCKET)%'
+#      messaging_sender_id: '%env(FIREBASE_MESSAGING_SENDER_ID)%'
+#      app_id: '%env(FIREBASE_APP_ID)%'
+#    channel_policy:
+#      high: [ 'push' ]
+  http_client:
+    scoped_clients:
+      daa_api:
+        base_uri: 'https://www.daa.net/api/v2/leads/bought/'
+        # HTTP Basic authentication
+        auth_basic: '%env(DA_BASIC_AUTH)%'
+  translator:
+    default_path: '%kernel.project_dir%/translations/%env(string:APP_SUBDOMAIN)%'
+    fallbacks:
+  secret: '%env(APP_SECRET)%'
+  #csrf_protection: true
+  http_method_override: false
+
+  # Enables session support. Note that the session will ONLY be started if you read or write from it.
+  # Remove or comment this section to explicitly disable session support.
+  session:
+    handler_id: null
+    cookie_secure: auto
+    cookie_samesite: lax
+    save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+  #esi: true
+  #fragments: true
+  php_errors:
+    log: true
+
+when@test:
+  framework:
+    test: true
+    session:
+      storage_factory_id: session.storage.factory.mock_file

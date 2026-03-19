@@ -1,0 +1,123 @@
+
+
+{#    {% set importDatum = offer.inquiry is not null ? offer.inquiry.date|date('ymd') : offer.offerDate|date('ymd') %}#}
+{#    {% set importDatumDate = offer.inquiry is not null ? offer.inquiry.date|date('d.m.Y') : offer.offerDate|date('d.m.Y') %}#}
+{#    {% set datum = offer.order ? offer.order.createdAt|date('d.m') : offer.offerDate|date('d.m') %}#}
+{#    {% set difference = date('now'|date('Y-m-d H:i:s')).diff(date(offer.inquiry.date|date('Y-m-d H:i:s'))) %}#}
+{#    {% set leftDays = difference.days %}#}
+{#    {% set hasTermine = offer.bookings|length %}#}
+{# Initialisiere das Icon #}
+{% set icon = '<a href="' ~ path('offer_edit_plus', {'id': offer.id}) ~ '"><i class="material-icons" style="margin:-10px 6px auto 4px;">design_services</i></a>' %}
+
+{# Setze Standardwerte #}
+{% set status = 0 %}
+{% set allow = '' %}
+{% set sendDate = null %}
+{% set sendImportant = false %}
+
+{# Funktion zur Erstellung eines Icons #}
+{% macro createIcon(title, path, iconClass) %}
+    <a title="{{ title }}" href="{{ path }}" class=""><i class="material-symbols-outlined">{{ iconClass }}</i></a>
+{% endmacro %}
+
+{# Statusabhängige Logik mit Switch-ähnlicher Struktur #}
+{% set statusIcons = {
+    'call': {
+        'status': 1,
+        'icon': _self.createIcon('Kunden anrufen', path('offer_edit', {'id': offer.id}), 'support_agent')
+    },
+    'call-plus': {
+        'status': 0,
+        'icon': _self.createIcon('Kundenformular aufrufen', path('offer_edit', {'id': offer.id}), 'edit')
+    },
+    'estimate': {
+        'status': 1.1,
+        'icon': icon ~ _self.createIcon('Kostenvoranschlag', path('offer_show', {'id': offer.id}), 'local_offer')
+    },
+    'besichtigung': {
+        'status': 1.2,
+        'icon': icon ~ _self.createIcon('Kostenvoranschlag', path('offer_show', {'id': offer.id}), 'local_offer')
+    },
+    'open': {
+        'status': 2,
+        'icon': icon ~ _self.createIcon('Angebot bearbeiten und senden', path('offer_show', {'id': offer.id}), 'content_paste')
+    },
+    'gesendet': {
+        'status': 3,
+        'icon': _self.createIcon(offer.order ? 'o.sendAt'|trans({'%date%': offer.order.createdAt|date('d.m.Y')}) : 'Fehler '~ offer.id, path('offer_show', {'id': offer.id}), 'content_paste'),
+        'allow': 'bestaetigt',
+        'sendDate': offer.order ? offer.order.createdAt|date('d.m.Y') : null
+    },
+    'storno': {
+        'status': 0,
+        'icon': _self.createIcon('', path('offer_show', {'id': offer.id}), 'content_paste'),
+        'allow': 'all'
+    },
+    'bestaetigt': {
+        'status': 4,
+        'icon': (offer.id == null or offer.order == null) ? '<br><i class="material-symbols-outlined">warning</i> Angebot NICHT gesendet/gespeichert!' :
+        _self.createIcon('o.sendAt'|trans({'%date%': offer.order.createdAt|date('d.m.Y')}), path('offer_show', {'id': offer.id}), 'content_paste') ~ '
+            ' ~ _self.createIcon('', path('invoice_part_index', {'id': offer.order.id}), 'receipt_long')
+    },
+    'rechnungPartSend': {
+        'status': 5,
+        'icon': _self.createIcon('o.sendAt'|trans({'%date%': offer.order.createdAt|date('d.m.Y')}), path('offer_show', {'id': offer.id}), 'content_paste') ~ '
+        ' ~ _self.createIcon('o.sendAt'|trans({'%date%': offer.order.invoices[0].sendDate|date('d.m.Y')}), path('invoice_part_index', {'id': offer.order.id}), 'receipt_long'),
+        'allow': 'rechnungPartEingang',
+        'sendDate': offer.order.invoices[0].sendDate|date('d.m.Y')
+    },
+    'rechnungPartEingang': {
+        'status': 6,
+        'icon': _self.createIcon('o.sendAt'|trans({'%date%': offer.order.createdAt|date('d.m.Y')}), path('offer_show', {'id': offer.id}), 'content_paste') ~ '
+        '~ _self.createIcon('o.sendAt'|trans({'%date%': offer.order.invoices[0].sendDate|date('d.m.Y')}), path('invoice_part_index', {'id': offer.order.id}), 'receipt_long') ~ '
+        '~ _self.createIcon('title.product.index'|trans, path('sf_montage_offer', {'id': offer.id,'a':true}), 'inventory'),
+        'allow': 'work',
+        'sendDate':
+    },
+    'work': {
+        'status': 7,
+        'icon': _self.createIcon('o.sendAt'|trans({'%date%':offer.order.createdAt|date('d.m.Y')}), path('offer_show', {'id': offer.id}), 'content_paste') ~ '
+        '~ _self.createIcon('o.sendAt'|trans({'%date%':offer.order.invoices[0].sendDate|date('d.m.Y')}), path('invoice_part_index', {'id': offer.order.id}), 'receipt_long'),
+        'allow': 'done',
+    },
+    'done': {
+        'status': 8,
+        'icon': _self.createIcon('o.sendAt'|trans({'%date%':offer.order.createdAt|date('d.m.Y')}), path('offer_show', {'id': offer.id}), 'content_paste') ~ '
+        '~ _self.createIcon('o.sendAt'|trans({'%date%':offer.order.invoices[0].sendDate|date('d.m.Y')}), path('invoice_part_index', {'id': offer.order.id}), 'receipt_long') ~ '
+        '~ _self.createIcon('Schlussrechnung', path('invoice_rest_index', {'id': offer.id}), 'receipt'),
+    },
+    'rechnungEingangSend': {
+        'status': 9,
+        'icon': _self.createIcon('o.sendAt'|trans({'%date%':offer.order.createdAt|date('d.m.Y')}), path('offer_show', {'id': offer.id}), 'content_paste') ~ '
+        '~ _self.createIcon('o.sendAt'|trans({'%date%':offer.order.invoices[0].sendDate|date('d.m.Y')}), path('invoice_part_index', {'id': offer.order.id}), 'receipt_long') ~ '
+        '~ _self.createIcon('title.product.index'|trans, path('backend_material_index', {'offerNumberBasic': offer.number}), 'production_quantity_limits') ~ '
+        '~ _self.createIcon('Schlussrechnung', path('invoice_rest_index', {'id': offer.id}), 'receipt'),
+        'allow': 'rechnungEingang',
+        'sendDate': offer.order.invoices[(offer.order.invoices|length-1)].sendDate|date('d.m.Y')
+    },
+    'rechnungEingang': {
+        'status': 10,
+        'icon': _self.createIcon('o.sendAt'|trans({'%date%':offer.order.createdAt|date('d.m.Y')}), path('offer_show', {'id': offer.id}), 'content_paste') ~ '
+        '~ _self.createIcon('o.sendAt'|trans({'%date%':offer.order.invoices[0].sendDate|date('d.m.Y')}), path('invoice_part_index', {'id': offer.order.id}), 'receipt_long') ~ '
+        '~ _self.createIcon('title.product.index'|trans, path('backend_material_index', {'offerNumberBasic': offer.number}), 'production_quantity_limits') ~ '
+        '~ _self.createIcon('Schlussrechnung', path('invoice_rest_index', {'id': offer.id}), 'receipt')
+    },
+    'archive': {
+        'status': 11,
+        'icon': _self.createIcon('o.sendAt'|trans({'%date%':offer.order.createdAt|date('d.m.Y')}), path('offer_show', {'id': offer.id}), 'content_paste') ~ '
+        '~ _self.createIcon('o.sendAt'|trans({'%date%':offer.order.invoices[0].sendDate|date('d.m.Y')}), path('invoice_part_index', {'id': offer.order.id}), 'receipt_long') ~ '
+        '~ _self.createIcon('title.product.index'|trans, path('backend_material_index', {'offerNumberBasic': offer.number}), 'production_quantity_limits') ~ '
+        '~ _self.createIcon('Schlussrechnung', path('invoice_rest_index', {'id': offer.id}), 'receipt')
+    },
+} %}
+
+{% if is_granted('ROLE_EMPLOYEE_EXTERN') == false %}
+    {#    {% if status <=3 %}#}
+    {#        {% set icon = '' %}#}
+    {#    {% else %}#}
+    {#        {% set icon = '<a title="'~('title.product.index'|trans)~'" href="'~ path('backend_material_index', {'offerNumberBasic': offer.number}) ~'" style="padding-left:20px;"><i class="material-symbols-outlined">production_quantity_limits</i></a>' %}#}
+    {#    {% endif %}#}
+    {% set icon = '' %}
+{% endif %}
+{{ save('icon') }}
+{{ save('status') }}

@@ -1,0 +1,147 @@
+<style>
+    .accordion-title {
+        font-size: 12px;
+        cursor: pointer;
+        padding: 1px 6px;
+        /*background-color: #f8f9fa;*/
+        /*border: 1px solid #e0e0e0;*/
+    }
+    /*.accordion-title:hover {*/
+    /*    background-color: #ddd;*/
+    /*}*/
+    /*.accordion-item.active .accordion-title {*/
+    /*    background-color: #e9ecef;*/
+    /*}*/
+    .accordion-content {
+        padding: 0 0 0 6px;
+        font-size: 12px;
+        border: 1px solid #e0e0e0;
+        border-top: none;
+    }
+    .accordion-item {
+        border: 1px solid #e0e0e0;
+        background-color: white;
+    }
+    .accordion-content[data-accordion-target="content"] {
+        display: none;
+        background-color: #fff;
+    }
+    .accordion-date {
+        padding: 0 0 0 6px;
+        font-size: 12px;
+    }
+    .btn .material-icons, .btn:not(.btn-just-icon):not(.btn-fab) .fa {
+        margin-bottom: 0;
+        margin-top: 0;
+        font-size: xx-large;
+    }
+    #pro_top {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: {{ sfColorDark }}; /* Beispiel Hintergrundfarbe */
+        z-index: 1000; /* Damit die Buttons immer über anderen Inhalten sichtbar sind */
+        padding: 10px 0 !important;
+    }
+    @media (max-width: 767px) { /* Beispielbreite für mobile Geräte */
+        #pro_top {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            padding: 10px; /* Optionalen Innenabstand hinzufügen */
+        }
+    }
+
+    @media (min-width: 768px) { /* Für größere Bildschirme */
+        #pro_top {
+            position: relative; /* oder position: static; wenn nicht fixiert sein soll */
+            bottom: auto;
+            left: auto;
+            right: auto;
+        }
+    }
+    .custom-select-button .button-style {
+        display: inline-block;
+        background-color: #ffffff;
+        color: #2a2a2a;
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+        border: none;
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        transition: background-color .3s;
+    }
+
+    .custom-select-button .button-style:hover {
+        background-color: #e8e8e8;
+    }
+
+    .custom-select-button .button-style.active {
+        background-color: #e5f3f3;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
+    h2 {
+        text-align: left;
+        color: black;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+    .btnbase {
+        font-size: 10px;
+        text-transform: initial;
+        width: 60px;
+        height: 60px;
+        margin: 0 0 10px 10px;
+    }
+    .page {background-color:#fff;padding:30px 1cm 20px 1cm; box-shadow: rgba(50, 50, 93, 0.25) 0 2px 5px -1px, rgba(0, 0, 0, 0.3) 0 1px 3px -1px;;width: 21cm; min-height: 29.7cm}
+    table.deckblatt td p, table.deckblatt td input {
+        font-size: 13px !important;
+    }
+    .jSignature{
+        height: 89px !important;
+    }
+    .menu-container {
+        white-space: nowrap;
+        overflow-x: auto;
+        padding: 20px 0; /* Optional: Fügt etwas Raum oben und unten hinzu */
+    }
+
+    .menu-container button {
+        display: inline-block;
+        white-space: nowrap;
+        margin: 0 5px; /* Optional: Fügt etwas Platz zwischen den Buttons hinzu */
+    }
+    .btn-default, .btn-default:hover {
+        background-color: #ff9800 !important;
+        border-color: {{ sfColorDark }} !important;
+    }
+    .is-hidden {
+        display: none;
+    }
+
+    .active {
+        display: block;
+        /* Dein Style für aktive Accordion-Items */
+    }
+    .circle {
+        height: 30px;
+        width: 30px;
+    }
+</style>
+{% from 'offer/components/macros/_offer_block_macro.html.twig' import offerBlock %}
+{% for offer in offers %}
+    {% if is_granted('ROLE_MONTAGE') or is_granted('POST_EDIT', offer) %}
+        {% if (offer.status == block or block == 'customer') and offer.status != 'storno' %}
+            <div class="col-12 customer_block" style="display: flex">
+                {% if offer.status not in ['storno','archive','deleted'] %}
+                    {{ offerBlock(offer, users, teams, sfColor, sfColorDark, ActionLog, form2) }}
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endif %}
+{% endfor %}

@@ -1,0 +1,100 @@
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                {% include 'offer/montage/components/customer_data.html.twig' with {'offer':offer, 'form':form} %}
+                <div class="toggle-container">
+                    {% include 'offer/montage/_body.address.html.twig' %}
+                </div>
+                {# {% include 'offer/montage/components/_auftrags_notice.html.twig' with {'offer':offer, 'form':form} %} #}
+                {# {% include 'offer/montage/components/_auftrags_upload.html.twig' with {'offer':offer, 'form':form} %} #}
+                <hr>
+                <h6 class="m-0 head-title">Kundenservice&nbsp;<a data-id="ks" href="javascript:void(0)" class="p_teams"><i style="font-size: xx-large;" class="material-icons">arrow_drop_down</i></a></h6>
+                <div class="p-teamks d-none row my-2">
+                    <div class="text-left col-4"><img style="max-width: 80px" src="{{ offer.user.image ? asset(appAssetPath~'user/'~offer.user.image) : asset('hd/empty_profile_image.jpeg')  }}" class="avatar"></div>
+                    <div class="text-left col-8">
+                        <p class="m-0"><span class="material-icons" style="color: #fff">phone</span><strong>{{ offer.user.fullName }}</strong></p>
+                        <p class="m-0"><span class="material-icons">phone</span>{{ offer.user.phone }}</p>
+                        <p class="m-0"><span class="material-icons">mail</span>{{ offer.user.email }}</p>
+                    </div>
+                </div>
+                {% if offer.monteur %}
+                    <h6 class="m-0 head-title">Projektleiter&nbsp;<a data-id="pl" href="javascript:void(0)" class="p_teams"><i style="font-size: xx-large;" class="material-icons">arrow_drop_down</i></a></h6>
+                    <div class="p-teampl d-none row my-2">
+                        <div class="text-left col-4"><img style="max-width: 120px" src="{{ offer.monteur.image ? asset(appAssetPath~'user/'~offer.monteur.image) : asset('hd/empty_profile_image.jpeg')  }}" class="avatar"></div>
+                        <div class="text-left col-8">
+                            <p class="m-0"><span class="material-icons" style="color: #fff">phone</span><strong>{{ offer.monteur.fullName }}</strong></p>
+                            <p class="m-0"><span class="material-icons">phone</span>{{ offer.monteur.phone }}</p>
+                            <p class="m-0"><span class="material-icons">mail</span>{{ offer.monteur.email }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if offer.projectTeams %}
+                    {% for team in offer.projectTeams %}
+                        <h6 class="m-0 head-title">{{ team.category }}:&nbsp;<a data-id="{{ team.id }}" href="javascript:void(0)" class="p_teams"><i style="font-size: xx-large;" class="material-icons">arrow_drop_down</i></a></h6>
+                        {% if team.users|length or team.partner %}
+                            {% for u in team.users %}
+                                <div class="p-team{{ team.id }} d-none row my-2">
+                                    <div class="text-left col-4"><img style="max-width: 120px" src="{{ u.image ? asset(appAssetPath~'user/'~u.image) : asset('hd/empty_profile_image.jpeg')  }}" class="avatar"></div>
+                                    <div class="text-left col-8">
+                                        <p class="m-0"><span class="material-icons" style="color: #fff">phone</span><strong>{{ u.fullName }}</strong></p>
+                                        <p class="m-0"><span class="material-icons">phone</span>{{ u.phone }}</p>
+                                        <p class="m-0"><span class="material-icons">mail</span>{{ u.email }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% if team.partner %}
+                                <h4 class="m-0 head-title">Extern</h4>
+                                <div class="row my-2">
+                                    <div class="text-left col-4"><img style="max-width: 120px" src="{{ asset('hd/empty_profile_image.jpeg')  }}" class="avatar"></div>
+                                    <div class="text-left col-8">
+                                        <p class="m-0"><span class="material-icons" style="color: #fff">phone</span><strong>{{ team.partner.name }}</strong></p>
+                                        <p class="m-0"><span class="material-icons">phone</span>{{ team.partner.phone }}</p>
+                                        <p class="m-0"><span class="material-icons">mail</span>{{ team.partner.email }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="p-team{{ team.id }} d-none row my-2">
+                                <h4 class="head-title" style="color: orangered;font-size: smaller">Es ist kein Partner oder Mitarbeiter eingetragen!</h4>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-md-6 mt-3">
+                <div id="map"></div>
+                <table class="table w-100">
+                    <tr>
+                        <th colspan="3" class="text-center">Kunden in der Nähe (12 km Umkreis)</th>
+                    </tr>
+                    <tr>
+                        <th>Benutzername</th>
+                        <th>Auftrag</th>
+                        <th class="text-right">Entfehrnung</th>
+                    </tr>
+                    {% for k, u in nearBys %}
+                        {% set offerI = getOff(k) %}
+                    <tr class="marker-all" id="marker{{ loop.index-1 }}">
+                        <td>{{ u.Vorname }} {{ u.Nachname }}</td>
+                        <td><a href="{{ path('sf_montage_offer', {'id':k}) }}">{{ offerI.number }}</a></td>
+                        <td class="text-right">{{ u.distance|number_format(2,'.') }} km</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+{#                <div id="map" style="border-radius: 20px;border: 1px solid {{ sfColor }}"></div>#}
+{#                <script src="https://solar.googleapis.com/v1/buildingInsights:findClosest?location.latitude=37.4450&location.longitude=-122.1390&requiredQuality=HIGH&key=AIzaSyAZYlsQNYOOUxcqNAFTFhwBmvX73fpGqwg" defer></script>#}
+{#                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZYlsQNYOOUxcqNAFTFhwBmvX73fpGqwg&callback=initMap&v=weekly" defer></script>#}
+                {# {% include 'offer/montage/components/customer_data.html.twig' with {'offer':offer, 'form':form} %} #}
+                {# {% include 'offer/montage/components/_auftrags_notice.html.twig' with {'offer':offer, 'form':form} %} #}
+                {# {% include 'offer/montage/components/_auftrags_upload.html.twig' with {'offer':offer, 'form':form} %} #}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center">
+                <button type="submit" class="w-100 montage_button p-2 btn btn-sm btn-primary">{{ 'w.save'|trans }}</button>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,206 @@
+<style>
+    .lh1 {line-height: 1;}
+    .lh21 {line-height: 1.2;}
+    .f10 {font-size: 10px !important;text-align: center;!important;margin: 0}
+    .f8 {font-size: 8px !important;text-align: center;!important;margin: 0}
+    .btcenter td {text-align: center}
+    .tdm{vertical-align: middle !important;}
+</style>
+<table class="mt5">
+    <tr>
+        <td colspan="2"><h3>Wechselrichterkonfiguration</h3></td>
+    </tr>
+    <tr>
+        <td>
+            <p class="inline-block" style="width: 150px">Konfiguration&nbsp;nach:</p>
+            <p class="inline-block" style="width: 100%;"><input style="width: 100%" class="check_i" type="text" name="pv_first[mess][1]" value="{% if yes and ocp.mess[1] is defined %}{{ ocp.mess[1] }}{% else %}VDE-ARN-4105{% endif %}"></p>
+        </td>
+        <td>
+            <p class="inline-block" style="width: 150px">Blindleistungseinstellung:</p>
+            <p class="inline-block" style="width: 100%;"><input class="check_i" type="text" name="pv_first[mess][2]" value="{% if yes and ocp.mess[2] is defined %}{{ ocp.mess[2] }}{% endif %}"></p>
+        </td>
+    </tr>
+</table>
+<table class="mt5">
+    <tr>
+        <td colspan="3"><h3>Nenndaten Wechselrichter</h3></td>
+        <td colspan="2"><p>Wechselrichter Standort:</p></td>
+        <td colspan="4"><input style="text-align: right;padding-right: 6px;" class="check_i" type="text" name="pv_first[mess][7]" value="{% if yes and ocp.mess[7] is defined %}{{ ocp.mess[7] }}{% endif %}"></td>
+        <td></td>
+    </tr>
+    <tr class="btTd">
+        <td class="brTd"><p class="f10">WR Nr.</p></td>
+        <td class="brTd"><p class="f10">Zuord. Stränge</p></td>
+        <td class="brTd"><p class="f10">Hersteller</p></td>
+        <td class="brTd"><p class="f10">WR Typ</p></td>
+        <td class="brTd"><p class="f10">Pn<sub>ac</sub><br>[kW]</p></td>
+        <td class="brTd"><p class="f10">Galv.<br>Trenn.</p></td>
+        <td class="brTd"><p class="f10">VDE<br>0126-1</p></td>
+        <td class="brTd"><p class="f10">WR Seriennummer</p></td>
+        <td class="brTd"><p class="f10">Netzaus-<br>fallprüf.</p></td>
+        <td class="brTd"><p class="f10">R<sub>PA</sub><br>[&#8486;]</p></td>
+    </tr>
+    <tr class="btTd">
+        {% for q in 8..17 %}
+            <td class="brTd"><p class="f10"><input style="text-align:center;" class="check_i" type="text" name="pv_first[mess][{{ q }}]" value="{% if yes and ocp.mess[q] is defined %}{{ ocp.mess[q] }}{% endif %}"></p></td>
+        {% endfor %}
+    </tr>
+    <tr class="btTd">
+        {% for q in 18..27 %}
+            <td class="brTd"><p class="f10"><input style="text-align:center;" class="check_i" type="text" name="pv_first[mess][{{ q }}]" value="{% if yes and ocp.mess[q] is defined %}{{ ocp.mess[q] }}{% endif %}"></p></td>
+        {% endfor %}
+    </tr>
+    <tr class="btTd">
+        {% for q in 28..37 %}
+            <td class="brTd"><p class="f10"><input style="text-align:center;" class="check_i" type="text" name="pv_first[mess][{{ q }}]" value="{% if yes and ocp.mess[q] is defined %}{{ ocp.mess[q] }}{% endif %}"></p></td>
+        {% endfor %}
+    </tr>
+</table>
+
+<table class="mt5">
+    <tr>
+        <td colspan="2"><h3>Messungen AC Anschluss</h3></td>
+    </tr>
+    <tr>
+        <td>
+            <p class="inline-block"><input class="check_i" type="radio" name="pv_first[mess][38]" {% if yes and ocp.mess[38] is defined and ocp.mess[38] == 1 %}checked{% endif %} value="1"></p>
+            <p class="inline-block">Bis Anlagenschalter AC</p>
+        </td>
+        <td>
+            <p class="inline-block"><input class="check_i" type="checkbox" name="pv_first[mess][39]" {% if yes and ocp.mess[39] is defined and ocp.mess[39] %}checked{% endif %} value="1"></p>
+            <p class="inline-block" style="width: 177px">Externer FI Typ B erforderlich</p>
+            <p class="inline-block" style="min-width: 380px;"><input style="width:370px" class="check_i" type="text" name="pv_first[mess][40]" value="{% if yes and ocp.mess[40] is defined %}{{ ocp.mess[40] }}{% endif %}"></p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p class="inline-block"><input class="check_i" type="radio" name="pv_first[mess][38]" {% if yes and ocp.mess[38] is defined and ocp.mess[38] == 2 %}checked{% endif %} value="2"></p>
+            <p class="inline-block">Vollständige&nbsp;Installation</p>
+        </td>
+        <td>
+            <p class="inline-block"><input class="check_i" type="checkbox" name="pv_first[mess][42]" {% if yes and ocp.mess[42] is defined and ocp.mess[42] %}checked{% endif %} value="1"></p>
+            <p class="inline-block" style="width: 390px">DC&nbsp;seitige&nbsp;Fehlerstromüberwachung&nbsp;wird&nbsp;durch den WR gewährleistet</p>
+            <p class="inline-block" style="min-width: 166px;"><input style="width:160px" class="check_i" type="text" name="pv_first[mess][43]" value="{% if yes and ocp.mess[43] is defined %}{{ ocp.mess[43] }}{% endif %}"></p>
+        </td>
+    </tr>
+</table>
+<table class="mt5">
+    <tr>
+        <td colspan="2"><h3>Messen</h3></td>
+        <td colspan="3"><p>StromkreisverteilerNr.:</p></td>
+        <td colspan="11"><input style="text-align: right;padding-right: 6px;" class="check_i" type="text" name="pv_first[mess][7]" value="{% if yes and ocp.mess[7] is defined %}{{ ocp.mess[7] }}{% endif %}"></td>
+        <td></td>
+    </tr>
+    <tr class="btTd">
+        <td class="brTd tdm" colspan="2"><p class="f10">Stromkreis</p></td>
+        <td class="brTd tdm" colspan="2"><p class="f10">Leitung/Kabel</p></td>
+        <td class="brTd tdm" rowspan="2"><p class="f10">Leitfä.<br>Schutz</p></td>
+        <td class="brTd tdm" colspan="2"><p class="f10">R<sub>iso</sub></p></td>
+        <td class="brTd tdm" colspan="6"><p class="f10">Fehlerstrom-Schutzeinrichtung (RCD)</p></td>
+        <td class="brTd tdm" colspan="4"><p class="f10 lh1">Überstrom-Schutzeinrichtung</p></td>
+    </tr>
+    <tr class="btTd btcenter">
+        <td class="brTd tdm" rowspan="2">Nr.</td>
+        <td class="brTd tdm" rowspan="2">Zielbez.</td>
+
+        <td class="brTd tdm" rowspan="2">Typ</td>
+        <td class="brTd tdm">Leiter<br>a.&nbsp;x&nbsp;q.</td>
+
+        <td class="brTd tdm lh21">U<sub>mess</sub><br>bei R<sub>iso</sub></td>
+        <td class="brTd tdm">R<sub>iso</sub></td>
+
+        <td class="brTd tdm" rowspan="2"><p class="f10 lh21">Typ<br>Ausl.<br>Charak-<br>teristik</p></td>
+        <td class="brTd tdm">I<sub>n</sub></td>
+        <td class="brTd tdm">I<sub>&#8710;n</sub></td>
+        <td class="brTd tdm lh21">U<sub>L</sub>&#8804;...V<br>U<sub>B</sub></td>
+        <td class="brTd tdm"><p class="f10 lh21">Ausl.<br>Zeit t<sub>A</sub></p></td>
+        <td class="brTd tdm lh21">I<sub>&#8710;<br>&#8804;I<sub>&#8710;n</sub></sub></td>
+
+        <td class="brTd tdm lh21" rowspan="2">Cha-<br>rakter-<br>istik</td>
+        <td class="brTd lh1">I<sub>n</sub></td>
+        <td class="brTd lh1">Z<sub>s</sub>(&#8486;)<input class="check_i" type="checkbox" name="pv_first[mess][50]" {% if yes and ocp.mess[50] is defined and ocp.mess[50] == 1 %}checked{% endif %} value="1"><br>I<sub>A</sub>(A)<input class="check_i" type="checkbox" name="pv_first[mess][51]" {% if yes and ocp.mess[51] is defined and ocp.mess[51] == 1 %}checked{% endif %} value="1"></td>
+        <td class="brTd lh1">Z<sub>I</sub>(&#8486;)<input class="check_i" type="checkbox" name="pv_first[mess][52]" {% if yes and ocp.mess[52] is defined and ocp.mess[52] == 1 %}checked{% endif %} value="1"><br>I<sub>K</sub>(A)<input class="check_i" type="checkbox" name="pv_first[mess][53]" {% if yes and ocp.mess[53] is defined and ocp.mess[53] == 1 %}checked{% endif %} value="1"></td>
+    </tr>
+    <tr class="btTd btcenter">
+        <td class="brTd" style="position: relative;">(mm<sup class="f8" style="position: absolute;right: 8px;top:0px">2</sup>)</td>
+        <td class="brTd">(&#8486;)</td>
+        <td class="brTd">(V)</td>
+        <td class="brTd">(M&#8486;)</td>
+
+        <td class="brTd">(A)</td>
+        <td class="brTd">(mA)</td>
+        <td class="brTd">(V)</td>
+        <td class="brTd">(ms)</td>
+        <td class="brTd">(mA)</td>
+
+        <td class="brTd">(A)</td>
+        <td class="brTd"><p class="f10">(L&#8722;PE)</p></td>
+        <td class="brTd"><p class="f10">(L&#8722;N)</p></td>
+    </tr>
+    {% for p in 1..9 %}
+    <tr class="btTd">
+        {% for q in 1..17 %}
+            <td class="brTd"><p class="f10"><input style="text-align:center;" class="check_i" type="text" name="pv_first[messi][{{ p }}][{{ q }}]" value="{% if yes and ocp.messi[p][q] is defined %}{{ ocp.messi[p][q] }}{% endif %}"></p></td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+<table class="mt5">
+    <tr class="btTd">
+        <td class="brTd tdm" colspan="2"><p class="f10">Stromkreis</p></td>
+        <td class="brTd tdm" colspan="2"><p class="f10">Leitung/Kabel</p></td>
+        <td class="brTd tdm" rowspan="3"><p class="f10">Leitfä.<br>Schutz</p></td>
+        <td class="brTd btcenter" colspan="13"><p class="f10">Isolationsmessung</p></td>
+    </tr>
+    <tr class="btTd btcenter">
+        <td class="brTd tdm" rowspan="3">Nr.</td>
+        <td class="brTd tdm" rowspan="3">Zielbez.</td>
+
+        <td class="brTd tdm" rowspan="3">Typ</td>
+        <td class="brTd tdm" rowspan="2">Leiter<br>a.x q.</td>
+
+        <td class="brTd lh12" rowspan="2">U<sub>mess</sub><br>bei R<sub>iso</sub></td>
+        <td class="brTd tdm" rowspan="2" colspan="2">Verbrau. angeschl.</td>
+
+        <td class="brTd tdm" colspan="13"><p class="f10">Detailsmessung zur Isolationsmessung R<sub>iso</sub></p></td>
+    </tr>
+    <tr class="btTd btcenter">
+        <td class="brTd tdm"><p class="f8">N&#8722;PE</p></td>
+        <td class="brTd tdm"><p class="f8">L1&#8722;PE</p></td>
+        <td class="brTd tdm"><p class="f8">L1&#8722;N</p></td>
+        <td class="brTd tdm"><p class="f8">L2&#8722;PE</p></td>
+        <td class="brTd tdm"><p class="f8">L2&#8722;N</p></td>
+        <td class="brTd tdm"><p class="f8">L3&#8722;PE</p></td>
+        <td class="brTd tdm"><p class="f8">L3&#8722;N</p></td>
+        <td class="brTd tdm"><p class="f8">L!&#8722;L</p></td>
+        <td class="brTd tdm"><p class="f8">L1&#8722;L3</p></td>
+        <td class="brTd tdm"><p class="f8">L2&#8722;L3</p></td>
+     </tr>
+    <tr class="btTd btcenter">
+        <td class="brTd" style="position: relative;">(mm<sup class="f8" style="position: absolute;right: 8px;top:0px">2</sup>)</td>
+        <td class="brTd">(&#8486;)</td>
+        <td class="brTd">(V)</td>
+        <td class="brTd">Ja</td>
+        <td class="brTd">Nein</td>
+
+        <td class="brTd">(M&#8486;)</td>
+        <td class="brTd">(M&#8486;)</td>
+        <td class="brTd">(M&#8486;)</td>
+        <td class="brTd">(M&#8486;)</td>
+        <td class="brTd">(M&#8486;)</td>
+        <td class="brTd">(M&#8486;)</td>
+        <td class="brTd">(M&#8486;)</td>
+        <td class="brTd">(M&#8486;)</td>
+        <td class="brTd">(M&#8486;)</td>
+        <td class="brTd">(M&#8486;)</td>
+    </tr>
+    {% for p in 1..9 %}
+    <tr class="btTd">
+        {% for q in 1..18 %}
+            <td class="brTd"><p class="f10"><input style="text-align:center;" class="check_i" type="text" name="pv_first[messj][{{ p }}][{{ q }}]" value="{% if yes and ocp.messj[p][q] is defined %}{{ ocp.messj[p][q] }}{% endif %}"></p></td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+{% include 'offer/montage/intern/checkpage/_copyrights.html.twig' %}

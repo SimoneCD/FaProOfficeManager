@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'w.links' |trans}} - {{ sf.name }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        th {font-size: 0.8rem !important;}
+        td {font-size: 0.8rem !important;}
+    </style>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(document).on('click', '.oload_link_data', function () {
+            let name = jQuery(this).attr('data-name');
+            jQuery.ajax({
+                'url': jQuery(this).attr('data-action') + '',
+                'data': $('#link_form').serialize(),
+                'method': 'get',
+                'success': function (ax) {
+                    jQuery('#terminModalTitle').html('<strong>' + name + '</strong>')
+                    jQuery('#terminModalContent').html(ax)
+                },
+                'error': function (err) {
+                    console.log(err)
+                }
+            });
+        });
+        jQuery(document).on('click', '#add_link', function () {
+            let name = jQuery(this).attr('data-name');
+            console.log($('form[name="link"]').serialize());
+            jQuery.ajax({
+                'url': jQuery(this).attr('data-action') + '',
+                'data': $('form[name="link"]').serialize(),
+                'method': 'post',
+                'success': function (ax) {
+                    $('#terminModal').modal('toggle')
+                    window.location.reload();
+                    //$('.terminModal').find('.close').click();
+                },
+                'error': function (err) {
+                    $('.terminModalFooter').innerHTML('<strong>Fehler!</strong>');
+                }
+            });
+        });
+    </script>
+{% endblock %}
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">Empfehlunkslink erstellen
+                        <a href="javascript:" data-toggle="modal" data-target="#terminModal" data-action="{{ path('app_link_new') }}" class="oload_link_data" data-name="Empfehlungslink erstellen"><span style="color:{{ sfColorDark }};position: relative;vertical-align: middle;" class="material-symbols-outlined">add_circle</span></a></h4>
+                </div>
+                <div class="card-body table-responsive">
+                    <div class="card" style="text-align: center;">
+                        <p class="mt-3">Empfehlungslinks werden automatisch erstellt wenn der Kunde über {{ sf.www }} einen Code anfordert.</p>
+                        <h2 class="d-none">Einbinden:<br>{{ '<iframe width="300" height="210" style="border: none" src="'~absolute_url(path('ajax_extern_form_link'))~'" title="ZOE Empfehlungscode Anfordern"></iframe>' }}</h2>
+                        <h2 class="d-none">Kontakt einbetten:<br>{{ '<iframe width="100%" height="500" style="border: none" src="'~absolute_url(path('extern_form_contact'))~'" title="ZOE Empfehlungscode Anfordern"></iframe>' }}</h2>
+{#                        <iframe width="300" height="210" style="border: none" src="{{ path('ajax_extern_form_link') }}" title="ZOE Empfehlungscode Anfordern"></iframe>#}
+{#                        <iframe width="100%" height="500" style="border: none" src="{{ path('extern_form_contact') }}" title="ZOE Empfehlungscode Anfordern"></iframe>#}
+                    </div>
+                    <table class="table table-sm">
+                        <thead>
+                        <tr>
+                            <th>{{ 'w.fullname'|trans }}</th>
+                            <th>{{ 'w.email'|trans }}</th>
+                            <th>{{ 'w.description'|trans }}</th>
+                            <th>{{ 'w.link'|trans }}</th>
+                            <th>Benutzt</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for link in links %}
+                            <tr>
+                                <td>{{ link.fullname }}</td>
+                                <td>{{ link.email }}</td>
+                                <td>{{ link.notice }}</td>
+                                <td>{{ absolute_url(path('app_recommendation')~'?key='~link.link) }}</td>
+                                <td>{{ link.customer|length }}</td>
+                                <td>
+                                    <a data-toggle="modal" data-target="#terminModal" data-name="Empfehlungslink bearbeiten" href="javascript:" class="oload_link_data" data-action="{{ path('app_link_edit', {'id': link.id}) }}"><i class="material-symbols-outlined">edit</i></a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            {% include 'backend/_no_entry.html.twig' with {'collSpan': 6} %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

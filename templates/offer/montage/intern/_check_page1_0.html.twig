@@ -1,0 +1,100 @@
+
+<table class="deckblatt" style="border: none">
+    <tr>
+        <td style="width: 34%"><p style="text-align: right;font-weight: bold">Anlage:</p></td>
+        <td><p><input class="check_i" type="text" name="offer_check[start][1]" value="{% if yes %}{{ ocp.start[1] }}{% else %}{{ getOfferName(offer.id) }}{% endif %}"></p></td>
+    </tr>
+    <tr>
+        <td style="width: 34%"><p style="text-align: right;font-weight: bold">Anlagenbetreiber:</p></td>
+        <td><p><input class="check_i" type="text" name="offer_check[start][2]" value="{% if yes %}{{ ocp.start[2] }}{% else %}{{ offer.customer.sex|trans }} {{ offer.customer.fullName }}{% endif %}"></p></td>
+    </tr>
+    <tr>
+        <td style="width: 34%"><p style="text-align: right;font-weight: bold">Anlagenadresse:</p></td>
+        <td><p><input class="check_i" type="text" name="offer_check[start][0]" value="{% if yes %}{{ ocp.start[0] }}{% else %}{{ offer.stationAddress }}, {{ offer.stationZip }}{% endif %}"></p></td>
+    </tr>
+</table>
+<table class="deckblatt deckblatt2">
+    <tr>
+        <td colspan="3"><h3>Das vorliegende Anlagenbuch beinhaltet den Befund der Erstprüfung vom: <input style="max-width: 120px" class="check_i" type="date" name="offer_check[start][3]" value="{% if yes %}{{ ocp.start[3] }}{% else %}{% endif %}"> über:</h3></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][3]" {% if yes and ocp.start[3]%}checked{% endif %} value="1">&nbsp;&nbsp;Die elektronische Anlage</p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][4]" {% if yes and ocp.start[4]%}checked{% endif %} value="1">&nbsp;&nbsp;Versorgung/Schutzmassnahmen</p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][5]" {% if yes and ocp.start[5]%}checked{% endif %} value="1">&nbsp;&nbsp;Verteiler</p></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][6]" {% if yes and ocp.start[6]%}checked{% endif %} value="1">&nbsp;&nbsp;Betriebsmittel</p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][7]" {% if yes and ocp.start[7]%}checked{% endif %} value="1">&nbsp;&nbsp;Erprobung und Messung</p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][8]" {% if yes and ocp.start[8]%}checked{% endif %} value="1">&nbsp;&nbsp;Besichtigung</p></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][9]" {% if yes and ocp.start[9]%}checked{% endif %} value="1">&nbsp;&nbsp;die Pläne(siehe Besichtigung)</p></td>
+        <td>{#<p><input class="check_i" type="checkbox" name="offer_check[system][10]" {% if yes and ocp.start[10]%}checked{% endif %} value="1">&nbsp;<input style="width: 80%" class="check_i" type="text" name="offer_check[start][11]" value="{% if yes %}{{ ocp.start[11] }}{% else %}{% endif %}"></p>#}</td>
+        <td>{#<p><input class="check_i" type="checkbox" name="offer_check[system][11]" {% if yes and ocp.start[12]%}checked{% endif %} value="1">&nbsp;<input style="width: 80%" class="check_i" type="text" name="offer_check[start][13]" value="{% if yes %}{{ ocp.start[13] }}{% else %}{% endif %}"></p>#}</td>
+    </tr>
+    <tr>
+        <td colspan="3"><h3 style="padding-top: 10px;">Das vorliegende Anlagenbuch beinhaltet den Befund der Erstprüfung vom: <input style="max-width: 120px" class="check_i" type="date" name="offer_check[start][14]" value="{% if yes %}{{ ocp.start[14] }}{% else %}{% endif %}"> über:</h3></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][16]" {% if yes and ocp.start[16]%}checked{% endif %} value="1">&nbsp;&nbsp;Die Blitzschutzanlage</p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][17]" {% if yes and ocp.start[17]%}checked{% endif %} value="1">&nbsp;&nbsp;Technischer Teil</p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][18]" {% if yes and ocp.start[18]%}checked{% endif %} value="1">&nbsp;&nbsp;Besichtigung, Prüfung u. Messung</p></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][19]" {% if yes and ocp.start[19]%}checked{% endif %} value="1">&nbsp;&nbsp;<input style="width: 80%" class="check_i" type="text" name="offer_check[start][20]" value="{% if yes %}{{ ocp.start[20] }}{% else %}{% endif %}"></p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][21]" {% if yes and ocp.start[21]%}checked{% endif %} value="1">&nbsp;&nbsp;<input style="width: 80%" class="check_i" type="text" name="offer_check[start][22]" value="{% if yes %}{{ ocp.start[22] }}{% else %}{% endif %}"></p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][23]" {% if yes and ocp.start[23]%}checked{% endif %} value="1">&nbsp;&nbsp;<input style="width: 80%" class="check_i" type="text" name="offer_check[start][24]" value="{% if yes %}{{ ocp.start[24] }}{% else %}{% endif %}"></p></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][25]" {% if yes and ocp.start[25]%}checked{% endif %} value="1">&nbsp;&nbsp;<input style="width: 80%" class="check_i" type="text" name="offer_check[start][26]" value="{% if yes %}{{ ocp.start[26] }}{% else %}{% endif %}"></p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][27]" {% if yes and ocp.start[27]%}checked{% endif %} value="1">&nbsp;&nbsp;<input style="width: 80%" class="check_i" type="text" name="offer_check[start][28]" value="{% if yes %}{{ ocp.start[28] }}{% else %}{% endif %}"></p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][29]" {% if yes and ocp.start[29]%}checked{% endif %} value="1">&nbsp;&nbsp;<input style="width: 80%" class="check_i" type="text" name="offer_check[start][30]" value="{% if yes %}{{ ocp.start[30] }}{% else %}{% endif %}"></p></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][31]" {% if yes and ocp.start[31]%}checked{% endif %} value="1">&nbsp;&nbsp;<input style="width: 80%" class="check_i" type="text" name="offer_check[start][32]" value="{% if yes %}{{ ocp.start[15] }}{% else %}{% endif %}"></p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][33]" {% if yes and ocp.start[33]%}checked{% endif %} value="1">&nbsp;&nbsp;<input style="width: 80%" class="check_i" type="text" name="offer_check[start][34]" value="{% if yes %}{{ ocp.start[34] }}{% else %}{% endif %}"></p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][35]" {% if yes and ocp.start[35]%}checked{% endif %} value="1">&nbsp;&nbsp;<input style="width: 80%" class="check_i" type="text" name="offer_check[start][36]" value="{% if yes %}{{ ocp.start[36] }}{% else %}{% endif %}"></p></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][36]" {% if yes and ocp.start[36]%}checked{% endif %} value="1">&nbsp;&nbsp;<input style="width: 80%" class="check_i" type="text" name="offer_check[start][37]" value="{% if yes %}{{ ocp.start[37] }}{% else %}{% endif %}"></p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][38]" {% if yes and ocp.start[38]%}checked{% endif %} value="1">&nbsp;&nbsp;<input style="width: 80%" class="check_i" type="text" name="offer_check[start][39]" value="{% if yes %}{{ ocp.start[39] }}{% else %}{% endif %}"></p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[system][40]" {% if yes and ocp.start[40]%}checked{% endif %} value="1">&nbsp;&nbsp;<input style="width: 80%" class="check_i" type="text" name="offer_check[start][41]" value="{% if yes %}{{ ocp.start[41] }}{% else %}{% endif %}"></p></td>
+    </tr>
+</table>
+<table class="deckblatt">
+    <tr>
+        <td><h3>Errichter der Anlage</h3></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="text" name="offer_check[start][42]" value="{% if yes %}{{ ocp.start[42] }}{% else %}{{ sf.name_complete }}, {{ sf.address }}, {{ sf.zip }}{% endif %}"></p></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="text" name="offer_check[start][43]" value="{% if yes %}{{ ocp.start[43] }}{% else %}{% endif %}"></p></td>
+    </tr>
+</table>
+<table class="deckblatt">
+    <tr>
+        <td colspan="2"><h3>Folgende Berichte über die "Wiederkehrende Prüfung" liegen dem Anlagenbuch bei.</h3></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[start][44]" value="1" {% if yes and ocp.start[42] %}checked{% endif %}">&nbsp;&nbsp;Datum: <input style="max-width: 80px" class="check_i" type="date" name="offer_check[start][45]" value="{% if yes %}{{ ocp.start[45] }}{% else %}{% endif %}">&nbsp;Prüfbericht Nr.:<input style="max-width: 100px" class="check_i" type="text" name="offer_check[start][46]" value="{% if yes %}{{ ocp.start[46] }}{% else %}{% endif %}"></p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[start][47]" value="1" {% if yes and ocp.start[47] %}checked{% endif %}">&nbsp;&nbsp;Datum: <input style="max-width: 80px" class="check_i" type="date" name="offer_check[start][48]" value="{% if yes %}{{ ocp.start[48] }}{% else %}{% endif %}">&nbsp;Prüfbericht Nr.:<input style="max-width: 100px" class="check_i" type="text" name="offer_check[start][49]" value="{% if yes %}{{ ocp.start[49] }}{% else %}{% endif %}"></p></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[start][51]" value="1" {% if yes and ocp.start[51] %}checked{% endif %}">&nbsp;&nbsp;Datum: <input style="max-width: 80px" class="check_i" type="date" name="offer_check[start][52]" value="{% if yes %}{{ ocp.start[52] }}{% else %}{% endif %}">&nbsp;Prüfbericht Nr.:<input style="max-width: 100px" class="check_i" type="text" name="offer_check[start][53]" value="{% if yes %}{{ ocp.start[53] }}{% else %}{% endif %}"></p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[start][54]" value="1" {% if yes and ocp.start[54] %}checked{% endif %}">&nbsp;&nbsp;Datum: <input style="max-width: 80px" class="check_i" type="date" name="offer_check[start][55]" value="{% if yes %}{{ ocp.start[55] }}{% else %}{% endif %}">&nbsp;Prüfbericht Nr.:<input style="max-width: 100px" class="check_i" type="text" name="offer_check[start][56]" value="{% if yes %}{{ ocp.start[56] }}{% else %}{% endif %}"></p></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[start][57]" value="1" {% if yes and ocp.start[57] %}checked{% endif %}">&nbsp;&nbsp;Datum: <input style="max-width: 80px" class="check_i" type="date" name="offer_check[start][58]" value="{% if yes %}{{ ocp.start[58] }}{% else %}{% endif %}">&nbsp;Prüfbericht Nr.:<input style="max-width: 100px" class="check_i" type="text" name="offer_check[start][59]" value="{% if yes %}{{ ocp.start[59] }}{% else %}{% endif %}"></p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[start][60]" value="1" {% if yes and ocp.start[60] %}checked{% endif %}">&nbsp;&nbsp;Datum: <input style="max-width: 80px" class="check_i" type="date" name="offer_check[start][61]" value="{% if yes %}{{ ocp.start[61] }}{% else %}{% endif %}">&nbsp;Prüfbericht Nr.:<input style="max-width: 100px" class="check_i" type="text" name="offer_check[start][62]" value="{% if yes %}{{ ocp.start[62] }}{% else %}{% endif %}"></p></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[start][63]" value="1" {% if yes and ocp.start[63] %}checked{% endif %}">&nbsp;&nbsp;Datum: <input style="max-width: 80px" class="check_i" type="date" name="offer_check[start][64]" value="{% if yes %}{{ ocp.start[64] }}{% else %}{% endif %}">&nbsp;Prüfbericht Nr.:<input style="max-width: 100px" class="check_i" type="text" name="offer_check[start][65]" value="{% if yes %}{{ ocp.start[65] }}{% else %}{% endif %}"></p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[start][66]" value="1" {% if yes and ocp.start[66] %}checked{% endif %}">&nbsp;&nbsp;Datum: <input style="max-width: 80px" class="check_i" type="date" name="offer_check[start][67]" value="{% if yes %}{{ ocp.start[67] }}{% else %}{% endif %}">&nbsp;Prüfbericht Nr.:<input style="max-width: 100px" class="check_i" type="text" name="offer_check[start][68]" value="{% if yes %}{{ ocp.start[68] }}{% else %}{% endif %}"></p></td>
+    </tr>
+    <tr>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[start][69]" value="1" {% if yes and ocp.start[69] %}checked{% endif %}">&nbsp;&nbsp;Datum: <input style="max-width: 80px"class="check_i" type="date" name="offer_check[start][70]" value="{% if yes %}{{ ocp.start[70] }}{% else %}{% endif %}">&nbsp;Prüfbericht Nr.:<input style="max-width: 100px" class="check_i" type="text" name="offer_check[start][71]" value="{% if yes %}{{ ocp.start[71] }}{% else %}{% endif %}"></p></td>
+        <td><p><input class="check_i" type="checkbox" name="offer_check[start][72]" value="1" {% if yes and ocp.start[72] %}checked{% endif %}">&nbsp;&nbsp;Datum: <input style="max-width: 80px"class="check_i" type="date" name="offer_check[start][73]" value="{% if yes %}{{ ocp.start[73] }}{% else %}{% endif %}">&nbsp;Prüfbericht Nr.:<input style="max-width: 100px" class="check_i" type="text" name="offer_check[start][74]" value="{% if yes %}{{ ocp.start[74] }}{% else %}{% endif %}"></p></td>
+    </tr>
+</table>
+<small>&copy; copyrigths by {{ sf.name_complete }}, {{ sf.address }}, {{ sf.zip }} - Stand Mai 2023</small>

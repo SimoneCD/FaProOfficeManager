@@ -1,0 +1,179 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don"t need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+#
+# faq 1-200 (offer/index, details)
+# faq 500 Material-order
+# faq 300 chechprotocol
+parameters:
+  vapid_public_key: '%env(VAPID_PUBLIC_KEY)%'
+  # dump the Service Container into a Single File
+  app_active_log:
+    slack_active: 0
+    slack_log: 0
+    app_chat: 0
+    app_crypto: 0
+  mail_templates: '%kernel.project_dir%/config/mail_templates.yaml'
+  app_google_client_id: '%env(APP_GOOGLE_CLIENT_ID)%'
+  app_google_client_secret: '%env(APP_GOOGLE_CLIENT_SECRET)%'
+  app_slack_bearer: '%env(string:SLACK_DSN)%'
+  app_holidays: 'BE'
+  .container.dumper.inline_factories: true
+  locale: "%env(string:APP_LOCALE)%"
+  app_kernel_root_dir: "%kernel.project_dir%/"
+  app_kernel_dir: "%kernel.project_dir%/public/"
+  app_db: "%env(string:DATABASE_URL)%"
+  app_email: "kundenservice@zukunftsorientierte-energie.de"
+  app_email_name: "ZOE-Kundenservice"
+  app_password: '%env(APP_PASSWORD)%'
+  # This parameter defines the codes of the locales (languages) enabled in the application
+  app_locales: de|en|
+  customer_start: 4000
+  app_base_uri: "%env(string:APP_URL)%"
+  app.notifications.email_sender: anonymous@example.com
+  app_dirs: "%kernel.project_dir%/public/hd/%env(APP_SUBDOMAIN)%"
+  app_product_upload_dir: "%kernel.project_dir%/public/hd/%env(APP_SUBDOMAIN)%/products"
+  app_offer_dir: "%kernel.project_dir%/public/hd/%env(APP_SUBDOMAIN)%/offers"
+  app_protocol_upload_dir: "%kernel.project_dir%/public/hd/%env(APP_SUBDOMAIN)%/offers"
+  app_doc_directory: "%kernel.project_dir%/public/hd/%env(APP_SUBDOMAIN)%/uploads"
+  app_template_directory: "hd/%env(APP_SUBDOMAIN)%"
+  # dump the Service Container into a Single File
+  app_asset_path: "hd/%env(APP_SUBDOMAIN)%"
+  appCurrency: "&euro;"
+  subdomain: "%env(APP_SUBDOMAIN)%"
+  template_dir: "tamplate_%env(APP_SUBDOMAIN)%"
+  path:
+    hd_uploads: "%kernel.project_dir%/public/hd/%env(APP_SUBDOMAIN)%/offers"
+    hd_public_root: "hd/%env(APP_SUBDOMAIN)%"
+    hd_template_folder: "tamplate_%env(APP_SUBDOMAIN)%"
+  data:
+    description: "Ihr Fachbetrieb f&#252;r Ladestation, PV-Anlagen und Installation"
+    name: "ZOE Solar"
+    name_short: "ZOE"
+    phone:
+      montage: "+49 152 25 956 222"
+      customer_service: "+49 156 788 762 00"
+      company: "+49 156 788 762 01"
+  sf:
+    title: "Ihr Fachbetrieb f&#252;r Ladestation, PV-Anlagen und Installation"
+    name: "ZOE Solar"
+    name_complete: "Inh. Jeremy Schulze, ZOE Solar"
+    iban: "DE06 1001 1001 2158 8581 87"
+    bic: "NTSBDEB1XXX"
+    footer_r1: "HWK Betriebsnr.: 134514"
+    footer_r2: "Steuernummer: 18 / 525 / 00694"
+    footer_r3: "UmSt-ID.: DE325514610"
+    montage_phone: "+49 152 25 956 222" # Markus
+    montage_email: "info@zoe-solar.de"
+    app_email: "info@zoe-solar.de"
+    service_phone: "+49 156 78 801 777" # Micha
+    phone: "+49 176 46 74 48 35" # Jeremy
+    pv_phone: "+49 176 46 74 48 35" # Jeremy
+    address: "Kurfürstenstraße 124"
+    zip: "10785 Berlin"
+    city: "Berlin"
+    country: "Deutschland"
+    email: "kundenservice@zukunftsorientierte-energie.de"
+    url: "https://kundenservice.zukunftsorientierte-energie.de"
+    www: "https://zoe-solar.de"
+    www2: "https://zukunftsorientierte-energie.de"
+    owner: "Inh. Hr. Jeremy Schulze"
+    agb: "https://zoe-solar.de/agb"
+    call_back: "https://zoe-solar.de/anrufservice"
+
+services:
+  notifier.flash_message_importance_mapper:
+    class: Symfony\Component\Notifier\FlashMessage\BootstrapFlashMessageImportanceMapper
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    bind: # defines the scalar arguments once and apply them to any service defined/created in this file
+      $emailSender: "%app.notifications.email_sender%"
+      string $hdDir: "%app_dirs%"
+      string $subdomain: "%subdomain%"
+      string $appEmail: "kundenservice@zukunftsorientierte-energie.de"
+      string $appEmailName: "ZOE-Kundenservice"
+      string $appPassword: '%env(APP_PASSWORD)%'
+      string $appPdfPath: "%app_base_uri%"
+      string $appPdfLocalPath: "%app_kernel_dir%"
+      string $protocolDirectory: "%app_doc_directory%"
+      string $templateDirectory: "%app_template_directory%"
+      string $offersDirectory: "%app_offer_dir%"
+      string $docDirectory: "%app_doc_directory%"
+      string $productsDirectory: "%app_product_upload_dir%"
+      string $appSlackBearer: "%app_slack_bearer%"
+
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  App\:
+    resource: "../src/"
+    exclude:
+      - "../src/DependencyInjection/"
+      - "../src/Entity/"
+      - "../src/Kernel.php"
+  # controllers are imported separately to make sure services can be injected
+  # as action arguments even if you don"t extend any base controller class
+  # equal to as extends AbstractController
+  # equal to #[AsController]
+  #App\Controller\:
+  #    resource: "../src/Controller/"
+  #    tags: ["controller.service_arguments"]
+
+  #App\EventListener\ExceptionListener:
+  #    tags:
+  #        - { name: kernel.event_listener, event: kernel.exception }
+
+  # add more service definitions when explicit configuration is needed
+  # please note that last definitions always *replace* previous ones
+  App\Service\PushNotificationService:
+    arguments:
+      $publicKey: '%env(VAPID_PUBLIC_KEY)%'
+      $privateKey: '%env(VAPID_PRIVATE_KEY)%'
+
+  App\Service\FileUploader:
+    arguments:
+      $offersDirectory: "%app_offer_dir%"
+      $productsDirectory: "%app_product_upload_dir%"
+      $protocolDirectory: "%app_protocol_upload_dir%"
+      $docDirectory: "%app_doc_directory%"
+      $slugger: "@slugger"
+
+  #    App\MessageHandler\Command\:
+  #        resource: "../src/MessageHandler/Command"
+  #        autoconfigure: false
+  #        tags: [{ name: messenger.message_handler, bus: command.bus }]
+
+  #    App\MessageHandler\Query\:
+  #        resource: "../src/MessageHandler/Query"
+  #        autoconfigure: false
+  #        tags: [{ name: messenger.message_handler, bus: query.bus }]
+
+  App\Security\CustomLogoutListener:
+    tags:
+      - name: 'kernel.event_listener'
+        event: 'Symfony\Component\Security\Http\Event\LogoutEvent'
+        dispatcher: security.event_dispatcher.main
+  App\MessageHandler\:
+    resource: "../src/MessageHandler"
+    autoconfigure: of
+    tags: [ { name: messenger.message_handler, bus: event.bus } ]
+
+  app_slack_service:
+    class: App\Service\SlackService
+    arguments: [ "@chatter", '@http_client','%app_slack_bearer%' ]
+
+  deleted_offers_out:
+    class: App\EventListener\OfferListener
+    arguments: [ "@doctrine.orm.entity_manager", '@chatter','@security.token_storage', '@app_slack_service','@parameter_bag']
+    tags:
+      - name: kernel.event_listener
+        event: kernel.request
+        method: onKernelRequest
+when@test:
+  services:
+    test.user_password_hasher:
+      alias: "security.user_password_hasher"
+      public: true

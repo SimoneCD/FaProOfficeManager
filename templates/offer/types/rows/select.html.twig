@@ -1,0 +1,9 @@
+{{ restore('appAnswerChecked') }}
+        {% for answer in question.offerAnswers|sort((a, b) => a.sort <=> b.sort) %}
+            {% set selected = (context['questions'] is defined and context['questions'][answer.question.id] is defined and context['questions'][answer.question.id]['answer'] == answer.id) ? true : false %}
+            {% if selected %}
+                {{ getAnswer(answer.id)}}
+                {%- if answer.dependencies is not null %}{{ answer.dependencies|join('-') }}{% endif %}
+            {% endif %}
+        {% endfor %}
+{{ save('appAnswerChecked') }}

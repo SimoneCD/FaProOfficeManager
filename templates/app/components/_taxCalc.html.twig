@@ -1,0 +1,2 @@
+{% set tax = (invoice.context['solar']??(taxX??appTax))*price/100 %}
+{{ save('tax') }}

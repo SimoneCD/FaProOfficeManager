@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ProductSubCategory{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {% include 'backend/_form_style.html.twig' %}
+{% endblock %}
+{% block main %}
+    {% include 'backend/components/_menu.html.twig' with {
+        'productlistLi': {'n':'w.productCategories'|trans,'k':true},
+        'productcategoryLi': {'n':category.name,'k':category.id,'i':'qr_code_2'},
+        'productcategoryLi2': {'n':('p.c.add'|trans),'i':'add_circle_outline'}
+    } %}
+<div id="backend_form">
+    {{ include('backend/product_sub_category/_form.html.twig') }}
+</div>
+{% endblock %}

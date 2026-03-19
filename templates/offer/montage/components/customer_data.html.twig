@@ -1,0 +1,1 @@
+<h4 class="head-title">Auftragsdaten / {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}<a style="color: {{ sfColor }}" href="{{ path('offer_show', {'id':offer.id}) }}">{{ offer.number }}</a>{% else %}{#<a style="color: {{ sfColor }}" href="{{ path('backend_material_index', {'offerNumberBasic':offer.number}) }}">#}{{ offer.number }}{#</a>#}{% endif %}</h4>

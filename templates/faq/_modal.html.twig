@@ -1,0 +1,55 @@
+<div class="modal fade" id="faq-modal"
+     data-controller="modal" data-faq-target="faqmodal" tabindex="-2" role="dialog"
+     aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="w-100 modal-title">
+                    FAQ bearbeiten
+                </h5>
+                <button id="order_modal_close" data-action="click->modal#close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" data-order-action-target="result" style="padding: 8%;background: #fff;">
+                {{ form_start(form, {'attr': {'style': 'background:transparent;'}}) }}
+                <div class="row">
+                    {{ form_label(form.title) }}
+                    <div class="col-12">
+                        {{ form_widget(form.title) }}
+                    </div>
+                    {{ form_label(form.text) }}
+                    <div class="col-12">
+                        {{ form_widget(form.text, {'id':'faq_editor_'~(faq.id ?? app.request.request.get('id'))}) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 p-0"><button type="button" onclick="toggleDiv('imageDiv', 'videoDiv')" class="btn btn-sm w-100">Bild hochladen</button></div>
+                    <div class="col-6 p-0"><button type="button" onclick="toggleDiv('videoDiv', 'imageDiv')" class="btn btn-sm w-100">Video hochladen</button></div>
+                </div>
+                <div class="row">
+                    <div id="videoDiv" style="max-width: 600px;{% if faq.video %}{% else %}display: none{% endif %}" class="col-12">
+                        {% if faq.video %}
+                            <video class="videoview" muted="muted" controls style="width: 100%" >
+                                <source data-faq-target="video" src="{{ asset(appAssetPath~'/faq/'~faq.video) }}" type="video/mp4">
+                            </video>
+                        {% endif %}
+                        {{ form_widget(form.video) }}
+                        {% if faq.video %}<button type="button" {{ stimulus_action('faq', 'removeVideo', 'click')}} data-faq-url-param="{{ path('ajax_faq_delvideo', {'id': faq.id}) }}" class="w-100 btn btn-danger">Video Löschen</button>{% endif %}
+                    </div>
+                    <div id="imageDiv" style="max-width: 600px;{% if faq.image %}{% else %}display: none"{% endif %}  class="col-12">
+                        {% if faq.image %}
+                            <img class="imageview" data-faq-target="image" style="width: 100%" src="{{ asset(appAssetPath~'/faq/'~faq.image) }}" >
+                        {% endif %}
+                        {{ form_widget(form.image) }}
+                        {% if faq.image %}<button type="button" {{ stimulus_action('faq', 'removeImage', 'click')}} data-faq-url-param="{{ path('ajax_faq_delimage', {'id': faq.id}) }}" class="w-100 btn btn-danger">Bild Löschen</button>{% endif %}
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+            <div class="modal-footer">
+                <button data-faq-url-param="{{ path('ajax_faq_submit', {'faqId':faq.id ?? ''}) }}" {{ stimulus_action('faq', 'submitFaq', 'click')}} type="button" class="btn btn-default">{{ 'w.save'|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>

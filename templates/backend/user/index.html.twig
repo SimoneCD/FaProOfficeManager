@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'w.employees'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .icon::before {
+            position: absolute;
+            display: block;
+            width: 1rem;
+            height: 1rem;
+            overflow: hidden;
+            vertical-align: middle;
+            border-width: 1px;
+            border-style: solid;
+            border-radius: 100%;
+            font-weight: 700;
+            font-size: 0.9rem;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        .icon-error::before {
+            content: "!";
+            color: crimson;
+        }
+
+        .icon-info::before {
+            content: "i";
+            color: mediumblue;
+        }
+
+        .icon-success::before {
+            content: "✓";
+            color: green;
+        }
+
+        .icon-warning::before {
+            content: "!";
+            color: chocolate;
+        }
+
+        .icon-help::before {
+            content: "?";
+            color: darkblue;
+        }
+    </style>
+{% endblock %}
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">{{ 'w.employees'|trans }} <a href="{{ path('backend_user_new') }}"><span style="color: {{ sfColorDark }}" class="material-symbols-outlined">add_circle</span></a>
+                    </h4>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr style="background-color: {{ sfColor }};color: #fff">
+                            <th class="text-center">{{ 'w.active'|trans }}</th>
+                            <th>{{ 'w.name'|trans }}</th>
+                            <th>SlackId</th>
+                            <th style="width: 160px;">{{ 'w.phone'|trans }}</th>
+                            <th>{{ 'w.email'|trans }}</th>
+                            <th>{{ 'w.securityRole'|trans }}</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td class="text-center">
+                                    {% if user.status == false %}
+                                        <img src="{{ asset('app/images/noOk.svg') }}">
+                                    {% else %}
+                                        <img src="{{ asset('app/images/ok.svg') }}">
+                                    {% endif %}
+                                </td>
+                                <td>{{ user.fullName }}</td>
+                                <td>{{ user.slackId ? '<span style="color:green;font-weight:bold;" class="material-icons">done</span>'|raw : '' }}</td>
+                                <td>{{ user.phone }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    {% for role in user.roles %}
+                                        {{ (user.roleName(role)~'')|trans }}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    <a href="{{ path('backend_user_edit', {'id': user.id}) }}"><i class="material-symbols-outlined">edit</i></a>
+                                </td>
+                            </tr>
+                        {% else %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

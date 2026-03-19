@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}IndexStates{% endblock %}
+
+{% block body %}
+    <h1>IndexStates</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ index_state.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ index_state.name }}</td>
+            </tr>
+            <tr>
+                <th>State</th>
+                <td>{{ index_state.state }}</td>
+            </tr>
+            <tr>
+                <th>ActionFirst</th>
+                <td>{{ index_state.actionFirst }}</td>
+            </tr>
+            <tr>
+                <th>ActionLast</th>
+                <td>{{ index_state.actionLast }}</td>
+            </tr>
+            <tr>
+                <th>Help</th>
+                <td>{{ index_state.help }}</td>
+            </tr>
+            <tr>
+                <th>AutoMoveByTime</th>
+                <td>{{ index_state.autoMoveByTime ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_index_states_index') }}">back to list</a>
+
+    <a href="{{ path('app_index_states_edit', {'id': index_state.id}) }}">edit</a>
+
+    {{ include('index_states/_delete_form.html.twig') }}
+{% endblock %}

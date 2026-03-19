@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'osc.quest.q.edit'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% include 'backend/offer_question/_style.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% include 'backend/offer_question/_script.html.twig' %}
+{% endblock %}
+{% block main %}
+    {% include 'backend/components/_menu.html.twig' with {
+        'listLi': {'n':'o.categories'|trans, 'k':true},
+        'categoryLi': {'n':subCategory.category.name,'k':subCategory.category.id,'i':subCategory.category.icon},
+        'subCategoryLi': {'n':('replace.questionnaire'|trans({'%name%':subCategory.name})),'i':'document_scanner','ki':subCategory.category.id,'k':subCategory.id},
+        'questionLi': {'n':question.name,'k':question.id,'i':'psychology_alt'},
+        'questionLi2': {'n':('replace.question'|trans({'%name%':subCategory.name})),'i':'edit'}
+    } %}
+    {#<h1>{{ 'osc.quest.q.edit'|trans }}</h1>#}
+<div id="backend_form">
+    {{ include('backend/offer_question/_form.html.twig', {'button_label': 'f.button.saveName'|trans({'%name%':'w.question'|trans}) }) }}
+</div>
+{% endblock %}

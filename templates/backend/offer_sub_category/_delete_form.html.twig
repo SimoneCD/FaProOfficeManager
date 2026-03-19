@@ -1,0 +1,8 @@
+<form id="sub_category_delete" method="post" action="{{ path('backend_subcategory_delete', {'category': subCategory.category.id,'id': subCategory.id}) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete-sub-category-' ~ subCategory.id) }}">
+    <div class="form-group row">
+        <div class="col-sm-7 offset-sm-5">
+            {% if subCategory.id is not null %}<button data-confirm="{{ 'f.confirm.deleteQuestionnaire'|trans }} {{ 'f.confirm.pscInvolved'|trans({'%number%':subCategory.offers|length}) }}" class="confirm btn btn-danger" type="button">{{ 'osc.quest.delete'|trans({'%name%':subCategory.name}) }}</button>{% endif %}
+        </div>
+    </div>
+</form>

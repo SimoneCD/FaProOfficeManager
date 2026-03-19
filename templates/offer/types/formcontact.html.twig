@@ -1,0 +1,89 @@
+{% extends 'base.precommendation.html.twig' %}
+{% block title %}Kontakt Anfragen{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        button[type="submit"] {
+            background-color: initial;
+            border: 1px solid #ffce51;
+            color: initial;
+        }
+        .bttsbutton {
+            border: 1px solid #ffce51 !important;
+            background-color: #ffce51 !important;
+            color: #0a0a0a !important;
+            transition: border-color .3s, background-color .3s, transform .3s, color .3s;
+        }
+        .form-control:focus {box-shadow: none;}
+        .form-control:disabled, .form-control[readonly] {background-color: #7e2a7e;color: #fff;opacity: 1;}
+        label {font-size: 1rem;}
+        button{float:right;padding:30px;margin-top:30px !important;width:100%;text-align: center;font-size: 1.1rem;font-weight: 400;}
+        input[type="text"], .form-select {
+            padding: 10px 0 10px 10px !important;
+            height: 54px !important;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: grey;
+        }
+        @media (max-width: 600px) {
+            button{float:right;padding:25px;margin-top:30px !important;width:100%;text-align: center;font-size: 1rem;font-weight: 400;}
+            input[type="text"], .form-select {
+                height: 44px !important;
+            }
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+    </script>
+{% endblock %}
+{% set customerName = '' %}
+{# offer.customer.companyName ==''? (offer.customer.sex|trans)~' '~offer.customer.fullName : offer.customer.companyName %} #}
+{% set appAnswerChecked = [] %}
+{% block main %}
+    <div style="margin:20px;text-align: left">
+    {% if form is defined and (done is not defined or done == false) %}
+        {{ form_start(form) }}
+        <div class="form-group row">
+            <div class="col-sm-6">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_label(form.surName) }}
+                {{ form_widget(form.surName) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-6">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_label(form.phone) }}
+                {{ form_widget(form.phone) }}
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-12">
+                {{ form_label(form.text) }}
+                {{ form_widget(form.text) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-12" style="text-align: right">
+                <button class="bttsbutton carousel-control carousel-control-next" type="submit">Nachricht&nbsp;Senden</button>
+            </div>
+        </div>
+        {{ form_end(form, {'render_rest':false}) }}
+    {% elseif done is defined and done != false %}
+        <div>
+            <p style="text-align: center;margin-bottom: 5px;font-size: 1.2rem">Vielen Dank, Ihre Anfrage wurde gesendet.</p>
+            <p style="text-align: center;margin-bottom: 2px">Wir melden uns umgehend bei Ihnen zurück.</p>
+        </div>
+    {% endif %}
+    </div>
+    {{ form_end(form, {'render_rest':false}) }}
+{% endblock %}

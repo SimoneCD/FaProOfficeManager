@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;" lang="{{ app.request.locale ?? 'de' }}">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="ZOE-Solar, PV-Anlage, Kundenanfrage, Solar, Energie">
+    <meta name="description" content="PV-Anlagen Kundenanfragen">
+    <title>ZOE-Solar PV-Anlagen, Wallboxen und Mehr</title>
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon"/>
+    <meta name="referrer" content="origin">
+    {% block stylesheets %}
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('link/css/style.css') }}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    {% endblock %}
+    <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+</head>
+<body class="is-boxed has-animations">
+    {% block body %}
+    {% endblock %}
+    {% block javascripts %}
+        <script class="u-script" type="text/javascript" src="{{ asset('app/js/jquery3.6.0.js') }}" defer=""></script>
+        <script src="{{ asset('link/js/main.min.js') }}"></script>
+    {% endblock %}
+</body>
+</html>

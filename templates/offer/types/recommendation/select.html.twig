@@ -1,0 +1,29 @@
+
+    <label class="funnel{{ question.funnelEnd ? 'End' : 'Start' }} my-0 form-check-label">
+    {% set help = '' %}
+    <div class="m-0 p-0">
+        <select title="{{ question.name }}"
+                data-class="s-{{ question.id }}"
+                data-question="{{ question.id }}"
+                data-help-dependencies="{% for answer in question.offerAnswers %}
+{%- if answer.helptext %}{{ answer.id }}{% if loop.index != question.offerAnswers|length %}-{% endif %}{% endif %}
+{% endfor %}" data-dependencies="{% for answer in question.offerAnswers %}
+{%- if answer.dependencies is not null %}{{ answer.dependencies|join('-') }}{% endif %}
+{% endfor %}" name="offer_option[{{ question.id }}]"
+                class="form-control condition-change-check form-check-select">
+            {% for answer in question.offerAnswers|sort((a, b) => a.sort <=> b.sort) %}
+                {% set selected = (context and context[answer.id] is defined and context[answer.id]['questions'][answer.question.id]['answer'] == answer.id) ? 'selected' : '' %}
+                {% if selected and answer.dependencies is not null %}
+                    {% set appAnswerChecked = appAnswerChecked|merge(answer.dependencies) %}
+                {% endif %}
+                <option{% if answer.helptext %} {{ selected }} data-help="{{ answer.id }}"{% endif %}{% if answer.dependencies|length %} data-questions="{{ answer.dependencies|join(':') }}"{% endif%} value="{{ answer.id }}">{{ answer.name }}</option>
+                {% if answer.helptext %}
+                    {% set help = help~'<div id="help-'~answer.id~'" class="help-'~question.id~' answer-helper" style="display:none">'~answer.helptext~'</div>' %}
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+    <div class="app_helpers app_helpers-{{ question.id }} col-sm-12">
+        {{ help|raw }}
+    </div>
+    </label>

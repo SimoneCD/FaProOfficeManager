@@ -1,0 +1,19 @@
+{{ restore('imagesCount') }}
+<div class="col-md-2" class="offer_order_images" {{ stimulus_controller('upload', {'offerId':offer.id, 'question':question.id, 'imgCount':(question.images|length+1)}) }}>
+    <div class="row m-0 p-0">
+        <div class="col-12">
+            <div class="">
+                <input type="hidden" name="offer_order[images][{{ imagesCount }}][question]" value="{{ question.id }}">
+                <input type="file" multiple class="d-none" name="offer_order[images][{{ imagesCount }}][file]"
+                       data-upload-target="fileclick"
+                       accept="image/*" {{ stimulus_action('upload','addImagePreview','change') }}>
+            </div>
+            <div class="">
+                {% set imagesCount = imagesCount+1 %}
+                <div class="" {{ stimulus_target('upload', 'preview') }}></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ save('imagesCount') }}

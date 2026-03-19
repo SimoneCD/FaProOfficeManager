@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .btn-primary, .nav-tabs .nav-item .nav-link {
+            margin: 4px;
+            box-shadow: rgba(60, 64, 67, 0.3) 0 1px 2px 0, rgba(60, 64, 67, 0.15) 0 1px 3px 1px;
+        }
+        .nav-tabs .nav-item .nav-link.active {
+            background-color: {{ sfColor }};
+            color: #fff !important;
+            transition: background-color .3s .2s;
+        }
+        .nav-tabs .nav-item .nav-link, .nav-tabs .nav-item .nav-link:focus, .nav-tabs .nav-item .nav-link:hover {
+            color: #000 !important;
+            font-weight: 600;
+
+        }
+        .col-form-label, .col-form-label p, .form-check-label {font-size: 1.2rem}
+    </style>
+    {# {{ path('ajax_offer_stats') }} https:\/\/zoomcharts.com\/data\/appl.json {{ path('ajax_update_call', {'offerName':'open'})}} #}
+{% endblock %}
+{% block main %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="w-100">
+                        <form action="{{ path('backend_material_prices') }}" method="get">
+                        <div class="form-group row">
+                            <label for="materialCost" class="col-sm-6 col-form-label">{{ 'dash.showMeMaterialCost'|trans }}:</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" id="offerNumber" name="offerNumber" class="form-control" value="{{ app.request.query.get('offerNumber') }}">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-light input-group-btn">{{ 'w.send'|trans }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                        {% if offerItems|length %}
+                        <div class="ml-3 mt-5">
+                            <h2>{{ offerItems[0].offer.customer.sex|trans }} {{ offerItems[0].offer.customer.name }} {{ offerItems[0].offer.customer.surName }} <a href="{{ path('offer_show', {'id': offerItems[0].offer.id}) }}">{{ offerItems[0].offer.number }}</a></h2>
+                        </div>
+                        {% set price = 0 %}
+                        {% set ekprice = 0 %}
+                        <table class="mx-3 my-2 grid-width-100">
+                            {% set loopIndex = [] %}
+                            {% set offer = null %}
+                            {% if offerItems|length %}
+                                {% set offer = offerItems[0].offer %}
+                            {% endif %}
+                            <tr style="background: #efefef;color: grey;">
+                                <th></th>
+                                <th class="text-left" style="padding-left: 8px">{{ 'w.product'|trans }}</th>
+                                <th class="text-right">{{ 'w.amount'|trans }}</th>
+                                <th class="text-right">{{ 'w.completePrice'|trans }}</th>
+                                <th class="text-right">{{ 'w.ekprice'|trans }}</th>
+                            </tr>
+                            {% for prods in itemProducts %}
+                                {% if prods.wp == false %}
+                                    {% set product = getProduct(prods.id, true) %}
+                                    <tr>
+                                        {% if loop.index >= 2 %}
+                                            <th class="p-2" style="width: 20px" >{{ prods.productNumber }}</th>
+                                            <th class="p-2 w-50"><a title="{{ prods.name }}" href="{{ path('backend_product_edit', {'subCategory': prods.scatId, 'category':prods.catId, 'id':prods.id}) }}">{{ prods.name }}</a><br><small style="color: #575757">{{ product.description }}</small></th>
+                                        {% else %}
+                                            <th colspan="2"></th>
+                                        {% endif %}
+                                        {% if loop.index == 1 %}
+                                            <th class="p-2 text-right">{{ 'w.count'|trans }}</th>
+                                            <th class="p-2 text-right">{{ 'w.price'|trans }}</th>
+                                            <th class="p-2 text-right">{{ 'w.ekprice'|trans }}</th>
+                                        {% else %}
+
+                                            {% for oi in offerItems %}
+                                                {% if oi.item.id == prods.id and loop.parent.loop.index not in loopIndex %}
+                                                    {% set price = price+(prods.price ? prods.price*oi.amount : 0) %}
+                                                    {% set ekprice = ekprice+(prods.ekPrice ? prods.ekPrice*oi.amount : 0) %}
+                                                    <td class="p-2 text-right">{{ oi.amount }}</td>
+                                                    <td class="p-2 text-right">{{ (prods.price ? prods.price*oi.amount : 0)|number_format(2,',','.') }} &euro;</td>
+                                                    <td class="p-2 text-right">{{ (prods.ekPrice ? prods.ekPrice*oi.amount : 0)|number_format(2,',','.') }} &euro;</td>
+                                                    {% set loopIndex = loopIndex|merge([loop.parent.loop.index]) %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </tr>
+                                    {% if loop.index == 1 and offerItems|length and offerItems[0].offer.wallboxProduct %}
+                                        {% set offer = offerItems[0].offer %}
+                                        {% set price = price+(offer.wallboxProduct.price*offer.amount) %}
+                                        {% set ekprice = ekprice+(offer.wallboxProduct.ekPrice ? offer.wallboxProduct.ekPrice*offer.amount : 0) %}
+                                        <tr>
+                                            <th class="p-2" style="width: 20px" >{{ offer.wallboxProduct.productNumber }}</th>
+                                            <th class="p-2 w-50"><a title="{{ offer.wallboxProduct.name }}" href="{{ path('backend_product_edit', {'subCategory': offer.wallboxProduct.productSubCategory.id, 'category':offer.wallboxProduct.productCategory.id, 'id':offer.wallboxProduct.id}) }}">{{ offer.wallboxProduct.name }}</a></th>
+                                            <td class="p-2 text-right">{{ offer.amount }}</td>
+                                            <td class="p-2 text-right">{{ (offer.wallboxProduct.price*offer.amount)|number_format(2,',','.') }} &euro;</td>
+                                            <td class="p-2 text-right">{{ (offer.wallboxProduct.ekPrice ? offer.wallboxProduct.ekPrice*offer.amount: 0)|number_format(2,',','.') }} &euro;</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            <tr>
+                                <td class="text-right" colspan="3">{{ 'w.netto'|trans }}</td>
+                                <th class="text-right">{{ price|number_format(2,',','.') }} &euro;</th>
+                                <th class="text-right">{{ ekprice|number_format(2,',','.') }} &euro;</th>
+                            </tr>
+                            {% if offer and offer.rabat %}
+                                <tr>
+                                    <td class="text-right" colspan="3">{{ 'w.netto'|trans }} - {{ 'w.discount'|trans }}</td>
+                                    <th class="text-right">{{ (price-offer.rabat)|number_format(2,',','.') }} &euro;</th>
+                                    <th class="text-right"></th>
+                                </tr>
+                            {% endif %}
+                        </table>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

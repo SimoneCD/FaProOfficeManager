@@ -1,0 +1,216 @@
+{% extends 'base.customer.html.twig' %}
+
+{% block body_id 'login' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @font-face{font-family:inherit;}*{margin:0;padding:0;box-sizing:border-box}body,html{height:100%;}a{font-size:14px;line-height:1.7;color:#666;margin:0;transition:all .4s;-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s}a:focus{outline:none!important}a:hover{text-decoration:none;color:#333}h1,h2,h3,h4,h5,h6{margin:0}p{font-size:14px;line-height:1.7;color:#666;margin:0}ul,li{margin:0;list-style-type:none}input{outline:none;border:none}textarea{outline:none;border:none}textarea:focus,input:focus{border-color:transparent!important}input:focus::-webkit-input-placeholder{color:transparent}input:focus:-moz-placeholder{color:transparent}input:focus::-moz-placeholder{color:transparent}input:focus:-ms-input-placeholder{color:transparent}textarea:focus::-webkit-input-placeholder{color:transparent}textarea:focus:-moz-placeholder{color:transparent}textarea:focus::-moz-placeholder{color:transparent}textarea:focus:-ms-input-placeholder{color:transparent}input::-webkit-input-placeholder{color:#adadad}input:-moz-placeholder{color:#adadad}input::-moz-placeholder{color:#adadad}input:-ms-input-placeholder{color:#adadad}textarea::-webkit-input-placeholder{color:#adadad}textarea:-moz-placeholder{color:#adadad}textarea::-moz-placeholder{color:#adadad}textarea:-ms-input-placeholder{color:#adadad}button{outline:none!important;border:none;background:0 0}button:hover{cursor:pointer}iframe{border:none!important}.txt1{font-size:15px;color:#999;line-height:1.5}.txt2{font-size:15px;color:{{ sfColor }};line-height:1.5}.limiter{width:100%;margin:0 auto}.container-login100{width:100%;min-height:100vh;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;padding:15px;background:#fff}.wrap-login100{width:390px;background:#fff}.login100-form{width:100%}.login100-form-title{display:block;font-size:39px;color:#333;line-height:1.2;text-align:center;padding-bottom: 30px;}.login100-form-avatar{display:block;width:120px;height:120px;border-radius:50%;overflow:hidden;margin:0 auto}.login100-form-avatar img{width:100%}.wrap-input100{width:100%;position:relative;border-bottom:2px solid #d9d9d9}.input100{font-size:18px;color:#555;line-height:1.2;display:block;width:100%;height:52px;background:0 0;padding:0 5px;margin-top:30px}.focus-input100{position:absolute;display:block;width:100%;height:100%;top:0;left:0;pointer-events:none}.focus-input100::before{content:"";display:block;position:absolute;bottom:-2px;left:0;width:0;height:2px;-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s;transition:all .4s;background:{{ sfColor }}}.focus-input100::after{font-size:18px;color:#999;line-height:1.2;content:attr(data-placeholder);display:block;width:100%;position:absolute;top:15px;left:0;padding-left:5px;-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s;transition:all .4s}.input100:focus+.focus-input100::after{top:-20px;font-size:15px}.input100:focus+.focus-input100::before{width:100%}.has-val.input100+.focus-input100::after{top:-20px;font-size:15px}.has-val.input100+.focus-input100::before{width:100%}.container-login100-form-btn{margin-top:30px;margin-bottom:30px;width:100%;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;flex-wrap:wrap;justify-content:center}.login100-form-btn{margin-top:30px;margin-bottom:30px;font-size:16px;color:#fff;line-height:1.2;text-transform:uppercase;display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;justify-content:center;align-items:center;padding:0 20px;width:100%;height:50px;background-color:{{ sfColor }};border-radius:25px;box-shadow:0 10px 30px 0 rgba(87,184,70,.5);-moz-box-shadow:0 10px 30px 0 rgba(87,184,70,.5);-webkit-box-shadow:0 10px 30px 0 rgba(87,184,70,.5);-o-box-shadow:0 10px 30px 0 rgba(87,184,70,.5);-ms-box-shadow:0 10px 30px 0 rgba(87,184,70,.5);-webkit-transition:all .4s;-o-transition:all .4s;-moz-transition:all .4s;transition:all .4s}.login100-form-btn:hover{background-color:#333;box-shadow:0 10px 30px 0 rgba(51,51,51,.5);-moz-box-shadow:0 10px 30px 0 rgba(51,51,51,.5);-webkit-box-shadow:0 10px 30px 0 rgba(51,51,51,.5);-o-box-shadow:0 10px 30px 0 rgba(51,51,51,.5);-ms-box-shadow:0 10px 30px 0 rgba(51,51,51,.5)}.validate-input{position:relative}.alert-validate::before{content:attr(data-validate);position:absolute;max-width:70%;background-color:#fff;border:1px solid #c80000;border-radius:2px;padding:4px 25px 4px 10px;top:50%;-webkit-transform:translateY(-50%);-moz-transform:translateY(-50%);-ms-transform:translateY(-50%);-o-transform:translateY(-50%);transform:translateY(-50%);right:0;pointer-events:none;color:#c80000;font-size:13px;line-height:1.4;text-align:left;visibility:hidden;opacity:0;-webkit-transition:opacity .4s;-o-transition:opacity .4s;-moz-transition:opacity .4s;transition:opacity .4s}.alert-validate::after{content:"\f06a";font-family:FontAwesome;font-size:16px;color:#c80000;display:block;position:absolute;background-color:#fff;top:50%;-webkit-transform:translateY(-50%);-moz-transform:translateY(-50%);-ms-transform:translateY(-50%);-o-transform:translateY(-50%);transform:translateY(-50%);right:5px}.alert-validate:hover:before{visibility:visible;opacity:1}@media(max-width:992px){.alert-validate::before{visibility:visible;opacity:1}}.login-more li{position:relative;padding-left:16px}.login-more li::before{content:"";display:block;position:absolute;width:5px;height:5px;border-radius:50%;background-color:#ccc;top:45%;-webkit-transform:translateY(-50%);-moz-transform:translateY(-50%);-ms-transform:translateY(-50%);-o-transform:translateY(-50%);transform:translateY(-50%);left:0}
+        a {
+            color: {{ sfColor }};
+            text-shadow: 1px 1px 2px #fff;
+        }
+        input:-webkit-autofill,
+        input:-webkit-autofill:focus {
+            transition: background-color 600000s 0s, color 600000s 0s;
+        }
+        .wrap-input100 {
+            width: 100%;
+            position: relative;
+            border-bottom: 2px solid #d9d9d9;
+        }
+        footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: {{ sfColor }};
+            color: #fff;
+        }
+        .login-container{
+        }
+        body {
+            background-color: {{ sfColor }};
+        {#background: url("{{ asset(appAssetPath~'logo/bg.jpg') }}");#}
+        {#background-size: cover;#}
+        {#background-repeat: no-repeat;#}
+        }
+        .login-form-1{
+            /*background: url("./svgs/support_agent_white_24dp.svg");*/
+            /*background-repeat: no-repeat;*/
+            /*background-size: cover;*/
+            background: rgba(255, 255, 255, 0.28);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(4.5px);
+            -webkit-backdrop-filter: blur(4.5px);
+            border: 1px solid rgba(255, 255, 255, 0.87);
+        }
+        .login-form-1 h3{
+            text-align: center;
+            color: #fff;    font-weight: 600;
+        }
+        .login-form-2{
+            padding: 5%;
+            background: #fff;
+            box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+        }
+        .login-form-2 h3{
+            text-align: center;
+            color: #fff;    font-weight: 600;
+        }
+        .login-container form{
+            padding: 0 10%;
+        }
+        .btnSubmit
+        {
+            width: 50%;
+            border-radius: 1rem;
+            padding: 1.5%;
+            border: none;
+            cursor: pointer;
+        }
+        .login-form-1 .btnSubmit{
+            font-weight: 600;
+            color: #fff;
+            background-color: {{ sfColor }};
+        }
+        .login-form-2 .btnSubmit{
+            font-weight: 600;
+            color: {{ sfColorDark }};
+            background-color: #fff;
+        }
+        .login-form-2 .ForgetPwd{
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .login-form-1 .ForgetPwd{
+            color: {{ sfColorDark }};
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .btn-dark {
+            background-color: {{ sfColor }};
+            color: #fff;
+        }
+        input[type="text"], textarea {
+            background-color : #fff;
+            color: darkgrey;
+
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        function loadGoogleOneTap() {
+            google.accounts.id.initialize({
+                client_id: '{{ clientId }}',
+                callback: handleCredentialResponse
+            });
+            if (!isUserLoggedIn()) {
+                //google.accounts.id.prompt();
+            }
+        }
+
+        function handleCredentialResponse(response) {
+            console.log(response.credential);
+            fetch('{{ path('security_google_callback') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: response.credential
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data === true) {
+                        window.location.reload();
+                    } else {
+                        alert('Benutzer existiert nicht');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function isUserLoggedIn() {
+            console.log('{{ app.user }}')
+            return false;
+        }
+
+        // Lädt die Google One Tap-Login-Funktion beim Laden der Seite.
+        window.onload = loadGoogleOneTap;
+    </script>
+{#    <script>#}
+{#        window.onload = function () {#}
+{#            google.accounts.id.initialize({#}
+{#                client_id: '875912630110-ia9npcf7udoff9hvnam8n5qoqd6uab25.apps.googleusercontent.com',#}
+{#                callback: handleCredentialResponse#}
+{#            });#}
+{#            google.accounts.id.prompt();#}
+{#        };#}
+
+{#        function handleCredentialResponse(response) {#}
+{#            console.log(response);#}
+{#        }#}
+{#    </script>#}
+{#    <script src="https://apis.google.com/js/platform.js" async defer></script>#}
+{% endblock %}
+{% block body_class %}bg-image{% endblock %}
+{% block body %}
+<div class="container login-container">
+
+    <div class="row mt-auto">
+        <div class="offset-md-3 col-md-6 login-form-1">
+            <div class="limiter">
+                <div class="container-login100">
+
+
+                    <div class="p-t-85 p-b-20" style="width: 80%;">
+
+                        <span class="login100-form-title"><img class="logo" alt="{{ sf.name }}" src="{{ asset(appAssetPath~'logo/logo_dark_in.png') }}"></span>
+                        <form action="{{ path('security_login') }}" method="post" class="login100-form validate-form">
+                            <div class="wrap-input100 validate-input m-t-85 m-b-35" data-validate="Email">
+                                <input class="input100 has-val" type="text" name="_username">
+                                <span class="focus-input100" data-placeholder="Email:"></span>
+                            </div>
+                            <div class="wrap-input100 validate-input m-b-50" data-validate="Passwort">
+                                <input class="input100 has-val" type="password" name="_password">
+                                <span class="focus-input100" data-placeholder="Passwort:"></span>
+                            </div>
+                            <div class="form-group text-center" style="text-align: center;">
+                                {#                        <input type="hidden" name="_remember_me" value="1"/>#}
+                                {#                        <input type="hidden" name="_target_path" value="{{ app.request.get('redirect_to') }}"/>#}
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+                                <div class="container-login100-form-btn" style="margin-bottom: 0">
+                                    <button type="submit" class="login100-form-btn">
+                                        {{ 'w.serviceLogin'|trans }}
+                                    </button>
+
+                                    <div id="g_id_onload"
+                                         data-client_id="{{ clientId }}"
+                                         data-callback="handleCredentialResponse">
+                                    </div>
+                                    <div class="g_id_signin" data-type="standard"></div>
+                                </div>
+                                <br><br>
+                                <a style="padding-top:20px;font-size: large" href="https://zoe-solar.de" title="{{ sf.name }}"><strong>{{ sf.www }}</strong></a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+

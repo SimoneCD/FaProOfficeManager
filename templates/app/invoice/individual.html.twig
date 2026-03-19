@@ -1,0 +1,173 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Individuelle Rechnung{% endblock %}
+{% set text = 'wir bedanken uns für Ihrer Beauftragung und senden Ihnen die Abschlussrechnung RNr.:'~ rechNr ~'' %}
+
+{% set solarProduct = false %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/jquery.datetimepicker.css') }}">
+    <style>
+        #cke_2_contents {
+            max-height: 96px;
+        }
+        .row {display: flex;flex-wrap: wrap;margin-right: -15px;margin-left: -15px;clear: left}
+        #section-to-print {
+            background-color: #fff;
+            padding: 20px;
+        }
+        .form-control {
+            background-color: {{ sfColorForm }};
+        }
+        input[type=checkbox] {
+            height: 20px;
+            width: 20px;
+            visibility: visible;
+        }
+    </style>
+    {% include appTemplate~'invoice/pdf/_style.html.twig' %}
+{% endblock %}
+{% block main %}
+    <div class="row" style="width: 1024px;overflow: scroll">
+        <div class="col-md-12">
+            <a href="{{ path('customer_edit', {'id':invoice.customer.id}) }}"><i class="material-symbols-outlined">person</i></a>
+        </div>
+    </div>
+    <div id="section-to-print" class="row" style="width: 1024px">
+        <div class="main-box">
+            {% include appTemplate~'invoice/pdf_individual/_header.html.twig' with {'aNumber': invoice.number} %}
+            {% include appTemplate~'invoice/pdf/_head_line.html.twig' with {'type': 'individual'} %}
+
+            <form id="s"></form>
+            {{ form_start(form) }}
+            {% if invoice.sendDate and app.request.query.get('load') is null  %}
+                {% include appTemplate~'invoice/_anrede_individual.html.twig' with {'customer': customer} %}
+            {% else %}
+                {% include appTemplate~'invoice/pdf_individual/_anrede.html.twig' with {'customer': customer} %}
+            {% endif %}
+
+            <div class="divi text-left" style="font-size:18px;padding-left: 65px;">Projekt: {{ form_widget(form.ladestation, {'data': '','attr':{'class':'form-control','style':'font-size: 16px;width:400px;background-color:#fff'}}) }}</div>
+            <div style="padding: 10px 48px;height: 140px;">
+                <div class="row">
+                    <div class="col-md-3"><strong style="padding:10px;font-weight: 800">Beschreibung:</strong></div>
+                    <div class="col-md-9">{{ form_widget(form.lv, {'attr':{'class':'form-control','style':'font-size: 16px;'}}) }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3"><strong style="padding:10px;font-weight: 800">{{ 'book.type.work'|trans}}:</strong></div>
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            {{ form_widget(form.leistungsdatum, {'attr':{'class':'form-control','style':'font-size: 16px;','placeholder':'dd.mm - dd.mm.YYYY'}}) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3"><strong style="padding:10px;font-weight: 800">Bauvorhaben:</strong></div>
+                    <div class="col-md-9">{{ form_widget(form.bauvorhaben, {'attr':{'class':'form-control','style':'font-size: 16px;'}}) }}</div>
+                </div>
+                <br>
+            </div>
+            {% set percentGo = 100 %}
+            <div style="padding: 30px 48px;">
+                <table class="table">
+                    <tr>
+                        <th style="width: 50px">{{ 'w.posShort'|trans }}</th>
+                        <th style="width: 100px">{{ 'w.date'|trans }}</th>
+                        <th>{{ 'w.description'|trans }}</th>
+                        <th class="text-right" style="width: 100px">{{ 'w.price'|trans }}</th>
+                    </tr>
+                    <tr style="color:#000;background-color: #eaeaea;border-bottom: none;padding: 0">
+                        <td>001</td>
+                        <td>{{ form_widget(form.pos0Date) }}</td>
+                        <td>{{ form_widget(form.pos0Text) }}</td>
+                        <td class="text-right">
+                            <div class="input-group">
+                                {{ form_widget(form.pos0Price, {'attr':{'data-pos':'000','style':'color:#000'}}) }}
+                            </div>
+                        </td>
+                    </tr>
+                    {% set price = invoice.pos0Price %}
+                    <tr style="color: #000">
+                        <td>002</td>
+                        <td>{{ form_widget(form.pos1Date) }}</td>
+                        <td>{{ form_widget(form.pos1Text) }}</td>
+                        <td class="text-right">
+                            <div class="input-group">
+                                {{ form_widget(form.pos1Price, {'attr':{'data-pos':'001'}}) }}
+                            </div>
+                        </td>
+                    </tr>
+                    {% set price = price+invoice.pos1Price %}
+                    <tr style="color: #000">
+                        <td><strong>003</strong></td>
+                        <td>{{ form_widget(form.pos2Date) }}</td>
+                        <td>{{ form_widget(form.pos2Text,{'attr':{'placeholder':'Leer lassen wenn nicht benötigt'}}) }}</td>
+                        <td class="text-right">
+                            <div class="input-group">
+                                {{ form_widget(form.pos2Price, {'attr':{'data-pos':'002'}}) }}
+                            </div>
+                        </td>
+                    </tr>
+
+                    {% set price = price+invoice.pos2Price %}
+                    {% set price = price+invoice.pos3Price %}
+                    <tr style="border-top: 1px solid lightgrey">
+                        <td style="border: none"></td>
+                        <td style="border: none"></td>
+                        <td  style="border: none" class="text-right">Netto:</td>
+                        <td id="calc_netto" class="text-right">{{ price|number_format(2,',','.') }} €</td>
+                    </tr>
+                    {% if customer.id != 277 %}
+                        {% set tax = 19*price/100 %}
+                        <tr style="border-top: none">
+                            <td style="border: none"></td>
+                            <td style="border: none"></td>
+                            <td  style="border: none" class="text-right">{{ 'w.procentTax'|trans({'%procent%':appTax}) }}</td>
+                            <td id="calc_tax" class="text-right">{{  tax|number_format(2,',','.') }} €</td>
+                        </tr>
+                        <tr>
+                            <td style="border: none"></td>
+                            <td style="border: none"></td>
+                            <td  style="border: none" class="text-right"><strong>Brutto</strong></td>
+                            <td class="text-right"><strong id="calc_brutto" >{{ (price+tax)|number_format(2,',','.') }} €</strong></td>
+                        </tr>
+                    {% else %}
+                        {% set tax = 0 %}
+                    {% endif %}
+                    <tr>
+                        <td colspan="3" style="font-weight: 800;" class="text-right"><strong>Rechnungsbetrag</strong></td>
+                        <td class="text-right"><strong style="font-weight: 800" id="calc_brutto_all" >{{ (price+tax)|number_format(2,',','.') }} €</strong></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="text-left" style="padding-left: 40px;">
+                <p style="margin-bottom:2px;color: #0a7291; font-weight: 800">{{ form_widget(form.leistung) }}</p>
+                <p style="color: #0a7291; font-weight: 800">{{ form_widget(form.zusatz) }}</p>
+            </div>
+
+            {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}
+                <div class="text-right" style="padding-right: 0;">
+                    {{ 'i.send'|trans }} <input id="soll_send" title="senden" type="checkbox" name="send" value="1"> <button id="id_senden" type="submit" class="btn btn-danger">{{ 'w.save'|trans }}</button>
+                </div>
+                <div class="text-left" style="padding-left: 40px;">
+                    <p>Email-Text</p>
+                    <textarea class="form-control" name="emailtext" style="background-color: #fff6af;height: 300px;">{{ 'o.t.email.partInvoice'|trans|replace({'<br>':"\n"}) }}</textarea>
+
+                </div>
+                {{ form_widget(form._token) }}
+            {% endif %}
+            {{ form_end(form, {'render_rest':false}) }}
+
+            {% include appTemplate~'invoice/pdf/_page.html.twig' with {'page': 1} %}
+            {% include appTemplate~'invoice/pdf/_footer.html.twig' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/jquery.js') }}"></script>
+    <script src="{{ asset('assets/jquery.datetimepicker.full.js') }}"></script>
+
+{% endblock %}
+

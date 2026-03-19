@@ -1,0 +1,137 @@
+{{ form_start(form) }}
+<div class="card">
+    <h2 class="p-2">Nur für Funnel</h2>
+    <div class="form-group row">
+        {{ form_label(form.funnelEnd) }}
+        <div class="col-6 offset-6">
+            {{ form_widget(form.funnelEnd) }}
+        </div>
+    </div>
+</div>
+{% if answer.question.answerType == 'hauptproduct' or answer.question.answerType == 'selectproduct' %}
+    <div class="form-group row">
+        {{ form_label(form.name) }}
+        <div class="col-6">
+            <select name="offer_answers[name]" class="form-control">
+                <option value=""> - </option>
+                {% for product in questionProducts %}
+                    <option value="{{ product.id }}"{% if answer.name == product.id %} selected{% endif %}>{{ product.name }} ({{ product.kw }} {{ product.valueName }}) | {{ product.description }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+{% else %}
+    {% if answer.question.answerType == 'number' %}
+        <div class="form-group row d-none">
+            {{ form_label(form.name) }}
+            <div class="col-6">
+                {{ form_widget(form.name, {'value':'0'}) }}
+            </div>
+        </div>
+    {% else %}
+        <div class="form-group row">
+            {{ form_label(form.name) }}
+            <div class="col-6">
+                {{ form_widget(form.name) }}
+            </div>
+        </div>
+        {% if answer.question.answerType != 'text' and answer.question.answerType != 'textarea' %}
+            <div class="form-group row">
+                {{ form_label(form.dependencies) }}
+                <div class="col-sm-6">
+                    {{ form_widget(form.dependencies) }}
+                </div>
+            </div>
+        {% endif %}
+        {% if answer.question.answerType in ['radio', 'radio-plus', 'select', 'checkbox'] %}
+            <div class="form-group row">
+                <label class="col-sm-6 col-form-label" for="offer_answers_answerImage" style="cursor: pointer">
+                    {{ 'oqa.image'|trans }}<br>
+                    <small>(Maximale Höhe 200px)</small>
+                    <span class="material-icons">backup</span>
+                </label>
+                <div class="col-sm-6">
+                    {{ form_widget(form.answerImage) }}
+                    {{ form_errors(form.answerImage) }}
+
+                    {% if answer is defined and answer.image != '' %}
+                        <img style="max-height: 200px;" id="answer_preview{% if answer.id is null %}_active{% endif %}" src="{{ asset(appAssetPath~'offers/answers/'~answer.image) }}?{{ 'now'|date('u') }}" alt="{{ 'oqa.imagePreview'|trans}} - {{ answer.name }}" />
+                    {% else %}
+                        <img style="max-height: 200px;" id="answer_preview{% if answer.id is null %}_active{% endif %}" src="{{ asset('app/img/1x1.png') }}?{{ 'now'|date('u') }}" alt="{{ 'o.imagePreview'|trans }}" />
+                    {% endif %}
+                </div>
+                {% if answer is defined and answer.id %}
+                    {% include 'backend/components/_crop_buttons.html.twig' %}
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endif %}
+{% endif %}
+
+<div class="form-group row">
+    {{ form_label(form.helptext) }}
+    <div class="col-sm-6">
+        {{ form_widget(form.helptext) }}
+    </div>
+</div>
+{% if answer.question.answerType not in ['text', 'textarea'] %}
+    <div class="row">
+        <div class="col-6">{{ form_label(form.products,) }}</div>
+        <div class="col-1"><span class="material-icons">keyboard_backspace</span></div>
+        <div class="col-5"></div>
+    </div>
+    <div class="row">
+        <div class="col-5">
+            {% set ins = [] %}
+            <select style="min-height: 650px;font-size:smaller;background-color: #fff !important;" name="offer_answers[products][]" id="multiselect" class="form-control" multiple="multiple">
+                {% for k, product in form.products.vars.choices %}
+                    {% if answer.products|length %}<optgroup label="{{ k }}">{% endif %}
+                    {% for pr in product.choices %}
+                        {% for ak, a in answer.products %}
+                            {% if a.id == pr.value and pr.value not in ins %}
+                                {% set ins = ins|merge([pr.value]) %}
+                                <option value="{{ pr.value }}">{{ pr.label }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    {% if answer.products|length %}</optgroup>{% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-1">
+            <button type="button" id="multiselect_rightAll" class="m-0 p-2 btn btn-block"><span class="material-icons">keyboard_double_arrow_right</span></button>
+            <button type="button" id="multiselect_rightSelected" class="m-0 p-2 btn btn-block"><span class="material-icons">navigate_next</span></button>
+            <button type="button" id="multiselect_leftSelected" class="m-0 p-2 btn btn-block"><span class="material-icons">chevron_left</span></button>
+            <button type="button" id="multiselect_leftAll" class="m-0 p-2 btn btn-block"><span class="material-icons">keyboard_double_arrow_left</span></button>
+        </div>
+        <div class="col-6" style="min-height: 650px;height: max-content">
+            <select style="font-size:smaller;min-height: 650px;" name="pr" id="multiselect_to" class="form-control" multiple="multiple">
+                {% for k, product in form.products.vars.choices %}
+                    <optgroup label="{{ k }}">
+                        {% for pr in product.choices %}
+                            {% if pr.value not in ins %}
+                                <option value="{{ pr.value }}">{{ pr.label }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </optgroup>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        {{ form_label(form.productMultiplicator) }}
+        <div class="col-sm-6">
+            {{ form_widget(form.productMultiplicator) }}
+        </div>
+    </div>
+{% endif %}
+    <div class="form-group row">
+        <div class="col-sm-6 offset-sm-6 text-left">
+            <button class="btn btn-primary">{{ button_label|default('w.save')|trans }}</button>
+        </div>
+    </div>
+{{ form_widget(form._token) }}
+{{ form_end(form, {'render_rest': false}) }}
+{% if answer.id %}
+    {{ include('backend/offer_answers/_delete_form.html.twig') }}
+{% endif %}

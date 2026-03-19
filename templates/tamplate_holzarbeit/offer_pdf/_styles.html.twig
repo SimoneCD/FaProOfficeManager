@@ -1,0 +1,252 @@
+
+<style>
+    .body {
+        background-color: #fff;
+        font-family: Arial, normal, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" ;
+    }
+    body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4 {
+        font-size: 16px;
+        color: {{ sfColorText }};
+    }
+    h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6, p, .navbar, .brand, a, .td-name, td {
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+    }
+    h3 {
+        padding: 0;
+        margin: 0 0 10px 0;
+    }
+    .headBoxLine {
+        height: 44px;
+    }
+    .headBoxLine h2 {
+        color: {{ sfColorDark }};
+        font-weight: bold;
+        font-size: 14px;
+    }
+    .headBox {
+        width: 100%;
+        padding: 8px 50px 0 50px ;
+        overflow: visible;
+        height: 104px;
+        max-height: 114px !important;
+        background: {{ sfColorDark }};color: #ffffff;
+    }
+    .headBoxSmall {
+        width: 100%;
+        padding: 0 50px 0 50px ;
+    }
+    .hBox, .wrapper-full-page {
+        background-color: #fff;
+        color: {{ sfColorText }};
+    }
+    .hBox {
+        width: 100%;
+        padding: 12px 50px 0 50px ;
+        overflow: hidden;
+    }
+    .header_title, .header_title_small {
+        color: #fff;
+        background-color: transparent;
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 0;
+    }
+    .header_title {
+        font-size: 20px;
+    }
+    .header_text {
+        font-size: 18px;
+    }
+    .boxHeadLine p {
+        font-size: 18px;
+        /* font-weight: bold; */
+        letter-spacing: 2px;
+    }
+    .boxHeadLine {
+        height: 36px;
+        padding: 5px 50px 0;
+        background-color: {{ sfColor }};
+        color: #fff;
+        text-align: center;
+    }
+    .main-box {max-width: 21cm;background-color: #fff;}
+    .headBoxSalutation {
+        background-color: #fff !important;
+    }
+    .headerLineRightSmall {
+        font-size: 12px !important;
+        letter-spacing: 1px !important;
+        position: absolute;
+        left: 0;
+        top: 4px;
+        width: max-content;
+    }
+    .headBoxData {
+        padding-top: 0;
+        background: #fff;
+        overflow: hidden;
+    }
+    .page-header div  {
+        color: {{ sfColor }};
+        background-color: #fff;
+    }
+    .headBoxSmall{color: #fff;background: {{ sfColor }};height: 42px;border-bottom: 1px solid {{ sfColorDark }};}
+    .headBoxSmall2{color: #fff;background: {{ sfColor }};height: 70px;border-top: 1px solid {{ sfColorDark }};border-bottom: 1px solid {{ sfColorDark }};}
+    .headBoxSmall p{font-size: x-large;font-weight: 800;}
+    .headBoxSmall p.smaller{font-weight: bold;text-shadow: none;font-size: initial;}
+    .headBoxWhite{color:{{ sfColor }};font-size: initial;font-weight: normal;height: 400px;background: #fff;}
+
+    .img_img {max-width: 180px;max-height: 240px;
+        margin-top: 60px;
+        margin-right: 45px;
+    }
+    .headBox strong, table .product_list_table strong {
+        color: {{ sfColorText }};
+        font-weight: bold;
+    }
+
+    .headBox2 {
+        background: {{ sfColor }};
+        color: #fff;
+        font-size: large;
+        height: 132px;
+    }
+    .headBox4 {
+        height: 30px;
+        border-top: 1px solid {{ sfColorDark }};
+    }
+
+    .headBox5 {
+        height: 7cm !important;
+       /* background-size: cover;*/
+        background-position-x: 0;
+        background-position-y: 0;
+        background-repeat: no-repeat;
+    }
+    .headBox51 {
+        height: 7cm !important;
+        background-color: #fff;
+        overflow: visible;
+    }
+    .headBox51 .headbox_div {
+        /* background-size: cover;*/
+        background-size: cover;
+        /*border-right: 1px solid #acacac;*/
+        background-position-x: 0;
+        background-position-y: 0;
+        background-repeat: no-repeat;
+    }
+    .headBox_footerImage {
+        height: 208px;
+        background-color: #fff;
+        {#background-image: url({{ getImgContent(asset(appAssetPath~'footer.png')) }});#}
+        background-position: 0;
+        background-size: cover;
+        border-top: 1px solid white;
+    }
+    .head_small_p {
+        margin:0;letter-spacing:2px;font-weight: lighter;
+    }
+    table, th,td {vertical-align:top;padding:0;margin:0;border:none !important; border-bottom:1px solid #cccccc !important}
+    td.pad-l {padding-left: 4px;}
+    td.last {border-bottom:none !important}
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        padding: 4px 8px;
+        vertical-align: top;
+    }
+    .page-header {height: 116px; min-height: 110px; padding: 0; overflow: visible}
+
+    .page-mobility {height: 42px; border-top: 1px solid {{ sfColorDark }}; border-bottom: 1px solid {{ sfColorDark }};}
+    .page-wellcome {height: 254px !important;color:{{ sfColorText }};}
+    .page-data {height: 236px}
+    .page-condition-line {
+        height: 28px;
+        padding-top: 0;
+        background-color: {{ sfColorDark }};
+        color: #fff;
+    }
+    .page-condition {
+        height: 34px;
+        padding-top: 10px;
+        background-color: #fff;
+        color:{{ sfColorDark }};
+        border-bottom: 1px solid lightgrey;
+    }
+    .condition_text {
+        margin: 0;letter-spacing: 3px;padding-top: 2px;
+    }
+    .page-pager {height: 32px; border-top: 1px solid {{ sfColorDark }}; border-bottom: 1px solid {{ sfColorDark }};font-weight: bold;
+        background: {{ sfColor }};
+        color: #fff;
+    }
+    .smaller {
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .page-friendly {
+        height:66px;
+        border: none;
+        font-size: 14px;
+        background: #fff;
+        padding-top: 4px !important;
+        line-height: 1.2;
+        {#color: {{ sfColorDark }};#}
+        {#border-top: 1px solid {{ sfColorDark }};#}
+    }
+    /*.page-agb {height: 50px;padding-top: 10px;border-top: 1px solid #fff;}*/
+
+    .page-leistungsverzeichnis {height: 34px;}
+    .page-bau {height: 200px;background-color: #fff;color: {{ sfColorText }};}
+    .page-price-bau { height: 930px}
+    .page-price-bau_end { height: 714px}
+    .page-payable {height: 34px; padding-top: 2px;border-bottom: 1px solid {{ sfColorDark }} !important;border-top: 1px solid {{ sfColorDark }};
+        color: #fff;
+        background: {{ sfColorDark }}}
+
+    /*.page-price {height: 716px}*/
+    /*.page-price-full {height: 1130px;}*/
+    /*.page-price-end {height: 914px;}*/
+    .page-pay-plan {height: 156px;/*color: {{ sfColorDark }}*/;background: #fff;}
+    .page-agb {height: 876px;border: none;overflow: hidden}
+    .page-agb-title {height: 34px;border-bottom: 1px solid {{ sfColorDark }};border-top: 1px solid {{ sfColorDark }};}
+    .pdf_footer {
+        font-size: 14px;
+        line-height: 1.3;
+        height: 77px;
+        overflow: hidden;
+        padding: 8px 50px 0 50px;
+        color: #fff;
+        background-color: {{ sfColorDark }};
+    }
+    .uebertrag {background-color: {{ sfColor }};color:#fff;font-weight: bold;}
+    .pdf_logo {
+        padding: 0;
+        margin: 0;
+        font-weight: bolder;
+        width: 400px;
+    }
+    .page-image {
+        height: 248px !important;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+    .page-image-cover {
+        max-width: 268px;
+        max-height: 248px;
+        margin-left: -10px;
+    }
+    .page-image-box {
+        position: relative;
+        background-image: none;
+        background-color: #fff;
+        border-left: 4px solid {{ sfColorDark }};
+        border-right: 4px solid {{ sfColorDark }};
+        border-top: 0;
+        border-bottom: 1px solid {{ sfColorDark }};
+        border-radius: 50%;
+        height: 230px !important;
+    }
+    {#strong.header_title_span {color: {{ sfColorDark }}}#}
+    /*table {font-size: 1.1rem;}*/
+</style>

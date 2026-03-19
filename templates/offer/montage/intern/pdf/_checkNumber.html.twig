@@ -1,0 +1,5 @@
+{% set type = type is defined ? type : 'pv_first' %}<div style="position: relative;">
+    <img class="logo-zoe" src="{{ absolute_url(asset(appAssetPath~'logo/logo_dark_in.png')) }}">
+{#    <img class="logo-e" src="{{ absolute_url(asset(appAssetPath~'logo/e-marke.png')) }}">#}
+    <p style="text-align:right"><br><br><br><br><br>Prüfprotokoll<sup class="numberCircle">1</sup> Nr.: <input disabled style="cursor: not-allowed;width: 100px" class="check_i" type="text" name="{{ type }}[number]" value="01-{{ offer.number }}"></p>
+</div>

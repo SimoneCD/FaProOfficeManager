@@ -1,0 +1,250 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DoctrineMigrations;
+
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
+
+/**
+ * Auto-generated Migration: Please modify to your needs!
+ */
+final class Version20230807235828 extends AbstractMigration
+{
+    public function getDescription(): string
+    {
+        return '';
+    }
+
+    public function up(Schema $schema): void
+    {
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql('CREATE TABLE action_log (id INT AUTO_INCREMENT NOT NULL, offer_id INT DEFAULT NULL, user_id INT NOT NULL, name VARCHAR(255) NOT NULL, type VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL, INDEX IDX_B2C5F68553C674EE (offer_id), INDEX IDX_B2C5F685A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE booking (id INT AUTO_INCREMENT NOT NULL, customer_id INT DEFAULT NULL, offer_id INT DEFAULT NULL, begin_at DATETIME NOT NULL, end_at DATETIME NOT NULL, title VARCHAR(255) NOT NULL, notice LONGTEXT DEFAULT NULL, google_event_id VARCHAR(255) DEFAULT NULL, INDEX IDX_E00CEDDE9395C3F3 (customer_id), INDEX IDX_E00CEDDE53C674EE (offer_id), INDEX begin_at_i_idx (begin_at), INDEX google_event_idx (google_event_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE chat (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, employee_id INT DEFAULT NULL, text LONGTEXT NOT NULL, date DATETIME NOT NULL, INDEX IDX_659DF2AAA76ED395 (user_id), INDEX IDX_659DF2AA8C03F15C (employee_id), INDEX date_idx (date), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE contact_person (id INT AUTO_INCREMENT NOT NULL, customer_id INT NOT NULL, sex VARCHAR(20) DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, surname VARCHAR(255) NOT NULL, phone VARCHAR(255) DEFAULT NULL, email VARCHAR(255) DEFAULT NULL, INDEX IDX_A44EE6F79395C3F3 (customer_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE customer (id INT AUTO_INCREMENT NOT NULL, company_name VARCHAR(255) DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, title VARCHAR(255) DEFAULT NULL, sur_name VARCHAR(255) NOT NULL, sex VARCHAR(100) NOT NULL, phone VARCHAR(255) DEFAULT NULL, email VARCHAR(255) NOT NULL, roles LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\', password VARCHAR(255) NOT NULL, address VARCHAR(300) DEFAULT NULL, zip VARCHAR(100) DEFAULT NULL, city VARCHAR(255) DEFAULT NULL, country VARCHAR(255) DEFAULT NULL, customer_number VARCHAR(255) DEFAULT NULL, notice VARCHAR(255) DEFAULT NULL, INDEX company_idx (company_name), INDEX sure_name_idx (sur_name), INDEX name_idx (name), INDEX email_idx (email), INDEX customer_number_idx (customer_number), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE customer_notes (id INT AUTO_INCREMENT NOT NULL, offer_id INT DEFAULT NULL, user_id INT DEFAULT NULL, customer_id INT NOT NULL, type VARCHAR(255) NOT NULL, note LONGTEXT NOT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', answered_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime_immutable)\', INDEX IDX_CF2ED3B753C674EE (offer_id), INDEX IDX_CF2ED3B7A76ED395 (user_id), INDEX IDX_CF2ED3B79395C3F3 (customer_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE document (id INT AUTO_INCREMENT NOT NULL, offer_id INT DEFAULT NULL, product_id INT DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, mime_type VARCHAR(255) DEFAULT NULL, type VARCHAR(255) DEFAULT NULL, type_id INT DEFAULT NULL, original_name VARCHAR(255) DEFAULT NULL, updated DATETIME DEFAULT NULL, INDEX IDX_D8698A7653C674EE (offer_id), INDEX IDX_D8698A764584665A (product_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE email (id INT AUTO_INCREMENT NOT NULL, send_to_id INT DEFAULT NULL, user_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, template VARCHAR(255) DEFAULT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, attachment VARCHAR(255) DEFAULT NULL, attachment_name VARCHAR(255) DEFAULT NULL, attachment_second VARCHAR(255) DEFAULT NULL, attachment_second_name VARCHAR(255) DEFAULT NULL, INDEX IDX_E7927C7459574F23 (send_to_id), INDEX IDX_E7927C74A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE faq (id INT NOT NULL, user_id INT NOT NULL, title VARCHAR(255) DEFAULT NULL, text LONGTEXT DEFAULT NULL, created_at DATETIME NOT NULL, video VARCHAR(255) DEFAULT NULL, image VARCHAR(255) DEFAULT NULL, INDEX IDX_E8FF75CCA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE image (id INT AUTO_INCREMENT NOT NULL, offer_id INT DEFAULT NULL, question_id INT DEFAULT NULL, filename VARCHAR(255) DEFAULT NULL, mime_type VARCHAR(255) DEFAULT NULL, original_name VARCHAR(255) DEFAULT NULL, updated DATETIME DEFAULT NULL, INDEX IDX_C53D045F53C674EE (offer_id), INDEX IDX_C53D045F1E27F6BF (question_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE index_states (id INT AUTO_INCREMENT NOT NULL, document_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, state VARCHAR(255) NOT NULL, send_cost_estimate TINYINT(1) NOT NULL, send_offer TINYINT(1) NOT NULL, send_part_invoice TINYINT(1) NOT NULL, send_invoice TINYINT(1) NOT NULL, action_first VARCHAR(255) NOT NULL, action_last VARCHAR(255) DEFAULT NULL, help LONGTEXT DEFAULT NULL, auto_move_by_time TINYINT(1) DEFAULT NULL, INDEX IDX_285C88BCC33F7837 (document_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE inquiry (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, customer_id INT DEFAULT NULL, offer_id INT DEFAULT NULL, lead_id INT DEFAULT NULL, sale_id INT DEFAULT NULL, date DATETIME NOT NULL, create_date DATETIME DEFAULT NULL, storno_date DATETIME DEFAULT NULL, referer_from VARCHAR(255) DEFAULT NULL, status VARCHAR(255) NOT NULL, offer_type VARCHAR(20) DEFAULT NULL, declined DATETIME DEFAULT NULL, notice LONGTEXT DEFAULT NULL, context LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', INDEX IDX_5A3903F0A76ED395 (user_id), INDEX IDX_5A3903F09395C3F3 (customer_id), UNIQUE INDEX UNIQ_5A3903F053C674EE (offer_id), INDEX create_date_idx (create_date), INDEX sale_id_idx (sale_id), INDEX lead_id_idx (lead_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE invoice (id INT AUTO_INCREMENT NOT NULL, invoice_order_id INT DEFAULT NULL, user_id INT DEFAULT NULL, customer_id INT DEFAULT NULL, date DATETIME NOT NULL, send_date DATETIME DEFAULT NULL, context LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', type VARCHAR(255) NOT NULL, number VARCHAR(255) DEFAULT NULL, bauvorhaben VARCHAR(255) DEFAULT NULL, bauherr VARCHAR(255) DEFAULT NULL, text LONGTEXT DEFAULT NULL, lv VARCHAR(255) DEFAULT NULL, ladestation VARCHAR(255) DEFAULT NULL, leistungsdatum VARCHAR(255) DEFAULT NULL, pos0_text VARCHAR(255) DEFAULT NULL, pos0_date VARCHAR(255) DEFAULT NULL, pos0_price DOUBLE PRECISION DEFAULT NULL, pos1_text VARCHAR(255) DEFAULT NULL, pos1_date VARCHAR(255) DEFAULT NULL, pos1_price DOUBLE PRECISION DEFAULT NULL, pos2_text VARCHAR(255) DEFAULT NULL, pos2_date VARCHAR(255) DEFAULT NULL, pos2_price DOUBLE PRECISION DEFAULT NULL, pos3_text VARCHAR(255) DEFAULT NULL, pos3_date VARCHAR(255) DEFAULT NULL, pos3_price DOUBLE PRECISION DEFAULT NULL, leistung VARCHAR(255) DEFAULT NULL, zusatz VARCHAR(255) DEFAULT NULL, bezahlt DATE DEFAULT NULL, INDEX IDX_9065174492B73760 (invoice_order_id), INDEX IDX_90651744A76ED395 (user_id), INDEX IDX_906517449395C3F3 (customer_id), INDEX create_date_idx (date), INDEX type_idx (type), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE key_value_sub_category_data (id INT AUTO_INCREMENT NOT NULL, sub_category_id INT DEFAULT NULL, key_name VARCHAR(100) NOT NULL, key_value VARCHAR(100) DEFAULT NULL, key_sort DOUBLE PRECISION DEFAULT NULL, INDEX IDX_8AEF3665F7BFE87C (sub_category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE offer (id INT AUTO_INCREMENT NOT NULL, option_id INT DEFAULT NULL, customer_id INT DEFAULT NULL, user_id INT DEFAULT NULL, monteur_id INT DEFAULT NULL, wallbox_product_id INT DEFAULT NULL, order_id INT DEFAULT NULL, inquiry_id INT DEFAULT NULL, sub_category_id INT DEFAULT NULL, category_id INT DEFAULT NULL, number VARCHAR(255) DEFAULT NULL, urgent TINYINT(1) NOT NULL, delete_it TINYINT(1) NOT NULL, kw DOUBLE PRECISION DEFAULT NULL, context LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', service_date_from DATETIME DEFAULT NULL, service_date_to DATETIME DEFAULT NULL, use_case VARCHAR(255) DEFAULT NULL, amount INT DEFAULT NULL, install_amount INT DEFAULT NULL, appointment_date DATETIME DEFAULT NULL, station_address VARCHAR(255) DEFAULT NULL, station_zip VARCHAR(255) DEFAULT NULL, notice LONGTEXT DEFAULT NULL, note LONGTEXT DEFAULT NULL, status VARCHAR(255) DEFAULT NULL, status_date DATETIME DEFAULT NULL, coupon VARCHAR(255) DEFAULT NULL, rabat DOUBLE PRECISION DEFAULT NULL, price DOUBLE PRECISION DEFAULT NULL, tax INT DEFAULT NULL, offer_date DATETIME DEFAULT NULL, image VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_29D6873EA7C41D6F (option_id), INDEX IDX_29D6873E9395C3F3 (customer_id), INDEX IDX_29D6873EA76ED395 (user_id), INDEX IDX_29D6873EA8326A11 (monteur_id), INDEX IDX_29D6873E988EB4F (wallbox_product_id), UNIQUE INDEX UNIQ_29D6873E8D9F6D38 (order_id), UNIQUE INDEX UNIQ_29D6873EA7AD6D71 (inquiry_id), INDEX IDX_29D6873EF7BFE87C (sub_category_id), INDEX IDX_29D6873E12469DE2 (category_id), INDEX status_idx (status), INDEX number_idx (number), INDEX status_date_idx (status_date), INDEX offer_date_idx (offer_date), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE offer_answers (id INT AUTO_INCREMENT NOT NULL, question_id INT NOT NULL, name VARCHAR(255) NOT NULL, sort DOUBLE PRECISION DEFAULT NULL, image VARCHAR(255) DEFAULT NULL, customerimage VARCHAR(255) DEFAULT NULL, product_multiplicator VARCHAR(25) DEFAULT NULL, dependencies LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', helptext VARCHAR(255) DEFAULT NULL, INDEX IDX_F1D8000F1E27F6BF (question_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE offer_answers_product (offer_answers_id INT NOT NULL, product_id INT NOT NULL, INDEX IDX_F51B10D3E515D81A (offer_answers_id), INDEX IDX_F51B10D34584665A (product_id), PRIMARY KEY(offer_answers_id, product_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE offer_category (id INT AUTO_INCREMENT NOT NULL, product_category_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, icon VARCHAR(50) DEFAULT NULL, INDEX IDX_7F31A9A3BE6903FD (product_category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE offer_item (id INT AUTO_INCREMENT NOT NULL, offer_id INT NOT NULL, item_id INT DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, description LONGTEXT NOT NULL, amount DOUBLE PRECISION NOT NULL, einheit VARCHAR(255) DEFAULT NULL, price DOUBLE PRECISION NOT NULL, INDEX IDX_E1E30B0953C674EE (offer_id), INDEX IDX_E1E30B09126F525E (item_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE offer_option (id INT AUTO_INCREMENT NOT NULL, offer_id INT DEFAULT NULL, context LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', invoice_percent DOUBLE PRECISION DEFAULT \'50\', solar TINYINT(1) DEFAULT NULL, blend_out TINYINT(1) DEFAULT 0, called TINYINT(1) DEFAULT 0, UNIQUE INDEX UNIQ_83D3771153C674EE (offer_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE offer_question (id INT AUTO_INCREMENT NOT NULL, sub_category_id INT NOT NULL, product_select_sub_category_id INT DEFAULT NULL, question_area_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, title VARCHAR(255) DEFAULT NULL, description LONGTEXT NOT NULL, sort DOUBLE PRECISION NOT NULL, view TINYINT(1) NOT NULL, need_image TINYINT(1) DEFAULT NULL, answer_type VARCHAR(20) NOT NULL, product_select_sub_category_anz VARCHAR(20) NOT NULL, protocol VARCHAR(3) NOT NULL, INDEX IDX_CF8AF92CF7BFE87C (sub_category_id), INDEX IDX_CF8AF92C3A15D34 (product_select_sub_category_id), INDEX IDX_CF8AF92CB3D39581 (question_area_id), INDEX sort_idx (sort), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE offer_sub_category (id INT AUTO_INCREMENT NOT NULL, category_id INT DEFAULT NULL, product_sub_category_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, service_title VARCHAR(255) DEFAULT NULL, service_text VARCHAR(255) DEFAULT NULL, estimate_mail_text LONGTEXT DEFAULT NULL, mail_text LONGTEXT DEFAULT NULL, invoice_mail_text LONGTEXT DEFAULT NULL, part_mail_text LONGTEXT DEFAULT NULL, status TINYINT(1) DEFAULT NULL, estimate_text LONGTEXT DEFAULT NULL, offer_text LONGTEXT DEFAULT NULL, part_invoice_text LONGTEXT DEFAULT NULL, invoice_text LONGTEXT DEFAULT NULL, specifications LONGTEXT DEFAULT NULL, image VARCHAR(255) DEFAULT NULL, context LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', INDEX IDX_5BDAF82312469DE2 (category_id), INDEX IDX_5BDAF823C534EDE1 (product_sub_category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE offer_sub_category_product (offer_sub_category_id INT NOT NULL, product_id INT NOT NULL, INDEX IDX_7B0C3548E6296DAD (offer_sub_category_id), INDEX IDX_7B0C35484584665A (product_id), PRIMARY KEY(offer_sub_category_id, product_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE offer_sub_category_project_team_category (offer_sub_category_id INT NOT NULL, project_team_category_id INT NOT NULL, INDEX IDX_AF9D21A8E6296DAD (offer_sub_category_id), INDEX IDX_AF9D21A844F3B1C6 (project_team_category_id), PRIMARY KEY(offer_sub_category_id, project_team_category_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE `order` (id INT AUTO_INCREMENT NOT NULL, offer_id INT DEFAULT NULL, price DOUBLE PRECISION NOT NULL, tax INT NOT NULL, text LONGTEXT NOT NULL, title VARCHAR(255) DEFAULT NULL, created_at DATETIME DEFAULT NULL, send_at DATETIME DEFAULT NULL, send_pre_offer_at DATETIME DEFAULT NULL, status VARCHAR(255) NOT NULL, bestaetigt TINYINT(1) DEFAULT NULL, access_key VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_F529939853C674EE (offer_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE partner (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, type VARCHAR(25) DEFAULT NULL, description LONGTEXT DEFAULT NULL, address VARCHAR(255) DEFAULT NULL, phone VARCHAR(255) DEFAULT NULL, email VARCHAR(255) NOT NULL, link VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE product (id INT AUTO_INCREMENT NOT NULL, product_category_id INT DEFAULT NULL, product_sub_category_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, value_name VARCHAR(255) DEFAULT NULL, einheit VARCHAR(20) DEFAULT NULL, image VARCHAR(255) DEFAULT NULL, product_number VARCHAR(105) DEFAULT NULL, sales_info LONGTEXT DEFAULT NULL, shop VARCHAR(255) DEFAULT NULL, in_stock INT DEFAULT NULL, manufacturer_name VARCHAR(255) DEFAULT NULL, manufacturer_info LONGTEXT DEFAULT NULL, manufacturer_warranty VARCHAR(255) DEFAULT NULL, kw DOUBLE PRECISION NOT NULL, color VARCHAR(255) DEFAULT NULL, partner TINYINT(1) DEFAULT 1 NOT NULL, kfw TINYINT(1) DEFAULT NULL, ibb TINYINT(1) DEFAULT NULL, bmvi TINYINT(1) DEFAULT NULL, delivery_time VARCHAR(150) DEFAULT \'1\', description LONGTEXT DEFAULT \'\', shop_link VARCHAR(500) DEFAULT \'\', ean VARCHAR(255) DEFAULT NULL, product_type VARCHAR(255) DEFAULT NULL, stock DOUBLE PRECISION DEFAULT \'0\', price DOUBLE PRECISION DEFAULT \'0\' NOT NULL, ek_price DOUBLE PRECISION DEFAULT \'0\', solar TINYINT(1) DEFAULT 0 NOT NULL, worker_product TINYINT(1) DEFAULT NULL, INDEX IDX_D34A04ADBE6903FD (product_category_id), INDEX IDX_D34A04ADC534EDE1 (product_sub_category_id), INDEX create_name_idx (name), INDEX create_type_id (product_type), INDEX create_number_id (product_number), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE product_product (product_source INT NOT NULL, product_target INT NOT NULL, INDEX IDX_2931F1D3DF63ED7 (product_source), INDEX IDX_2931F1D24136E58 (product_target), PRIMARY KEY(product_source, product_target)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE product_category (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE product_order (id INT AUTO_INCREMENT NOT NULL, product_id INT DEFAULT NULL, offer_id INT DEFAULT NULL, user_id INT NOT NULL, name VARCHAR(255) NOT NULL, serialnumber VARCHAR(255) DEFAULT NULL, amount DOUBLE PRECISION NOT NULL, price DOUBLE PRECISION NOT NULL, deliverd TINYINT(1) DEFAULT NULL, deliver_date DATETIME DEFAULT NULL, created_at DATETIME NOT NULL, INDEX IDX_5475E8C44584665A (product_id), INDEX IDX_5475E8C453C674EE (offer_id), INDEX IDX_5475E8C4A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE product_sub_category (id INT AUTO_INCREMENT NOT NULL, category_id INT NOT NULL, name VARCHAR(255) NOT NULL, main_product TINYINT(1) NOT NULL, global TINYINT(1) DEFAULT NULL, sort DOUBLE PRECISION DEFAULT NULL, INDEX IDX_3147D5F312469DE2 (category_id), INDEX psc_sort_idx (sort), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE project_team (id INT AUTO_INCREMENT NOT NULL, category_id INT DEFAULT NULL, partner_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, INDEX IDX_FD716E0712469DE2 (category_id), INDEX IDX_FD716E079393F8FE (partner_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE project_team_user (project_team_id INT NOT NULL, user_id INT NOT NULL, INDEX IDX_4D4E67E5BF72D4CB (project_team_id), INDEX IDX_4D4E67E5A76ED395 (user_id), PRIMARY KEY(project_team_id, user_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE project_team_offer (project_team_id INT NOT NULL, offer_id INT NOT NULL, INDEX IDX_F676B54CBF72D4CB (project_team_id), INDEX IDX_F676B54C53C674EE (offer_id), PRIMARY KEY(project_team_id, offer_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE project_team_category (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, intern TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE protocol (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, customer_id INT NOT NULL, name VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, context LONGTEXT NOT NULL, closed TINYINT(1) NOT NULL, create_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', INDEX IDX_C8C0BC4CA76ED395 (user_id), INDEX IDX_C8C0BC4C9395C3F3 (customer_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE question_area (id INT AUTO_INCREMENT NOT NULL, sub_category_id INT NOT NULL, name VARCHAR(255) NOT NULL, sort DOUBLE PRECISION NOT NULL, INDEX IDX_897AD087F7BFE87C (sub_category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE timesheet (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, name VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, start DATETIME NOT NULL, end DATETIME NOT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', INDEX IDX_77A4E8D4A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, salutation VARCHAR(255) NOT NULL, full_name VARCHAR(255) NOT NULL, slack_id VARCHAR(255) DEFAULT NULL, slack_log TINYINT(1) DEFAULT NULL, username VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, status TINYINT(1) DEFAULT NULL, phone VARCHAR(255) DEFAULT NULL, color VARCHAR(255) DEFAULT NULL, roles LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:json)\', unread_chats INT DEFAULT NULL, notice LONGTEXT DEFAULT NULL, position_name VARCHAR(255) DEFAULT NULL, netto_salary DOUBLE PRECISION DEFAULT NULL, image VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_8D93D649F85E0677 (username), UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), INDEX username_idx (username), INDEX full_name_idx (full_name), INDEX login_idx (email, password), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE messenger_messages (id BIGINT AUTO_INCREMENT NOT NULL, body LONGTEXT NOT NULL, headers LONGTEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at DATETIME NOT NULL, available_at DATETIME NOT NULL, delivered_at DATETIME DEFAULT NULL, INDEX IDX_75EA56E0FB7336F0 (queue_name), INDEX IDX_75EA56E0E3BD61CE (available_at), INDEX IDX_75EA56E016BA31DB (delivered_at), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE action_log ADD CONSTRAINT FK_B2C5F68553C674EE FOREIGN KEY (offer_id) REFERENCES offer (id)');
+        $this->addSql('ALTER TABLE action_log ADD CONSTRAINT FK_B2C5F685A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE booking ADD CONSTRAINT FK_E00CEDDE9395C3F3 FOREIGN KEY (customer_id) REFERENCES customer (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE booking ADD CONSTRAINT FK_E00CEDDE53C674EE FOREIGN KEY (offer_id) REFERENCES offer (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE chat ADD CONSTRAINT FK_659DF2AAA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE chat ADD CONSTRAINT FK_659DF2AA8C03F15C FOREIGN KEY (employee_id) REFERENCES user (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE contact_person ADD CONSTRAINT FK_A44EE6F79395C3F3 FOREIGN KEY (customer_id) REFERENCES customer (id)');
+        $this->addSql('ALTER TABLE customer_notes ADD CONSTRAINT FK_CF2ED3B753C674EE FOREIGN KEY (offer_id) REFERENCES offer (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE customer_notes ADD CONSTRAINT FK_CF2ED3B7A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE customer_notes ADD CONSTRAINT FK_CF2ED3B79395C3F3 FOREIGN KEY (customer_id) REFERENCES customer (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE document ADD CONSTRAINT FK_D8698A7653C674EE FOREIGN KEY (offer_id) REFERENCES offer (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE document ADD CONSTRAINT FK_D8698A764584665A FOREIGN KEY (product_id) REFERENCES product (id)');
+        $this->addSql('ALTER TABLE email ADD CONSTRAINT FK_E7927C7459574F23 FOREIGN KEY (send_to_id) REFERENCES customer (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE email ADD CONSTRAINT FK_E7927C74A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE faq ADD CONSTRAINT FK_E8FF75CCA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE image ADD CONSTRAINT FK_C53D045F53C674EE FOREIGN KEY (offer_id) REFERENCES offer (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE image ADD CONSTRAINT FK_C53D045F1E27F6BF FOREIGN KEY (question_id) REFERENCES offer_question (id)');
+        $this->addSql('ALTER TABLE index_states ADD CONSTRAINT FK_285C88BCC33F7837 FOREIGN KEY (document_id) REFERENCES document (id)');
+        $this->addSql('ALTER TABLE inquiry ADD CONSTRAINT FK_5A3903F0A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE inquiry ADD CONSTRAINT FK_5A3903F09395C3F3 FOREIGN KEY (customer_id) REFERENCES customer (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE inquiry ADD CONSTRAINT FK_5A3903F053C674EE FOREIGN KEY (offer_id) REFERENCES offer (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE invoice ADD CONSTRAINT FK_9065174492B73760 FOREIGN KEY (invoice_order_id) REFERENCES `order` (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE invoice ADD CONSTRAINT FK_90651744A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE invoice ADD CONSTRAINT FK_906517449395C3F3 FOREIGN KEY (customer_id) REFERENCES customer (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE key_value_sub_category_data ADD CONSTRAINT FK_8AEF3665F7BFE87C FOREIGN KEY (sub_category_id) REFERENCES offer_sub_category (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE offer ADD CONSTRAINT FK_29D6873EA7C41D6F FOREIGN KEY (option_id) REFERENCES offer_option (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE offer ADD CONSTRAINT FK_29D6873E9395C3F3 FOREIGN KEY (customer_id) REFERENCES customer (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE offer ADD CONSTRAINT FK_29D6873EA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE offer ADD CONSTRAINT FK_29D6873EA8326A11 FOREIGN KEY (monteur_id) REFERENCES user (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE offer ADD CONSTRAINT FK_29D6873E988EB4F FOREIGN KEY (wallbox_product_id) REFERENCES product (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE offer ADD CONSTRAINT FK_29D6873E8D9F6D38 FOREIGN KEY (order_id) REFERENCES `order` (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE offer ADD CONSTRAINT FK_29D6873EA7AD6D71 FOREIGN KEY (inquiry_id) REFERENCES inquiry (id)');
+        $this->addSql('ALTER TABLE offer ADD CONSTRAINT FK_29D6873EF7BFE87C FOREIGN KEY (sub_category_id) REFERENCES offer_sub_category (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE offer ADD CONSTRAINT FK_29D6873E12469DE2 FOREIGN KEY (category_id) REFERENCES offer_category (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE offer_answers ADD CONSTRAINT FK_F1D8000F1E27F6BF FOREIGN KEY (question_id) REFERENCES offer_question (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE offer_answers_product ADD CONSTRAINT FK_F51B10D3E515D81A FOREIGN KEY (offer_answers_id) REFERENCES offer_answers (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE offer_answers_product ADD CONSTRAINT FK_F51B10D34584665A FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE offer_category ADD CONSTRAINT FK_7F31A9A3BE6903FD FOREIGN KEY (product_category_id) REFERENCES product_category (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE offer_item ADD CONSTRAINT FK_E1E30B0953C674EE FOREIGN KEY (offer_id) REFERENCES offer (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE offer_item ADD CONSTRAINT FK_E1E30B09126F525E FOREIGN KEY (item_id) REFERENCES product (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE offer_option ADD CONSTRAINT FK_83D3771153C674EE FOREIGN KEY (offer_id) REFERENCES offer (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE offer_question ADD CONSTRAINT FK_CF8AF92CF7BFE87C FOREIGN KEY (sub_category_id) REFERENCES offer_sub_category (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE offer_question ADD CONSTRAINT FK_CF8AF92C3A15D34 FOREIGN KEY (product_select_sub_category_id) REFERENCES product_sub_category (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE offer_question ADD CONSTRAINT FK_CF8AF92CB3D39581 FOREIGN KEY (question_area_id) REFERENCES question_area (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE offer_sub_category ADD CONSTRAINT FK_5BDAF82312469DE2 FOREIGN KEY (category_id) REFERENCES offer_category (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE offer_sub_category ADD CONSTRAINT FK_5BDAF823C534EDE1 FOREIGN KEY (product_sub_category_id) REFERENCES product_sub_category (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE offer_sub_category_product ADD CONSTRAINT FK_7B0C3548E6296DAD FOREIGN KEY (offer_sub_category_id) REFERENCES offer_sub_category (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE offer_sub_category_product ADD CONSTRAINT FK_7B0C35484584665A FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE offer_sub_category_project_team_category ADD CONSTRAINT FK_AF9D21A8E6296DAD FOREIGN KEY (offer_sub_category_id) REFERENCES offer_sub_category (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE offer_sub_category_project_team_category ADD CONSTRAINT FK_AF9D21A844F3B1C6 FOREIGN KEY (project_team_category_id) REFERENCES project_team_category (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE `order` ADD CONSTRAINT FK_F529939853C674EE FOREIGN KEY (offer_id) REFERENCES offer (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE product ADD CONSTRAINT FK_D34A04ADBE6903FD FOREIGN KEY (product_category_id) REFERENCES product_category (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE product ADD CONSTRAINT FK_D34A04ADC534EDE1 FOREIGN KEY (product_sub_category_id) REFERENCES product_sub_category (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE product_product ADD CONSTRAINT FK_2931F1D3DF63ED7 FOREIGN KEY (product_source) REFERENCES product (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE product_product ADD CONSTRAINT FK_2931F1D24136E58 FOREIGN KEY (product_target) REFERENCES product (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE product_order ADD CONSTRAINT FK_5475E8C44584665A FOREIGN KEY (product_id) REFERENCES product (id)');
+        $this->addSql('ALTER TABLE product_order ADD CONSTRAINT FK_5475E8C453C674EE FOREIGN KEY (offer_id) REFERENCES offer (id)');
+        $this->addSql('ALTER TABLE product_order ADD CONSTRAINT FK_5475E8C4A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE product_sub_category ADD CONSTRAINT FK_3147D5F312469DE2 FOREIGN KEY (category_id) REFERENCES product_category (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE project_team ADD CONSTRAINT FK_FD716E0712469DE2 FOREIGN KEY (category_id) REFERENCES project_team_category (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE project_team ADD CONSTRAINT FK_FD716E079393F8FE FOREIGN KEY (partner_id) REFERENCES partner (id)');
+        $this->addSql('ALTER TABLE project_team_user ADD CONSTRAINT FK_4D4E67E5BF72D4CB FOREIGN KEY (project_team_id) REFERENCES project_team (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE project_team_user ADD CONSTRAINT FK_4D4E67E5A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE project_team_offer ADD CONSTRAINT FK_F676B54CBF72D4CB FOREIGN KEY (project_team_id) REFERENCES project_team (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE project_team_offer ADD CONSTRAINT FK_F676B54C53C674EE FOREIGN KEY (offer_id) REFERENCES offer (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE protocol ADD CONSTRAINT FK_C8C0BC4CA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE protocol ADD CONSTRAINT FK_C8C0BC4C9395C3F3 FOREIGN KEY (customer_id) REFERENCES customer (id)');
+        $this->addSql('ALTER TABLE question_area ADD CONSTRAINT FK_897AD087F7BFE87C FOREIGN KEY (sub_category_id) REFERENCES offer_sub_category (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE timesheet ADD CONSTRAINT FK_77A4E8D4A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
+        $this->addSql('INSERT INTO `user` (`id`, `full_name`, `username`, `email`, `password`, `roles`, `salutation`, `status`, `phone`, `color`, `unread_chats`, `notice`, `position_name`, `netto_salary`)VALUES(1, \'SF-Developer\', \'Admin\', \'admin@angebot-manager.de\', \'$2y$13$Zx8zXv69.q2slh7Fr8bocOKXLf62r2tk/8/PFPJvKV.B3j0sKcNFa\', \'[\"ROLE_SUPER_ADMIN\"]\', \'ms\', 0, \'+49 176 46 74 48 35\', NULL, 0, NULL, NULL, NULL);');
+        $this->addSql('ALTER TABLE invoice CHANGE bezahlt bezahlt DATETIME DEFAULT NULL');
+    }
+
+    public function down(Schema $schema): void
+    {
+        // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql('ALTER TABLE action_log DROP FOREIGN KEY FK_B2C5F68553C674EE');
+        $this->addSql('ALTER TABLE action_log DROP FOREIGN KEY FK_B2C5F685A76ED395');
+        $this->addSql('ALTER TABLE booking DROP FOREIGN KEY FK_E00CEDDE9395C3F3');
+        $this->addSql('ALTER TABLE booking DROP FOREIGN KEY FK_E00CEDDE53C674EE');
+        $this->addSql('ALTER TABLE chat DROP FOREIGN KEY FK_659DF2AAA76ED395');
+        $this->addSql('ALTER TABLE chat DROP FOREIGN KEY FK_659DF2AA8C03F15C');
+        $this->addSql('ALTER TABLE contact_person DROP FOREIGN KEY FK_A44EE6F79395C3F3');
+        $this->addSql('ALTER TABLE customer_notes DROP FOREIGN KEY FK_CF2ED3B753C674EE');
+        $this->addSql('ALTER TABLE customer_notes DROP FOREIGN KEY FK_CF2ED3B7A76ED395');
+        $this->addSql('ALTER TABLE customer_notes DROP FOREIGN KEY FK_CF2ED3B79395C3F3');
+        $this->addSql('ALTER TABLE document DROP FOREIGN KEY FK_D8698A7653C674EE');
+        $this->addSql('ALTER TABLE document DROP FOREIGN KEY FK_D8698A764584665A');
+        $this->addSql('ALTER TABLE email DROP FOREIGN KEY FK_E7927C7459574F23');
+        $this->addSql('ALTER TABLE email DROP FOREIGN KEY FK_E7927C74A76ED395');
+        $this->addSql('ALTER TABLE faq DROP FOREIGN KEY FK_E8FF75CCA76ED395');
+        $this->addSql('ALTER TABLE image DROP FOREIGN KEY FK_C53D045F53C674EE');
+        $this->addSql('ALTER TABLE image DROP FOREIGN KEY FK_C53D045F1E27F6BF');
+        $this->addSql('ALTER TABLE index_states DROP FOREIGN KEY FK_285C88BCC33F7837');
+        $this->addSql('ALTER TABLE inquiry DROP FOREIGN KEY FK_5A3903F0A76ED395');
+        $this->addSql('ALTER TABLE inquiry DROP FOREIGN KEY FK_5A3903F09395C3F3');
+        $this->addSql('ALTER TABLE inquiry DROP FOREIGN KEY FK_5A3903F053C674EE');
+        $this->addSql('ALTER TABLE invoice DROP FOREIGN KEY FK_9065174492B73760');
+        $this->addSql('ALTER TABLE invoice DROP FOREIGN KEY FK_90651744A76ED395');
+        $this->addSql('ALTER TABLE invoice DROP FOREIGN KEY FK_906517449395C3F3');
+        $this->addSql('ALTER TABLE key_value_sub_category_data DROP FOREIGN KEY FK_8AEF3665F7BFE87C');
+        $this->addSql('ALTER TABLE offer DROP FOREIGN KEY FK_29D6873EA7C41D6F');
+        $this->addSql('ALTER TABLE offer DROP FOREIGN KEY FK_29D6873E9395C3F3');
+        $this->addSql('ALTER TABLE offer DROP FOREIGN KEY FK_29D6873EA76ED395');
+        $this->addSql('ALTER TABLE offer DROP FOREIGN KEY FK_29D6873EA8326A11');
+        $this->addSql('ALTER TABLE offer DROP FOREIGN KEY FK_29D6873E988EB4F');
+        $this->addSql('ALTER TABLE offer DROP FOREIGN KEY FK_29D6873E8D9F6D38');
+        $this->addSql('ALTER TABLE offer DROP FOREIGN KEY FK_29D6873EA7AD6D71');
+        $this->addSql('ALTER TABLE offer DROP FOREIGN KEY FK_29D6873EF7BFE87C');
+        $this->addSql('ALTER TABLE offer DROP FOREIGN KEY FK_29D6873E12469DE2');
+        $this->addSql('ALTER TABLE offer_answers DROP FOREIGN KEY FK_F1D8000F1E27F6BF');
+        $this->addSql('ALTER TABLE offer_answers_product DROP FOREIGN KEY FK_F51B10D3E515D81A');
+        $this->addSql('ALTER TABLE offer_answers_product DROP FOREIGN KEY FK_F51B10D34584665A');
+        $this->addSql('ALTER TABLE offer_category DROP FOREIGN KEY FK_7F31A9A3BE6903FD');
+        $this->addSql('ALTER TABLE offer_item DROP FOREIGN KEY FK_E1E30B0953C674EE');
+        $this->addSql('ALTER TABLE offer_item DROP FOREIGN KEY FK_E1E30B09126F525E');
+        $this->addSql('ALTER TABLE offer_option DROP FOREIGN KEY FK_83D3771153C674EE');
+        $this->addSql('ALTER TABLE offer_question DROP FOREIGN KEY FK_CF8AF92CF7BFE87C');
+        $this->addSql('ALTER TABLE offer_question DROP FOREIGN KEY FK_CF8AF92C3A15D34');
+        $this->addSql('ALTER TABLE offer_question DROP FOREIGN KEY FK_CF8AF92CB3D39581');
+        $this->addSql('ALTER TABLE offer_sub_category DROP FOREIGN KEY FK_5BDAF82312469DE2');
+        $this->addSql('ALTER TABLE offer_sub_category DROP FOREIGN KEY FK_5BDAF823C534EDE1');
+        $this->addSql('ALTER TABLE offer_sub_category_product DROP FOREIGN KEY FK_7B0C3548E6296DAD');
+        $this->addSql('ALTER TABLE offer_sub_category_product DROP FOREIGN KEY FK_7B0C35484584665A');
+        $this->addSql('ALTER TABLE offer_sub_category_project_team_category DROP FOREIGN KEY FK_AF9D21A8E6296DAD');
+        $this->addSql('ALTER TABLE offer_sub_category_project_team_category DROP FOREIGN KEY FK_AF9D21A844F3B1C6');
+        $this->addSql('ALTER TABLE `order` DROP FOREIGN KEY FK_F529939853C674EE');
+        $this->addSql('ALTER TABLE product DROP FOREIGN KEY FK_D34A04ADBE6903FD');
+        $this->addSql('ALTER TABLE product DROP FOREIGN KEY FK_D34A04ADC534EDE1');
+        $this->addSql('ALTER TABLE product_product DROP FOREIGN KEY FK_2931F1D3DF63ED7');
+        $this->addSql('ALTER TABLE product_product DROP FOREIGN KEY FK_2931F1D24136E58');
+        $this->addSql('ALTER TABLE product_order DROP FOREIGN KEY FK_5475E8C44584665A');
+        $this->addSql('ALTER TABLE product_order DROP FOREIGN KEY FK_5475E8C453C674EE');
+        $this->addSql('ALTER TABLE product_order DROP FOREIGN KEY FK_5475E8C4A76ED395');
+        $this->addSql('ALTER TABLE product_sub_category DROP FOREIGN KEY FK_3147D5F312469DE2');
+        $this->addSql('ALTER TABLE project_team DROP FOREIGN KEY FK_FD716E0712469DE2');
+        $this->addSql('ALTER TABLE project_team DROP FOREIGN KEY FK_FD716E079393F8FE');
+        $this->addSql('ALTER TABLE project_team_user DROP FOREIGN KEY FK_4D4E67E5BF72D4CB');
+        $this->addSql('ALTER TABLE project_team_user DROP FOREIGN KEY FK_4D4E67E5A76ED395');
+        $this->addSql('ALTER TABLE project_team_offer DROP FOREIGN KEY FK_F676B54CBF72D4CB');
+        $this->addSql('ALTER TABLE project_team_offer DROP FOREIGN KEY FK_F676B54C53C674EE');
+        $this->addSql('ALTER TABLE protocol DROP FOREIGN KEY FK_C8C0BC4CA76ED395');
+        $this->addSql('ALTER TABLE protocol DROP FOREIGN KEY FK_C8C0BC4C9395C3F3');
+        $this->addSql('ALTER TABLE question_area DROP FOREIGN KEY FK_897AD087F7BFE87C');
+        $this->addSql('ALTER TABLE timesheet DROP FOREIGN KEY FK_77A4E8D4A76ED395');
+        $this->addSql('DROP TABLE action_log');
+        $this->addSql('DROP TABLE booking');
+        $this->addSql('DROP TABLE chat');
+        $this->addSql('DROP TABLE contact_person');
+        $this->addSql('DROP TABLE customer');
+        $this->addSql('DROP TABLE customer_notes');
+        $this->addSql('DROP TABLE document');
+        $this->addSql('DROP TABLE email');
+        $this->addSql('DROP TABLE faq');
+        $this->addSql('DROP TABLE image');
+        $this->addSql('DROP TABLE index_states');
+        $this->addSql('DROP TABLE inquiry');
+        $this->addSql('DROP TABLE invoice');
+        $this->addSql('DROP TABLE key_value_sub_category_data');
+        $this->addSql('DROP TABLE offer');
+        $this->addSql('DROP TABLE offer_answers');
+        $this->addSql('DROP TABLE offer_answers_product');
+        $this->addSql('DROP TABLE offer_category');
+        $this->addSql('DROP TABLE offer_item');
+        $this->addSql('DROP TABLE offer_option');
+        $this->addSql('DROP TABLE offer_question');
+        $this->addSql('DROP TABLE offer_sub_category');
+        $this->addSql('DROP TABLE offer_sub_category_product');
+        $this->addSql('DROP TABLE offer_sub_category_project_team_category');
+        $this->addSql('DROP TABLE `order`');
+        $this->addSql('DROP TABLE partner');
+        $this->addSql('DROP TABLE product');
+        $this->addSql('DROP TABLE product_product');
+        $this->addSql('DROP TABLE product_category');
+        $this->addSql('DROP TABLE product_order');
+        $this->addSql('DROP TABLE product_sub_category');
+        $this->addSql('DROP TABLE project_team');
+        $this->addSql('DROP TABLE project_team_user');
+        $this->addSql('DROP TABLE project_team_offer');
+        $this->addSql('DROP TABLE project_team_category');
+        $this->addSql('DROP TABLE protocol');
+        $this->addSql('DROP TABLE question_area');
+        $this->addSql('DROP TABLE timesheet');
+        $this->addSql('DROP TABLE user');
+        $this->addSql('DROP TABLE messenger_messages');
+        $this->addSql('ALTER TABLE invoice CHANGE bezahlt bezahlt DATE DEFAULT NULL');
+    }
+}

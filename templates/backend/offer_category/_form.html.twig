@@ -1,0 +1,29 @@
+{{ form_start(form) }}
+
+<div class="form-group row">
+    {{ form_label(form.name) }}
+    <div class="col-sm-6">
+        {{ form_widget(form.name) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ form_label(form.icon) }}
+    <div class="col-sm-6">
+        {{ form_widget(form.icon) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ form_label(form.productCategory) }}
+    <div class="col-sm-6">
+        {{ form_widget(form.productCategory) }}
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-sm-6 offset-sm-6 text-right">
+        <button class="btn btn-primary">{{ 'w.save'|trans }}</button>
+    </div>
+</div>
+{{ form_end(form) }}
+{% if category is defined %}
+    {{ include('backend/offer_category/_delete_form.html.twig') }}
+{% endif %}

@@ -1,0 +1,34 @@
+
+<header class="chatbox-panel__header">
+    <aside style="flex:9">
+        <h1>{% if chats|length %}{{ chats[0].customer.name }}{% endif %}</h1>
+    </aside>
+    <aside style="flex:3;text-align:right;">
+        <button class="chatbox-minimize"><span class="material-icons" style="font-size: 32px;padding: 10px 0 0 0;" aria-hidden="true">close_fullscreen</span></button>
+        <button class="chatbox-panel-close"><span class="material-icons" style="font-size: 32px;padding: 10px 0 0 0;" aria-hidden="true">clear</span></button>
+    </aside>
+</header>
+<main class="chatbox-panel__main" style="flex:2; max-height: 400px;overflow: scroll">
+    <div class="row">
+        <div class="col-md-4" data-action="click->public-comunicate#loadChat" data-public-comunicate-target="data">
+            {% include 'public/admin/_new_customer_chats.html.twig' with {'chats': chats} %}
+        </div>
+        <div class="col-md-8" data-public-comunicate-target="chat">
+            {% if chats|length %}
+                {% include 'public/admin/_customer_chat.html.twig' with {'customer': chats[0].customer} %}
+            {% endif %}
+        </div>
+    </div>
+</main>
+<footer class="chatbox-panel__footer">
+    <div>
+        {% if chats|length %}
+            <textarea data-public-comunicate-target="message" class="w-100 form-control" type="text" placeholder="Antwort hier eingeben" autofocus></textarea>
+        {% endif %}
+    </div>
+    <div>
+        {% if chats|length %}
+            <button type="button" {{ stimulus_action('public-comunicate', 'addAnswer', 'click')}} data-public-comunicate-url-param="{{ path('ajax_chat_customer_add', {'id':chats[0].customer.id}) }}" class="btn btn-sm w-100"><span class="material-icons">send</span></button>
+        {% endif %}
+    </div>
+</footer>

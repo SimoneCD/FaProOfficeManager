@@ -1,0 +1,30 @@
+
+{% set context = offer.context %}
+    {% set yes = context is defined and context.protocol is defined %}
+<table>
+    <tr>
+        <th colspan="3" style="width: 33%"><h3>Auftraggeber</h3></th>
+        <th colspan="3" style="width: 33%"><h3>Auftragnehmer</h3></th>
+        <th colspan="3"><h3>Projektleitung</h3></th>
+    </tr>
+    <tr>
+        <td colspan="1"><p>Name:</p><p>Stra&szlig;e/Nr.:</p><p>PLZ Ort:</p></td>
+        <td colspan="2">
+            <p><input class="check_i" type="text" name="offer_check[customer][name][{{ count }}]" value="{% if yes %}{{ context.protocol.customer.name[count] }}{% else %}{{ offer.customer.fullName|trim }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[customer][streetnr][{{ count }}]" value="{% if yes %}{{ context.protocol.customer.streetnr[count] }}{% else %}{{ offer.customer.address }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[customer][plzort][{{ count }}]" value="{% if yes %}{{ context.protocol.customer.plzort[count] }}{% else %}{{ offer.customer.zip }}{% endif %}"></p>
+        </td>
+        <td colspan="1"><p>Name:</p><p>Stra&szlig;e/Nr.:</p><p>PLZ Ort:</p></td>
+        <td colspan="2">
+            <p><input class="check_i" type="text" name="offer_check[user][name][{{ count }}]" value="{% if yes %}{{ context.protocol.user.name[count] }}{% else %}{{ sf.name }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[user][streetnr][{{ count }}]" value="{% if yes %}{{ context.protocol.user.streetnr[count] }}{% else %}{{ sf.address }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[user][plzort][{{ count }}]" value="{% if yes %}{{ context.protocol.user.plzort[count] }}{% else %}{{ sf.zip }}{% endif %}"></p>
+        </td>
+        <td colspan="1"><p>Name:</p><p>ESTI Bew.-Nr.:</p><p>Telefon:</p></td>
+        <td colspan="2">
+            <p><input class="check_i" type="text" name="offer_check[pruefer][name][{{ count }}]" value="{% if yes %}{{ context.protocol.pruefer.name[count] }}{% else %}{{ offer.monteur ? offer.monteur.fullName|trim : '' }}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[pruefer][nr][{{ count }}]" value="{% if yes %}{{ context.protocol.pruefer.nr[count] }}{% else %}{% endif %}"></p>
+            <p><input class="check_i" type="text" name="offer_check[pruefer][phone][{{ count }}]" value="{% if yes %}{{ context.protocol.pruefer.phone[count] }}{% else %}{{ sf.service_phone }}{% endif %}"></p>
+        </td>
+    </tr>
+</table>

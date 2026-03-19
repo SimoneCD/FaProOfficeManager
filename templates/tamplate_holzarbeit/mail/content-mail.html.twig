@@ -1,0 +1,8 @@
+{#<h3 id="mail-pre-title" style="display:none;padding-top: 0; padding-bottom: 0; font-weight: 500; vertical-align: baseline; font-size: 1.2rem; line-height: 1.2; letter-spacing: 3px; color: {{ sfColor }}; margin: 0;" align="left">#}
+{#    {{ sf.name }} {{ 'w.customerServiceMessage'|trans }}#}
+{#</h3>#}
+{#<h1 id="mail-title" style="display:none;padding-top: 0; padding-bottom: 0; font-weight: 500; vertical-align: baseline; font-size: 1.9rem; line-height: 120%; color: #393939; margin: 0;" align="left">{{ email.title }}</h1>#}
+{% include appTemplate~'mail/_h2.html.twig' with {'customer': customer} %}
+<p id="mail-message" style="line-height: 24px; font-size: 16px; width: 100%; margin: 0;" align="left">
+    {{ email.message|raw }}
+</p>

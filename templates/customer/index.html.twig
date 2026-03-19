@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'w.customers'|trans }}{% endblock %}
+
+{% block main %}
+<style>
+    .offer_plus_box_block{
+        padding: 4px;
+        text-align: right;
+        font-weight: 600;
+        color: #444444;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">{{ 'w.customers'|trans }} <a href="{{ path('customer_new') }}"><span style="color: {{ sfColorDark }}" class="material-symbols-outlined">add_circle</span></a></h4>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table table_data w-100">
+                    <thead>
+                    <tr style="color: {{ sfColor }};">
+                        <th style="cursor: pointer">{{ 'w.short.custumerNumber'|trans }}</th>
+                        <th style="cursor: pointer">{{ 'w.buisiness'|trans }}</th>
+                        <th style="cursor: pointer">{{ 'w.contactPerson'|trans }}</th>
+                        <th style="cursor: pointer">{{ 'w.phone'|trans }}</th>
+                        <th style="cursor: pointer">{{ 'w.email'|trans }}</th>
+                        <th style="cursor: pointer">{{ 'f.label.address'|trans }}</th>
+                        <th style="cursor: pointer;min-width: 30px" class="text-right"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for customer in customers %}
+                        <tr>
+                            <td>{{ customer.customerNumber }}</td>
+                            <td>{{ customer.companyName }}</td>
+                            <td><a href="{{ path('customer_edit', {'id': customer.id}) }}">{{ customer.sex|replace({'Herr':'mr'|trans,'Frau':'ms'|trans}) }} {{ customer.name }} {{ customer.surName }}</a></td>
+                            <td>{{ customer.phone }}</td>
+                            <td>{{ customer.email }}</td>
+                            <td>{{ customer.address }}, {{ customer.zip }} {{ customer.city }}</td>
+                            <td style="width: 30px">
+                                <a style="float: right" href="{{ path('customer_edit', {'id': customer.id}) }}"><i class="material-symbols-outlined">badge</i></a>
+                                {% if is_granted('ROLE_ADMIN') %}<form style="float: right" method="post" action="{{ path('customer_delete', {'id': customer.id}) }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ customer.id) }}">
+                                    <a style="cursor:pointer;color:red;padding: 0;margin: 0" data-confirm="Kunde Löschen" class="confirm"><span class="material-symbols-outlined">delete_forever</span></a>
+                                </form>{% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

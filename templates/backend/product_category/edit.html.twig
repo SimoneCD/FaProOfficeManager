@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ProductCategory{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {% include 'backend/_form_style.html.twig' %}
+{% endblock %}
+
+{% block main %}
+    {% include 'backend/components/_menu.html.twig' with {
+        'productlistLi': {'n':'w.productCategories'|trans,'k':true},
+        'productcategoryLi': {'n':('p.c.edit'|trans),'i':'edit'}
+    } %}
+
+<div id="backend_form">
+    {{ include('backend/product_category/_form.html.twig', {'button_label': 'Update'}) }}
+</div>
+{% endblock %}

@@ -1,0 +1,132 @@
+<ol>
+    <li style="overflow: visible">
+        {% if offer.offerItems|length %}
+            <style>.avatar {border: 1px solid {{ sfColorDark }}</style>
+            <table class="table mx-3 my-2 w-100 table-striped" style="width:100%;">
+                {% set loopIndex = [] %}
+                {% set index = 0 %}
+                {% set products = 0 %}
+                {% if offer.wallboxProduct %}
+                    {% set wp = offer.wallboxProduct %}
+                    <tr>
+                        <th style="width: 40px;" >Pos.</th>
+                        <th style="width: 40px;" ></th>
+                        <th style="width: max-content">Produktname</th>
+                        <th style="width: 40px;" ><span class="material-icons">file_download</span></th>
+                    </tr>
+                    <tr>
+                        <th class="p-2">{{ wp.productNumber }}</th>
+                        <th class="p-2">
+                            <div style="margin: 0;position: relative" data-controller="popover">
+                                <a href="javascript:" style="margin-left:4px;margin-right:4px;height:50px;width:50px;border-radius: 50%;" data-action="mouseenter->popover#show mouseleave->popover#hide">
+                                    <img style="max-height:50px;max-width:50px;" src="{{ asset(appAssetPath~'products/'~wp.image) }}">
+                                </a>
+                                <template style="position: absolute;left: 0;top: 0" data-popover-target="content">
+                                    <div style="cursor:auto;background-color:#fff;position: absolute;left: 0;top: 0;z-index: 7" data-popover-target="card">
+                                        <img style="max-height:170px;max-width:170px;border: 1px solid #e3e3e3;" src="{{ asset(appAssetPath~'products/'~wp.image) }}">
+                                    </div>
+                                </template>
+                            </div>
+                        </th>
+                        <th class="p-2" style="min-width: 200px;color: {{ sfColorDark }}">{{ wp.name }}<br>
+                            <small style="color: #575757">{{ wp.description }}</small>
+                        </th>
+                        <th style="width: 40px;">
+                            {% if wp.certificats|length %}
+                                <div style="position: relative;width: 40px;" data-controller="popover" data-popover-url-value="{{ path('ajax_public_products', {'id': wp.id}) }}">
+                                    <a href="javascript:void(0)" style="color: {{ sfColorDark }}" data-action="click->popover#show mouseleave->popover#hide">
+                                        <span class="material-icons">picture_as_pdf</span>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </th>
+                    </tr>
+                    {% set index = index+1 %}
+                {% endif %}
+                {% for k, p in offer.offerItems|sort((a, b) => a.item.productNumber <=> b.item.productNumber) %}
+                    {% set index = index+1 %}
+                    {% set product = p.item %}
+                    {% if product and p.item.workerProduct %}
+                        {% set index = index-1 %}
+                    {% endif %}
+                    {% if product and p.item.workerProduct == false %}
+                        {% set products = products+1 %}
+                        <tr style="padding-top: 10px;">
+                            {% if index >= 2 %}
+                                <th class="p-2" style="width: 40px;" >{{ product.productNumber }}</th>
+                                <th class="p-2">
+                                    {% if product.image %}
+                                        <div style="margin: 0;position: relative" data-controller="popover">
+                                            <a href="javascript:" style="margin-left:4px;margin-right:4px;height:50px;width:50px;border-radius: 50%;" data-action="mouseenter->popover#show mouseleave->popover#hide">
+                                                <img style="max-height:50px;max-width:50px;" src="{{ asset(appAssetPath~'products/'~product.image) }}">
+                                            </a>
+                                            <template style="position: absolute;left: 0;top: 0" data-popover-target="content">
+                                                <div style="cursor:auto;background-color:#fff;position: absolute;left: 0;top: 0;z-index: 7" data-popover-target="card">
+                                                    <img style="max-height:170px;max-width:170px;border: 1px solid #e3e3e3;" src="{{ asset(appAssetPath~'products/'~product.image) }}">
+                                                </div>
+                                            </template>
+                                        </div>
+{#                                        <img style="max-height:50px;max-width:50px;border: 1px solid #014662;border-radius: 50%;" src="{{ asset(appAssetPath~'products/'~product.image) }}">#}
+                                    {% endif %}
+                                </th>
+                                <th class="p-2" style="min-width: 200px;color: {{ sfColorDark }}">{{ p.item.name ?? product.name }}<br>
+                                    <small style="color: #575757">{{ p.description }}</small>
+                                </th>
+                                <th>
+                                    {% if product.certificats|length %}
+                                        <div style="position: relative;width: 40px;" data-controller="popover" data-popover-url-value="{{ path('ajax_public_products', {'id': product.id}) }}">
+                                            <a style="color:{{ sfColorDark }};" href="javascript:void(0)" data-action="click->popover#show mouseleave->popover#hide">
+                                                <span class="material-icons">picture_as_pdf</span>
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </th>
+                            {% else %}
+                                <th>Pos.</th>
+                                <th></th>
+                                <th>Produktname</th>
+                                <th><span class="material-icons">file_download</span></th>
+                            </tr>
+                            <tr>
+                                <th class="p-2" style="width: 40px;" >{{ product.productNumber }}</th>
+                                <th class="p-2">
+                                    {% if product.image %}
+                                        <div style="margin: 0;position: relative" data-controller="popover">
+                                            <a href="javascript:" style="margin-left:4px;margin-right:4px;height:50px;width:50px;border-radius: 50%;" data-action="mouseenter->popover#show mouseleave->popover#hide">
+                                                <img style="max-height:50px;max-width:50px;" src="{{ asset(appAssetPath~'products/'~product.image) }}">
+                                            </a>
+                                            <template style="position: absolute;left: 0;top: 0" data-popover-target="content">
+                                                <div style="cursor:auto;background-color:#fff;position: absolute;left: 0;top: 0;z-index: 7" data-popover-target="card">
+                                                    <img style="max-height:170px;max-width:170px;border: 1px solid #e3e3e3;" src="{{ asset(appAssetPath~'products/'~product.image) }}">
+                                                </div>
+                                            </template>
+                                        </div>
+{#                                        <img style="max-height:70px;max-width:70px;border: 1px solid #014662;border-radius: 50%;" src="{{ asset(appAssetPath~'products/'~product.image) }}">#}
+                                    {% endif %}
+                                </th>
+                                <th class="p-2" style="min-width: 200px;color: {{ sfColorDark }}">{{ p.item.name ?? product.name }}<br>
+                                    <small style="color: #575757">{{ p.description ?? product.description }}</small>
+                                </th>
+                                <th>
+                                    {% if product.certificats|length %}
+                                        <div style="position: relative;width: 40px;" data-controller="popover" data-popover-url-value="{{ path('ajax_public_products', {'id': product.id}) }}">
+                                            <a style="color: {{ sfColorDark }}" href="javascript:void(0)" data-action="click->popover#show mouseleave->popover#hide">
+                                                <span class="material-icons">picture_as_pdf</span>
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </th>
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                {% if products == 0 %}
+                    {% include 'backend/_no_entry.html.twig' with {'collSpan': 4} %}
+                {% endif %}
+            </table>
+            <p style="font-size: 12px">
+                <strong>HINWEIS:</strong> Bitte beachten Sie, dass das Produktbild nur einen visuellen Eindruck vermittelt und das tatsächliche Produkt in Marke und Aussehen geringfügig abweichen kann.
+            </p>
+        {% endif %}
+    </li>
+</ol>

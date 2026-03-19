@@ -1,0 +1,2 @@
+{% set value = (context and context['questions'] is defined and context['questions'][question.id]['answer'] is defined) ? context['questions'][question.id]['answer'] : '' %}
+{%- if value['n'] is defined %}{% else %}{{ value }}{% endif %}

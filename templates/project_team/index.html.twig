@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'w.products' |trans}} - {{ sf.name}}{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">Projekt-Teams
+                        <a href="{{ path('app_project_team_new') }}"><span style="color: {{ sfColorDark }}" class="material-symbols-outlined">add_circle</span></a></h4>
+                </div>
+                <div class="card-body table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>{{ 'w.category'|trans }}</th>
+                    <th>{{ 'w.name'|trans }}</th>
+                    <th>{{ 'w.employee'|trans }}</th>
+                    <th>{{ 'w.partner'|trans }}</th>
+                    <th>{{ 'Default'|trans }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for project_team in project_teams %}
+                <tr>
+                    <td>{{ project_team.id }}</td>
+                    <td>{{ project_team.category }}</td>
+                    <td>{{ project_team.name }}</td>
+                    <td>{% if project_team.users|length %}{{ project_team.users|join(', ') }}{% endif %}</td>
+                    <td>{% if project_team.partner %}{{ project_team.partner.name }}{% endif %}</td>
+                    <td>{% if project_team.isDefault %}<img src="{{ asset('app/images/ok.svg') }}">{% else %}<img src="{{ asset('app/images/noOk.svg') }}">{% endif %}</td>
+                    <td>
+                        <a href="{{ path('app_project_team_edit', {'id': project_team.id}) }}"><i class="material-symbols-outlined">edit</i></a>
+                    </td>
+                </tr>
+            {% else %}
+                {% include 'backend/_no_entry.html.twig' with {'collSpan': 4} %}
+            {% endfor %}
+            </tbody>
+        </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary m-0 p-2" >
+                    {#                    <h4 class="card-title">Projekt-Team Kategorien <a href="{{ path('app_project_team_new') }}" class="dot"><span>+</span></a></h4>#}
+                    <div class="p-4" style="background-color: #fff">
+                        <h4 style="color: {{ sfColor }}">Neue Team Kategorie</h4>
+                    {{ form_start(categoryForm) }}
+                        <div class="input-group mb-3 w-100">
+                            {{ form_widget(categoryForm, {'attr': {'style':'width: 86%;'}}) }}
+                            <div class="input-group-append">
+                                <button class="btn btn-primary btn-sm">{{ button_label|default('Save') }}</button>
+                            </div>
+                        </div>
+                    {{ form_end(categoryForm) }}
+                    </div>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for project_team_cat in project_team_categories %}
+                            <tr>
+                                <td>{{ project_team_cat.id }}</td>
+                                <td>{{ project_team_cat.name }}</td>
+                                <td style="width: 20px">
+                                    <form method="post" action="{{ path('app_project_team_cat_delete', {'id': project_team_cat.id}) }}" onsubmit="return confirm('Sind Sie sich sicher, diese Kategorie zu Löschen?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ project_team_cat.id) }}">
+                                        <button class="btn btn-sm btn-danger">{{ 'w.delete'|trans }}</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% else %}
+                            {% include 'backend/_no_entry.html.twig' with {'collSpan': 4} %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

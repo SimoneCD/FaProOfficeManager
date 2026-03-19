@@ -1,0 +1,276 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ sf.name }} - Kunde: {% if customer.companyName == '' %}{{ customer.sex|trans }} {% endif %}{{ customer.fullName }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .red_dot.offer_dot {
+            display: none;
+        }
+        .product_block {
+            position: absolute;
+            border-radius: 4px;
+            bottom: -10px;
+            top: auto;
+            right: 0;
+            padding: 1px 3px;
+            font-size: 9px;
+            background-color: #fff !important;
+            border: 1px solid #d2d2d2 !important;
+            color: #000 !important;
+        }
+    </style>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('app/js/ui.js') }}" type="text/javascript"></script>
+{% endblock %}
+{% block main %}
+<div data-controller="email">
+    <div class="row">
+{#        {% include 'backend/components/_back_button.html.twig' %}#}
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">{% if customer.companyName == '' %}{{ customer.sex|trans }} {% endif %} {{ customer.fullName }}</h4>
+                </div>
+                <div class="card-body">
+
+                    {{ form_start(form) }}
+                    <div id="step">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.customerNumber) }}
+                                    {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}{{ form_widget(form.customerNumber) }}{% else %}{{ form_widget(form.customerNumber, {'attr':{'disabled':'disabled'}}) }}{% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.companyName) }}
+                                    {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}{{ form_widget(form.companyName) }}{% else %}{{ form_widget(form.companyName, {'attr':{'disabled':'disabled'}}) }}{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.title) }}
+                                    {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}{{ form_widget(form.title) }}{% else %}{{ form_widget(form.title, {'attr':{'disabled':'disabled'}}) }}{% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group bmd-form-group">
+                                    {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}{{ form_widget(form.sex) }}{% else %}{{ form_widget(form.sex, {'attr':{'disabled':'disabled'}}) }}{% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.name) }}
+                                    {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}{{ form_widget(form.name) }}{% else %}{{ form_widget(form.name, {'attr':{'disabled':'disabled'}}) }}{% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.surName) }}
+                                    {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}{{ form_widget(form.surName) }}{% else %}{{ form_widget(form.surName, {'attr':{'disabled':'disabled'}}) }}{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.email) }}
+                                    {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}{{ form_widget(form.email) }}{% else %}{{ form_widget(form.email, {'attr':{'disabled':'disabled'}}) }}{% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.phone) }}
+                                    {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}{{ form_widget(form.phone) }}{% else %}{{ form_widget(form.phone, {'attr':{'disabled':'disabled'}}) }}{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.address) }}
+                                    {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}{{ form_widget(form.address) }}{% else %}{{ form_widget(form.address, {'attr':{'disabled':'disabled'}}) }}{% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.zip) }}
+                                    {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}{{ form_widget(form.zip) }}{% else %}{{ form_widget(form.zip, {'attr':{'disabled':'disabled'}}) }}{% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.city) }}
+                                    {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}{{ form_widget(form.city) }}{% else %}{{ form_widget(form.city, {'attr':{'disabled':'disabled'}}) }}{% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group bmd-form-group">
+                                    {{ form_label(form.country) }}
+                                    {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}{{ form_widget(form.country) }}{% else %}{{ form_widget(form.country, {'attr':{'disabled':'disabled'}}) }}{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group bmd-form-group">
+                                {{ form_label(form.link) }}
+                                {{ form_widget(form.link) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8"></div>
+                        <div class="col-md-2">{% if is_granted('ROLE_EMPLOYEE_SERVICE') %}<button type="submit" class="btn btn-primary pull-right">{{ 'f.button.saveName'|trans({'%name%':'w.customer'|trans}) }}</button>{% endif %}</div>
+                    </div>
+                    {{ form_end(form, {'render_rest':false}) }}
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">{{ 'Termine'|trans }}</h4>
+                </div>
+                <div class="card-body">
+                    {% include 'customer/_termin_table.html.twig' with {'bookings':customer.bookings, 'customer': customer } %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">{{ 'w.offers'|trans }}
+                        <a href="{{ path('inquiry_new_customer', {'customer': customer.id}) }}"> <span style="color: {{ sfColorDark }};" class="material-symbols-outlined">add_circle</span></a>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+                        {% include 'offer/_offer_block_cover.html.twig' with {'offers': offers, 'customer': customer, 'block': 'customer'  } %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% include 'offer/modals/_email_modal.html.twig' %}
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary" style="border: 1px solid #a53434;">
+                    <h4 class="card-title">Mahnungen{# <button class="btn btn-xs p-1 btn-light a_static_progress"
+                                                             data-action="click->email#launchReminder"
+                                                             type="button"
+                                                             data-type="reminder_1"
+                                                             data-email-url-param="{{ path('ajax_load_detail_mail',{'id':customer.id,'template':'reminder_1'}) }}"
+                                                             data-email-attachurl-param=""
+                                                             data-id="{{ customer.id }}"
+                                                             data-name="{{ customer.fullNormalName }} ({{ customer.email }})"
+                                                             data-title="{{ 'w.customerServiceMessage'|trans }}"> <span style="color: {{ sfColorDark }};" class="material-symbols-outlined">add_circle</span></button>#}</h4>
+                </div>
+                <div class="card-body">
+                    {% include 'customer/_email_table.html.twig' with {'reminder': customer.reminder, 'customer': customer } %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">Abgeschlossene Projekte</h4>
+                </div>
+                <div class="card-body">
+                    {% if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+                        {% include 'offer/_offer_block_archive_cover.html.twig' with {'offers': archiveOffers, 'customer': customer, 'block': 'customer'  } %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+   {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">{{ 'w.invoices'|trans }}<a href="{{ path('invoice_user_new', {'id':customer.id}) }}"> <span style="color: {{ sfColorDark }};" class="material-symbols-outlined">add_circle</span></a></h4>
+                </div>
+                <div class="card-body">
+                    {% include 'app/invoice/_invoices_table.html.twig' with {'invoices': customer.invoices } %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">Emails <button class="btn btn-xs p-1 btn-light a_static_progress"
+                                                          data-action="click->email#launchEmail"
+                                                          type="button"
+                                                          data-type="default"
+                                                          data-email-url-param="{{ path('ajax_load_detail_mail',{'id':customer.id,'template':'default'}) }}"
+                                                          data-email-attachurl-param=""
+                                                          data-id="{{ customer.id }}"
+                                                          data-name="{{ customer.fullNormalName }} ({{ customer.email }})"
+                                                          data-title="{{ 'w.customerServiceMessage'|trans }}"> <span style="color: {{ sfColorDark }};" class="material-symbols-outlined">add_circle</span></button></h4>
+                </div>
+                <div class="card-body">
+                    {% include 'customer/_email_table.html.twig' with {'emails': customer.emails, 'customer': customer } %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">Auftragsbilder</h4>
+                </div>
+                <div class="card-body">
+                    {% if customer.offers|length %}
+                        {% for offer in customer.offers %}
+                            <h3>{{ offer.number }}</h3>
+                            <div class="row mb-3 radios" data-upload-target="preview">
+                                {% set imagesCount = 0 %}
+                                {% set arrayA = [] %}
+                                {% for img in offer.images %}
+                                    {% if img.question is null %}
+                                        {% set i = loop.index-1 %}
+                                        {% include 'offer/montage/components/im_box.html.twig' with {'img':img, 'imagesCount': imagesCount} %}
+                                        {% set imagesCount = imagesCount+1 %}
+                                    {% else %}
+                                        {% include 'offer/montage/components/im_box_incl_title.html.twig' with {'img':img} %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card text-center">
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+            {% include 'customer/_delete_form.html.twig' %}
+        {% endif %}
+    </div>
+    {% include 'offer/modals/_email_modal.html.twig' with {'customer': customer} %}
+</div>
+{% endblock %}

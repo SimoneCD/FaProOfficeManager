@@ -1,0 +1,18 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de">
+{% include appTemplate~'mail/_head.html.twig' with {'title': email.title ~' - '~sf.name } %}
+<body id="mail-body" style="background-color: #fff; margin: 0; padding: 0; -webkit-text-size-adjust: none; text-size-adjust: none;">
+<table border="0" cellpadding="0" cellspacing="0" class="nl-container" role="presentation"
+       style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+    <tbody>
+    <tr>
+        <td>
+            {% include appTemplate~'mail/_header.html.twig' %}
+            {% include appTemplate~'mail/_content.html.twig' with {'content':'termin'} %}
+            {% include appTemplate~'mail/_footer.html.twig' with {'customer': customer}%}
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

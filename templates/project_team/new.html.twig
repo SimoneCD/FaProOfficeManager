@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ProjectTeam{% endblock %}
+
+{% block main %}
+    <div class="row" id="wallbox">
+        <div class="col-md-12">
+            <a href="{{ path('app_project_team_index') }}"><i class="material-symbols-outlined">list</i></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">{{ 'teams.new'|trans }}</h4>
+                </div>
+                <div class="card-body table-responsive">
+                    {{ include('project_team/_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

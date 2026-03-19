@@ -1,0 +1,23 @@
+<form action="{{ path('inquiry_daa_storno', {'id': offer.inquiry.id}) }}" method="post">
+    <div class="modal-body"{# id="offerModalContent{{ offer.id }}"#}>
+        <div class="row">
+            <div class="col-md-12 text-left" style="padding: 20px;">
+                <label style="color:#565656"><strong style="color: #000">Revisions Grund auswählen:</strong><br>
+                    <input type="radio" name="revison[reson]"  value="1">Kontaktdaten falsch angegeben<br>
+                    <input type="radio" name="revison[reson]"  value="2">Kunde will keine Beauftragung<br>
+                    <input type="radio" name="revison[reson]"  value="3">Kunde innerhalb 7 Tage nicht abwickelbar<br>
+                </label>
+                <br>
+                <label style="color:#565656"><strong style="color: #000">Was soll mit dem Kunden / Angebot passieren?:</strong><br>
+                    <input type="radio" name="revison[do]" value="0"> Kunde & Angebot behalten<br>
+                    <input type="radio" name="revison[do]"  value="1"> Kunde & Angebot behalten - nur Ausblenden<br>
+                    <input type="radio" name="revison[do]"  value="2"> Kunde behalten, Angebot löschen<br>
+                    <input type="radio" name="revison[do]"  value="3"> Kunde löschen<br>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" id="offerModalFooter{{ offer.id }}" style="justify-content: center;padding: 10px;background-color: #87aaae;color: #fff;font-weight: 600;">
+        <button type="submit" class="btn btn-primary">Bei DAA Stornieren</button>
+    </div>
+</form>

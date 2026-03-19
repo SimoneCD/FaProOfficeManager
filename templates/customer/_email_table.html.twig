@@ -1,0 +1,65 @@
+{% if emails is defined %}
+    <div class="table-responsive">
+       <table class="table">
+        <thead>
+        <tr>
+            <th style="width: 120px"><strong>{{ 'w.editor'|trans }}</strong></th>
+            <th style="width: 70px"><strong>{{ 'w.date'|trans }}</strong></th>
+            <th style="width: 120px"><strong>{{ 'w.time'|trans }}</strong></th>
+            <th><strong>{{ 'w.title'|trans }}</strong></th>
+            <th><strong>{{ 'w.email'|trans }}</strong></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% set so = 1 %}
+        {% for email in emails %}
+            {% if (rtype is defined and rtype == 'reminder' and 'reminder' in email.template) or rtype is not defined %}
+                {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}
+                    <tr>
+                        <td style="border-bottom: none">{{ email.user.username }}</td>
+                        <td style="border-bottom: none">{{ email.date|date('d.m.Y') }}</td>
+                        <td style="border-bottom: none">{{ email.date|date('H:i') }}</td>
+                        <td style="border-bottom: none">{{ email.title|raw }}</td>
+                        <td>{{ email.message|raw }}</td>
+                    </tr>
+                {% endif %}
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="5">Keine Einträge</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+{% elseif reminder is defined %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th style="width: 120px"><strong>{{ 'w.editor'|trans }}</strong></th>
+                <th style="width: 140px"><strong>{{ 'w.date'|trans }}</strong></th>
+                <th><strong>{{ 'w.email'|trans }}</strong></th>
+                <th><strong>{{ 'i.th.paid'|trans }}</strong></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% set so = 1 %}
+            {% for email in reminder %}
+               {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}
+                    <tr>
+                        <td style="border-bottom: none">{{ email.user.username }}</td>
+                        <td style="border-bottom: none">{{ email.sendDate|date('d.m.Y H:i') }}</td>
+                        <td style="border-bottom: none">{{ email.text|raw }}</td>
+                        <td style="border-bottom: none">{{ email.paid ? email.paid|date('d.m.Y H:i') : '' }}</td>
+                    </tr>
+                {% endif %}
+            {% else %}
+                <tr>
+                    <td colspan="5">Keine Einträge</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}

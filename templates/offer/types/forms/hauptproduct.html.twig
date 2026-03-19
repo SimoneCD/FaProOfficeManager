@@ -1,0 +1,14 @@
+<div class="form-group row">
+    <label for="{{ question.name }}" class="col-sm-{{ col1 }} col-form-label">{{ question.name }}</label>
+    <div class="col-sm-{{ col2 }} m-0 p-0">
+        {{ form_widget(form.wallboxProduct, {'attr': {'class':'form-control condition-change-check form-select'}}) }}
+    </div>
+</div>
+{% set questCount = questCount+1 %}
+{{ save('questCount') }}
+<div class="form-group row">
+    {{ form_label(form.amount, 'w.amount'|trans, {'label_attr': {'class':' col-sm-'~col1~' col-form-label'}}) }}
+    <div class="col-sm-{{ col2 }} m-0 p-0">
+        {{ form_widget(form.amount) }}
+    </div>
+</div>

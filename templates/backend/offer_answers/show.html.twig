@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}OfferAnswers{% endblock %}
+
+{% block main %}
+    <h3>{{ offer_answer.name }}</h3>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ offer_answer.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ offer_answer.name }}</td>
+            </tr>
+            <tr>
+                <th>Dependencies</th>
+                <td>{{ offer_answer.dependencies ? offer_answer.dependencies|json_encode : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('backend_answers_index') }}">back to list</a>
+
+    <a href="{{ path('abackend_answers_edit', {'question': offer_answer.question.id, 'id': offer_answer.id}) }}">edit</a>
+
+    {{ include('backend/offer_answers/_delete_form.html.twig') }}
+{% endblock %}

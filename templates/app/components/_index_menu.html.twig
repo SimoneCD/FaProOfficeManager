@@ -1,0 +1,120 @@
+
+<div class="row irow" style="width: 1024px" data-controller="email">
+    <div class="col-12 pl-0">
+        <div class="btn-group" role="group" aria-label="">
+            {% if offer.category is not null  %}<a class="btn btn-xs p-1 btn-light" href="{{ path('offer_category_index',{'id':offer.category.id}) }}"><i class="material-symbols-outlined">list</i></a>{% endif %}
+            {% if getStatusNumber(offer.status) > 5 %}<a class="btn btn-xs p-1 btn-light" href="{{ path('backend_material_index',{'offerNumberBasic':offer.number}) }}"><i class="material-symbols-outlined">production_quantity_limits</i></a>{% endif %}
+            {% if is_granted('ROLE_EMPLOYEE_SERVICE') %}<a class="btn btn-xs p-1 btn-light" href="{{ path('sf_montage_offer', {'id': offer.id}) }}"><span class="material-symbols-outlined">pending_actions</span></a>{% endif %}
+            {# Aufmaß-Protokoll / Auftragsblatt #}
+            {% if is_granted('POST_EDIT', offer) -%}
+                {# User Icon #}
+                <a class="btn btn-xs p-1 btn-light" href="{{ path('customer_edit', {'id': offer.customer.id}) }}"><i class="material-symbols-outlined">person</i></a>
+                {# PDF Icon #}
+                {% if order is not defined %}
+                {% set order = offer.order %}
+                {% endif %}
+               {%- if is_granted('ROLE_EMPLOYEE_EXTERN') %}
+                    {# E-Mail Icon #}
+                    <button class="btn btn-xs p-1 btn-light a_static_progress"
+                       data-action="click->email#launchEmail"
+                            type="button"
+                       data-type="default"
+                       data-email-url-param="{{ path('ajax_load_detail_mail',{'id':offer.customer.id,'template':'default'}) }}"
+                       data-email-attachurl-param="{{ path('ajax_attachments_mail',{'id':offer.id}) }}"
+                       data-id="{{ offer.customer.id }}"
+                       data-name="{{ offer.customer.fullNormalName }} ({{ offer.customer.email }})"
+                       data-title="{{ 'w.customerServiceMessage'|trans }}"><small><i class="material-symbols-outlined">email</i></small></button>
+                    {% if invoice is defined %}
+                        {% if invoice and type == 'part' and invoice.id is not null %}
+                            <a class="btn btn-xs p-1 btn-light" href="{{ path('invoice_part_pdf', {'order': invoice.invoiceOrder.id}) }}" target="_blank"><i class="material-symbols-outlined">picture_as_pdf</i></a>
+                        {% elseif invoice and type == 'part-plus' and invoice.id is not null %}
+                            <a class="btn btn-xs p-1 btn-light" href="{{ path('invoice_part_plus_pdf_id', {'order': order.id, 'invoice': invoice.id}) }}" target="_blank"><i class="material-symbols-outlined">picture_as_pdf</i></a>
+                        {% elseif invoice.invoiceOrder.restInvoice %}
+                            <a class="btn btn-xs p-1 btn-light" href="{{ path('invoice_rest_pdf', {'order': order.id}) }}" target="_blank"><i class="material-symbols-outlined">picture_as_pdf</i></a>
+                        {% endif %}
+                    {% else %}
+                        <a class="btn btn-xs p-1 btn-light" href="{{ path('pdf_offer', {'id': offer.id}) }}" target="_blank"><i class="material-symbols-outlined">picture_as_pdf</i></a>
+                    {% endif %}
+                    {% set restExist = false %}
+                    {% set partExist = false %}
+                   {% if order %}
+                       {% for oi in order.invoices %}
+                            {% if oi.type == 'part' and oi.sendDate is not null %}
+                                {% set partExist = true %}
+                            {% endif %}
+                            {% if oi.type == 'rest' and oi.sendDate is not null %}
+                                {% set restExist = true %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if restExist == false and partExist and offer.context['invoice_pay'] is defined %}
+                            {% if offer.context['invoice_pay']|length > order.invoices|length %}
+                                {% set i = 0 %}
+                                {% for inP in offer.context['invoice_pay'] %}
+                                    {% if inP['value'] != 0 %}
+                                        {% set i = i+1 %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {%- endif -%}
+        </div>
+        {%- if offer.order is not null -%}
+            {# Rechnungs Button #}
+            {% for oi in offer.order.invoices %}
+                {% if oi.type == 'part' %}
+                    {% set partSend = true %}
+                    <a class="btn btn-sm btn-{% if invoice is defined and oi.id == invoice.id %}primary{% else %}light{% endif %}" href="{{ path('invoice_part_plus_id', {'order': offer.order.id, 'invoice': oi.id}) }}">1. {{ 'w.invoice'|trans }}: {{ offer.number~'.1' }}</a>
+                {% elseif oi.type == 'part-plus' %}
+                    <a class="btn btn-sm btn-{% if invoice is defined and oi.id == invoice.id %}primary{% else %}light{% endif %}" href="{{ path('invoice_part_plus_id', {'order': offer.order.id, 'invoice': oi.id}) }}">{{ 'w.invoicePartPlus'|trans }}: {{ oi.number }}</a>
+                {% else %}
+                    <a class="btn btn-sm btn-{% if invoice is defined and oi.id == invoice.id %}primary{% else %}light{% endif %}" href="{{ path('invoice_rest_index', {'id': offer.id}) }}">{{ 'w.invoiceRest'|trans }}: {{ oi.number }}</a>
+                {% endif %}
+            {% endfor %}
+{#            {% if partSend is defined and invoice.context.payed.name|length >= offer.order.invoices|length %}#}
+{#                <a class="btn btn-sm btn-light" href="{{ path('invoice_part_plus_index', {'order': offer.order.id}) }}">{{ 'addPartPlusInvoice'|trans }}</a>#}
+{#            {% endif %}#}
+            {% if i is defined and i > order.invoices|length %}
+                <a href="{{ path('invoice_part_plus_index', {'order': order.id}) }}"><span class="material-icons">add_circle</span> {{ 'addPartPlusInvoice'|trans }}</a>
+            {% endif %}
+        {% endif %}
+        {% if offer.customer.offers|length > 0 %}
+            {% set otherOffers = offer.customer.offers %}
+            {# Weitere Angebote von #}
+            <div class="m-0 p-0">
+{#                <span style="color: {{ sfColorText }}; font-weight: bold;">{{ 'o.moreOffersFrom'|trans({'%name%':offer.customer.fullName}) }}:</span>&nbsp;<br>#}
+                {% for ocos in otherOffers %}
+                    {% if ocos.status != 'deleted' and ocos.status != 'archive' and ocos.status != 'storno' %}
+                        <a class="btn btn-sm btn-{% if ocos.id != offer.id %}light{% else %}primary{% endif %}" style="padding: 6px;" href="{{ path('offer_show', {'id': ocos.id}) }}">{{ 'w.offer'|trans }}: {{ ocos.number }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    {% include 'offer/modals/_email_modal.html.twig' %}
+</div>
+{% if disabled == false and offer.category is not null and invoice is not defined  %}
+    <div class="row p-0" style="width: 1024px">
+        <div class="col-12 p-0">
+            <p class="mb-0 p-0" style="margin-top: 20px;color: {{ sfColorText }};">
+                {{ 'o.c.change'|trans }}:
+            </p>
+            {% for oc in getOfferCategories()  %}
+                <a class="btn btn-{% if oc.id == offer.category.id %}primary{% else %}light{% endif %} p-1 pl-2 pr-2" type="button" href="{{ path('ajax_offer_update_category',{'id':offer.id, 'category':oc.id}) }}">{{ oc.name }}</a> 
+            {% endfor %}
+        </div>
+    </div>
+    {% if offer.subCategory %}
+        <div class="row p-0" style="width: 1024px">
+            <div class="col-12 p-0">
+{#                <p class="mb-0" style="margin-top: 20px;color: {{ sfColorText }}">#}
+{#                    {{ 'o.sc.change'|trans }}:#}
+{#                </p>#}
+                {% for sc in offer.category.offerSubCategories  %}
+                    <a class="btn btn-{% if offer.subCategory == sc %}primary{% else %}light{% endif %} p-1 pl-2 pr-2" type="button" href="{{ path('ajax_offer_update_subCategory',{'id':offer.id, 'subCategory':sc.id}) }}">{{ sc.name }}</a> 
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endif %}

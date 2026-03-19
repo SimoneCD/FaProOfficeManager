@@ -1,0 +1,122 @@
+{%- extends 'base.html.twig' %}
+{% block title %}ZOE Solar Rechnung{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/jquery.datetimepicker.css') }}">
+    <style>
+        #cke_2_contents {
+            max-height: 96px;
+        }
+        .irow {padding-left: 15px;}
+        .section-to-print {
+            background-color: #fff;
+        }
+        input[type=checkbox] {
+            height: 20px;
+            width: 20px;
+            visibility: visible;
+        }
+        .col-1 {width: 8.33%;float: left}
+        .col-2 {width: 17%;float: left}
+        .col-3 {width: 25%;float: left}
+        .col-4 {width: 33.33%;float: left}
+        .col-5 {width: 41.5%;float: left}
+        .col-6 {width: 50%;float: left}
+        .col-7 {width: 58%;float: left}
+        .col-8 {width: 66.7%;float: left}
+        .col-9 {width: 75%;float: left}
+        .col-10 {width: 83.3%;clear: left}
+        .col-11 {width: 91.67%;clear: left}
+        .col-12 {width: 100%;clear: left}
+
+        body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, strong {
+            font-family: Mont, Arial, normal, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 14px;
+        }
+        strong {
+            font-weight: bold;
+        }
+        p {
+            font-size: 14px;
+            line-height: 1.5em;
+            font-weight: normal;
+        }
+        div.footer {height: 100px !important;}
+        .row {display: flex;flex-wrap: wrap;margin-right: -15px;margin-left: -15px;clear: left}
+        table td, table td * {
+            vertical-align: top !important;
+        }
+    </style>
+    {% include appTemplate~'offer_pdf/_styles.html.twig' %}
+    {% include appTemplate~'invoice/pdf/_style.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+        {{ parent() }}
+        <script src="{{ asset('assets/jquery.js') }}" defer></script>
+        <script src="{{ asset('assets/jquery.datetimepicker.full.js') }}" defer></script>
+        {% include 'app/invoice/_script.html.twig' %}
+        <script>
+            $(document).on('click', '.addPrice', function () {
+                let i = ($('.posPrice').length)+1;
+                {% if type == 'individual' -%}
+                $('.addPriceTable tr:eq('+(i-1)+')').after('<tr>'+
+                    '<td><input type="text" name="invoice_individual[context][posPrices]['+i+'][number]" required="required" class="form-control form-control" value="00'+i+'"></td>'+
+                    '<td><input type="text" name="invoice_individual[context][posPrices]['+i+'][date]" required="required" class="form-control form-control" value="{{ 'now'|date('d.m.Y') }}"></td>'+
+                    '<td><input type="text" name="invoice_individual[context][posPrices]['+i+'][text]" required="required" class="form-control form-control" value=""></td>'+
+                    '<td class="text-right">'+
+                    '<div class="input-group">'+
+                    '<input type="text" name="invoice_individual[context][posPrices]['+i+'][price]" required="required" class="posPrice form-control form-control" value=""> &euro;'+
+                    '</div>'+
+                    '</td>'+
+                    '</tr>');
+                {% else %}
+                $('.addPriceTable tr:eq('+(i-1)+')').after('<tr>'+
+                    '<td><input type="text" name="invoice_option[context][posPrices]['+i+'][number]" required="required" class="form-control form-control" value="00'+i+'"></td>'+
+                    '<td><input type="text" name="invoice_option[context][posPrices]['+i+'][date]" required="required" class="form-control form-control" value="{{ 'now'|date('d.m.Y') }}"></td>'+
+                    '<td><input type="text" name="invoice_option[context][posPrices]['+i+'][text]" required="required" class="form-control form-control" value=""></td>'+
+                    '<td class="text-right">'+
+                    '<div class="input-group">'+
+                    '<input type="text" name="invoice_option[context][posPrices]['+i+'][price]" required="required" class="posPrice form-control form-control" value=""> &euro;'+
+                    '</div>'+
+                    '</td>'+
+                    '</tr>');
+                {% endif %}
+            })
+        </script>
+    {% endblock %}
+{% block main %}
+    {% if type == 'individual' -%}
+        <input type="hidden" id="apptax" name="apptax" value="{{ appTax }}">
+        {% set disabled = 0 %}
+        {% set text = 'wir bedanken uns für Ihrer Beauftragung und senden Ihnen Ihre Rechnung mit der RNr.:' %}
+        {% set rechNr = invoice.number %}
+        {% set type = 'individual' %}
+        {% if invoice.sendDate %}
+            {% set disabled = 1 %}
+        {% endif %}
+        {% include 'app/components/_individual_menu.html.twig' with {'disabled':disabled} %}
+        {% include appTemplate~'invoice/_wrap_invoice_individual_preview.html.twig' with {'rechNr': rechNr}  %}
+        <br>
+    {% else %}
+        <input type="hidden" id="apptax" name="apptax" value="{{ offer.tax }}">
+        {% set order = invoice.invoiceOrder %}
+        {% set offer = order.offer %}
+        {% set angebotNr = offer.number %}
+        {% set rechNr = (type == 'part' ? offer.number~'.1' : invoice.number) %}
+        {% set angebotName = getOfferName(offer.id)|raw %}
+        {% set restExist = false %}
+        {% set partExist = false %}
+        {% if invoice.type == 'rest' and invoice.sendDate is not null %}
+            {% set restExist = true %}
+        {% endif %}
+        {% set disabled = 0 %}
+        {% if invoice.sendDate and app.request.query.get('load') is null %}
+            {% set disabled = 1 %}
+        {% endif %}
+        {% include 'app/components/_index_menu.html.twig' with {'offer': order.offer,'disabled':disabled, 'items':order.offer.offerItems} %}
+        {% include appTemplate~'invoice/_wrap_invoice_preview.html.twig' with {'rechNr': rechNr}  %}
+        <br>
+    {% endif %}
+{% endblock %}
+

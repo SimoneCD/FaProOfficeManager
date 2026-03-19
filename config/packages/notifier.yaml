@@ -1,0 +1,22 @@
+framework:
+    notifier:
+        # push_transports:
+            # firebase: '%env(FIREBASE_CREDENTIALS)%'
+        chatter_transports:
+            slack: '%env(SLACK_DSN)%'
+            slack_funnel: '%env(SLACK_DSN_FUNNEL)%'
+            slack_log: '%env(SLACK_DSN_LOG)%'
+            slack_login: '%env(SLACK_DSN_LOGIN)%'
+            slack_kv: '%env(SLACK_DSN_KV)%'
+            slack_angebot: '%env(SLACK_DSN_ANGEBOT)%'
+            slack_rechnung: '%env(SLACK_DSN_RECHNUNG)%'
+            slack_test: '%env(SLACK_DSN_TEST)%'
+            slack_emails: '%env(SLACK_DSN_EMAILS)%'
+            slack_kicall: '%env(SLACK_DSN_KICALL)%'
+        channel_policy:
+            urgent: ['email']
+            high: ['push']
+            medium: ['email']
+            low: ['email']
+        admin_recipients:
+            - { email: 'si.schulze@zukunftsorientierte-energie.de' }
