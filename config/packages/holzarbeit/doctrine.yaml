@@ -1,7 +1,0 @@
-parameters:
-  # dump the Service Container into a Single File
-  app_db: "%env(string:DATABASE_URL)%"
-doctrine:
-  dbal:
-    # url: '%app_db%'
-    # local

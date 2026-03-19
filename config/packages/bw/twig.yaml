@@ -1,8 +1,0 @@
-twig:
-  globals:
-    sfBG: '#f2f7fb'
-    sfColorForm: '#e6f3f3'
-    sfColorText: '#454545'
-    sfColorLight: '#009997'
-    sfColor: '#028281'
-    sfColorDark: '#014662'
